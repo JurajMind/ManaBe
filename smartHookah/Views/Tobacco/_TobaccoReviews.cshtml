@@ -1,0 +1,53 @@
+﻿@model smartHookah.Models.Tobacco
+
+<div class="card">
+    <h3 class="card-header">Tobacco review</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3 col-xs-12">
+                <b>Summary of @Model.Reviews.Count reviews:</b>
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <b>Smoke:</b>@Model.Statistics.Smoke.ToString("N2")
+                <input type="number" class="rating" value="@((int) Model.Statistics.Smoke)" data-readonly />
+
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <b>Taste:</b>@Model.Statistics.Taste.ToString("N2")
+                <input type="number" class="rating" value="@((int) Model.Statistics.Taste)" data-readonly />
+
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <b>Quality:</b>@Model.Statistics.Quality.ToString("N2")
+                <input type="number" class="rating" value="@((int) Model.Statistics.Quality)" data-readonly />
+
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <b>Overal:</b>@Model.Statistics.Overall.ToString("N2")
+                <input type="number" class="rating" value="@((int) Model.Statistics.Overall)" data-readonly />
+
+            </div>
+        </div>
+
+        <hr />
+        <div class="list-group">
+            @foreach (var review in Model.Reviews.OrderByDescending(a => a.PublishDate))
+            {
+                <div class="list-group-item">
+                    <p class="row">
+                        <b class="col-md-3 col-xs-12">@review.PublishDate.ToString("d.M.yyyy")</b>
+                        <span class="col-md-2 col-xs-6"><b>Smoke:</b>@review.Smoke.ToString("N2") <input type="number" class="rating" value="@review.Smoke" data-readonly /> </span>
+                        <span class="col-md-2 col-xs-6"><b>Taste:</b>@review.Taste.ToString("N2") <input type="number" class="rating" value="@review.Taste" data-readonly /> </span>
+                        <span class="col-md-2 col-xs-6"><b>Quality:</b>@review.Quality.ToString("N2") <input type="number" class="rating" value="@review.Quality" data-readonly /> </span>
+                        <span class="col-md-2 col-xs-6"><b>Overall:</b>@review.Overall.ToString("N2") <input type="number" class="rating" value="@review.Overall" data-readonly /> </span>
+                        <span class="col-sm-offset-3 col-md-9 col-xs-12 ">
+
+                            @if (!string.IsNullOrEmpty(review.Text))
+                            {  @review.Text }
+                        </span>
+                </div>
+                <div class="list-group-separator"></div>
+            }
+        </div>
+    </div>
+</div>

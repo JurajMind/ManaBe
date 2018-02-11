@@ -1,0 +1,21 @@
+﻿@model smartHookah.Models.Hookah
+
+@{
+    ViewBag.Title = "Remove your stand";
+
+}
+
+<div class="well">
+    <h2>
+        Do you realy want remove your stand @Model.Name ?
+    </h2>
+    <h4>All statistic for this stand will not be detelet</h4>
+    
+      @using (Html.BeginForm())
+      {
+          @Html.AntiForgeryToken();
+          @Html.Hidden("id",@Model.Id)
+          <button class="btn btn-danger btn-raised"type="submit">Remove&nbsp;<i class="fa fa-trash"></i></button>
+          <a href="@Url.Action("Details",new {id = Model.Id})" class="btn btn-success btn-raised"type="submit">Back&nbsp;<i class="fa fa-undo"></i></a>
+      }
+</div>

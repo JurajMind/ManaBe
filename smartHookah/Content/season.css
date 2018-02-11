@@ -1,0 +1,30 @@
+﻿main.bmd-layout-content {
+    background-image: url(/Content/images/hallo.png);
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.navbar.navbar-dark.bg-faded {
+    background-color: #000000 !important;
+    color: #ffffff!important;
+}
+
+.bmd-layout-drawer {
+    background-color: #000000 !important;
+    color: #ff3d00!important;
+ }
+
+    .bmd-layout-drawer > .list-group .list-group-item:hover {
+        background-color: #ff3d00 !important;
+        color: #000000 !important;
+    }
+
+    .bmd-layout-drawer > header {
+        background-color: #000000;
+        height: 151px;
+        background-image: url(/Content/images/j1.jpg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        color: white;
+    }

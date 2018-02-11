@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model smartHookah.Controllers.IndexMyViewModel
+
+<div class="jumbotron">
+   <h1>List of stands & senzors</h1>
+</div>
+
+<div class="well">
+    <div class="list-group">
+        @foreach (var hookah in Model.Hookah)
+        {
+            var liveText = Model.Online.Contains(hookah.Code) ? "Live" : "Ready";
+            var liveCss = Model.Online.Contains(hookah.Code) ? "btn-success" : "btn-info";
+            <div class="list-group-item">
+                <h3 class="list-group-item-heading"><b>@hookah.Name </b><span class="pull-right">v.@Helper.UpdateVersionToString(hookah.Version)</span></h3>
+                <div class="row ">
+                    <div class="col-sm-6">@Html.ActionLink(liveText, "Hookah", new { controller = "SmokeSession", id = hookah.Code},new { @class = $"btn btn-sm {liveCss} btn-raised" })</div>
+                    <div class="col-sm-6">@Html.ActionLink("History", "Index", new { controller = "SmokeSession", id = hookah.Id },new {@class="btn btn-sm btn-default btn-raised"})</div>
+                </div>
+            </div>
+          
+        }
+    </div>
+</div>

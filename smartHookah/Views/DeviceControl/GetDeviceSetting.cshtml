@@ -1,0 +1,189 @@
+﻿@using System.Globalization
+@using Device
+@using smartHookah.Helpers
+@model smartHookah.Controllers.DeviceControlController.DeviceSettingViewModel
+
+<style>
+    .colorPicker {
+        height: 220px;
+        width: 261px !important;
+    }
+</style>
+
+<div id="settings">
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" style="width: 49%">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#action" role="tab" aria-controls="home" aria-expanded="true">@Device.action</a>
+        </li>
+        <li class="nav-item" style="width: 49%">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#idle" role="tab" aria-controls="profile">@Device.idle</a>
+        </li>
+    </ul>
+
+    <div class="tab-content container" id="myTabContent">
+        <div class="tab-pane active" id="action" role="tabpanel" aria-labelledby="home-tab">
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="bmd-label-floating">@Device.pufAnimation</label>
+                    <div class="input-group">
+                        @Html.AnimationDropdown(Model.PufAnimation, Model.HookahVersion, "form-control", "pufAnimation", "AnimationChanged(1, 'pufAnimation')")
+                    </div>
+                </div>
+
+                <div class="col-sm-6 form-group">
+                    <label class="bmd-label-floating">@Device.blowAnimation</label>
+                    <div class="input-group">
+                        @Html.AnimationDropdown(Model.BlowAnimation, Model.HookahVersion, "form-control", "blowAnimation", "AnimationChanged(2, 'blowAnimation')")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="bmd-label-floating">@Device.pufBr</label>
+                    <input class="form-control" step="10" value="@Model.Setting.PufBrightness" type="number" min="0" max="255" onchange="BrChanged(1, this.value)" id="pufSlider"/>
+                </div>
+
+
+                @if (Model.HookahVersion > 1000024)
+                {
+                    <div class="form-group col-sm-6">
+                        <label class="bmd-label-floating">@Device.pufSpeed</label>
+                        <input class="form-control" step="10" value="@Model.Setting.PufSpeed" type="number" min="10" max="255" onchange="SpeedChanged(1, this.value)" id="pufSpeedSlider"/>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="idle" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label class="bmd-label-floating">@Device.idleAnimation</label>
+                    <div class="input-group">
+                        @Html.AnimationDropdown(Model.IdleAnimation, Model.HookahVersion, "form-control", "idleAnimation", "AnimationChanged(0, 'idleAnimation')")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="bmd-label-floating">@Device.idleBr</label>
+                    <input class="form-control" step="10" value="@Model.Setting.IdleBrightness" type="number" min="0" max="255" onchange="BrChanged(0, this.value)" id="idleSlider"/>
+                </div>
+
+                @if (Model.HookahVersion > 1000024)
+                {
+                    <div class="form-group col-sm-6">
+                        <label class="bmd-label-floating">@Device.idleSpeed</label>
+                        <input class="form-control" step="10" value="@Model.Setting.IdleSpeed" type="number" min="10" max="255" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider"/>
+                    </div>
+                }
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input class="form-control" name="color" id="color" type="text" data-wheelcolorpicker="" data-wcp-layout="block" data-wcp-mobile="true" data-wcp-autoResize="true" data-wcp-cssClass="colorPicker">
+            <button class="btn btn-success" onclick="SendColor()">
+                @Device.setColor <i class="glyphicon glyphicon-save"></i>
+            </button>
+        </div>
+
+
+    </div>
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button class="btn btn-default" onclick="SetDefault()">
+            Set default
+        </button>
+    }
+
+    <button class="btn btn-default disabled" onclick="UseDefault()">
+        Use default
+    </button>
+
+    <hr/>
+</div>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        @{
+            var h = (double) Model.Setting.Color.Hue / 255;
+            var s = (double) Model.Setting.Color.Saturation / 255;
+            var v = (double) Model.Setting.Color.Value / 255;
+        }
+        $('#color')
+            .wheelColorPicker('setHsv',
+                @h.ToString(CultureInfo.InvariantCulture),
+                @s.ToString(CultureInfo.InvariantCulture),
+                @v.ToString(CultureInfo.InvariantCulture));
+    });
+
+    function SendColor() {
+        const color = $('#color').wheelColorPicker('getColor');
+        console.log(color);
+        SendComand("color", JSON.stringify(color));
+    }
+
+    function SendComand(cmd, data) {
+        console.log(cmd + ':' + data);
+        console.log(cmd + ':' + data);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Sent", "DeviceControl", new {id = Model.SessionId})',
+            data: { 'command': cmd, 'data': data },
+            dataType: 'json'
+        });
+    }
+
+    function SetDefault() {
+        
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetDefault", "DeviceControl", new { id = Model.SessionId})',
+            dataType: 'json'
+        });
+    }
+
+    function UseDefault() {
+        
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UseDefault", "DeviceControl", new { id = Model.SessionId})',
+            dataType: 'json'
+        });
+    }
+
+
+    function ModeChanged() {
+        SendComand('mode', $('#ModeSelector').val());
+    }
+
+    function AnimationChanged(index, value) {
+        SendComand('led', index + ':' + $(`#${value}`).val());
+    }
+
+    function BrChanged(index, value) {
+        SendComand('br', index + ':' + value);
+    }
+
+    function SpeedChanged(index, value) {
+        SendComand('speed', index + ':' + value);
+    }
+
+    function Restart() {
+        SendComand('restart', '');
+    }
+
+</script>

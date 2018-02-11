@@ -1,0 +1,11 @@
+﻿@model smartHookah.Controllers.DeviceControlController.DeviceSettingViewModel
+
+@{
+    ViewBag.Title = "Colors setting";
+   
+}
+
+<div class="card">
+    <h4 class="card-header">Settings</h4>
+    <div class="card-block">        @Html.Partial("~/Views/DeviceControl/GetDeviceSetting.cshtml", Model)</div>
+</div>

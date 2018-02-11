@@ -1,0 +1,8 @@
+﻿@model smartHookah.Models.Reward
+    
+<div class="list-group-item row">
+    <span class="col-sm-3">@Model.GetWebName()</span>
+    <span class="col-sm-4"  @Model.Name ></span>
+    <span class="col-sm-4"  @Model.Param ></span>
+    <a href="@Url.Action("RewardDetails",new {id = Model.Id})"class="btn btn-info btn-sm">Details</a>
+</div>

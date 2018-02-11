@@ -1,0 +1,152 @@
+﻿@model smartHookah.Controllers.DashBoardViewModel
+@{
+    ViewBag.Title = "DashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="well">
+    <h2>Welcome @Model.User.Email</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Live sessions</div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Smoke sumary</div>
+        <div class="panel-body">
+
+            <table class="table table-striped">
+                <tr>
+                    <td> Total sessions</td>
+                    <td> @Model.Sessions.Count()</td>
+                </tr>
+
+                <tr>
+                    <td> Total session time</td>
+                    <td> @Model.SessionStatistics.Select(a => a.SessionDuration).Aggregate((a, b) => a + b).ToString(@"hh\:mm\:ss")</td>
+                </tr>
+
+                <tr>
+                    <td> Total pufs</td>
+                    <td> @Model.Sessions.Sum(b => b.Statistics.PufCount)</td>
+                </tr>
+
+
+
+                <tr>
+                    <td> Total smoke time</td>
+                    <td> @Model.SessionStatistics.Where(a => a != null).Select(a => a.SmokeDuration).Aggregate((a, b) => a + b).ToString(@"hh\:mm\:ss")</td>
+                </tr>
+
+                <tr>
+                    <td> Longest pufs</td>
+                    <td> @Model.SessionStatistics.Max(b => b.LongestPuf).ToString(@"s\.fff") .sec</td>
+                </tr>
+
+                <tr>
+                    <td> Longest session</td>
+                    <td>
+                        @{
+                            var longestSession = Model.SessionStatistics.OrderBy(a => a.SmokeDuration).Last();
+                        }
+                        On:@longestSession.Start.ToString("dd.MM.yyyy") Duration:@longestSession.SmokeDuration.ToString(@"hh\:mm\:ss") #@longestSession.PufCount
+                    </td>
+
+                </tr>
+
+
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Meta data</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Tobaco usage</label>
+                    <table>
+                        @{
+                            var tobacco = Model.MetaData.GroupBy(a => a.Tobacco).OrderByDescending(a => a.Count());
+                        }
+                        @foreach (var t in tobacco.Where(t => t.Key != null))
+                        {
+                        <tr>
+                            <td>@t.Key.Brand.Name @t.Key.AccName</td>
+                            <td>@t.Count()</td>
+                        </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <label>Hookah usage</label>
+                    <table>
+                        @{
+                            var hookah = Model.MetaData.GroupBy(a => a.Pipe);
+                        }
+                        @foreach (var t in hookah.Where(t => t.Key != null))
+                        {
+                        <tr>
+                            <td>@t.Key.Brand.Name @t.Key.AccName</td>
+                            <td>@t.Count()</td>
+                        </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <label>Bowl usage</label>
+                    <table>
+                        @{
+                            var bowl = Model.MetaData.GroupBy(a => a.Bowl);
+                        }
+                        @foreach (var t in bowl.Where(t => t.Key != null))
+                        {
+                            <tr>
+                                <td>@t.Key.Brand.Name @t.Key.AccName</td>
+                                <td>@t.Count()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <label>Heat manager usage</label>
+                    <table>
+                        @{
+                            var heatKeeper = Model.MetaData.GroupBy(a => a.HeatKeeper);
+                        }
+                        @foreach (var t in heatKeeper)
+                        {
+                            <tr>
+                                <td>@t.Key</td>
+                                <td>@t.Count()</td>
+                            </tr>
+                        }
+                    </table>
+                    <hr/>
+                    <label>Pack type </label>
+                    <table>
+                        @{
+                            var packType = Model.MetaData.GroupBy(a => a.PackType);
+                        }
+                        @foreach (var t in packType)
+                        {
+                            <tr>
+                                <td>@t.Key</td>
+                                <td>@t.Count()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+

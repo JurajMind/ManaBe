@@ -1,0 +1,49 @@
+﻿@model smartHookah.Models.PipeAccesoryStatistics
+
+
+<div class="card">
+    @if (Model != null)
+{
+        <h4 class="card-header">Summary :</h4>
+        <div class="card-body">
+            <table class="table table-striped table-responsive">
+                <tr>
+                    <td>Used :</td>
+                    <td>@Model.Used</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Puf count:</td>
+                    <td>@Model.PufCount.ToString("N2")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Blow count:</td>
+                    <td>@Model.BlowCount.ToString("N2")</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>Smoke duration:</td>
+                    <td>@Model.SmokeDuration.ToString(@"mm\:ss")</td>
+                    <td>@Model.SmokeTimePercentil.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td>Session duration:</td>
+                    <td>@Model.SessionDuration.ToString(@"hh\:mm\:ss")</td>
+                    <td>@Model.SessionTimePercentil.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td>Pack type</td>
+                    <td>@Model.PackType</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+}
+else
+{
+    <h4 class="card-header"> No usage data</h4>
+}
+</div>

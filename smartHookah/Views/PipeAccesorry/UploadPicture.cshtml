@@ -1,0 +1,27 @@
+﻿@model smartHookah.Models.PipeAccesory
+
+@{
+    ViewBag.Title = "Upload picture";
+   
+}
+
+@using (Html.BeginForm("UploadPicture", "PipeAccesorry", FormMethod.Post, new {enctype = "multipart/form-data", id = "createForm"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("id",@Model.Id);
+    <div class="well">
+        <h2>Upload picture</h2>
+        <h4>@Model.Brand.DisplayName @Model.AccName</h4>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Picture, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <label class="btn btn-primary" >
+                    <input  name="file" type="file" style="display:none;" onchange="$('#pictureFileInfo').html(this.files[0].name);">
+                    Upload
+                </label>
+                <span class='label label-info' id="pictureFileInfo"></span>
+            </div>
+        </div>
+        <button>Upload</button>
+    </div>
+}

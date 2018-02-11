@@ -1,0 +1,61 @@
+﻿@model smartHookah.Models.PersonSetingViewModel
+    
+<style>
+    a.infobtn {
+        padding-left: 12px;
+    }
+</style>
+@{
+    object disabled = null;
+    if (!Model.CanEdit)
+    {
+        disabled = new {@disabled = "disabled"};
+    }
+    else
+    {
+        
+    }
+
+}
+@Html.HiddenFor(a => a.Person.Id)
+<div class="form-group">
+    
+    @Html.LabelFor(model => model.Person.AutoAssign, htmlAttributes: new {@class = "control-label col-md-2 "})
+    
+   
+    <div class="col-md-10">
+        <div class="checkbox">
+            <label> @Html.CheckBoxFor(model => model.Person.AutoAssign, disabled)</label>
+            @Html.ValidationMessageFor(model => model.Person.AutoAssign, "", new { @class = "text-danger" })
+            <a class="infobtn" href="#" data-toggle="tooltip" title="Auto assing to your stand sessions"><i class="fa fa-info-circle"></i></a>
+        </div>
+        
+    </div>
+
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Person.MyGear, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            <label>    @Html.CheckBoxFor(model => model.Person.MyGear, disabled)</label>
+            @Html.ValidationMessageFor(model => model.Person.MyGear, "", new { @class = "text-danger" })
+            <a class="infobtn" href="#" data-toggle="tooltip" title="Show primary my gear in selection!"><i class="fa fa-info-circle"></i></a>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Person.MyTobacco, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            <label>    @Html.CheckBoxFor(model => model.Person.MyTobacco, disabled)</label>
+            @Html.ValidationMessageFor(model => model.Person.MyTobacco, "", new { @class = "text-danger" })
+            <a class="infobtn" href="#" data-toggle="tooltip" title="Show primary my tobacco in selecion!"><i class="fa fa-info-circle"></i></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+</script>

@@ -1,0 +1,73 @@
+﻿@model smartHookah.Models.ProcessOrderViewModel
+
+@{
+    ViewBag.Title = "title";
+
+}
+
+<div class="well">
+    <h3><i class="fa fa-info-circle"></i> Smoke Metadata</h3>
+    <div id="metaDataTable">
+        @Html.Partial("smokeSessionMetaData", Model.order.SmokeSessionMetaData)
+    </div>
+    <hr/>
+    <a class="btn btn-primary btn-raised" data-toggle="modal" data-target="#metaDataModal">
+        Edit smoke session metaData
+    </a>
+    <hr />
+@using (Html.BeginForm("ProcessOrder", "Places", FormMethod.Post, new {id = "form"}))
+{
+    @Html.Hidden("id",@Model.order.Id);
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Podložka</label>
+            <select name="hookahId" class="form-control">
+                @foreach (var hookah in Model.Hookahs)
+                {
+                    <option value="@hookah.Id">@hookah.Name - @hookah.SessionCode</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Misto</label>
+            <select name="seatId" class="form-control">
+                <option @(0 == Model.SelectedSeat ? "Selected=\"Selected\"" : "")value="0">None</option>
+                @foreach (var seat in Model.Seats)
+                {
+                    <option @(seat.Id == Model.SelectedSeat ? "Selected=\"Selected\"" : "")value="@seat.Id">@seat.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <button class="btn btn-success btn-raised">Save&nbsp;<i class="fa fa-check"></i></button>
+    <a href="@Url.Action("Manage","Places",new {id = @Model.order.PlaceId})"class="btn btn-danger btn-raised">Back&nbsp;<i class="fa fa-backward"></i></a>
+}
+    
+</div>
+
+<div>   @Html.Partial("smokeMetaDataModal", Model.SmokeMetadataModalViewModel)</div>
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            DrawnMixChart('mixChart');
+
+        })
+
+
+        function SaveSmokeMetadataSucess(data) {
+            console.log(data);
+            $('#metaDataTable').html(data);
+            $('#metaDataModal').modal('hide');
+        
+            if ($('#mixChart').length === 1) {
+                DrawnMixChart('mixChart');
+            }
+        }
+
+    </script>
+}

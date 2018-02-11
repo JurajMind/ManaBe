@@ -1,0 +1,24 @@
+﻿@using smartHookah.Support
+@model  smartHookah.Controllers.TypeStatsModel
+
+@{
+   
+    Layout = null;
+}
+
+<tr>
+    <td>@Model.type.ToFriendlyString()</td>
+    <td>@Model.Pufs.Count()</td>
+    @if (Model.TimeSpan.Any())
+    {
+        <td>@Model.TimeSpan.Aggregate((a, b) => a + b)</td>
+        <td>@Model.TimeSpan.Max()</td>
+        <td>@Model.TimeSpan.Min()</td>
+    }
+    else
+    {
+        <td>No data</td>
+        <td>No data</td>
+        <td>No data</td>
+    }
+</tr>

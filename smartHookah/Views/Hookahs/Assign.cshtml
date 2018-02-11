@@ -1,0 +1,37 @@
+﻿@model smartHookah.Controllers.HookahsController.AssignHookahViewModel
+@{
+    ViewBag.Title = "Assign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="well">
+    <h2>Assign</h2>
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HookahCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HookahCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HookahCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        if (User.IsInRole("Admin"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.personId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.personId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.personId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        <div class="form-actions no-color">
+            <input type="submit" value="Assign" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

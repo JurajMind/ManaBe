@@ -1,0 +1,179 @@
+﻿@using System.Configuration
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="manifest" href="~/Content/manifest.json">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link href="~/Content/images/icons/icon-128x128.png" rel="apple-touch-icon" sizes="128x128"/>
+    <link rel="apple-touch-startup-image" href="~/Content/splash.png">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <meta property="og:title" content="Manapipes" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://app.manapipes.com/Content/images/icons/icon-96x96.png" />
+    <meta property="fb:app_id" content="@ConfigurationManager.AppSettings["fbAppId"]" />
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#3f51b5">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#3f51b5">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#3f51b5">
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>@ViewBag.Title - ManaPipes</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/mdl")
+    @Styles.Render("~/Content/font-awesome")
+
+    @Styles.Render("~/Content/material")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    
+    @Scripts.Render("~/bundles/jqueryval")
+  
+
+    @Scripts.Render("~/bundles/jquery-rating")
+    @Scripts.Render("~/bundles/chart")
+    @Scripts.Render("~/bundles/main")
+    <script type='text/javascript'>
+        var appInsights = window.appInsights ||
+            function(config) {
+                function r(config) {
+                    t[config] = function() {
+                        var i = arguments;
+                        t.queue.push(function() { t[config].apply(t, i) })
+                    }
+                }
+
+                var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f;
+                for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0]
+                        .parentNode.appendChild(s), t.cookie = u
+                        .cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax'];
+                    i.length;
+                ) r('track' + i.pop());
+                return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'),
+                    config.disableExceptionTracking ||
+                    (i = 'onerror', r('_' + i), f = e[i], e[i] = function(config, r, u, e, o) {
+                        var s = f && f(config, r, u, e, o);
+                        return s !== !0 && t['_' + i](config, r, u, e, o), s
+                    }), t
+            }({
+                instrumentationKey: '***REMOVED***'
+            });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img href="@Url.Action("Index", "Home")" class="pull-left" src="~/Content/images/icons/icon-72x72.png" width="50" height="50" alt="Icon"/>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">&nbsp;Mana pipes</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @*<li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                <li class="nav-item dropdown">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link dropdown-toggle" href="#" id="responsiveNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-rocket"></i>&nbsp;Dev</a>
+                        <ul class="dropdown-menu" aria-labelledby="responsiveNavbarDropdown">
+                            <li> <a class="dropdown-item" href="@Url.Action("Index", "Brands")">Brands</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "Pipes")">Hookah</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "Bowls")">Bowls</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "Hookahs")">Stands</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index", "Picture")">Pictures</a></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Update")">Updates</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Old", "Home")">OldHome</a></li>
+                            }
+                            <li><a class="dropdown-item" href="@Url.Action("DashBoard", "Places", new {id = 1})">Test board<i class="fa fa-home"></i></a></li>
+                        </ul>
+                    }
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li><a href="@Url.Action("MyGear", "Person")">@Home.Home.myGear</a></li>
+                }
+                <li><a href="@Url.Action("Index", "Tobacco")">@Home.Home.tobacco</a></li>
+                <li><a href="@Url.Action("Mix", "Tobacco")"><i class="fa fa-pie-chart"></i>&nbsp;@Home.Home.mixology</a></li>
+                <li><a class="hidden-lg hidden-md" href="@Url.Action("Index", "QrCodeReader")">Qr reader &nbsp;<i class="glyphicon glyphicon-qrcode"></i></a></li>
+                <li><a href="@Url.Action("Index", "Places")"><i class="fa fa-users"></i>&nbsp;@Res.Person.places</a></li>
+                <li><a href="http:\\manapipes.com" target="_blank"><i class="fa fa-info"></i>&nbsp;@Home.Home.about</a></li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Mana pipes</p>
+    </footer>
+</div>
+
+@Scripts.Render("~/bundles/mdl")
+@Scripts.Render("~/bundles/support")
+@Scripts.Render("~/bundles/controll")
+@Scripts.Render("~/bundles/signalr")
+@Scripts.Render("~/bundles/moment")
+@Scripts.Render("~/bundles/material")
+@*@Scripts.Render("~/bundles/highcharts")*@
+
+<script src="~/signalr/hubs"></script>
+<script type="text/javascript">
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load',
+            function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    },
+                    function(err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+    }
+
+    $(function() {
+        $.stayInWebApp();
+    });
+    $.material.init();
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '@ConfigurationManager.AppSettings["fbAppId"]',
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+@RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,2399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4C319AFE-6D50-411A-9FC8-D2265941C84D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>smartHookah</RootNamespace>
+    <AssemblyName>smartHookah</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44324</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ApplicationInsightsResourceId>/subscriptions/8531dba7-efbb-447d-960d-12621b93543b/resourcegroups/smartHookah/providers/microsoft.insights/components/smarthookah</ApplicationInsightsResourceId>
+    <Use64BitIISExpress />
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/8531dba7-efbb-447d-960d-12621b93543b/resourcegroups/smartHookah/providers/microsoft.insights/components/smarthookah</ApplicationInsightsAnnotationResourceId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.8.0\lib\net46\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.MachineLearning, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\net46\Accord.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.WebApi2.4.1.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.87.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonMark.NET.0.9.0\lib\net45\CommonMark.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Buffers, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Buffers-signed.0.3.2\lib\net45\DotNetty.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetty.Codecs, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs-signed.0.3.2\lib\net45\DotNetty.Codecs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.Mqtt, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs.Mqtt-signed.0.3.2\lib\net45\DotNetty.Codecs.Mqtt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetty.Common, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Common-signed.0.3.2\lib\net45\DotNetty.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetty.Handlers, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Handlers-signed.0.3.2\lib\net45\DotNetty.Handlers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetty.Transport, Version=0.3.2.0, Culture=neutral, PublicKeyToken=e7a0210a354f294a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Transport-signed.0.3.2\lib\net45\DotNetty.Transport.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.BulkInsert, Version=6.0.2.8, Culture=neutral, PublicKeyToken=630a17433349cb76, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6.6.0.2.8\lib\Net45\EntityFramework.BulkInsert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.1.0.9, Culture=neutral, PublicKeyToken=7ee2e825d201459e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.1.0.9\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="GuigleAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Easyforce.GuigleAPI.1.0.6\lib\GuigleAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Console, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Console.1.3.4\lib\net45\Hangfire.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.6.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.6.17\lib\net45\Hangfire.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.SqlServer, Version=1.6.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.6.17\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.5.5.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.5.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.Core, Version=2.4.9.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.2.4.9\lib\net45\JavaScriptEngineSwitcher.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="JSPool, Version=3.0.1.0, Culture=neutral, PublicKeyToken=2fc7775f73072640, processorArchitecture=MSIL">
+      <HintPath>..\packages\JSPool.3.0.1\lib\net451\JSPool.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Mailzory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mailzory.1.2.0\lib\net461\Mailzory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.4.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.4.1\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.2.2.0\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Authentication.1.1.1\lib\net451\Microsoft.AspNetCore.Authentication.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication.Facebook, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Authentication.Facebook.1.1.1\lib\net451\Microsoft.AspNetCore.Authentication.Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication.OAuth, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Authentication.OAuth.1.1.1\lib\net451\Microsoft.AspNetCore.Authentication.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.Internal.1.1.1\lib\net451\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.DataProtection, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.DataProtection.1.1.1\lib\net451\Microsoft.AspNetCore.DataProtection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.DataProtection.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.DataProtection.Abstractions.1.1.1\lib\net451\Microsoft.AspNetCore.DataProtection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Abstractions.1.1.1\lib\net451\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Server.Abstractions.1.1.1\lib\net451\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.1.1.1\lib\net451\Microsoft.AspNetCore.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.1.1.1\lib\net451\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Extensions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Extensions.1.1.1\lib\net451\Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.1.1.1\lib\net451\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.1.1.1\lib\net451\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Amqp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Amqp.2.0.6\lib\net45\Microsoft.Azure.Amqp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Devices, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Devices.1.4.1\lib\net451\Microsoft.Azure.Devices.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Devices.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Devices.Client.1.2.2\lib\net45\Microsoft.Azure.Devices.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Devices.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.1.1\lib\net45\Microsoft.Azure.Devices.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Server, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Server.2.0.0\lib\net46\Microsoft.Azure.Mobile.Server.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Server.Authentication, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Authentication.2.0.0\lib\net46\Microsoft.Azure.Mobile.Server.Authentication.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Server.Entity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Entity.1.1.157.1\lib\net45\Microsoft.Azure.Mobile.Server.Entity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Mobile.Server.Tables, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Tables.2.0.0\lib\net46\Microsoft.Azure.Mobile.Server.Tables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.8.1\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.8.1\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.1\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.1.1.1\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.ObjectPool, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.ObjectPool.1.1.0\lib\net451\Microsoft.Extensions.ObjectPool.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.1.1.1\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.1.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.WebEncoders, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.WebEncoders.1.1.1\lib\netstandard1.0\Microsoft.Extensions.WebEncoders.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.Headers.1.1.1\lib\netstandard1.1\Microsoft.Net.Http.Headers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.1.0-rc1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.1.0-rc1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.1.0-rc1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.ServiceBus.3.4.5\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceBus.Messaging.EventProcessorHost, Version=0.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.ServiceBus.EventProcessorHost.2.2.10\lib\net45-full\Microsoft.ServiceBus.Messaging.EventProcessorHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.8.0.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Security.3.2.3.0\lib\net45\Mono.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MsieJavaScriptEngine, Version=2.2.2.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MsieJavaScriptEngine.2.2.2\lib\net45\MsieJavaScriptEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NodaTime, Version=2.0.3.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.2.0.3\lib\net45\NodaTime.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLCrypto.2.0.147\lib\net45\PCLCrypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.BCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\packages\PInvoke.BCrypt.0.3.152\lib\net40\PInvoke.BCrypt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.Kernel32, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\packages\PInvoke.Kernel32.0.3.152\lib\net40\PInvoke.Kernel32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.NCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\packages\PInvoke.NCrypt.0.3.152\lib\net40\PInvoke.NCrypt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.Windows.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\packages\PInvoke.Windows.Core.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.Windows.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.2.8\lib\net40\QRCoder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.9.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.9.0\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Redis, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Redis.3.9.71\lib\net35\ServiceStack.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.3.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.30826.1200, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.3.308261200\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.3.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.8.1\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.3.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.2.8\lib\net40\UnityEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Validation, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Validation.2.3.7\lib\dotnet\Validation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VroomJs, Version=1.2.3.0, Culture=neutral, PublicKeyToken=e7c52e67fcb0044f, processorArchitecture=MSIL">
+      <HintPath>..\packages\VroomJs.1.2.3\lib\net45\VroomJs.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Westwind.Globalization, Version=2.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Westwind.Globalization.2.15.0\lib\net45\Westwind.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Westwind.Globalization.Web, Version=2.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Westwind.Globalization.Web.2.15.0\lib\net45\Westwind.Globalization.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Westwind.Utilities, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Westwind.Utilities.3.0.1\lib\net45\Westwind.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Westwind.Web, Version=2.75.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Westwind.Web.2.75\lib\net45\Westwind.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\Api\AnimController.cs" />
+    <Compile Include="Controllers\Api\AnimationController.cs" />
+    <Compile Include="Controllers\Api\CleanAllController.cs" />
+    <Compile Include="Controllers\Api\EndSessionController.cs" />
+    <Compile Include="Controllers\Api\WearablesController.cs" />
+    <Compile Include="Controllers\Api\MsBandController.cs" />
+    <Compile Include="Controllers\Api\Ping.cs" />
+    <Compile Include="Controllers\Api\PufController.cs" />
+    <Compile Include="Controllers\Api\SentToDeviceController.cs" />
+    <Compile Include="Controllers\Api\StandPictureController.cs" />
+    <Compile Include="Controllers\AppCacheController.cs" />
+    <Compile Include="Controllers\BowlsController.cs" />
+    <Compile Include="Controllers\BrandsController.cs" />
+    <Compile Include="Controllers\Mobile\PersonController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
+    <Compile Include="Helpers\InlineHelper.cs" />
+    <Compile Include="Migrations\201710281304391_sessionSeat.cs" />
+    <Compile Include="Migrations\201710281304391_sessionSeat.Designer.cs">
+      <DependentUpon>201710281304391_sessionSeat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711041035348_reservation.cs" />
+    <Compile Include="Migrations\201711041035348_reservation.Designer.cs">
+      <DependentUpon>201711041035348_reservation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711041140485_PlacePublic.cs" />
+    <Compile Include="Migrations\201711041140485_PlacePublic.Designer.cs">
+      <DependentUpon>201711041140485_PlacePublic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711091247420_order2.cs" />
+    <Compile Include="Migrations\201711091247420_order2.Designer.cs">
+      <DependentUpon>201711091247420_order2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711101515234_reservation3.cs" />
+    <Compile Include="Migrations\201711101515234_reservation3.Designer.cs">
+      <DependentUpon>201711101515234_reservation3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711101931070_order4.cs" />
+    <Compile Include="Migrations\201711101931070_order4.Designer.cs">
+      <DependentUpon>201711101931070_order4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711111054537_placeMap.cs" />
+    <Compile Include="Migrations\201711111054537_placeMap.Designer.cs">
+      <DependentUpon>201711111054537_placeMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711111250315_order5.cs" />
+    <Compile Include="Migrations\201711111250315_order5.Designer.cs">
+      <DependentUpon>201711111250315_order5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711221256394_alternativeName.cs" />
+    <Compile Include="Migrations\201711221256394_alternativeName.Designer.cs">
+      <DependentUpon>201711221256394_alternativeName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712021315259_priceGroup1.cs" />
+    <Compile Include="Migrations\201712021315259_priceGroup1.Designer.cs">
+      <DependentUpon>201712021315259_priceGroup1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712021733039_alternativeName1.cs" />
+    <Compile Include="Migrations\201712021733039_alternativeName1.Designer.cs">
+      <DependentUpon>201712021733039_alternativeName1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712021735114_orderExtraPriceGroup.cs" />
+    <Compile Include="Migrations\201712021735114_orderExtraPriceGroup.Designer.cs">
+      <DependentUpon>201712021735114_orderExtraPriceGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712021816044_GroupPriceFix.cs" />
+    <Compile Include="Migrations\201712021816044_GroupPriceFix.Designer.cs">
+      <DependentUpon>201712021816044_GroupPriceFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712031752409_MultiSeat.cs" />
+    <Compile Include="Migrations\201712031752409_MultiSeat.Designer.cs">
+      <DependentUpon>201712031752409_MultiSeat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801312202444_add-sleepTime.cs" />
+    <Compile Include="Migrations\201801312202444_add-sleepTime.Designer.cs">
+      <DependentUpon>201801312202444_add-sleepTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802101321273_MinimumReservationTime.cs" />
+    <Compile Include="Migrations\201802101321273_MinimumReservationTime.Designer.cs">
+      <DependentUpon>201802101321273_MinimumReservationTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActiveSessionListItemViewModel.cs" />
+    <Compile Include="Models\Db\SessionReport.cs" />
+    <Compile Include="Models\Db\SmokeEvent.cs" />
+    <Compile Include="Models\Db\SmokeEventType.cs" />
+    <Compile Include="Models\Db\StandUsage.cs" />
+    <Compile Include="Models\Db\Tag.cs" />
+    <Compile Include="Models\EditOpenHoursPostModel.cs" />
+    <Compile Include="Models\EditOpenHoursViewModel.cs" />
+    <Compile Include="Controllers\GamificationController.cs" />
+    <Compile Include="Controllers\GetPlaceMenuModel.cs" />
+    <Compile Include="Controllers\Hours.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Models\OrderHookahViewModel.cs" />
+    <Compile Include="Models\PlaceDetailsViewModel.cs" />
+    <Compile Include="Models\PlaceModels.cs" />
+    <Compile Include="Models\PostOrderModel.cs" />
+    <Compile Include="Filters\HangfireFilter.cs" />
+    <Compile Include="Filters\LocalizationAttribute.cs" />
+    <Compile Include="Helpers\ImageActionLinkHelper.cs" />
+    <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Helpers\RedisHelper.cs" />
+    <Compile Include="Jobs\SessionAutoEnd.cs" />
+    <Compile Include="Migrations\201707021251146_addDisplayName.cs" />
+    <Compile Include="Migrations\201707021251146_addDisplayName.Designer.cs">
+      <DependentUpon>201707021251146_addDisplayName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707070901147_tobacoFix.cs" />
+    <Compile Include="Migrations\201707070901147_tobacoFix.Designer.cs">
+      <DependentUpon>201707070901147_tobacoFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707072004535_laungeBH.cs" />
+    <Compile Include="Migrations\201707072004535_laungeBH.Designer.cs">
+      <DependentUpon>201707072004535_laungeBH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707072027497_adressfix.cs" />
+    <Compile Include="Migrations\201707072027497_adressfix.Designer.cs">
+      <DependentUpon>201707072027497_adressfix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707072030329_laungeName.cs" />
+    <Compile Include="Migrations\201707072030329_laungeName.Designer.cs">
+      <DependentUpon>201707072030329_laungeName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707072034432_deleteAnimations.cs" />
+    <Compile Include="Migrations\201707072034432_deleteAnimations.Designer.cs">
+      <DependentUpon>201707072034432_deleteAnimations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707072253139_personLounge.cs" />
+    <Compile Include="Migrations\201707072253139_personLounge.Designer.cs">
+      <DependentUpon>201707072253139_personLounge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707080923115_addPlaces.cs" />
+    <Compile Include="Migrations\201707080923115_addPlaces.Designer.cs">
+      <DependentUpon>201707080923115_addPlaces.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707081106245_urlIndex.cs" />
+    <Compile Include="Migrations\201707081106245_urlIndex.Designer.cs">
+      <DependentUpon>201707081106245_urlIndex.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707221856238_tag.cs" />
+    <Compile Include="Migrations\201707221856238_tag.Designer.cs">
+      <DependentUpon>201707221856238_tag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707261200270_smokeEvent.cs" />
+    <Compile Include="Migrations\201707261200270_smokeEvent.Designer.cs">
+      <DependentUpon>201707261200270_smokeEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708012025429_orders.cs" />
+    <Compile Include="Migrations\201708012025429_orders.Designer.cs">
+      <DependentUpon>201708012025429_orders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708031629524_preset.cs" />
+    <Compile Include="Migrations\201708031629524_preset.Designer.cs">
+      <DependentUpon>201708031629524_preset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708060953588_orderMetadata.cs" />
+    <Compile Include="Migrations\201708060953588_orderMetadata.Designer.cs">
+      <DependentUpon>201708060953588_orderMetadata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708060958215_orderDate.cs" />
+    <Compile Include="Migrations\201708060958215_orderDate.Designer.cs">
+      <DependentUpon>201708060958215_orderDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708121308426_accPictures.cs" />
+    <Compile Include="Migrations\201708121308426_accPictures.Designer.cs">
+      <DependentUpon>201708121308426_accPictures.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708130920264_speed.cs" />
+    <Compile Include="Migrations\201708130920264_speed.Designer.cs">
+      <DependentUpon>201708130920264_speed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708141739096_priceGroup.cs" />
+    <Compile Include="Migrations\201708141739096_priceGroup.Designer.cs">
+      <DependentUpon>201708141739096_priceGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708151734568_ownDate.cs" />
+    <Compile Include="Migrations\201708151734568_ownDate.Designer.cs">
+      <DependentUpon>201708151734568_ownDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708190936508_PriceFix.cs" />
+    <Compile Include="Migrations\201708190936508_PriceFix.Designer.cs">
+      <DependentUpon>201708190936508_PriceFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708191230009_pricePlace.cs" />
+    <Compile Include="Migrations\201708191230009_pricePlace.Designer.cs">
+      <DependentUpon>201708191230009_pricePlace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708200930060_seat.cs" />
+    <Compile Include="Migrations\201708200930060_seat.Designer.cs">
+      <DependentUpon>201708200930060_seat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708200947372_seat2.cs" />
+    <Compile Include="Migrations\201708200947372_seat2.Designer.cs">
+      <DependentUpon>201708200947372_seat2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708301321595_game1.cs" />
+    <Compile Include="Migrations\201708301321595_game1.Designer.cs">
+      <DependentUpon>201708301321595_game1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708310854565_game2.cs" />
+    <Compile Include="Migrations\201708310854565_game2.Designer.cs">
+      <DependentUpon>201708310854565_game2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708310919193_game3.cs" />
+    <Compile Include="Migrations\201708310919193_game3.Designer.cs">
+      <DependentUpon>201708310919193_game3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708310921078_game4.cs" />
+    <Compile Include="Migrations\201708310921078_game4.Designer.cs">
+      <DependentUpon>201708310921078_game4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709010846394_game5.cs" />
+    <Compile Include="Migrations\201709010846394_game5.Designer.cs">
+      <DependentUpon>201709010846394_game5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709031148202_game6.cs" />
+    <Compile Include="Migrations\201709031148202_game6.Designer.cs">
+      <DependentUpon>201709031148202_game6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709031226258_placeFix4.cs" />
+    <Compile Include="Migrations\201709031226258_placeFix4.Designer.cs">
+      <DependentUpon>201709031226258_placeFix4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709040832039_game51.cs" />
+    <Compile Include="Migrations\201709040832039_game51.Designer.cs">
+      <DependentUpon>201709040832039_game51.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709040946577_game61.cs" />
+    <Compile Include="Migrations\201709040946577_game61.Designer.cs">
+      <DependentUpon>201709040946577_game61.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709041442304_game7.cs" />
+    <Compile Include="Migrations\201709041442304_game7.Designer.cs">
+      <DependentUpon>201709041442304_game7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709051426578_gamefix6.cs" />
+    <Compile Include="Migrations\201709051426578_gamefix6.Designer.cs">
+      <DependentUpon>201709051426578_gamefix6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709051449214_gamefix7.cs" />
+    <Compile Include="Migrations\201709051449214_gamefix7.Designer.cs">
+      <DependentUpon>201709051449214_gamefix7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709171010111_media.cs" />
+    <Compile Include="Migrations\201709171010111_media.Designer.cs">
+      <DependentUpon>201709171010111_media.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709280848453_tobaccoTaste.cs" />
+    <Compile Include="Migrations\201709280848453_tobaccoTaste.Designer.cs">
+      <DependentUpon>201709280848453_tobaccoTaste.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710061755050_game.cs" />
+    <Compile Include="Migrations\201710061755050_game.Designer.cs">
+      <DependentUpon>201710061755050_game.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710131230057_hookahOfline.cs" />
+    <Compile Include="Migrations\201710131230057_hookahOfline.Designer.cs">
+      <DependentUpon>201710131230057_hookahOfline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710161255264_defaultValues.cs" />
+    <Compile Include="Migrations\201710161255264_defaultValues.Designer.cs">
+      <DependentUpon>201710161255264_defaultValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710191300030_autoSleepSetting.cs" />
+    <Compile Include="Migrations\201710191300030_autoSleepSetting.Designer.cs">
+      <DependentUpon>201710191300030_autoSleepSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710261340241_seatCode.cs" />
+    <Compile Include="Migrations\201710261340241_seatCode.Designer.cs">
+      <DependentUpon>201710261340241_seatCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChangeNameViewModel.cs" />
+    <Compile Include="Controllers\ControllerModule.cs" />
+    <Compile Include="Controllers\DeviceControlController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HookahsController.cs" />
+    <Compile Include="Controllers\MachineController.cs" />
+    <Compile Include="Controllers\PlacesController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Api\QRCodeController.cs" />
+    <Compile Include="Controllers\Mobile\PipeAccesoryDtocontroller.cs" />
+    <Compile Include="Controllers\Mobile\SmokeSessionsController.cs" />
+    <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\PictureController.cs" />
+    <Compile Include="Controllers\PipeAccesorryController.cs" />
+    <Compile Include="Controllers\PipesController.cs" />
+    <Compile Include="Controllers\QrCodeReaderController.cs" />
+    <Compile Include="Controllers\ResourcesController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Models\SmokeSessionGetStaticsticsModel.cs" />
+    <Compile Include="Helpers\AnimationHelper.cs" />
+    <Compile Include="Helpers\DbHelper.cs" />
+    <Compile Include="Helpers\ExpandPropertyAttribute.cs" />
+    <Compile Include="Helpers\HtmlHelper.cs" />
+    <Compile Include="Helpers\IFFTHelper.cs" />
+    <Compile Include="Helpers\MySqlFuncs.cs" />
+    <Compile Include="Helpers\ServerRenderHelper.cs" />
+    <Compile Include="Helpers\ShareHelper.cs" />
+    <Compile Include="Helpers\SmokeHelper.cs" />
+    <Compile Include="Migrations\201701311937412_bigUpdate.cs" />
+    <Compile Include="Migrations\201701311937412_bigUpdate.Designer.cs">
+      <DependentUpon>201701311937412_bigUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702021801237_ownFix.cs" />
+    <Compile Include="Migrations\201702021801237_ownFix.Designer.cs">
+      <DependentUpon>201702021801237_ownFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702071702166_brandName.cs" />
+    <Compile Include="Migrations\201702071702166_brandName.Designer.cs">
+      <DependentUpon>201702071702166_brandName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702231904456_autoassign.cs" />
+    <Compile Include="Migrations\201702231904456_autoassign.Designer.cs">
+      <DependentUpon>201702231904456_autoassign.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111445575_review4.cs" />
+    <Compile Include="Migrations\201703111445575_review4.Designer.cs">
+      <DependentUpon>201703111445575_review4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111652319_review5.cs" />
+    <Compile Include="Migrations\201703111652319_review5.Designer.cs">
+      <DependentUpon>201703111652319_review5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111656289_review6.cs" />
+    <Compile Include="Migrations\201703111656289_review6.Designer.cs">
+      <DependentUpon>201703111656289_review6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171827048_personCount.cs" />
+    <Compile Include="Migrations\201703171827048_personCount.Designer.cs">
+      <DependentUpon>201703171827048_personCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171847208_SmokeTime.cs" />
+    <Compile Include="Migrations\201703171847208_SmokeTime.Designer.cs">
+      <DependentUpon>201703171847208_SmokeTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171853594_aqqQuality.cs" />
+    <Compile Include="Migrations\201703171853594_aqqQuality.Designer.cs">
+      <DependentUpon>201703171853594_aqqQuality.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171926023_statFix.cs" />
+    <Compile Include="Migrations\201703171926023_statFix.Designer.cs">
+      <DependentUpon>201703171926023_statFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703172042273_statFix2.cs" />
+    <Compile Include="Migrations\201703172042273_statFix2.Designer.cs">
+      <DependentUpon>201703172042273_statFix2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703172118395_fix4.cs" />
+    <Compile Include="Migrations\201703172118395_fix4.Designer.cs">
+      <DependentUpon>201703172118395_fix4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703181022326_fix5.cs" />
+    <Compile Include="Migrations\201703181022326_fix5.Designer.cs">
+      <DependentUpon>201703181022326_fix5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703181034506_fix6.cs" />
+    <Compile Include="Migrations\201703181034506_fix6.Designer.cs">
+      <DependentUpon>201703181034506_fix6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703181037239_fix7.cs" />
+    <Compile Include="Migrations\201703181037239_fix7.Designer.cs">
+      <DependentUpon>201703181037239_fix7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703181043451_fix8.cs" />
+    <Compile Include="Migrations\201703181043451_fix8.Designer.cs">
+      <DependentUpon>201703181043451_fix8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703181046132_fix9.cs" />
+    <Compile Include="Migrations\201703181046132_fix9.Designer.cs">
+      <DependentUpon>201703181046132_fix9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703261202009_ssTable1.cs" />
+    <Compile Include="Migrations\201703261202009_ssTable1.Designer.cs">
+      <DependentUpon>201703261202009_ssTable1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703261237213_paTable1.cs" />
+    <Compile Include="Migrations\201703261237213_paTable1.Designer.cs">
+      <DependentUpon>201703261237213_paTable1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705122108467_brightness.cs" />
+    <Compile Include="Migrations\201705122108467_brightness.Designer.cs">
+      <DependentUpon>201705122108467_brightness.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706041221323_myTobacco.cs" />
+    <Compile Include="Migrations\201706041221323_myTobacco.Designer.cs">
+      <DependentUpon>201706041221323_myTobacco.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706131652473_SessionReport.cs" />
+    <Compile Include="Migrations\201706131652473_SessionReport.Designer.cs">
+      <DependentUpon>201706131652473_SessionReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706211808308_assignBrand.cs" />
+    <Compile Include="Migrations\201706211808308_assignBrand.Designer.cs">
+      <DependentUpon>201706211808308_assignBrand.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706280859540_layerMethod.cs" />
+    <Compile Include="Migrations\201706280859540_layerMethod.Designer.cs">
+      <DependentUpon>201706280859540_layerMethod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GameProfile.cs" />
+    <Compile Include="Models\Notificatiom.cs" />
+    <Compile Include="Models\PersonModel.cs" />
+    <Compile Include="Models\Puf.cs" />
+    <Compile Include="Models\SmokeSessionListItemViewModel.cs" />
+    <Compile Include="Models\SmokeSessionViewModel.cs" />
+    <Compile Include="Models\SaveSmokeMetadataModel.cs" />
+    <Compile Include="Controllers\ShareController.cs" />
+    <Compile Include="Controllers\SmokeSessionController.cs" />
+    <Compile Include="Models\SmokeViewModel.cs" />
+    <Compile Include="Controllers\TobaccoController.cs" />
+    <Compile Include="Controllers\TobaccoReviewsController.cs" />
+    <Compile Include="Controllers\UpdateController.cs" />
+    <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\IotDeviceHelper.cs" />
+    <Compile Include="Helpers\PictureHelper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
+    <Compile Include="Hubs\AllertHub.cs" />
+    <Compile Include="Hubs\SmokeSessionHub.cs" />
+    <Compile Include="Jobs\IotProcessor.cs" />
+    <Compile Include="Jobs\StoreEventProcessor.cs" />
+    <Compile Include="Migrations\201610272006544_puf.cs" />
+    <Compile Include="Migrations\201610272006544_puf.Designer.cs">
+      <DependentUpon>201610272006544_puf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610291636335_settings.cs" />
+    <Compile Include="Migrations\201610291636335_settings.Designer.cs">
+      <DependentUpon>201610291636335_settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610291720493_setting2.cs" />
+    <Compile Include="Migrations\201610291720493_setting2.Designer.cs">
+      <DependentUpon>201610291720493_setting2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610301241016_settings3.cs" />
+    <Compile Include="Migrations\201610301241016_settings3.Designer.cs">
+      <DependentUpon>201610301241016_settings3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610301544383_add.cs" />
+    <Compile Include="Migrations\201610301544383_add.Designer.cs">
+      <DependentUpon>201610301544383_add.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610301602375_add2.cs" />
+    <Compile Include="Migrations\201610301602375_add2.Designer.cs">
+      <DependentUpon>201610301602375_add2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611061949466_test4.cs" />
+    <Compile Include="Migrations\201611061949466_test4.Designer.cs">
+      <DependentUpon>201611061949466_test4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611121147568_animation.cs" />
+    <Compile Include="Migrations\201611121147568_animation.Designer.cs">
+      <DependentUpon>201611121147568_animation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611131132311_brand.cs" />
+    <Compile Include="Migrations\201611131132311_brand.Designer.cs">
+      <DependentUpon>201611131132311_brand.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611191236419_update.cs" />
+    <Compile Include="Migrations\201611191236419_update.Designer.cs">
+      <DependentUpon>201611191236419_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611191430458_update2.cs" />
+    <Compile Include="Migrations\201611191430458_update2.Designer.cs">
+      <DependentUpon>201611191430458_update2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611271147122_color.cs" />
+    <Compile Include="Migrations\201611271147122_color.Designer.cs">
+      <DependentUpon>201611271147122_color.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612031124280_picture.cs" />
+    <Compile Include="Migrations\201612031124280_picture.Designer.cs">
+      <DependentUpon>201612031124280_picture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612031408102_update21.cs" />
+    <Compile Include="Migrations\201612031408102_update21.Designer.cs">
+      <DependentUpon>201612031408102_update21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701131757592_Coal.cs" />
+    <Compile Include="Migrations\201701131757592_Coal.Designer.cs">
+      <DependentUpon>201701131757592_Coal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701151034026_mix.cs" />
+    <Compile Include="Migrations\201701151034026_mix.Designer.cs">
+      <DependentUpon>201701151034026_mix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701182038013_review.cs" />
+    <Compile Include="Migrations\201701182038013_review.Designer.cs">
+      <DependentUpon>201701182038013_review.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701182103438_tobacoWeight.cs" />
+    <Compile Include="Migrations\201701182103438_tobacoWeight.Designer.cs">
+      <DependentUpon>201701182103438_tobacoWeight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701182142183_tobacoStats2.cs" />
+    <Compile Include="Migrations\201701182142183_tobacoStats2.Designer.cs">
+      <DependentUpon>201701182142183_tobacoStats2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701221459017_review3.cs" />
+    <Compile Include="Migrations\201701221459017_review3.Designer.cs">
+      <DependentUpon>201701221459017_review3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701261928484_share.cs" />
+    <Compile Include="Migrations\201701261928484_share.Designer.cs">
+      <DependentUpon>201701261928484_share.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Db\ApplicationRole.cs" />
+    <Compile Include="Models\DataModule.cs" />
+    <Compile Include="Models\Db\DbPuf.cs" />
+    <Compile Include="Models\Db\Hookah.cs" />
+    <Compile Include="Models\Db\HookahSetting.cs" />
+    <Compile Include="Models\Db\IdentityModels.cs" />
+    <Compile Include="Models\Db\Lounge.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Db\Person.cs" />
+    <Compile Include="Models\Db\PipeAccesory.cs" />
+    <Compile Include="Models\Db\TobaccoReview.cs" />
+    <Compile Include="Models\Db\PipeAccesoryStatistics.cs" />
+    <Compile Include="Models\Redis\DynamicSmokeStatistic.cs" />
+    <Compile Include="Models\Db\SmartHookahContext.cs" />
+    <Compile Include="Models\SmartHookahInitializer.cs" />
+    <Compile Include="Models\Db\SmokeSession.cs" />
+    <Compile Include="Models\Db\SmokeSessionMetaData.cs" />
+    <Compile Include="Models\Db\SmokeSessionStatistics.cs" />
+    <Compile Include="Models\Db\StandPicture.cs" />
+    <Compile Include="Models\Db\Update.cs" />
+    <Compile Include="Models\TobaccoListViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Account\Account.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Account.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Account\Account.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Account.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Device\Device.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Device.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Device\Device.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Device.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Enums\Enums.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Enums.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Home\Home.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Home.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Home\Home.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Home.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Order\Order.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Order.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Order\Order.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Order.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Person\Person.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Person.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Person\Person.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Person.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SmokeSession\SmokeSession.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SmokeSession.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SmokeSession\SmokeSession.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SmokeSession.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Tobacco\Tobacco.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tobacco.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="Support\DTO.cs" />
+    <Compile Include="Support\Extensions.cs" />
+    <Compile Include="Support\FixedSizeQueue.cs" />
+    <Compile Include="Support\Helper.cs" />
+    <Compile Include="Support\QrCodeHelper.cs" />
+    <Compile Include="Support\Support.cs" />
+    <Compile Include="TagHelpers\ScriptTagHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ClientApp\app.js" />
+    <Content Include="ClientApp\boot-app.js" />
+    <Content Include="ClientApp\boot-server.js" />
+    <Content Include="ClientApp\css\site.css" />
+    <Content Include="ClientApp\router.js" />
+    <Content Include="ClientApp\routes.js" />
+    <Content Include="ClientApp\store\api.js" />
+    <Content Include="ClientApp\store\index.js" />
+    <Content Include="Content\Audio\notification.mp3" />
+    <Content Include="Content\bmd.css" />
+    <Content Include="Content\bootstrap-colorselector.css" />
+    <Content Include="Content\bootstrap-fs-modal.css" />
+    <Content Include="Content\bootstrap-fs-modal.min.css" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-material-datetimepicker.css" />
+    <Content Include="Content\bootstrap-material-design-new.css" />
+    <Content Include="Content\bootstrap-material-design.min.css" />
+    <Content Include="Content\bootstrap-material-design.css" />
+    <Content Include="Content\bootstrap-fs-modal.css.map" />
+    <None Include="Content\bootstrap-material-design.css.new" />
+    <None Include="Content\bootstrap-material-design.min.css.new" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-tagsinput.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\critical.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\game\sky3.png" />
+    <Content Include="Content\game\snowflakes.png" />
+    <Content Include="Content\game\snowflakes_large.png" />
+    <Content Include="Content\gijgo\combined\gijgo.css" />
+    <Content Include="Content\gijgo\combined\gijgo.min.css" />
+    <Content Include="Content\gijgo\modular\checkbox.css" />
+    <Content Include="Content\gijgo\modular\checkbox.min.css" />
+    <Content Include="Content\gijgo\modular\core.css" />
+    <Content Include="Content\gijgo\modular\core.min.css" />
+    <Content Include="Content\gijgo\modular\datepicker.css" />
+    <Content Include="Content\gijgo\modular\datepicker.min.css" />
+    <Content Include="Content\gijgo\modular\dialog.css" />
+    <Content Include="Content\gijgo\modular\dialog.min.css" />
+    <Content Include="Content\gijgo\modular\dropdown.css" />
+    <Content Include="Content\gijgo\modular\dropdown.min.css" />
+    <Content Include="Content\gijgo\modular\editor.css" />
+    <Content Include="Content\gijgo\modular\editor.min.css" />
+    <Content Include="Content\gijgo\modular\grid.css" />
+    <Content Include="Content\gijgo\modular\grid.min.css" />
+    <Content Include="Content\gijgo\modular\tree.css" />
+    <Content Include="Content\gijgo\modular\tree.min.css" />
+    <Content Include="Content\highcharts.css" />
+    <Content Include="Content\icons\blow.svg" />
+    <Content Include="Content\icons\bowl.svg" />
+    <Content Include="Content\icons\cloud.svg" />
+    <Content Include="Content\icons\hookah.svg" />
+    <Content Include="Content\icons\lotus.svg" />
+    <Content Include="Content\icons\pack.svg" />
+    <Content Include="Content\icons\tobacco.svg" />
+    <Content Include="Content\images\bg.jpg" />
+    <Content Include="Content\images\hallo.png" />
+    <Content Include="Content\images\icons\icon-128x128.png" />
+    <Content Include="Content\images\icons\icon-144x144.png" />
+    <Content Include="Content\images\icons\icon-152x152.png" />
+    <Content Include="Content\images\icons\icon-192x192.png" />
+    <Content Include="Content\images\icons\icon-384x384.png" />
+    <Content Include="Content\images\icons\icon-512x512.png" />
+    <Content Include="Content\images\icons\icon-45x45.png" />
+    <Content Include="Content\images\icons\icon-72x72.png" />
+    <Content Include="Content\images\icons\icon-96x96.png" />
+    <Content Include="Content\images\j1.jpg" />
+    <Content Include="Content\lg.png" />
+    <Content Include="Content\material.min.css" />
+    <Content Include="Content\nouislider.css" />
+    <Content Include="Content\nouislider.min.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\season.css" />
+    <Content Include="Content\tether\tether-theme-arrows-dark.css" />
+    <Content Include="Content\tether\tether-theme-arrows-dark.min.css" />
+    <Content Include="Content\tether\tether-theme-arrows.css" />
+    <Content Include="Content\tether\tether-theme-arrows.min.css" />
+    <Content Include="Content\tether\tether-theme-basic.css" />
+    <Content Include="Content\tether\tether-theme-basic.min.css" />
+    <Content Include="Content\tether\tether.css" />
+    <Content Include="Content\tether\tether.min.css" />
+    <Content Include="Content\wheelcolorpicker.css" />
+    <Content Include="dist\89889688147bd7575d6327160d64e760.svg" />
+    <Content Include="dist\main.js" />
+    <Content Include="dist\site.css" />
+    <Content Include="dist\vendor.css" />
+    <Content Include="dist\vendor.js" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="LocalizationAdmin\app\app.js" />
+    <Content Include="LocalizationAdmin\app\createClassController.js" />
+    <Content Include="LocalizationAdmin\app\headerController.js" />
+    <Content Include="LocalizationAdmin\app\importExportResxController.js" />
+    <Content Include="LocalizationAdmin\app\listController.js" />
+    <Content Include="LocalizationAdmin\app\localizationservice.js" />
+    <Content Include="LocalizationAdmin\app\resourceController.js" />
+    <Content Include="LocalizationAdmin\app\resourceProviderInfoController.js" />
+    <Content Include="LocalizationAdmin\app\translateController.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\angular-sanitize.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\angular-sanitize.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\index.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular\angular-csp.css" />
+    <Content Include="LocalizationAdmin\bower_components\angular\angular.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular\angular.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\angular\index.js" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap-theme.css" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap-theme.min.css" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap.css" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap.min.css" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\js\bootstrap.js" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\js\bootstrap.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\js\npm.js" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\Gruntfile.js" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\package.js" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\css\font-awesome.css" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\css\font-awesome.min.css" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\dist\jquery.js" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\dist\jquery.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\MIT-LICENSE.txt" />
+    <Content Include="LocalizationAdmin\bower_components\lodash\LICENSE.txt" />
+    <Content Include="LocalizationAdmin\bower_components\lodash\lodash.js" />
+    <Content Include="LocalizationAdmin\bower_components\lodash\lodash.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload-all.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload-all.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload-shim.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload-shim.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\angular-file-upload.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\FileAPI.flash.swf" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\FileAPI.min.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\ng-file-upload-all.js" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\ng-file-upload-all.min.js" />
+    <Content Include="LocalizationAdmin\css\localizationAdmin.css" />
+    <Content Include="LocalizationAdmin\favicon.ico" />
+    <Content Include="LocalizationAdmin\images\vsizegrip.png" />
+    <Content Include="LocalizationAdmin\images\Westwind.Localization_128.png" />
+    <Content Include="LocalizationAdmin\index.html" />
+    <Content Include="LocalizationAdmin\LocalizationService.ashx" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\README.md" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\npm-debug.log" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\ng-file-upload\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\lodash\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\lodash\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\dist\jquery.min.map" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\jquery\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\css\font-awesome.css.map" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\.npmignore" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\.gitignore" />
+    <Content Include="LocalizationAdmin\bower_components\font-awesome\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\README.md" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\package.json" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap.css.map" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\dist\css\bootstrap-theme.css.map" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\bootstrap\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular\README.md" />
+    <Content Include="LocalizationAdmin\bower_components\angular\package.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular\angular.min.js.map" />
+    <Content Include="LocalizationAdmin\bower_components\angular\angular.min.js.gzip" />
+    <Content Include="LocalizationAdmin\bower_components\angular\.bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\README.md" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\package.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\bower.json" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\angular-sanitize.min.js.map" />
+    <Content Include="LocalizationAdmin\bower_components\angular-sanitize\.bower.json" />
+    <Content Include="LocalizationAdmin\bower.json" />
+    <Content Include="ApplicationInsights.config" />
+    <Content Include="Content\dist\vendor-manifest.json" />
+    <Content Include="ClientApp\components\app-root.vue" />
+    <Content Include="ClientApp\components\counter-example.vue" />
+    <Content Include="ClientApp\components\fetch-data.vue" />
+    <Content Include="ClientApp\components\home-page.vue" />
+    <Content Include="ClientApp\components\nav-menu.vue" />
+    <Content Include="webpack.config.js" />
+    <Content Include=".babelrc" />
+    <Content Include="ClientApp\components\nav-bottom.vue" />
+    <Content Include="dist\main.js.map" />
+    <Content Include="dist\vendor-manifest.json" />
+    <None Include="LocalizationAdmin\scripts\_references.js" />
+    <Content Include="LocalizationAdmin\Partials\AddResourceDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\CommentDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\CreateClassDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ImportExportResxDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\Menubar.html" />
+    <Content Include="LocalizationAdmin\Partials\RenameResourceDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceEditor.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceGrid.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceList.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceProviderInfoDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceSetList.html" />
+    <Content Include="LocalizationAdmin\Partials\TranslateDialog.html" />
+    <Content Include="LocalizationAdmin\scripts\ww.angular.js" />
+    <Content Include="LocalizationAdmin\scripts\ww.jquery.js" />
+    <Content Include="LocalizationAdmin\scripts\ww.jquery.min.js" />
+    <Content Include="LocalizationAdmin\scripts\ww.resourceEditor.js" />
+    <Content Include="LocalizationAdmin\touch-icon.png" />
+    <Content Include="Scripts\babel.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-material-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-material-design.iife.js" />
+    <Content Include="Scripts\bootstrap-material-design.js" />
+    <Content Include="Scripts\bootstrap-material-design.min.js" />
+    <Content Include="Scripts\bootstrap-modalmanager.js" />
+    <Content Include="Content\circular-slider.css" />
+    <Content Include="Content\farbtastic.css" />
+    <Content Include="Content\hookahLogo.png" />
+    <Content Include="Content\marker.png" />
+    <Content Include="Content\mask.png" />
+    <Content Include="Content\ripples.css" />
+    <Content Include="Content\splash.png" />
+    <Content Include="Content\wheel.png" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Landing\img_parallax.jpg" />
+    <Content Include="Landing\img_parallax2.jpg" />
+    <Content Include="Landing\img_parallax3.jpg" />
+    <Content Include="Landing\Index.htm" />
+    <Content Include="Landing\logo.png" />
+    <Content Include="Scripts\bootstrap-colorselector.js" />
+    <Content Include="Scripts\bootstrap-rating-input.js" />
+    <Content Include="Scripts\bootstrap-tagsinput.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\clipboard.min.js" />
+    <Content Include="Scripts\decoder.min.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\material.min.css.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\ww.jquery.js" />
+    <Content Include="Scripts\ww.jquery.min.js" />
+    <Content Include="Vue\bundle.js" />
+    <Content Include="Vue\index.js" />
+    <None Include="bundleconfig.json" />
+    <Content Include="package.json" />
+    <Content Include="nuget.config" />
+    <None Include="Properties\PublishProfiles\manapipeapp - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\smartHookah - Web Deploy %285%29.pubxml" />
+    <Content Include="Scripts\bootstrap-material-design.js.map" />
+    <None Include="Scripts\jquery-3.1.1-vsdoc.js" />
+    <Content Include="Scripts\gijgo\combined\gijgo.js" />
+    <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.bg-bg.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.bg-bg.min.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.de-de.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.de-de.min.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.fr-fr.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.fr-fr.min.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.pt-br.js" />
+    <Content Include="Scripts\gijgo\combined\messages\messages.pt-br.min.js" />
+    <Content Include="Scripts\gijgo\modular\checkbox.js" />
+    <Content Include="Scripts\gijgo\modular\checkbox.min.js" />
+    <Content Include="Scripts\gijgo\modular\core.js" />
+    <Content Include="Scripts\gijgo\modular\core.min.js" />
+    <Content Include="Scripts\gijgo\modular\datepicker.js" />
+    <Content Include="Scripts\gijgo\modular\datepicker.min.js" />
+    <Content Include="Scripts\gijgo\modular\dialog.js" />
+    <Content Include="Scripts\gijgo\modular\dialog.min.js" />
+    <Content Include="Scripts\gijgo\modular\draggable.js" />
+    <Content Include="Scripts\gijgo\modular\draggable.min.js" />
+    <Content Include="Scripts\gijgo\modular\dropdown.js" />
+    <Content Include="Scripts\gijgo\modular\dropdown.min.js" />
+    <Content Include="Scripts\gijgo\modular\droppable.js" />
+    <Content Include="Scripts\gijgo\modular\droppable.min.js" />
+    <Content Include="Scripts\gijgo\modular\editor.js" />
+    <Content Include="Scripts\gijgo\modular\editor.min.js" />
+    <Content Include="Scripts\gijgo\modular\grid.js" />
+    <Content Include="Scripts\gijgo\modular\grid.min.js" />
+    <Content Include="Scripts\gijgo\modular\tree.js" />
+    <Content Include="Scripts\gijgo\modular\tree.min.js" />
+    <Content Include="Scripts\ie10-viewport-bug-workaround.js" />
+    <Content Include="Scripts\jasny-bootstrap.js" />
+    <Content Include="Scripts\jasny-bootstrap.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery.bootstrap.wizard.js" />
+    <Content Include="Scripts\jquery.bootstrap.wizard.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Scripts\llqrcode.js" />
+    <Content Include="Scripts\lodash.core.js" />
+    <Content Include="Scripts\lodash.core.min.js" />
+    <Content Include="Scripts\lodash.js" />
+    <Content Include="Scripts\lodash.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\material-bootstrap-wizard.js" />
+    <Content Include="Scripts\mslider.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\shake.js" />
+    <Content Include="Scripts\snackbar.js" />
+    <Content Include="Scripts\tether.js" />
+    <Content Include="Scripts\tether.min.js" />
+    <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\vue.min.js" />
+    <Content Include="Content\material-bootstrap-wizard.css" />
+    <Content Include="Scripts\Vue\Place\main.js" />
+    <Content Include="sw.js" />
+    <Content Include="Scripts\webqr.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Views\ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\manifest.json" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <None Include="Properties\PublishProfiles\smartHookah - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\smarthookah - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\smartHookah - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\smartHookah - Web Deploy %284%29.pubxml" />
+    <None Include="Properties\PublishProfiles\smarthookah - Web Deploy.pubxml" />
+    <Content Include="Scripts\circular-slider.js" />
+    <Content Include="Scripts\farbtastic.js" />
+    <Content Include="Scripts\highcharts.js" />
+    <Content Include="Scripts\arrive.min.js" />
+    <Content Include="Scripts\highcharts\highcharts-3d.js" />
+    <Content Include="Scripts\highcharts\highcharts-more.js" />
+    <Content Include="Scripts\highcharts\modules\accessibility.js" />
+    <Content Include="Scripts\highcharts\modules\accessibility.src.js" />
+    <Content Include="Scripts\highcharts\modules\annotations.js" />
+    <Content Include="Scripts\highcharts\modules\annotations.src.js" />
+    <Content Include="Scripts\highcharts\modules\boost.js" />
+    <Content Include="Scripts\highcharts\modules\boost.src.js" />
+    <Content Include="Scripts\highcharts\modules\broken-axis.js" />
+    <Content Include="Scripts\highcharts\modules\broken-axis.src.js" />
+    <Content Include="Scripts\highcharts\modules\data.js" />
+    <Content Include="Scripts\highcharts\modules\data.src.js" />
+    <Content Include="Scripts\highcharts\modules\drilldown.js" />
+    <Content Include="Scripts\highcharts\modules\drilldown.src.js" />
+    <Content Include="Scripts\highcharts\modules\exporting.js" />
+    <Content Include="Scripts\highcharts\modules\exporting.src.js" />
+    <Content Include="Scripts\highcharts\modules\funnel.js" />
+    <Content Include="Scripts\highcharts\modules\funnel.src.js" />
+    <Content Include="Scripts\highcharts\modules\gantt.js" />
+    <Content Include="Scripts\highcharts\modules\gantt.src.js" />
+    <Content Include="Scripts\highcharts\modules\grid-axis.js" />
+    <Content Include="Scripts\highcharts\modules\grid-axis.src.js" />
+    <Content Include="Scripts\highcharts\modules\heatmap.js" />
+    <Content Include="Scripts\highcharts\modules\heatmap.src.js" />
+    <Content Include="Scripts\highcharts\modules\no-data-to-display.js" />
+    <Content Include="Scripts\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="Scripts\highcharts\modules\offline-exporting.js" />
+    <Content Include="Scripts\highcharts\modules\offline-exporting.src.js" />
+    <Content Include="Scripts\highcharts\modules\overlapping-datalabels.js" />
+    <Content Include="Scripts\highcharts\modules\overlapping-datalabels.src.js" />
+    <Content Include="Scripts\highcharts\modules\series-label.js" />
+    <Content Include="Scripts\highcharts\modules\series-label.src.js" />
+    <Content Include="Scripts\highcharts\modules\solid-gauge.js" />
+    <Content Include="Scripts\highcharts\modules\solid-gauge.src.js" />
+    <Content Include="Scripts\highcharts\modules\treemap.js" />
+    <Content Include="Scripts\highcharts\modules\treemap.src.js" />
+    <Content Include="Scripts\highcharts\modules\xrange-series.js" />
+    <Content Include="Scripts\highcharts\modules\xrange-series.src.js" />
+    <Content Include="Scripts\highcharts\themes\dark-blue.js" />
+    <Content Include="Scripts\highcharts\themes\dark-green.js" />
+    <Content Include="Scripts\highcharts\themes\dark-unica.js" />
+    <Content Include="Scripts\highcharts\themes\gray.js" />
+    <Content Include="Scripts\highcharts\themes\grid-light.js" />
+    <Content Include="Scripts\highcharts\themes\grid.js" />
+    <Content Include="Scripts\highcharts\themes\sand-signika.js" />
+    <Content Include="Scripts\highcharts\themes\skies.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.stayInWebApp.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.wheelcolorpicker.js" />
+    <Content Include="Scripts\material.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-duration-format.js" />
+    <Content Include="Scripts\nouislider.js" />
+    <Content Include="Scripts\phaser.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\ripples.js" />
+    <Content Include="Scripts\smoothie.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Updates\1.0.2\Stable\32\vodna.txt" />
+    <Content Include="Updates\1.0.2\Stable\60\vodna.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Old.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Hookahs\Create.cshtml" />
+    <Content Include="Views\Hookahs\Delete.cshtml" />
+    <Content Include="Views\Hookahs\Details.cshtml" />
+    <Content Include="Views\Hookahs\Edit.cshtml" />
+    <Content Include="Views\Hookahs\Index.cshtml" />
+    <Content Include="Views\Home\hookah.cshtml" />
+    <Content Include="Views\Shared\Smoke.cshtml" />
+    <Content Include="Views\SmokeSession\GetLiveSmokeStatics.cshtml" />
+    <Content Include="Views\Home\_TypeStats.cshtml" />
+    <Content Include="Views\Places\Create.cshtml" />
+    <Content Include="Views\Places\Delete.cshtml" />
+    <Content Include="Views\Places\Details.cshtml" />
+    <Content Include="Views\Places\Edit.cshtml" />
+    <Content Include="Views\Places\Index.cshtml" />
+    <Content Include="Views\SmokeSession\Index.cshtml" />
+    <Content Include="Views\SmokeSession\GetStatistics.cshtml" />
+    <Content Include="Views\Person\Create.cshtml" />
+    <Content Include="Views\Person\Delete.cshtml" />
+    <Content Include="Views\Person\Details.cshtml" />
+    <Content Include="Views\Person\Edit.cshtml" />
+    <Content Include="Views\Person\Index.cshtml" />
+    <Content Include="Views\Person\AddHookah.cshtml" />
+    <Content Include="Views\Tobacco\Create.cshtml" />
+    <Content Include="Views\Tobacco\Delete.cshtml" />
+    <Content Include="Views\Tobacco\Details.cshtml" />
+    <Content Include="Views\Tobacco\Edit.cshtml" />
+    <Content Include="Views\Tobacco\Brand.cshtml" />
+    <Content Include="Views\Bowls\Create.cshtml" />
+    <Content Include="Views\Bowls\Delete.cshtml" />
+    <Content Include="Views\Bowls\Details.cshtml" />
+    <Content Include="Views\Bowls\Edit.cshtml" />
+    <Content Include="Views\Bowls\Index.cshtml" />
+    <Content Include="Views\Brands\Create.cshtml" />
+    <Content Include="Views\Brands\Delete.cshtml" />
+    <Content Include="Views\Brands\Details.cshtml" />
+    <Content Include="Views\Brands\Edit.cshtml" />
+    <Content Include="Views\Brands\Index.cshtml" />
+    <Content Include="Views\Pipes\Create.cshtml" />
+    <Content Include="Views\Pipes\Delete.cshtml" />
+    <Content Include="Views\Pipes\Details.cshtml" />
+    <Content Include="Views\Pipes\Edit.cshtml" />
+    <Content Include="Views\Pipes\Index.cshtml" />
+    <Content Include="Views\Shared\smokeSessionMetaData.cshtml" />
+    <Content Include="Views\Shared\smokeMetaDataModal.cshtml" />
+    <Content Include="Views\DeviceControl\GetDeviceSetting.cshtml" />
+    <Content Include="Views\Person\DashBoard.cshtml" />
+    <Content Include="Views\SmokeSession\_TobacoMetaDataSelector.cshtml" />
+    <Content Include="Updates\1.bin" />
+    <Content Include="Views\Game\Snow.cshtml" />
+    <Content Include="Views\Update\Create.cshtml" />
+    <Content Include="Views\Update\Delete.cshtml" />
+    <Content Include="Views\Update\Details.cshtml" />
+    <Content Include="Views\Update\Edit.cshtml" />
+    <Content Include="Views\Update\Index.cshtml" />
+    <Content Include="Views\Picture\Create.cshtml" />
+    <Content Include="Views\Picture\Delete.cshtml" />
+    <Content Include="Views\Picture\Details.cshtml" />
+    <Content Include="Views\Picture\Edit.cshtml" />
+    <Content Include="Views\Picture\Index.cshtml" />
+    <Content Include="Views\Role\Create.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\ManageUserRoles.cshtml" />
+    <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Views\SmokeSession\NoLiveStatistic.cshtml" />
+    <Content Include="Views\Tobacco\ByBrand.cshtml" />
+    <Content Include="Views\Tobacco\Download.cshtml" />
+    <Content Include="Views\Tobacco\Mix.cshtml" />
+    <Content Include="Views\Tobacco\MixBrand.cshtml" />
+    <Content Include="Views\Tobacco\_TobaccoStatistic.cshtml" />
+    <Content Include="Views\TobaccoReviews\Create.cshtml" />
+    <Content Include="Views\TobaccoReviews\Delete.cshtml" />
+    <Content Include="Views\TobaccoReviews\Details.cshtml" />
+    <Content Include="Views\TobaccoReviews\Edit.cshtml" />
+    <Content Include="Views\TobaccoReviews\Index.cshtml" />
+    <Content Include="Views\TobaccoReviews\TobaccoReviewModal.cshtml" />
+    <Content Include="Views\QrCodeReader\Index.cshtml" />
+    <Content Include="Views\Shared\_MetadataAndReview.cshtml" />
+    <Content Include="Views\Person\ShowGear.cshtml" />
+    <Content Include="Views\Person\_MyGear.cshtml" />
+    <Content Include="Views\PipeAccesorry\_AddPipeAccesory.cshtml" />
+    <Content Include="Views\Person\_AddGearModal.cshtml" />
+    <Content Include="Views\Hookahs\Assign.cshtml" />
+    <Content Include="Views\Shared\_DropDown.cshtml" />
+    <Content Include="Views\Places\DashBoard.cshtml" />
+    <Content Include="Views\Machine\Clusters.cshtml" />
+    <Content Include="Views\Manage\ChangeName.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\GoToSession.cshtml" />
+    <Content Include="Views\Manage\_PersonSetting.cshtml" />
+    <Content Include="Views\Manage\EditUserSetting.cshtml" />
+    <Content Include="Views\Hookahs\UnAssignHookah.cshtml" />
+    <Content Include="Views\Gamification\CreateEventRecepie.cshtml" />
+    <Content Include="Views\Gamification\EventDetail.cshtml" />
+    <Content Include="Views\Gamification\CreateEvent.cshtml" />
+    <Content Include="Views\Gamification\CreateReward.cshtml" />
+    <Content Include="Views\Gamification\Profile.cshtml" />
+    <Content Include="Views\Gamification\_RewardListItem.cshtml" />
+    <Content Include="Views\Gamification\RewardDetails.cshtml" />
+    <Content Include="Views\Gamification\_DoneEventListItem.cshtml" />
+    <Content Include="Views\Gamification\_InProgressEvent.cshtml" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Views\Media\Create.cshtml" />
+    <Content Include="Views\Media\Delete.cshtml" />
+    <Content Include="Views\Media\Details.cshtml" />
+    <Content Include="Views\Media\Edit.cshtml" />
+    <Content Include="Views\Media\Index.cshtml" />
+    <Content Include="Views\Hookahs\CreateBatch.cshtml" />
+    <Content Include="Views\Person\MyStatistic.cshtml" />
+    <Content Include="Views\Info\Index.cshtml" />
+    <Content Include="Views\Game\ChcGame.cshtml" />
+    <Content Include="Views\Game\ChcGamePost.cshtml" />
+    <Content Include="Views\Game\GameResult.cshtml" />
+    <Content Include="Views\DeviceControl\DefaultMetadata.cshtml" />
+    <Content Include="Views\Game\Halloween.cshtml" />
+    <Content Include="Views\Emails\hello.cshtml" />
+    <Content Include="Views\Home\VueTest.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
+    <None Include="Views\Person\PersonList.cshtml" />
+    <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
+    <Content Include="Views\Shared\_Loader.cshtml" />
+    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
+    <Content Include="Views\SmokeSession\_SmokeSessionListItem.cshtml" />
+    <Content Include="Views\Tobacco\_SortedTobacco.cshtml" />
+    <Content Include="Views\Tobacco\Index.cshtml" />
+    <Content Include="Views\Tobacco\_TobacoList.cshtml" />
+    <Content Include="Views\Tobacco\_FilterTobaccoGrid.cshtml" />
+    <Content Include="Views\Tobacco\_TobacoMixListItem.cshtml" />
+    <Content Include="Views\Tobacco\_TobaccoMix.cshtml" />
+    <Content Include="Views\Tobacco\_TobaccoReviews.cshtml" />
+    <Content Include="Views\Person\_TobacoMyGearPartial.cshtml" />
+    <Content Include="Views\PipeAccesorry\Create.cshtml" />
+    <Content Include="Views\Shared\_TobacoEdit.cshtml" />
+    <Content Include="Views\Shared\_TobacoEditModal.cshtml" />
+    <Content Include="Views\Tobacco\CreateMix.cshtml" />
+    <Content Include="Views\Tobacco\MyMixes.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
+    <Content Include="Views\Places\_PlaceGroupIdem.cshtml" />
+    <Content Include="Views\Person\_TobaccoList.cshtml" />
+    <Content Include="Views\Places\EditOpenHours.cshtml" />
+    <Content Include="Views\Resources\Dummy.cshtml" />
+    <Content Include="Views\Places\Order.cshtml" />
+    <Content Include="Views\Places\Manage.cshtml" />
+    <Content Include="Views\Places\OrderDetails.cshtml" />
+    <Content Include="Views\Places\ProcessOrder.cshtml" />
+    <Content Include="Views\PipeAccesorry\UploadPicture.cshtml" />
+    <Content Include="Views\PipeAccesorry\Details.cshtml" />
+    <Content Include="Views\Places\EditPrice.cshtml" />
+    <Content Include="Views\Places\_EditPriceItem.cshtml" />
+    <Content Include="Views\Places\PublicDashBoard.cshtml" />
+    <Content Include="Views\Places\ManagedPlaces.cshtml" />
+    <Content Include="Views\Shared\_LayoutMdl.cshtml" />
+    <Content Include="Views\Places\_TimeTable.cshtml" />
+    <Content Include="Views\Person\ManageColors.cshtml" />
+    <Content Include="Views\Person\_PersonSmokeSessionDetails.cshtml" />
+    <Content Include="Views\Person\_TimeStatistics.cshtml" />
+    <Content Include="Views\Person\_HookahStatistics.cshtml" />
+    <Content Include="Views\Shared\_MetaDataEdit.cshtml" />
+    <Content Include="Views\PipeAccesorry\Index.cshtml" />
+    <Content Include="Views\Places\EditSeat.cshtml" />
+    <Content Include="Views\Places\Seat.cshtml" />
+    <Content Include="Views\Places\OrderSpecific.cshtml" />
+    <Content Include="Views\Reservation\Index.cshtml" />
+    <Content Include="Views\Reservation\Create.cshtml" />
+    <Content Include="Views\Reservation\Place.cshtml" />
+    <Content Include="Views\Reservation\Details.cshtml" />
+    <Content Include="Views\SmokeSession\_ActiveSession.cshtml" />
+    <Content Include="Vue\App.vue" />
+    <Content Include="Views\Places\Media.cshtml" />
+    <Content Include="Views\Places\AddMedia.cshtml" />
+    <Content Include="Views\Shared\_VueLayout.cshtml" />
+    <Content Include="Views\Shared\_Cookies.cshtml" />
+    <Content Include="Views\Shared\_Registration.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AppDbContextMigration\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\BrandPicture\" />
+    <Folder Include="Content\noUiSlider\" />
+    <Folder Include="Content\PlacePictures\" />
+    <Folder Include="Resources\NewFolder1\" />
+    <Folder Include="Views\Share\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610272006544_puf.resx">
+      <DependentUpon>201610272006544_puf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610291636335_settings.resx">
+      <DependentUpon>201610291636335_settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610291720493_setting2.resx">
+      <DependentUpon>201610291720493_setting2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610301241016_settings3.resx">
+      <DependentUpon>201610301241016_settings3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610301544383_add.resx">
+      <DependentUpon>201610301544383_add.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610301602375_add2.resx">
+      <DependentUpon>201610301602375_add2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611061949466_test4.resx">
+      <DependentUpon>201611061949466_test4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611121147568_animation.resx">
+      <DependentUpon>201611121147568_animation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611131132311_brand.resx">
+      <DependentUpon>201611131132311_brand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611191236419_update.resx">
+      <DependentUpon>201611191236419_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611191430458_update2.resx">
+      <DependentUpon>201611191430458_update2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611271147122_color.resx">
+      <DependentUpon>201611271147122_color.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612031124280_picture.resx">
+      <DependentUpon>201612031124280_picture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612031408102_update21.resx">
+      <DependentUpon>201612031408102_update21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701131757592_Coal.resx">
+      <DependentUpon>201701131757592_Coal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701151034026_mix.resx">
+      <DependentUpon>201701151034026_mix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701182038013_review.resx">
+      <DependentUpon>201701182038013_review.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701182103438_tobacoWeight.resx">
+      <DependentUpon>201701182103438_tobacoWeight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701182142183_tobacoStats2.resx">
+      <DependentUpon>201701182142183_tobacoStats2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701221459017_review3.resx">
+      <DependentUpon>201701221459017_review3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701261928484_share.resx">
+      <DependentUpon>201701261928484_share.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701311937412_bigUpdate.resx">
+      <DependentUpon>201701311937412_bigUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702021801237_ownFix.resx">
+      <DependentUpon>201702021801237_ownFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702071702166_brandName.resx">
+      <DependentUpon>201702071702166_brandName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702231904456_autoassign.resx">
+      <DependentUpon>201702231904456_autoassign.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111445575_review4.resx">
+      <DependentUpon>201703111445575_review4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111652319_review5.resx">
+      <DependentUpon>201703111652319_review5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111656289_review6.resx">
+      <DependentUpon>201703111656289_review6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171827048_personCount.resx">
+      <DependentUpon>201703171827048_personCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171847208_SmokeTime.resx">
+      <DependentUpon>201703171847208_SmokeTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171853594_aqqQuality.resx">
+      <DependentUpon>201703171853594_aqqQuality.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171926023_statFix.resx">
+      <DependentUpon>201703171926023_statFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703172042273_statFix2.resx">
+      <DependentUpon>201703172042273_statFix2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703172118395_fix4.resx">
+      <DependentUpon>201703172118395_fix4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703181022326_fix5.resx">
+      <DependentUpon>201703181022326_fix5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703181034506_fix6.resx">
+      <DependentUpon>201703181034506_fix6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703181037239_fix7.resx">
+      <DependentUpon>201703181037239_fix7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703181043451_fix8.resx">
+      <DependentUpon>201703181043451_fix8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703181046132_fix9.resx">
+      <DependentUpon>201703181046132_fix9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261202009_ssTable1.resx">
+      <DependentUpon>201703261202009_ssTable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261237213_paTable1.resx">
+      <DependentUpon>201703261237213_paTable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705122108467_brightness.resx">
+      <DependentUpon>201705122108467_brightness.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706041221323_myTobacco.resx">
+      <DependentUpon>201706041221323_myTobacco.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706131652473_SessionReport.resx">
+      <DependentUpon>201706131652473_SessionReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706211808308_assignBrand.resx">
+      <DependentUpon>201706211808308_assignBrand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706280859540_layerMethod.resx">
+      <DependentUpon>201706280859540_layerMethod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707021251146_addDisplayName.resx">
+      <DependentUpon>201707021251146_addDisplayName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707070901147_tobacoFix.resx">
+      <DependentUpon>201707070901147_tobacoFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707072004535_laungeBH.resx">
+      <DependentUpon>201707072004535_laungeBH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707072027497_adressfix.resx">
+      <DependentUpon>201707072027497_adressfix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707072030329_laungeName.resx">
+      <DependentUpon>201707072030329_laungeName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707072034432_deleteAnimations.resx">
+      <DependentUpon>201707072034432_deleteAnimations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707072253139_personLounge.resx">
+      <DependentUpon>201707072253139_personLounge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707080923115_addPlaces.resx">
+      <DependentUpon>201707080923115_addPlaces.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707081106245_urlIndex.resx">
+      <DependentUpon>201707081106245_urlIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707221856238_tag.resx">
+      <DependentUpon>201707221856238_tag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707261200270_smokeEvent.resx">
+      <DependentUpon>201707261200270_smokeEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708012025429_orders.resx">
+      <DependentUpon>201708012025429_orders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708031629524_preset.resx">
+      <DependentUpon>201708031629524_preset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708060953588_orderMetadata.resx">
+      <DependentUpon>201708060953588_orderMetadata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708060958215_orderDate.resx">
+      <DependentUpon>201708060958215_orderDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708121308426_accPictures.resx">
+      <DependentUpon>201708121308426_accPictures.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708130920264_speed.resx">
+      <DependentUpon>201708130920264_speed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708141739096_priceGroup.resx">
+      <DependentUpon>201708141739096_priceGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708151734568_ownDate.resx">
+      <DependentUpon>201708151734568_ownDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708190936508_PriceFix.resx">
+      <DependentUpon>201708190936508_PriceFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708191230009_pricePlace.resx">
+      <DependentUpon>201708191230009_pricePlace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708200930060_seat.resx">
+      <DependentUpon>201708200930060_seat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708200947372_seat2.resx">
+      <DependentUpon>201708200947372_seat2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708301321595_game1.resx">
+      <DependentUpon>201708301321595_game1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708310854565_game2.resx">
+      <DependentUpon>201708310854565_game2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708310919193_game3.resx">
+      <DependentUpon>201708310919193_game3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708310921078_game4.resx">
+      <DependentUpon>201708310921078_game4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709010846394_game5.resx">
+      <DependentUpon>201709010846394_game5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709031148202_game6.resx">
+      <DependentUpon>201709031148202_game6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709031226258_placeFix4.resx">
+      <DependentUpon>201709031226258_placeFix4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040832039_game51.resx">
+      <DependentUpon>201709040832039_game51.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709040946577_game61.resx">
+      <DependentUpon>201709040946577_game61.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709041442304_game7.resx">
+      <DependentUpon>201709041442304_game7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709051426578_gamefix6.resx">
+      <DependentUpon>201709051426578_gamefix6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709051449214_gamefix7.resx">
+      <DependentUpon>201709051449214_gamefix7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709171010111_media.resx">
+      <DependentUpon>201709171010111_media.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709280848453_tobaccoTaste.resx">
+      <DependentUpon>201709280848453_tobaccoTaste.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710061755050_game.resx">
+      <DependentUpon>201710061755050_game.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710131230057_hookahOfline.resx">
+      <DependentUpon>201710131230057_hookahOfline.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710161255264_defaultValues.resx">
+      <DependentUpon>201710161255264_defaultValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710191300030_autoSleepSetting.resx">
+      <DependentUpon>201710191300030_autoSleepSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710261340241_seatCode.resx">
+      <DependentUpon>201710261340241_seatCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710281304391_sessionSeat.resx">
+      <DependentUpon>201710281304391_sessionSeat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711041035348_reservation.resx">
+      <DependentUpon>201711041035348_reservation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711041140485_PlacePublic.resx">
+      <DependentUpon>201711041140485_PlacePublic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711091247420_order2.resx">
+      <DependentUpon>201711091247420_order2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101515234_reservation3.resx">
+      <DependentUpon>201711101515234_reservation3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711101931070_order4.resx">
+      <DependentUpon>201711101931070_order4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711111054537_placeMap.resx">
+      <DependentUpon>201711111054537_placeMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711111250315_order5.resx">
+      <DependentUpon>201711111250315_order5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711221256394_alternativeName.resx">
+      <DependentUpon>201711221256394_alternativeName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712021315259_priceGroup1.resx">
+      <DependentUpon>201712021315259_priceGroup1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712021733039_alternativeName1.resx">
+      <DependentUpon>201712021733039_alternativeName1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712021735114_orderExtraPriceGroup.resx">
+      <DependentUpon>201712021735114_orderExtraPriceGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712021816044_GroupPriceFix.resx">
+      <DependentUpon>201712021816044_GroupPriceFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712031752409_MultiSeat.resx">
+      <DependentUpon>201712031752409_MultiSeat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801312202444_add-sleepTime.resx">
+      <DependentUpon>201801312202444_add-sleepTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802101321273_MinimumReservationTime.resx">
+      <DependentUpon>201802101321273_MinimumReservationTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\LocalizationForm.de.resx" />
+    <EmbeddedResource Include="Properties\LocalizationForm.resx" />
+    <EmbeddedResource Include="Resources\Account\Account.cs.resx">
+      <CustomToolNamespace>Account</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Account.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Account\Account.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Account.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Device\Device.cs.resx">
+      <CustomToolNamespace>Device</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Device.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Device\Device.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Device.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Device</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Enums\Enums.cs.resx" />
+    <EmbeddedResource Include="Resources\Enums\Enums.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Enums.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Home\Home.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Home.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Home\Home.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Home.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Home</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Order\Order.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Order.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Order\Order.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Order.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Order</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Person\Person.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Person.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Person\Person.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Person.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Res</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SmokeSession\SmokeSession.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SmokeSession.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Smoke</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SmokeSession\SmokeSession.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SmokeSession.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Smoke</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tobacco\Tobacco.cs.resx">
+      <CustomToolNamespace>Tbc</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tobacco\Tobacco.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Tobacco.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Tbc</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <Target Name="RunWebpack">
+    <Exec Command="npm install" />
+    <Exec Command="webpack" />
+  </Target>
+  <Target Name="BeforeBuild" DependsOnTargets="RunWebpack">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>36062</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44324</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
+  </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

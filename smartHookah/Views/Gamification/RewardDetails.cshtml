@@ -1,0 +1,16 @@
+﻿@model smartHookah.Models.Reward
+
+@{
+    ViewBag.Title = "Details of reward";
+
+}
+
+<div class="well">
+    <h2>Details of reward @Model.Name</h2>
+    <table class="table table-striped">
+        <tr>
+            <td>Type</td>
+            <td>@Model.GetWebName()</td>
+        </tr>
+    </table>
+</div>

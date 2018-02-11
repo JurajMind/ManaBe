@@ -1,0 +1,382 @@
+﻿@using smartHookah.Models
+@using smartHookah.Support
+@model smartHookah.Controllers.SmokeSessionGetStaticsticsModel
+
+@{
+    ViewBag.Title = $"{@Model.SmokeSession.Hookah.Name} on { @Model.LiveStatistic.Start.ToString("dd.MM.yyyy")}"; 
+}
+@Scripts.Render("~/bundles/copyjs")
+@{
+}<div class="well">
+
+     <div class="card mb-2">
+         <table class="table table-striped">
+
+
+             <tbody>
+                 <tr>
+                     <td>Smoking session start</td>
+                     <td>@Model.LiveStatistic.Pufs.Min(a => a.DateTime).ToLocalTime().ToString("dd.MM.yyyy HH:mm.ss")</td>
+                 </tr>
+                 <tr>
+                     <td>Smoking session duration</td>
+                     <td>@((Model.LiveStatistic.Pufs.Last().DateTime - Model.LiveStatistic.Start).ToString(@"hh\:mm\:ss"))</td>
+                 </tr>
+                 <tr>
+                     <td><i class="fa fa-user"></i>&nbsp;Persons</td>
+                     @{
+                         var anonymous = Model.SmokeSession.MetaData?.AnonymPeopleCount ?? 0;
+                     }
+                     <td>@Model.SmokeSession.Persons.Count + @anonymous</td>
+                 </tr>
+             </tbody>
+
+         </table>
+     </div>
+
+     <div class="card mb-2">
+         <div class="card-block">
+             <table class="table table-striped">
+                 <thead>
+                     <tr>
+                         <th></th>
+                         <th><img src="~/Content/icons/cloud.svg" width="18px" />&nbsp;Pufs</th>
+                         <th><img src="~/Content/icons/blow.svg" width="18px" /> &nbsp;Blows</th>
+                         <th>Idle</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+
+                     <tr>
+                         <td><strong>Count:</strong></td>
+                         <td>@(Model.LiveStatistic.Pufs.Count(a => a.Type == PufType.In))</td>
+                         <td>@(Model.LiveStatistic.Pufs.Count(a => a.Type == PufType.Out))</td>
+                         <td></td>
+                     </tr>
+
+                     <tr>
+                         <td><strong>Time</strong></td>
+                         <td>@Model.LiveStatistic.InTimeSpan.Aggregate((a, b) => a + b).ToString(@"hh\:mm\:ss")</td>
+                         <td>@Model.LiveStatistic.OutTimeSpan.Aggregate((a, b) => a + b).ToString(@"hh\:mm\:ss")</td>
+                         <td>@Model.LiveStatistic.IdleTimeSpan.Aggregate((a, b) => a + b).ToString(@"hh\:mm\:ss")</td>
+                     </tr>
+
+                     <tr>
+                         <td><strong>Longest</strong></td>
+                         <td>@Model.LiveStatistic.InTimeSpan.Max().ToString(@"s\.ffff") sec.</td>
+                         <td>@Model.LiveStatistic.OutTimeSpan.Max().ToString(@"s\.ffff") sec.</td>
+                         <td>@Model.LiveStatistic.IdleTimeSpan.Max().ToString(@"s\.ffff") sec.</td>
+                     </tr>
+
+                     <tr>
+                         <td><strong>Avrg puf duration</strong></td>
+                         <td>@Model.LiveStatistic.InTimeSpan.Average(a => a.Seconds).ToString("N4") sec.</td>
+                         <td>@Model.LiveStatistic.OutTimeSpan.Average(a => a.Seconds).ToString("N4") sec.</td>
+                         <td>@Model.LiveStatistic.IdleTimeSpan.Average(a => a.Seconds).ToString("N4") sec.</td>
+                     </tr>
+
+
+                     <tr>
+                         <td><strong>Median puf duration</strong></td>
+                         <td>@Model.LiveStatistic.InTimeSpan.OrderBy(x => x).Skip(Model.LiveStatistic.InTimeSpan.Count() / 2).First().ToString(@"s\.ffff") sec.</td>
+                         <td>@Model.LiveStatistic.OutTimeSpan.OrderBy(x => x).Skip(Model.LiveStatistic.OutTimeSpan.Count() / 2).First().ToString(@"s\.ffff") sec.</td>
+                         <td>@Model.LiveStatistic.IdleTimeSpan.OrderBy(x => x).Skip(Model.LiveStatistic.IdleTimeSpan.Count() / 2).First().ToString(@"s\.ffff") sec.</td>
+                     </tr>
+
+
+             </table>
+         </div>
+     </div>
+    
+     <div class="card mb-2">
+         <div class="card-header">  <h4 class="pull-left"><i class="fa fa-info-circle"></i> Smoke Metadata</h4>
+             <div class="btn-group pull-right">
+                 <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <i class="material-icons">more_vert</i>
+                 </button>
+                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
+                     @if (User.Identity.IsAuthenticated)
+                     {
+                         <a class="btn btn-primary" data-toggle="modal" data-target="#metaDataModal">
+                             Edit smoke session metaData
+                         </a>
+                     }
+                 </div>
+             </div>
+         </div>
+         <div class="card-block" id="metaDataTable">
+             @Html.Partial("smokeSessionMetaData", Model.SmokeSession.MetaData)
+         </div>
+     </div>
+    
+    
+     <div class="card mb-2">
+         <h4 class="card-header"><i class="fa fa-pencil-square-o"></i>Smoke session review</h4>
+         <div class="card-block" id="reviewTable">
+             @Html.Partial("~/Views/TobaccoReviews/smokeSessionReview.cshtml", Model.SessionReview)
+         </div>
+     </div>
+    
+   
+    
+     <div class="card mb-2">
+         <div class="card-header">
+             <h4 class="pull-left"> Smoke overview</h4>
+             <div class="btn-group pull-right">
+                 <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <i class="material-icons">more_vert</i>
+                 </button>
+                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
+                     @if (User.Identity.IsAuthenticated)
+                     {
+                         <a class="btn btn-default" href="@Url.Action("Clusters","Machine", new {id = Model.SmokeSession.Id})">Clusters</a>
+                         <a class="btn btn-info"href="@Url.Action("GetRawData", new {id = Model.SmokeSession.Id})">Download statistic data</a>
+                     }
+                 </div>
+             </div>
+         </div>
+         <div class="card-block">
+             <canvas id="histogram" height="300" width="300"></canvas>
+         </div>
+     </div>
+
+
+    @if (!Model.Share)
+    {
+        <a  id="tobacoReview" class="btn btn-info btn-raised" style="display:@(Model.SmokeSession.MetaData.TobaccoId.HasValue?"initial":"none")" data-toggle="modal" data-target="#tobacoReviewModal">
+            Writte tobacco review
+        </a>
+       
+       
+       
+
+       
+            @section dropmenu
+            {
+                
+
+                <a class="assb btn btn-danger" onclick="AssignPerson(false)" href="#" style="@(Model.IsAssigned ? "" : "display:none;")">
+                    Un-assign <i class="fa fa-minus"></i>
+                </a>
+
+                @if (User.IsInRole("Admin"))
+                {
+                <a class="btn btn-danger" href="@Url.Action("DeleteSmokeStatistic", new {id = Model.SmokeSession.Id})">Delete this smoke statistic</a>
+                <a class="btn btn-warning " href="@Url.Action("RecalculateSmokeStats", new {id = Model.SmokeSession.Id})">Recalculate this smoke statistic</a>
+                }
+            }
+
+           
+        
+    }
+
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <nav class="button-assign-container">
+        <a class="assb button mainShareBtn" href="#" onClick="return false;" style=" @(Model.IsAssigned ? "display:none;" : "") ">
+            <span class="buttons" tooltip="Assign" style="background-color: #4caf50" onclick="AssignPerson(true)">
+                <span class="rotate"></span>
+                <i class="fa fa-plus"></i>
+            </span>
+        </a>
+    </nav>
+}
+
+<nav class="button-share-container">
+
+    <a target="_blank" href="http://twitter.com/intent/tweet?text=Manapipes+smoke+session&url=@ShareHelper.GetFbShareLink(Model.SmokeSession.Token)" class="buttons" tooltip="Share on Twitter"> <i class="fa fa-twitter"></i> </a>
+
+
+    @*<a target="_blank" href="mailto:?subject=' + escape('Have a look at this website') + '&body=' + escape('https://www.surfsearchspot.com/?p=16024" class="buttons" tooltip="Share on Email"> <i class="fa fa-envelope"></i> </a>*@
+
+    <a href="#" data-clipboard-text="@ShareHelper.GetFbShareLink(Model.SmokeSession.Token)" class="buttons copyBtn" tooltip="Copy share link"> <i class="fa fa-copy"></i> </a>
+
+    <a href="#" onclick="shareMsg()" class="buttons shareFbBtn" tooltip="Share on Messenger"> <i class="fa fa-comments"></i> </a>
+
+    <a href="#" onclick="shareFb()" class="buttons shareFbBtn" tooltip="Share on Facebook"> <i class="fa fa-facebook"></i> </a>
+
+
+    <a class="button mainShareBtn" href="#" onClick="return false;">
+        <span class="buttons" tooltip="Share">
+            <span class="rotate"></span>
+            <i class="fa fa-share-alt"></i>
+        </span>
+    </a>
+
+</nav>
+
+@if (!Model.Share)
+{
+    <div>   @Html.Partial("smokeMetaDataModal", Model.SmokeMetadataModalViewModel)</div>
+
+    <div>
+        @Html.Partial("~/Views/TobaccoReviews/TobaccoReviewModal.cshtml", Model.SessionReview)
+    </div>
+}
+@section scripts
+{
+    <script type="text/javascript">
+
+        new Clipboard('.copyBtn');
+
+       
+        function AssignPerson(assign) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AssignPerson", "SmokeSession", new {id = @Model.SmokeSession.SessionId})',
+                data : {'assign':assign},
+                dataType: 'json',
+                success : function(data) {
+                    if (data.success) {
+                        $('.assb').toggle();
+                    }
+                }
+            });
+        }
+
+        function shareFb() {
+
+            FB.ui({
+                name: "ManaPipe",
+                description: 'Check out my smoke session',
+                pictures: 'http://app.manapipes.com/Content/images/icons/icon-96x96.png',
+                method: 'share',
+                mobile_iframe: true,
+                href: '@ShareHelper.GetFbShareLink(Model.SmokeSession.Token)'
+
+            },
+                function(response) {});
+
+            return false;
+
+        }
+
+        function shareMsg () {
+         
+            FB.ui({
+                method: 'send',
+                name: "ManaPipe",
+                pictures: 'http://app.manapipes.com/Content/images/icons/icon-96x96.png',
+                link: '@ShareHelper.GetFbShareLink(Model.SmokeSession.Token)',
+                description: 'Check out my smoke session',
+            });
+
+            return false;
+
+        }
+
+
+        $(window).on('load', function() {
+            DrawnMixChart('mixChart');
+            var ctx = document.getElementById("histogram").getContext("2d");
+            ctx.canvas.height = 250;
+            var bars = new Chart(ctx, {type: 'bar',
+                data: histogramData,});
+        });
+
+        @{
+            var presureDivider =Model.Histogram.SelectMany(a => a.Select(b => b.Presure)).DefaultIfEmpty(0).Average() > 100 ? 200 : 1;
+            
+        }
+        var histogramData = {
+            labels: @Json.Encode(Enumerable.Range(1, Model.Histogram.Count).ToArray()),
+            datasets: [
+                {
+                    type: 'line',
+                    label: 'Puf count',
+                    fill: true,
+                    backgroundColor: "rgba(75,192,192,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    pointBorderColor: "rgba(75,192,192,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data:
+                        @Json.Encode(@Model.Histogram.Select(a => a.Count(b => b.Type == PufType.In)).ToArray()),
+                },
+                {
+                    type: 'line',
+                    label: 'Blow count',
+                    fill: true,
+                    backgroundColor: "#D60000",
+                    borderColor: "rgba(75,192,192,1)",
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    pointBorderColor: "rgba(75,192,192,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data:
+                        @Json.Encode(@Model.Histogram.Select(a => a.Count(b => b.Type == PufType.Out)).ToArray()),
+                }, {
+                    type: 'bar',
+                    label: 'Puf time ( /6 s)',
+                    data:
+                        @Json.Encode(@Model.Histogram.Select(a => a.GetDuration(d => d.Type == PufType.In).DefaultIfEmpty(new TimeSpan()).Aggregate(new TimeSpan(),(c, b) => c + b).TotalSeconds / 6)),
+                },
+            {
+            type: 'line',
+            label: 'Avrg strength',
+            fill: false,
+            backgroundColor: "#216B00",
+            borderColor: "#216B00",
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data:
+                @Json.Encode(@Model.Histogram.Select(a => a.Where(b => b.Type == PufType.Idle).Select(c => c.Presure).DefaultIfEmpty(0).Average() / presureDivider).ToArray()),
+        }
+            ]
+        };
+
+        function SaveSmokeMetadataSucess(data) {
+            console.log(data);
+            $('#metaDataTable').html(data);
+            $('#metaDataModal').modal('hide');
+            $('#tobacoReview').show();
+            if ($('#mixChart').length === 1) {
+                DrawnMixChart('mixChart');
+            }
+        }
+
+        
+        function SaveReviewSuccess(data)
+        {
+            if (data.success === true) {
+                $('#reviewTable').html(data.page);
+                $('.rating').rating({
+                    readonly:true
+                });
+                $('#tobacoReviewModal').modal('hide');
+
+            } else {
+                window.alert(data.msg);
+            }
+           
+        }
+    
+    </script>
+}

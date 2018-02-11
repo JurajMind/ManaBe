@@ -1,0 +1,91 @@
+﻿@model smartHookah.Models.TobaccoReview
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TobaccoReview</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReviewedTobacco.AccName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReviewedTobacco.AccName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SmokeSession.SessionId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SmokeSession.SessionId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PublishDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quality)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quality)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Taste)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Taste)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Smoke)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Smoke)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Overall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Overall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

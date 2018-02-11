@@ -1,0 +1,42 @@
+﻿@model smartHookah.Models.EventProgress
+
+@{
+    Layout = null;
+}
+@{
+    double progress = 0d;
+    string from = "";
+    string to = "";
+    if (Model.EventRecepie.TriggerTime != new TimeSpan())
+    {
+        from = Model.TimeProgress.ToString();
+        to = Model.EventRecepie.TriggerTime.ToString();
+        progress = ((double) Model.TimeProgress.Ticks / (double) Model.EventRecepie.TriggerTime.Ticks) * 100;
+        
+    }
+    else
+    {
+        from = Model.IntProgress.ToString();
+        to = Model.EventRecepie.TriggerCount.ToString();
+        progress = ((double) Model.IntProgress / (double) Model.EventRecepie.TriggerCount) * 100;
+    }
+
+}
+<div class="list-group-item">
+   
+        <div class="list-group-item-heading">
+
+            <a href="@Url.Action("EventDetail",new {id = @Model.EventRecepie.Id})">@Model.EventRecepie.Name</a>
+        </div>
+        <div class="list-group-item-text">
+            <span>@Model.EventRecepie.Description</span>
+            <div class="progress" style="height: 5px;">
+                <div class="progress-bar" role="progressbar" style="width: @progress.ToString(System.Globalization.CultureInfo.InvariantCulture)%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+
+                </div>
+            </div>
+            <span>@Model.IntProgress / @Model.EventRecepie.TriggerCount (@progress% done)</span>
+        </div>
+    </div>
+
+

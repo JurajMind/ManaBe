@@ -1,0 +1,47 @@
+﻿@model smartHookah.Models.SeatManagerModel
+
+@{
+    ViewBag.Title = "Seat Manager";
+}
+
+<div class="card">
+    <div class="card-body">
+        
+        @using (Html.BeginForm()) { 
+            @Html.AntiForgeryToken()
+            <div class="seats">
+                @for (int i = 0; i < Model.Seats.Count; i++)
+                {
+                    <div class="seat form-group d-inline-block">
+                        <input type="hidden" name="seat[i].Id" value="@Model.Seats[i].Id"/>
+                        <input type="text" name="seat[@i].Name" value="@Model.Seats[i].Name"/>
+                        <button class="btn btn-danger bmd-btn-fab-sm">Remove</button>
+                    </div>
+                }
+            </div>
+            <button>SAVE</button>
+        }
+        <div class="form-group d-inline-block">
+            <input id="newSeat" type="text"/>
+            <button onclick="addSeat()">Add</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        function addSeat() {
+            var count = $('.seat').length;
+            var name = $('#newSeat').val();
+            $('#newSeat').val('');
+            $('.seats').append('<div class="seat form-group d-inline-block">' +
+                '<input  type="text" name="seat[' +
+                count +
+                '].Name" value="' +
+                name +
+                '" /><button class="btn btn-danger bmd-btn-fab-sm" >Remove</button></div>');
+
+        }
+    </script>
+}

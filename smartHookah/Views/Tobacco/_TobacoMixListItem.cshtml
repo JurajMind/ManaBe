@@ -1,0 +1,45 @@
+﻿@model smartHookah.Models.TobaccoMix
+
+<div class="list-group-item">
+    <div class="list-group-item-heading row w-100">
+ 
+            <b class="col-md-3" style="margin-right: 0"> <a href="@Url.Action("Details","Tobacco",new {id = Model.Id})">@Model.AccName</a></b>
+            <ul class="col-md-8" style="display: inline">
+                @{
+                    var total = Model.Tobaccos.Sum(a => a.Fraction);
+                }
+                @foreach (var part in Model.Tobaccos.OrderBy(a => a.Tobacco.AccName))
+                {
+                    <li style="display: inline;margin-right: 0"><a href="@Url.Action("Details", "Tobacco", new {id = @part.TobaccoId})">@part.Tobacco.Brand.DisplayName @part.Tobacco.AccName </a> @((((decimal)part.Fraction/ total)* 100 ).ToString("N2"))%| </li>
+                }
+            </ul>
+            <a style="font-size: small" href="@Url.Action("Details","Tobacco",new {id = Model.Id})" class="col-md-1"><i class="material-icons">info</i></a>
+   
+    </div>
+    @if (Model.Statistics != null)
+    {
+        <div class="list-group-item-text row w-100 tobaccoListStat">
+
+            <div class="col-md-1 col-xs-6">
+                <i class="fa fa-check"></i>&nbsp;@(Model.Statistics.Used)
+            </div>
+            <div class="col-md-3 col-xs-6">
+                <i class="fa fa-hashtag"></i>&nbsp;@Model.Statistics.PufCount.ToString("N2") &nbsp; pufs
+            </div>
+            <div class="col-md-2 col-xs-6"><i class="fa fa-clock-o"></i> &nbsp;@Model.Statistics.SmokeDuration.ToString(@"hh\:mm\:ss")</div>
+            <div class="col-md-2 col-xs-6">
+                <i class="fa fa-hourglass-start"></i> &nbsp;@((Model.Statistics.SessionDuration).ToString(@"hh\:mm\:ss"))
+            </div>
+            <div class="col-md-2 ol-xs-offset-4 col-xs-6 c">
+                <i class="fa fa-star"></i> &nbsp;@Model.Statistics.Overall.ToString(@"N1")
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="list-group-item-text">
+            No data
+        </p>
+    }
+
+</div>

@@ -1,0 +1,38 @@
+﻿@model List<smartHookah.Models.Tobacco>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="well">
+    <h2>Tobacco brands</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-raised btn-success" })
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+            Brand
+            </th>
+            <th>
+             Name
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.BrandName
+                </td>
+                <td>
+                   @item.AccName
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

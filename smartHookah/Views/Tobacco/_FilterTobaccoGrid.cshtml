@@ -1,0 +1,139 @@
+﻿@using PagedList.Mvc
+@using smartHookah.Migrations
+@using smartHookah.Models
+@using ServiceStack.Common.Extensions
+@model smartHookah.Controllers.TobaccoController.FilterTobaccoViewModel
+    
+@{
+    Layout = null;
+    var ajaxOption = new AjaxOptions() {HttpMethod = "GET", UpdateTargetId = "tobaccoGrid", LoadingElementId = "loader"};
+}
+
+
+<div id="tobaccoGrid">
+    <div class="hidden-md-up row mobileLink">
+        @*<h3>Order by:</h3>*@
+        
+      
+        @{
+
+            if (Model.SortOrder == null)
+             {
+                 Model.SortOrder = "smokeduration";
+             }
+
+            var nameActive = @Model.SortOrder.StartsWith("name") ? " active" : "";
+            var usedActive = @Model.SortOrder.StartsWith("used") ? " active" : "";
+            var pufcountActive = @Model.SortOrder.StartsWith("pufcount") ? " active" : "";
+            var overallActive = @Model.SortOrder.StartsWith("overall") ? " active" : "";
+            var smokedurationActive = @Model.SortOrder.StartsWith("smokeduration") ? " active" : "";
+            var sessionDurationActive = @Model.SortOrder.StartsWith("sessionduration") ? " active" : "";
+            var brandActive = @Model.SortOrder.StartsWith("brand") ? " active" : "";
+           }
+      
+        
+        @Ajax.ActionLink(@Tbc.Tobacco.name, "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "name", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6" + nameActive })
+
+
+        @Ajax.ActionLink(@Tbc.Tobacco.used, "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "used_desc", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6" + usedActive })
+
+
+        @Ajax.ActionLink("Puf Count", "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "pufcount_desc", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6" + pufcountActive })
+        
+        @Ajax.ActionLink("Review", "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "overall_desc", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6" + overallActive })
+
+
+        @Ajax.ActionLink("Smoke duration", "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "smokeduration_desc", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6"  + smokedurationActive})
+
+
+        @Ajax.ActionLink("Session duration", "FilterTobaccoAjax", new { Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "sessionduration_desc", filter = Model.Filter }, ajaxOption, new { @class = "col-xs-6" + sessionDurationActive })
+  
+
+    </div>
+    <table class="table table-striped table-responsive">
+        <thead>
+        <tr>
+            <th>
+                @Ajax.ActionLink("Brand", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "brand", filter = Model.Filter}, ajaxOption,new { @class = "tableLink"+brandActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Name", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "name", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + nameActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Used", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "used_desc", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + usedActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Puf Count", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "pufcount_desc", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + pufcountActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Smoke duration", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "smokeduration_desc", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + smokedurationActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Session duration", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "sessionduration_desc", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + sessionDurationActive })
+            </th>
+            <th>
+                @Ajax.ActionLink("Review", "FilterTobaccoAjax", new {Model.PagedList.PageNumber, previousSort = Model.SortOrder, sortOrder = "overall_desc", filter = Model.Filter}, ajaxOption, new { @class = "tableLink" + overallActive })
+            </th>
+
+        </tr>
+        </thead>
+
+        @foreach (var item in Model.PagedList)
+        {
+            <tr>
+                <td data-title="Brand">
+                    @if (@item is TobaccoMix)
+                    {
+                        <b>(M)</b>
+                    }
+                    <a href="@Url.Action("ByBrand", "Tobacco", new {brand = @item.BrandName})">@item.Brand.DisplayName</a>
+                </td>
+                <td data-title="Name">
+                    <a href="@Url.Action("Details", "Tobacco", new {id = @item.Id})">@(item.AccName.IsNullOrEmpty()?"Unnamed mix": item.AccName)</a>
+                </td>
+
+
+                @if (item.Statistics == null)
+                {
+                    <td data-title="Used">0</td>
+                    <td colspan="4" style="text-align: center">No data</td>
+                }
+                else
+                {
+                    <td data-title="Used">
+                        @item.Statistics.Used
+                    </td>
+                    <td data-title="Puf count">
+                        @item.Statistics.PufCount.ToString("N2")
+                    </td>
+                    <td data-title="Smoke duration">
+                        @item.Statistics.SmokeDuration.ToString(@"hh\:mm\:ss")
+                    </td>
+                    <td data-title="Session duration">
+                        @item.Statistics.SessionDuration.ToString(@"hh\:mm\:ss")
+                    </td>
+                    <td data-title="Overall">
+                        @item.Statistics.Overall.ToString("N2")
+                    </td>
+
+                }
+                @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>*@
+            </tr>
+        }
+
+    </table>
+
+    <br/>
+    @Tbc.Tobacco.page @(Model.PagedList.PageCount < Model.PagedList.PageNumber ? 0 : Model.PagedList.PageNumber) @Tbc.Tobacco.of @Model.PagedList.PageCount
+
+
+    @Html.PagedListPager(Model.PagedList, page => Url.Action("FilterTobaccoAjax",
+        new {page, sortOrder = Model.SortOrder, filter = Model.Filter}),
+        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(ajaxOption))
+</div>
+
+@Html.Partial("_Loader")

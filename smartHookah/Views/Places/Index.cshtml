@@ -1,0 +1,43 @@
+﻿@model smartHookah.Models.PlaceIndexViewModel
+
+@{
+    ViewBag.Title = @Res.Person.places;
+}
+
+<style>
+    h4.placeOpen {
+        color: green;
+    }
+
+    h4.placeClose{
+        color:red;
+    }
+</style>
+<div>
+
+    <p>
+        @section dropmenu
+        {
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Create New", "Create",null,new {@class="dropdown-item"})
+            }
+
+        }
+       
+
+     
+    </p>
+    <div class="card-deck row">
+        @foreach(var place in Model.Places.Where(a => a.Public))
+        {
+            @Html.Partial("_PlaceGroupIdem", place);
+        }
+    </div>
+    
+    @if (Model.ownPlaceId != null)
+    { <hr />
+        <a class="btn btn-warning btn-lg" href="@Url.Action("Manage")">Manage place <i class="fa fa-user"></i></a>
+       
+    }
+</div>

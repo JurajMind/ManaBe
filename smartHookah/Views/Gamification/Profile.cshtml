@@ -1,0 +1,76 @@
+﻿@model smartHookah.Models.Person
+@{
+    ViewBag.Title = @Account.Account.profile;
+}
+
+<style>
+    .list-group-item .list-group-item-text {
+        max-height: 200px;
+    }
+</style>
+
+
+    <div class="card">
+        <div class="row card-block">
+            <div class="col-md-6">
+                <h3>@Account.Account.level: @Model.GameProfile.TestLevel</h3>
+                <h3>@Account.Account.experience: @Model.GameProfile.Experience</h3>
+                <div class="progress" style="height: 20px;">
+                    <div class="progress-bar"  role="progressbar" style="height: 20px;width: @Model.GameProfile.LvlProgress.ToString(System.Globalization.CultureInfo.InvariantCulture)%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      
+                    </div>
+                    <div class="progress-text">   @(Model.GameProfile.ExpToLevel(Model.GameProfile.Level + 2) - Model.GameProfile.Experience) to next lvl</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>@Account.Account.clouds: @Model.GameProfile.Clouds</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h4 class="card-header">Events in progress</h4>
+        <div class="list-group">
+            @foreach (var r in Model.GameProfile.InProgresses)
+            {
+                @Html.Partial("_InProgressEvent", r)
+           
+            }
+        </div>
+    </div>
+<div class="card-group">
+    <div class=" card">
+        <h4 class="card-header">@Account.Account.doneEvents</h4>
+        <div class="card-block">
+            <div class="list-group list-group-flush">
+                @foreach (var r in Model.GameProfile.GainRewards)
+                {
+                    @Html.Partial("_RewardListItem", r)
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="card">
+        <h4 class="card-header">@Account.Account.doneEvents</h4>
+        <div class="list-group">
+            @foreach (var r in Model.GameProfile.DoneEvent)
+            {
+                @Html.Partial("_DoneEventListItem", r)
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+@section dropmenu
+{
+    @Html.ActionLink("Manage profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" ,@class="btn btn-default"})
+
+}

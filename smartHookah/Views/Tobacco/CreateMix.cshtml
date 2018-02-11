@@ -1,0 +1,26 @@
+﻿@model smartHookah.Controllers.CreateMixViewModel
+
+@{
+    ViewBag.Title = "Create your tobacco mix";
+}
+
+<div class="well">
+@using (Html.BeginForm("CreateMix", "Tobacco", FormMethod.Post))
+{
+    <h2>Create custom mix</h2>
+    @Html.Partial("_TobacoEdit", Model.TobaccoMetadata)
+
+    <hr/>
+    <button class="btn btn-success btn-raised">Save&nbsp;<i class="fa fa-save"></i></button>
+}
+  
+</div>
+
+<script type="text/javascript">
+
+    $(function() {
+        init();
+        DrawnChart();
+        $('#mixName').show();
+    })
+</script>

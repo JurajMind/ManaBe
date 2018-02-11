@@ -1,0 +1,181 @@
+﻿@using smartHookah.Models
+@model List<SmokeSession>
+@{
+    Layout = null;
+}
+<style>
+    .hash {
+        font-weight: bold;
+        font-size: 22px;
+    }
+</style>
+
+@if (!Model.Any())
+{
+    <h2>@Smoke.SmokeSession.noSmokeSessions</h2>
+    return;
+}
+
+<div class="card">
+    <h4 class="card-header"><i class="fa fa-clock-o"></i>&nbsp;Time</h4>
+    <div class="card-body row">
+        <table class="table col-md-6">
+            <tbody>
+            <tr>
+                <td>@Res.Person.sessionCount</td>
+                <td> @Model.Count</td>
+            </tr>
+            <tr>
+                <td>@Res.Person.sessionTime</td>
+                @{
+                    var SessionTime = Model.Select(a => a.Statistics.SessionDuration).Aggregate((a, b) => a + b);
+                }
+                <td>
+                    @if (SessionTime.Days != 0)
+                    {
+                        <text>
+                            @SessionTime.Days days
+                        </text>
+                    } @SessionTime.ToString(@"hh\:mm\:ss")
+                </td>
+            </tr>
+            <tr>
+                @{
+                    var SmokeTime = @Model.Select(a => a.Statistics.SmokeDuration).Aggregate((a, b) => a + b);
+                }
+                <td>@Res.Person.smokeTime</td>
+                <td>
+                    @if (SmokeTime.Days != 0)
+                    {
+                        <text>
+                            @SmokeTime.Days days
+                        </text>
+                    } @SmokeTime.ToString(@"hh\:mm\:ss")
+                </td>
+            </tr>
+            <tr>
+                <td>@Res.Person.pufCount</td>
+                <td>@Model.Select(a => a.Statistics.PufCount).Sum()</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="col-md-6 table"></table>
+    </div>
+    <div class="card-footer"><button type="button" class="btn btn-info btn-raised" data-toggle="modal" data-target="#timeStatis">@Res.Person.moreInfo&nbsp;&nbsp;<i class="fa fa-info-circle"></i></button></div>
+</div>
+
+<div class="card-deck">
+
+            <div class="card col-md-4">
+                <h4 class="card-header"><img src="~/Content/icons/tobacco.svg" width="18px" />&nbsp;@Home.Home.tobacco</h4>
+              
+                <div class="card-body"> 
+                    <table class="table">
+                        @{
+                            var allTobacco = Model.SelectMany(delegate (SmokeSession session)
+                            {
+                                if (session.MetaData.Tobacco is TobaccoMix)
+                                {
+                                    TobaccoMix mixed = session.MetaData.Tobacco as TobaccoMix;
+                                    return mixed.Tobaccos.Select(a => a.Tobacco).ToList();
+                                }
+                                else
+                                {
+                                    if (session.MetaData.Tobacco != null)
+                                    {
+                                        return new List<Tobacco>() { session.MetaData.Tobacco };
+                                    }
+                                    else
+                                    {
+                                        return new List<Tobacco>();
+                                    }
+                                }
+
+                            });
+                            var tobaccoUsage = allTobacco.GroupBy(a => a.Id).OrderBy(a => a.Count());
+                            var sessionTobacco = Model.Where(a => a.MetaData.Tobacco != null).Select(a => a.MetaData.Tobacco.Id).ToList();
+                        }
+                        @foreach (var t in tobaccoUsage.OrderByDescending(a => a.Count()).Take(10))
+                        {
+                            <tr>
+                                <td><b>@(sessionTobacco.Contains(t.Key) ? "" : "(M)")</b> <a href="@Url.Action("Details","Tobacco",new {id = t.First().Id})">&nbsp;@t.First().Brand.DisplayName &nbsp;@t.First().AccName</a> </td>
+                                <td>@t.Count()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+                <div class="card-footer">   <a href="@Url.Action("Smoked","Tobacco")" class="btn btn-default">@Res.Person.moreInfo&nbsp;<i class="fa fa-info-circle"></i></a></div>
+            </div>
+            <div class="card col-md-4">
+                <h4 class="card-header" ><img src="~/Content/icons/hookah.svg" width="18px" />&nbsp;@Home.Home.hookah</h4>
+                <div class="card-body">
+                    <table class="table">
+                        @{
+                            var hookah = Model.Select(a => a.MetaData).GroupBy(a => a.Pipe);
+                        }
+                        @foreach (var t in hookah.Where(t => t.Key != null).Take(10))
+                        {
+                            <tr>
+                                <td>@t.Key.Brand.DisplayName @t.Key.AccName</td>
+                                <td>@t.Count()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="card-footer">   <button data-toggle="modal" data-target="#hookahStatistic"  class="btn btn-default">@Res.Person.moreInfo&nbsp;<i class="fa fa-info-circle"></i></button></div>
+
+
+            </div>
+    <div class="card col-md-4">
+        <h4 class="card-header"><img src="~/Content/icons/bowl.svg" width="18px"/>&nbsp;@Home.Home.bowl</h4>
+        <div class="card-body">
+            <table class="table">
+                @{
+                    var bowl = Model.Select(a => a.MetaData).GroupBy(a => a.Bowl);
+                }
+                @foreach (var t in bowl.Where(t => t.Key != null).Take(10))
+            {
+                    <tr>
+                        <td>@t.Key.Brand.DisplayName @t.Key.AccName</td>
+                        <td>@t.Count()</td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="card-footer"> <a href="@Url.Action("Smoked", "Tobacco")" class="btn btn-default">@Res.Person.moreInfo&nbsp;<i class="fa fa-info-circle"></i></a>
+        </div>
+    </div>
+        </div>
+ 
+
+
+
+<div class="card">
+    <h4 class="card-header">Smoke session</h4>
+    <div class="card-body list-group-flush">
+        <div class="list-group">
+            @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Take(10))
+            {
+                @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
+            }
+            <div style="display: none" id="hidenSmokeSession">
+                @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Skip(10))
+                {
+                    @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
+                }
+            </div>
+            @if (Model.OrderByDescending(a => a.Statistics.Start).Skip(10).Any())
+            {
+                
+                    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(true)">@Smoke.SmokeSession.showAll&nbsp;<i class="fa fa-arrow-down"></i></button>
+                    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(false)"style="display:none">@Smoke.SmokeSession.hide <i class="fa fa-arrow-up"></i></button>
+                
+            }
+        
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_TimeStatistics",Model);
+@Html.Partial("_HookahStatistics", Model);

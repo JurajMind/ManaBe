@@ -1,0 +1,143 @@
+﻿@using System.Globalization
+@using System.Web.Mvc.Html
+@using smartHookah
+@using smartHookah.Helpers
+@model smartHookah.Controllers.SmokeMetadataModalViewModel
+
+<div class="row">
+                        <div class="col-md-6">
+                            <div class="card ">
+                                <div class="card-header">
+                                    
+                                    <h4 class="pull-left">@Smoke.SmokeSession.myGear</h4>
+                                        <div class="switch pull-right" style="padding-left: 40px;">
+                                            <label>
+                                              @Smoke.SmokeSession.myGear &nbsp;
+                                                <input id="ownGear" value="" class="form-control" type="checkbox" @(Model.MyGear ? "checked=\"checked\"" : "") onclick="ChangeGear(this)" />
+
+                                            </label>
+                                        </div>
+                                </div>
+                                <div class="card-body container">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating" for="hookah">@Home.Home.hookah</label>
+
+                                        @Html.DropDownListPipe("hookah", Model.Pipes, Model.SelectedPipe, new { id = "hookah", @name = "hookah", @class = "form-control" })
+
+                                    </div>
+                                    <hr />
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating" for="bowl">@Home.Home.bowl</label>
+
+                                        @Html.DropDownListPipe("bowl", Model.Bowl, Model.SelectedBowl, new { id = "bowl", @name = "bowl", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                               
+                                    <h3 class="card-title">@Smoke.SmokeSession.persons</h3>
+                              
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="form-group">
+                                            <input type="number" min="@Model.AssignedPersonCount" value="@(Model.AnonymPeopleCount + Model.AssignedPersonCount )" class="form-control" name="PersonCount" />
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                
+                                    <h3 class="card-header">@Smoke.SmokeSession.packAndCoals</h3>
+                                
+                                <div class="card-body container">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                            <label class="bmd-label-floating" for="basic-url">@Smoke.SmokeSession.packStyle</label>
+                                            @Html.EnumDropDownListFor(x => x.PackType, new {@class = "form-control", @name = "PackType", @id = "PackType"})
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                            <label for="basic-url">@Smoke.SmokeSession.heatManager</label>
+                                            @Html.EnumDropDownListFor(x => x.HeatKeeper, new {@class = "form-control", @name = "HeatKeeper", @id = "HeatKeeper"})
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                            <label class="bmd-label-floating">@Smoke.SmokeSession.coalType</label>
+                                            @Html.EnumDropDownListFor(x => x.CoalType, new {@class = "form-control", @name = "CoalType", @id = "CoalType"})
+                                        </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                            <label class="bmd-label-floating">@Smoke.SmokeSession.coalCount</label>
+                                            <input type="number" min="0" max="10" value="@Model.CoalsCount.ToString(CultureInfo.InvariantCulture)" id="CoalsCount" class="form-control" name="CoalsCount"
+                                                   step="0.5"/>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div>
+                                        @*<label>Tags</label>
+                                        <input type="text" value="" data-role="tagsinput" id="tags" class="form-control">*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+<script>
+    function processOption($item, array) {
+        $item.empty();
+        $item.append($("<option />").val('').text('None'));
+        $.each(array,
+            function () {
+                $item.append($("<option />")
+                    .val(this.id)
+                    .text(this.name)
+                );
+
+            }
+        );
+    }
+
+    function ChangeGear(checkbox)
+    {
+        var myGearUrl = '@Url.Action("GetMyGear", "PipeAccesorry")';
+        var allGearUrl = '@Url.Action("GetAllGear", "PipeAccesorry")';
+
+        var url = "";
+
+        if ($(checkbox).is(":checked")) {
+            url = myGearUrl;
+        } else {
+            url = allGearUrl;
+        }
+
+        $.ajax(
+            {
+                type:
+                    "GET",
+                url: url,
+                dataType:
+                    'json',
+                success:
+                    function (data) {
+                        console.log(data);
+                        processOption($('#bowl'), data.bowls);
+                        processOption($('#hookah'), data.pipes);
+                    }
+
+            }
+        );
+    }
+</script>

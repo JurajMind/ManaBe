@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+        <img src="/Content/BrandPicture/Manapipes.png" class="avatar">
+        <div class="account">
+            <span>@User.Identity.GetUserName() </span>
+            <div class="dropdown">
+                <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="nav-account-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">arrow_drop_down</i>
+                    <div class="ripple-container"></div></button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="nav-account-menu">
+                    @Html.ActionLink(@Account.Account.profile, "Profile", "Gamification", routeValues: null, htmlAttributes: new { title = "Manage", @class = "dropdown-item" })
+                    <a  class="dropdown-item " href="javascript:document.getElementById('logoutForm').submit()">@Home.Home.logOff</a>
+                </div>
+            </div>
+        </div>
+
+
+    @*<ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+            @Html.ActionLink("Hi " + User.Identity.GetUserName() + "!", "Profile", "Gamification", routeValues: null, htmlAttributes: new { title = "Manage",@class="nav-link" })
+        </li>
+        <li class="nav-item">
+            <a  class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+        </li>
+    </ul>*@
+    }
+}
+else
+{
+    <ul class="nav navbar-nav d-inline-block">
+        @*<li class="nav-item">
+            @Html.ActionLink(@Home.Home.register, "Register", "Account", routeValues: null, htmlAttributes: new {id = "registerLink", @class = "btn btn-info btn-raised" })
+        </li>*@
+        <li class="nav-item">
+            @Html.ActionLink(@Home.Home.logIn, "Login", "Account", routeValues: null, htmlAttributes: new {id = "loginLink", @class = "btn btn-success btn-raised" })
+        </li>
+    </ul>
+}

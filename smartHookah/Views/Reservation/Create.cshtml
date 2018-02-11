@@ -1,0 +1,301 @@
+﻿@using smartHookah.Helpers
+@model smartHookah.Controllers.CreateReservationModel
+
+@{
+    ViewBag.Title = @Model.place.Name;
+
+}
+@Styles.Render("~/Content/gij")
+
+<style>
+    .place-table {
+        fill: #4caf50;
+    }
+
+    .place-table.selected {
+        fill: #3d50b6;
+    }
+
+    .place-table.taken {
+        fill: red;
+    }
+
+</style>
+<div id="app">
+    <div class="card">
+        <h4 class="card-header">@LocalizationHelper.Translate("createReservation", "Reservation")</h4>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
+                        <input id="datepicker" class="form-control"/>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("time", "Reservation")</label>
+                        <select v-model="Selected.Time" class="form-control" v-cloak>
+                            <option v-for="time in selectableTimeSlot" :value="time.Value" v-cloak>{{time.Text}}</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label><i class="fa fa-users">@LocalizationHelper.Translate("persons", "Reservation")</i></label>
+                        <select v-model="Selected.Persons" name="persons" class="form-control" v-cloak>
+                            <option v-for="n in 8" :value="n" >{{n}}</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("visitDuration", "Reservation")</label>
+                        <select v-model="Selected.Duration" class="form-control" v-cloak>
+                            <option v-for="time in Reservations.Times" :value="time.Key">{{time.Value}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <hr/>
+
+            <div v-cloak>
+                <div style="text-align: center" v-if="available">  
+                    <h5 class="card-title">V tomto čase je v podniku <strong style="color:#4caf50">volno</strong></h5>
+                </div>
+                <div v-else>
+                    <h5 class="card-title">Ospravedlnujeme sa , ale nieje mozne spravit rezervaciu pre dovod:
+                        <strong class="" v-cloak>{{DeniedReason}}</strong></h5>
+                </div>
+            </div>
+            
+            <hr />
+            <div id="tables">
+                
+                <div class="form-group">
+                    <label for="exampleTextarea" class="bmd-label-floating">@LocalizationHelper.Translate("message", "Reservation")</label>
+                    <textarea class="form-control" v-model="Selected.Text" id="exampleTextarea" rows="3"></textarea>
+                </div>
+                <hr/>
+                <h4 style="text-align: center">@LocalizationHelper.Translate("selectSeat", "Reservation")</h4>
+                @Html.Raw(Model.place.Map)
+                <h4 v-if="canReserved">{{this.Specification}}</h4>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button v-if="canReserved" onclick="v.postReservation()" class="btn btn-success btn-raised">@LocalizationHelper.Translate("reserve", "Reservation")</button>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/vue-multiselect@2.0.6"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.0.6/dist/vue-multiselect.min.css">
+@Scripts.Render("~/bundles/gij")
+@Scripts.Render("~/bundles/vue")
+@Scripts.Render("~/bundles/babel")
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        
+        $(function() {
+            $('#datepicker').datepicker({
+                showOtherMonths: true,
+                weekStartDay: 1,
+                uiLibrary: 'materialdesign',
+                format: 'dd.mm.yyyy',
+                minDate: moment().format('YYYY.MM.DD'),
+                value: moment().format('DD.MM.YYYY'),
+                change: function() {
+                    v.dateChanged();
+                }
+            });
+
+            $('.place-table').click(function() {
+
+                if ($(this).hasClass('taken')) {
+                    return true;
+                }
+
+                if ($(this).hasClass('selected')) {
+                    $('.place-table').removeClass('selected');
+                    v.Selected.Table = null;
+                } else {
+                    $('.place-table').removeClass('selected');
+                    $(this).addClass('selected');
+                    v.Selected.Table = $(this).data('id');
+                }
+
+                return true;
+            });
+
+        });
+
+        var placeId = @Model.place.Id;
+        var v = new Vue({
+            el: '#app',
+            created: function() {
+                this.loadReservations();
+
+            },
+
+            data: {
+                DeniedReason: null,
+                Specification : null,               
+                PlaceId: placeId,
+                Selected: {
+                    Table: null,
+                    format:'dd.mm.yyyy',
+                    Date: moment().format('DD.MM.YYYY'),
+                    Time: '',
+                    Duration: 3,
+                    Persons: 2,
+                    Text : ''
+                },
+                Reservations: {
+                    TimeSlots: [],
+                    Tables: [],
+                    Reservations: [],
+                    Times: []
+                }
+            },
+            computed:
+            {
+                selectableTimeSlot: function() {
+                    return this.Reservations.TimeSlots.slice(0, this.Reservations.TimeSlots.length- this.Selected.Duration);
+                },
+                freeTable: function() {
+
+                    var result = [];
+                    for (let index = 0; index < this.Reservations.Tables.length; ++index) {
+                        var table = this.Reservations.Tables[index];
+                        var tableReservation = this.Reservations.Reservations[table.Id];
+                        var timeslotIndex = findWithAttr(tableReservation, "Value", this.Selected.Time);
+
+                        if (timeslotIndex > -1) {
+                            var add = true;
+                            for (let timeIndex = 0; timeIndex < this.Selected.Duration + 1; ++timeIndex) {
+                                var tableIndex = timeslotIndex + timeIndex;
+                                if (tableIndex <= this.Reservations.TimeSlots.length && tableReservation[tableIndex] != undefined) {
+                                    if (!tableReservation[tableIndex].Reserved) {
+                                        add = add && true;
+                                    }
+                                    else {
+                                        add = false;
+                                        $('#table' + table.Id).addClass('taken');
+                                    }
+                                } else {
+                                    add = false;
+                                    this.DeniedReason = "Cas prekrocil otvaracku";
+                                }
+                            }
+                            if (add) {
+                                result.push(table);
+                                $('#table' + table.Id).removeClass('taken');
+                            }
+                        }
+
+                        
+                    }
+                    return result;
+                },
+                available: function () {
+
+                    if (this.freeTable.length === 0) {
+                        $("#tables").hide(10);
+                        this.DeniedReason = "Lutujeme, ale v pozadovanom case nieje ziadne miesto volne";
+                        return false;
+                     
+                    }
+                    var sum = 0;
+                    for (let i = 0; i < this.freeTable.length; ++i) {
+                        sum = sum + this.freeTable[i].Capacity;
+                    }
+
+
+                    
+
+                    if (sum >= this.Selected.Persons) {
+
+                        if (this.Selected.Table == null)
+                            return true;
+                        var _this = this;
+                        var selectedTable = this.Reservations.Tables.filter(function(obj) {
+                            return obj.Id === _this.Selected.Table;
+                        });
+                        selectedTable = selectedTable[0];
+
+                        if (selectedTable.Capacity >= this.Selected.Persons) {
+                            this.Specification = '';
+                        } else {
+                            this.Specification = " Prosim pockajte na potvrdenie rezervacie mailom, je vas viac ako sa zmesti k vybranemu stolu "
+                        }
+
+                        $("#tables").show(100);
+                        return true;
+                    }
+                    else {
+
+                        this.Specification = " Prosim pockajte na potvrdenie rezervacie mailom,  je vas viac ako aktualna kapacita podniku.. ale uvidime co sa s tym da robit"
+                        $("#tables").show(100);
+                        return true;
+                    }
+                   
+                },
+                canReserved: function() {
+                    if (this.Selected.Table == null)
+                        return false;
+                    return true;
+                }
+
+            },
+            methods: {
+                dateChanged() {
+                    this.Selected.Date = $("#datepicker").val();
+                    this.loadReservations();
+                },
+                loadReservations: function() {
+                    var _this = this;
+                    $.getJSON('/Reservation/Reservations/',
+                        {
+                            id: placeId,
+                            date: this.Selected.Date
+                        },
+                        function(json) {
+                            _this.Reservations = json;
+                            _this.Selected.Time = json.TimeSlots[0].Value;
+
+                            if (_this.Reservations.Times.length > 0)
+                                _this.Selected.Duration = _this.Reservations.Times[0].Key;
+                        });
+                },
+                postReservation: function() {
+                    var req = $.post(
+                        '/Reservation/PostReservation?id=' + this.PlaceId,
+                        this.Selected,
+                        function(data) {
+
+                            if (data.success) {
+                                window.location.href = '/Reservation/Details/' + data.id;
+                            }
+                            console.log(data);
+                        });
+
+
+                }
+            }
+        });
+
+
+    </script>
+}

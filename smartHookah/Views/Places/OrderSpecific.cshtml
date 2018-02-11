@@ -1,0 +1,19 @@
+﻿@{
+   ViewBag.Title = Model.Name.ToString();
+}
+@model smartHookah.Models.Place
+
+<div class="card">
+    <div class="card-block">
+        @using (Html.BeginForm("Order", "Places", FormMethod.Get))
+        {
+            <div class="form-group form-group-lg label-floating is-empty">
+                <label for="i6" class="control-label">@Order.Order.seatSpecify</label>
+                <input type="text" class="form-control" id="i6" name="code">
+                <input type="hidden" name="id" value="@Model.FriendlyUrl" />
+                <span class="help-block">@Order.Order.pleaseEnterTableCode</span>
+            </div>
+            <button class="btn btn-success btn-raised">@Order.Order.proceedToOrder &nbsp;<i class="fa fa-check"></i></button>
+        }
+    </div>
+</div>

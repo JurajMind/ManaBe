@@ -1,0 +1,16 @@
+﻿@model smartHookah.Models.ActiveSessionListItemViewModel
+<div class="list-group-item">
+    <a href="@Url.Action("SmokeSession", "SmokeSession", new {id = Model.SmokeSession.Id})" class="list-group-item-heading">
+        <span> @Model.DynamicSmokeSession.Start.ToString("d.M.yyyy hh:MM") @(Model.SmokeSession.MetaData.Tobacco != null ? $"{Model.SmokeSession.MetaData.Tobacco.Brand.DisplayName} {Model.SmokeSession.MetaData.Tobacco.AccName}" : "Unknown")</span>
+        <span class="btn btn-sm btn-success pull-right"></span>
+    </a>
+    <div class="list-group-item-text">
+        <div class="row">
+            <span class="col-sm-3"><i class="fa fa-hashtag"></i>@Model.DynamicSmokeSession.PufCount</span>
+            <span class="col-sm-3"><i class="fa fa-clock-o"></i>@Model.DynamicSmokeSession.TotalSmokeTime.ToString(@"mm\:ss")</span>
+            <span class="col-sm-3"><i class="fa fa-hourglass-start"></i>@((DateTime.Now - Model.DynamicSmokeSession.Start).ToString(@"hh\:mm\:ss"))</span>
+            <span class="col-sm-3"><i class="fa fa-star"></i>@Model.DynamicSmokeSession.LongestPuf.ToString(@"s\.fff") .sec</span>
+        </div>
+    </div>
+
+</div>

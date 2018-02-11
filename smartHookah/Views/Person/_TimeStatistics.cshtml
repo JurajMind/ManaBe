@@ -1,0 +1,90 @@
+﻿@using System.Globalization
+@model List<smartHookah.Models.SmokeSession>
+
+<div class="modal fade" id="timeStatis">
+    <div class="modal-dialog modal-lg" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Time statistics</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Day of week distribution</h4>
+                        <canvas id="weekDistribution" height="400" width="400"></canvas>
+                    </div>
+
+                    <hr />
+
+                    <div class="col-md-6">
+                        <h4>Session start time</h4>
+
+                        <canvas id="sessionTime" height="400" width="400"></canvas>
+                    </div>
+                </div>
+               
+                <!-- /.modal-content -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</div>
+
+<script>
+    @{
+        var weekDestibution = Model.GroupBy(a => (int)a.Statistics.Start.DayOfWeek).ToDictionary(a => a.Key,a => a.Count());
+        var timeDist = Model.GroupBy(a => a.Statistics.Start.Hour).ToDictionary(a => a.Key, a => a.Count());
+        var labels = new List<string>();
+        var data = new List<int>();
+        for (int i = 0; i < 7; i++)
+        {
+            labels.Add(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.DayNames[i]));
+            if (weekDestibution.ContainsKey(i))
+            {
+                data.Add(weekDestibution[i]);
+            }
+            else
+            {
+                data.Add(0);
+            }
+        }
+    }
+    var weekDestibution =@Json.Encode(data.ToArray());
+    var weekDestibutionLabels = @Html.Raw(Json.Encode(labels.ToArray()));
+    var weekDisct = $("#weekDistribution");
+    var timeDisc = $("#sessionTime"); 
+    var myDayChar;
+    var myTimeChar;
+    function drawnChar() {
+        myDayChar = new Chart(weekDisct, {
+        type: 'bar',
+        data: {
+            labels: weekDestibutionLabels,
+            //data: weekDestibution
+            datasets: [{ "label": "Daily distributions", "data": weekDestibution, "fill": false, "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"], "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"], "borderWidth": 1 }] }, "options": { "scales": { "yAxes": [{ "ticks": { "beginAtZero": true } }] } } 
+        
+        });
+
+        myTimeChar = new Chart(timeDisc, {
+            type: 'bar',
+            data: {
+                labels: @Json.Encode(timeDist.Keys.ToArray()),
+                //data: weekDestibution
+                datasets: [{ "label": "Daily distributions", "data": @Json.Encode(timeDist.Values.ToArray()), "fill": false, "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"], "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"], "borderWidth": 1 }] }, "options": { "scales": { "yAxes": [{ "ticks": { "beginAtZero": true } }] } } 
+        
+        });
+    }
+
+
+    $('#timeStatis')
+        .on('shown.bs.modal',
+            function (e) {
+                drawnChar();
+            });
+</script>

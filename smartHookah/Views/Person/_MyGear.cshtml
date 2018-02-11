@@ -1,0 +1,131 @@
+﻿@using smartHookah.Models
+@model smartHookah.Controllers.ShowGearViewModel
+
+
+
+@{
+    Layout = null;
+}
+<style>
+    .btn.btn-sm { padding: 0 10px; }
+
+    h4, h5 {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    } 
+
+    .btn-group.pull-right {
+        margin: 0px;
+    }
+   
+</style>
+<div>
+
+    <div class="card mb-3">
+        <div class="card-header text-light bg-primary hidden-md">
+            <h4 class="pull-left"><img src="~/Content/icons/tobacco.svg" width="18px"/>@Home.Home.tobacco</h4>
+            <div class="btn-group pull-right">
+                <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-default" href="@Url.Action("Owned", "Tobacco")">Owned tobacco&nbsp;<i class="fa fa-shopping-basket"></i></a>
+                    }
+                    @if (Model.CanEdit)
+                    {
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                            Add my gear&nbsp;<i class="fa fa-plus"></i>
+                        </button>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-block">
+            @Html.Partial("_TobaccoList", new TobaccoListViewModel() {CanEdit = Model.CanEdit, Tobaccos = Model.Tobaccos})
+        </div>
+    </div>
+
+    <div class="card-deck mb-3">
+        <div class="card">
+            <div class="card-header text-light bg-primary">
+                <h4 class="pull-left"><img src="~/Content/icons/hookah.svg" width="18px"/>&nbsp;@Home.Home.hookahs</h4>
+                <div class="btn-group pull-right">
+                    <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
+                      @if (Model.CanEdit)
+                        {
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                                Add my gear&nbsp;<i class="fa fa-plus"></i>
+                            </button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row border-between">
+
+
+                    <ul style="display: table">
+                        @foreach (var pipe in Model.Pipes.OrderBy(a => a.BrandName).ThenBy(a => a.AccName))
+                        {
+                            <li style="display: table-row">
+                                <span style="display: table-cell"> @pipe.Brand.DisplayName @pipe.AccName &nbsp;</span>
+                                @if (Model.CanEdit)
+                                {
+                                    <button style="display: table-cell" class="btn btn-sm btn-danger" onclick="RemoveGear(@pipe.Id)">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                }
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header text-light bg-primary">
+                <h4 class="pull-left"><img src="~/Content/icons/bowl.svg" width="18px"/>&nbsp;@Home.Home.bowls</h4>
+                <div class="btn-group pull-right">
+                    <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
+                        @if (Model.CanEdit)
+                        {
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                                Add my gear&nbsp;<i class="fa fa-plus"></i>
+                            </button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul style="display: table">
+                    @foreach (var bowl in Model.Bowls.OrderBy(a => a.BrandName).ThenBy(a => a.AccName))
+                    {
+                        <li style="display: table-row">
+                            <span style="display: table-cell"> @bowl.Brand.DisplayName @bowl.AccName &nbsp;</span>
+                            @if (Model.CanEdit)
+                            {
+                                <button style="display: table-cell" class="btn btn-sm btn-danger" onclick="RemoveGear(@bowl.Id)">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,39 @@
+﻿@using Tbc
+@model smartHookah.Models.TobaccoMix
+
+<div class="card">
+    <h3 class="card-header"><a href="@Url.Action("Details","Tobacco",new {id = @Model.Id})">@(string.IsNullOrEmpty(Model.AccName) ? "Mix" : Model.AccName)</a> @Tobacco.parts:</h3>
+    <div class=" card-body row">
+        <div class="col-md-6">
+            <canvas id="mixChart" width="250" height="250"></canvas>
+        </div>
+        <div class="col-md-6">
+            @if (Model.LayerMethod != null || Model.LayerMethod != 0)
+            {
+                <h4>@Tobacco.layeringMethod : @Model.LayerMethod</h4>
+            }
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>@Tobacco.brand</b></td>
+                        <td><b>@Tobacco.name</b></td>
+                        <td><b>@Tobacco.weight</b></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var allWeithg = Model.Tobaccos.Sum(a => a.Fraction); }
+                    @foreach (var parts in Model.Tobaccos)
+            {
+                        <tr class="mixPart" data-name="@parts.Tobacco.Brand.DisplayName @parts.Tobacco.AccName" data-weight="@parts.Fraction">
+                            <td><a href="@Url.Action("ByBrand", "Tobacco", new {brand = parts.Tobacco.BrandName})">@parts.Tobacco.Brand.DisplayName</a></td>
+                            <td><a href="@Url.Action("Details", "Tobacco", new {id = parts.Tobacco.Id})">@parts.Tobacco.AccName</a></td>
+                            <td>@parts.Fraction g. (@((((double)parts.Fraction / allWeithg) * 100).ToString("N2"))%)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

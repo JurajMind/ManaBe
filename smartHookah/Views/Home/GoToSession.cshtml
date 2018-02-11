@@ -1,0 +1,19 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = @Home.Home.goToSession;
+}
+
+<div class="card">
+    <div class="card-block">
+        @using (Html.BeginForm("GoToSession", "Home", FormMethod.Post))
+        {
+            <div class="form-group form-group-lg label-floating is-empty">
+                <label for="i6" class="control-label">@Home.Home.sessionCode</label>
+                <input type="text" class="form-control" id="i6" name="id">
+                <span class="help-block">@Home.Home.pleaseEnter</span>
+            </div>
+            <button class="btn btn-success btn-raised">@Home.Home.Go&nbsp;<i class="fa fa-check"></i></button>
+        }
+    </div>
+</div>

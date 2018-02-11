@@ -1,0 +1,27 @@
+﻿@using smartHookah.Support
+@model smartHookah.Models.SeatManagerModel
+
+@{
+    ViewBag.Title = "Seats";
+}
+
+<div class="card">
+    <div class="card-block">
+        <ul>
+            @foreach (var s in Model.Seats)
+            {
+                <li><div style="text-align: center">
+                        @Html.QRCode(@Url.Action("Order", "Places", new {id = s.Place.FriendlyUrl, code = s.Code}, this.Request.Url.Scheme), 256, 2, QrCodeHelper.QRCodeErrorCorrectionLevel.High)
+                   
+                        <h1>Code:@s.Code</h1>
+                        <h2>@s.Name</h2>
+                        <img src="@s.Place.LogoPath" height="80px" style="position: relative;top: -260px;"/>
+                    </div>
+                   
+            </li>
+
+            }
+        </ul>
+    </div>
+
+</div>

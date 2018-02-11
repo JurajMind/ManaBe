@@ -1,0 +1,55 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Manapipes";
+
+}
+
+<div class="card">
+    <div class="row align-content-sm-center">
+        <div class="col-sm-4" style="margin-bottom: 10px">
+            <a class="btn btn-lg btn-success btn-raised w-100" href="@Url.Action("GoToSession")">@Home.Home.goToSession&nbsp;<i class="fa fa-link"></i></a>
+        </div>
+        <div class="col-sm-4" style="margin-bottom: 10px">
+            <a class="btn btn-lg btn-info btn-raised w-100" href="@Url.Action("Mix","Tobacco")">@Home.Home.mixology&nbsp;<i class="fa fa-pie-chart"></i></a>
+        </div>
+        <div class="col-sm-4" style="margin-bottom: 10px">
+            <a class="btn btn-lg btn-warning btn-raised w-100" href="@Url.Action("Index","Places")">@Res.Person.places&nbsp;<i class="fa fa-users"></i></a>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <h4>
+            <a class="btn btn-lg btn-default w-100" href="@Url.Action("Login","Account")">@Home.Home.logIn&nbsp;<i class="fa fa-arrow-circle-left"></i></a>
+            <span>@Home.Home.logInForMoreFunctions&nbsp;</span>
+        </h4>
+    </div>
+</div>
+
+@section scripts
+{
+
+    @{
+        var partial = new HtmlString(Html.Partial("_Registration").ToString().Replace(System.Environment.NewLine, ""));
+        
+    }
+    <script type="text/javascript">
+
+        $( document ).ready(function() {
+            showRegistration();
+        });
+
+        
+        function showRegistration() {
+            var options = {
+                content: '@partial',
+                style: "registrationSnack", // add a custom class to your snackbar
+                timeout: 0, // time in milliseconds after the snackbar autohides, 0 is disabled
+                htmlAllowed: true, // allows HTML as content value
+                onClose: function () { } // callback called when the snackbar gets closed.
+            }
+
+            $.snackbar(options);
+        }
+    </script>
+}

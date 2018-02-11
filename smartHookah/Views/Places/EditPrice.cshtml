@@ -1,0 +1,102 @@
+﻿@using smartHookah.Controllers
+@using smartHookah.Models
+@model smartHookah.Models.EditPriceViewModel
+
+
+
+@{
+    ViewBag.Title = "Edit price";
+    var Hookah = Model.OwnedGear.Where(a => a.PipeAccesory is Pipe);
+    var Bowl = Model.OwnedGear.Where(a => a.PipeAccesory is Bowl);
+    var Tobacco = Model.OwnedGear.Where(a => a.PipeAccesory is Tobacco);
+    var index = 0;
+}
+
+<style>
+    .form-group {
+        padding-bottom: 0px;
+        margin: 0;
+         margin-bottom: 0px;
+    
+    }
+</style>
+<div class="well">
+    <h2>Edit place prices</h2>
+
+@using (Html.BeginForm("EditPrice", "Places", FormMethod.Post))
+{
+    @Html.Hidden("PlaceId",Model.PlaceId)
+    @Html.AntiForgeryToken()
+    <label>Base hookah price</label>
+    <input  class="form-control" type="number" value="@Model.BasePrice.ToString(System.Globalization.CultureInfo.InvariantCulture)" min="0" name="@($"BasePrice")" />
+   
+    <select class="form-control" name="Currency">
+        <option selected="selected" value="CZK">CZK</option>
+        <option  value="EUR">€</option>
+    </select>
+    <hr/>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Currency</th>
+            @foreach (var pc in @Model.PriceGroups)
+            {
+                <th>@pc.Name</th>
+            }
+        </tr>
+
+        </thead>
+
+        
+        <tbody>
+        <tr>
+            <td colspan="3"><h3>Tobacco</h3></td>
+        </tr>
+     
+        @foreach (var tbc in Tobacco)
+        {
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
+            {
+                Item = tbc,
+                Index = index,
+                PriceGroups = Model.PriceGroups
+            })
+            index = index + 1;
+        }
+
+      
+        <tr>
+            <td colspan="3"><h3>Hookah</h3></td>
+        </tr>
+        @foreach (var tbc in Hookah)
+        {
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
+            {
+                Item = tbc,
+                Index = index,
+                PriceGroups = Model.PriceGroups
+            })
+            index = index + 1;
+        }
+
+        <tr>
+            <td colspan="3"><h3>Bowl</h3></td>
+        </tr>
+        @foreach (var tbc in Bowl)
+        {
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
+            {
+                Item = tbc,
+                Index = index,
+                PriceGroups = Model.PriceGroups
+            })
+            index = index + 1;
+        }
+        </tbody>
+    </table>
+    <a href="@Url.Action("Manage",new {id = Model.PlaceId})" class="btn btn-success btn-danger">Cancel&nbsp;<i class="fa fa-step-backward"></i></a>
+    <button class="btn btn-success btn-raised">Save&nbsp;<i class="fa fa-save"></i></button>
+
+}
+</div>

@@ -1,0 +1,20 @@
+﻿@model IGrouping<string,smartHookah.Models.Tobacco>
+
+<h5>@Model.Key</h5>
+<ul style="display: table">
+    @foreach (var tobacco in @Model)
+    {
+        <li style="display:table-row">
+            <span style="display: table-cell">@tobacco.BrandName @tobacco.AccName </span>
+            <a class="btn btn-sm btn-success " style="display: table-cell" href="@Url.Action("Details", "Tobacco", new {id = tobacco.Id})">
+                <i class="fa fa-info-circle"></i>
+            </a>
+            @if (Model.CanEdit)
+            {
+                <button style="display: table-cell" class="btn btn-sm btn-danger" onclick="RemoveGear(@tobacco.Id)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+            }
+        </li>
+    }
+</ul>

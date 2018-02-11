@@ -1,0 +1,15 @@
+﻿@model smartHookah.Controllers.MetadataAndReviewModel
+<div class="row border-between">
+    <div class="col-md-6">
+        <h3>Smoke session metadata</h3>
+        <div id="metaDataTable">
+            @Html.Partial("smokeSessionMetaData", Model.MetaData)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h3>Smoke session review</h3>
+        <div id="reviewTable">
+            @Html.Partial("~/Views/TobaccoReviews/smokeSessionReview.cshtml", Model.Review)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@using PagedList
+@using smartHookah.Controllers
+@model smartHookah.Controllers.MixBrandModel
+@{
+    ViewBag.Title = "Mix by " + Model.Brand.DisplayName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<div class="card mb-3">
+    <h2 class="card-header"><img height="50px" src="@Model.Brand.Picture" />Mix by  @Model.Brand.DisplayName </h2>
+    <br />
+    @*<p>
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-raised btn-success" })
+        </p>*@
+
+    <div class="card-body list-group">
+        @foreach (var mix in Model.Tobacco)
+        {
+            @Html.Partial("_TobacoMixListItem", mix)
+        }
+    </div>
+</div>
+
+    <div class="card">
+        @Html.Partial("_FilterTobaccoGrid", new TobaccoController.FilterTobaccoViewModel()
+       {
+           PagedList = Model.Tobacco.ToPagedList(1, 10),
+           Filter = $"brand_{Model.Brand.Name}"
+
+       })
+    </div>
+
+

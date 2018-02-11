@@ -1,0 +1,71 @@
+﻿@using smartHookah.Models.Redis
+@model int?
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<style>
+    .container {
+        width: 98%;
+    }
+
+    .hookah.Online h2 {
+        color: green;
+        font-weight: bold;
+       
+    }
+
+    img.hookahPicture {
+        height: 190px;
+    }
+
+    .hookah.Online {
+        background: rgba(86, 253, 0, 0.24);
+    }
+
+    .hookah.Service {
+        background: rgba(255, 107, 107, 0.85);
+    }
+
+    .hookah.Offline table {
+        opacity: 0.5
+    }
+
+    .hookah.Offline a {
+        color: lightgrey;
+    }
+    hookahstand.Offline .controll {
+        display: none;
+    }
+    
+    .hookah.Offline {
+        display: none;
+    }
+</style>
+
+
+<div class="well"> 
+    @*<h2>@Model.Place.Name dashboard</h2>*@
+
+    <div id="app">
+        
+        <div class="row">
+            <hookah-componet-public v-for="item in hookahOrderedByPuf" :key="item.Key"
+                                    v-bind:item="item" v-bind:url="url" v-bind:now="now">
+
+            </hookah-componet-public>
+        </div>
+    </div>
+</div>
+
+@section scripts { 
+    <script>
+        var placeId = @Model;
+    </script>
+    @Scripts.Render("~/bundles/vue")
+    @Scripts.Render("~/bundles/babel")
+    @Scripts.Render("~/Scripts/lodash.min.js")
+    @Scripts.Render("~/Scripts/Vue/Place/main.js")
+}
