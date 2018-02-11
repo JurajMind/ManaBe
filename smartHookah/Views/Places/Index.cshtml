@@ -31,7 +31,7 @@
     <div class="card-deck row">
         @foreach(var place in Model.Places.Where(a => a.Public))
         {
-            @Html.Partial("_PlaceGroupIdem", place);
+            @Html.Partial("_PlaceGroupItem", place);
         }
     </div>
     
