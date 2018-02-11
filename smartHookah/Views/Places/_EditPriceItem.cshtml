@@ -1,0 +1,30 @@
+﻿@model smartHookah.Models.EditPriceItemModel
+
+<tr>
+    @Html.Hidden($"items[{Model.Index}].Id",Model.Item.Id)
+    <td > <strong> @Model.Item.PipeAccesory.Brand.DisplayName @Model.Item.PipeAccesory.AccName</strong></td>
+  
+    <td>
+        <select class="form-control" name="@($"items[{Model.Index}].Currency")">
+            <option selected="selected" value="CZK">CZK</option>
+            <option  value="EUR">€</option>
+        </select>
+
+        @for (var i = 0; i < Model.PriceGroups.Count; i++)
+        {
+            var pc = Model.PriceGroups[i];
+            var selectedPrice = Model.Item.Prices.FirstOrDefault(a => a.PriceGroup == pc);
+            decimal price = 0;
+            if (selectedPrice != null)
+            {
+                price = selectedPrice.Price;
+            }
+
+            <td>
+                <input class="form-control" type="hidden" name="@($"items[{Model.Index}].Prices[{i}].Id")" value="@pc.Id"/>
+                <input class="form-control" name="@($"items[{Model.Index}].Prices[{i}].Price")" value="@price"/>
+            </td>
+        }
+
+    </td>
+</tr>

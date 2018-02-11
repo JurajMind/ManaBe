@@ -1,0 +1,125 @@
+﻿@using smartHookah.Models
+@using smartHookah.Models.Redis
+@model smartHookah.Controllers.PersonIndexViewModel
+
+
+<style>
+
+    .hookahs {
+     padding-left: 23px;
+    padding-right: 23px;
+    }
+
+   .hookahs .list-group-item {
+    font-weight: bold;
+    /* color: black; */
+    padding-bottom: 5px;
+}
+
+    .offline {
+        opacity: 0.5;
+    }
+
+    .offline a {
+        color: black;
+    }
+
+</style>
+
+<div>
+
+    <div class="row">
+        @if(Model.Hookah.Any())
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <h4 class="card-header">@Home.Home.stands</h4>
+              
+
+                        <div class="card-body">
+                            <div class="list-group hookahs">
+                                @foreach (var hookah in Model.Hookah)
+                                {
+                                    <a href="@Url.Action("Hookah", "SmokeSession", new {id = hookah.Code})" class="btn btn- @(Model.OnlineHookah.Contains(hookah.Code) ? "online btn-success btn-raised" : "offline") list-group-item">
+                                        <span>@hookah.Name</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                  
+                </div>
+
+            </div>
+        }
+        <div class="@(Model.Hookah.Any()?"col-md-8":"col-md-12")">
+            <div class="card mb-3">
+                <h4 class="card-header">@Res.Person.activeSessions <a class="btn btn-sm btn-success btn-raised pull-right" style="margin-bottom:0px" href="@Url.Action("GoToSession","Home")">@Res.Person.goToSession &nbsp;<i class="fa fa-link"></i></a></h4>
+                <div class="card-body">
+                    @{ bool haveActiveSession = false;}
+                 
+                    <div class="list-group card-body">
+                        @foreach (var activeSession in Model.ActiveSession)
+                        {
+                            DynamicSmokeStatistic dynamicStatistic = new DynamicSmokeStatistic();
+                            if (!Model.DynamicStatistic.TryGetValue(activeSession.SessionId, out dynamicStatistic))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                haveActiveSession = true;
+                            }
+
+
+
+                            <div>    
+                        @{ Html.RenderPartial("~/Views/SmokeSession/_ActiveSession.cshtml", new ActiveSessionListItemViewModel()
+                           {
+                               DynamicSmokeSession = dynamicStatistic,
+                               SmokeSession = activeSession
+                               
+                           }); }</div>
+                           
+                        }
+                    @if(!haveActiveSession)
+                    {
+                        <div class="card-text">
+                            <h5>No active sessions</h5>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div>
+             
+                <div class="card">
+                    <h4 class="card-header">@Res.Person.activeOrders</h4>
+                    <div class="card-body">
+                        @if (Model.Person.Orders.Any(a => a.State == OrderState.Open))
+                        {
+
+                            <div class="list-group card-title">
+                                @foreach (var order in Model.Person.Orders.Where(a => a.State == OrderState.Open).OrderBy(a => a.Created))
+                                {
+                                    <div class="list-group-item">
+                                        <a class="list-group-item-heading" href="@Url.Action("OrderDetails", "Places", new {id = @order.Id})">
+                                            <span> @order.Created.ToString("hh:mm") @(order.SmokeSessionMetaData.Tobacco != null ? $"{order.SmokeSessionMetaData.Tobacco.Brand.DisplayName} {order.SmokeSessionMetaData.Tobacco.AccName}" : "Unknown")</span>
+                                        </a>
+
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.Partial("_Loader")
+        <div id="sessions"> @Html.Partial("_PersonSmokeSession", Model.SmokeSessions)</div>
+
+    </div>
+</div>
+

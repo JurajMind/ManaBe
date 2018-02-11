@@ -1,0 +1,63 @@
+﻿@using System.Globalization
+@model smartHookah.Controllers.EditOpenHoursViewModel
+
+@{
+    ViewBag.Title = "Edit open hour";
+ 
+}
+@Styles.Render("~/Content/datepicker")
+<div class="well">
+    
+@using (Html.BeginForm("EditOpenHours", "Places", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <h2>Edit open hour for @Model.Place.Name</h2>
+    <input type="hidden" name="placeId" value="@Model.Place.Id"/>
+    foreach (var open in Model.BusinessHours.OrderBy(a => a.Day))
+    {
+        <div class="row">
+            <strong class="col-md-2">@CultureInfo.CurrentCulture.DateTimeFormat.DayNames[open.Day]</strong>
+            <input type="hidden" name="businessHours[@open.Day].id"value="@open.Id"/>
+            <input type="hidden" name="businessHours[@open.Day].day"value="@open.Day"/>
+            <div class=" col-md-5 form-group label-floating is-empty">
+                <input name="businessHours[@open.Day].open" type="text" class="time form-control" data-set="@open.OpenTine.ToString(@"hh\:mm")">
+                <label  class="control-label">Open time</label>
+            </div>
+            <div class="col-md-5 form-group label-floating is-empty">
+                <input type="text"class="time form-control" name="businessHours[@open.Day].close" data-set="@open.CloseTime.ToString(@"hh\:mm")">
+                <label class="control-label">Close time</label>
+            </div>
+        </div>
+    }
+    <button type="submit" class="btn btn-success btn-raised">Save &nbsp;<i class="fa fa-save"></i></button>
+    <a class="btn btn-danger "href="@Url.Action("Details","Places",new {id = Model.Place.FriendlyUrl})">Cancel <i class="fa fa-ban"></i></a>
+}
+</div>
+@Scripts.Render("~/bundles/datepicker")
+@section scripts
+{@Scripts.Render("~/bundles/datepicker")
+    <script type="text/javascript">
+        $(function() {
+            $('.time').each(function() {
+                const date = $(this).data('set');
+
+
+                if (date === '00:00') {
+                    $(this).bootstrapMaterialDatePicker({ date: false, format: "LT" });
+                    return true;
+                }
+                console.log(date);
+                var time = new moment();
+                $(this).bootstrapMaterialDatePicker({
+                    date: false,
+                    format: "LT",
+                    currentDate: new moment(date, 'HH:mm')
+                });
+
+                console.log();
+                $(this).parent().removeClass('is-empty');
+                
+            });
+        });
+    </script>
+}

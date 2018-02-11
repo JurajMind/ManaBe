@@ -1,0 +1,1104 @@
+﻿body {
+    /*padding-top: 50px;*/
+    padding-bottom: 20px;
+}
+
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+#smokeProgress {
+   background: orange;
+    height:100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+}
+
+
+div.tobacoBox {
+   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 2px;
+    border: 0;
+    height: 100px;
+    width: 100px;
+    margin: 15px;
+     display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+
+ div.tobacoBox .tobaco-btn{
+     display: block;
+     position: relative;
+    top: 50px;
+    left: 30px;
+}
+
+  div.tobacoBox .edit-tobaco-btn{
+    left: -60px;
+}
+
+
+div.tobacoBox.tobacoBoxEmpty .remove-tobaco-btn {
+    display: none;
+}
+
+div.tobacoBox.tobacoBoxEmpty .edit-tobaco-btn {
+    display: none;
+}
+
+
+div.tobacoBox .add-tobaco-btn{
+    display: none;
+}
+
+div.tobacoBox .empty {
+    display: none;
+}
+
+div.tobacoBox.tobacoBoxEmpty .empty {
+    display: block;
+}
+
+div.tobacoBox.tobacoBoxEmpty .add-tobaco-btn{
+    display: block;
+}
+
+.flavor .mixBrand {
+    font-weight: bold;
+}
+
+body.modal-open { overflow: visible !important; }
+  
+    
+
+
+
+#tobacoSelect>.modal-dialog {
+    top: 60px;
+}
+
+.button-share-container {
+  bottom: 0;
+  position: fixed;
+  margin: 1em;
+  right: 0;
+
+}
+
+.button-assign-container {
+     bottom: 0;
+  position: fixed;
+  margin: 1em;
+  right: 5em;
+}
+
+
+.buttons {
+  box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.18), 0px 4px 12px -7px rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: 20px auto 0;
+  position: relative;
+  -webkit-transition: all .1s ease-out;
+  transition: all .1s ease-out;
+}
+
+.buttons:active,
+.buttons:focus,
+.buttons:hover {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+}
+
+.buttons:not(:last-child) {
+  width: 35px;
+  height: 35px;
+  margin: 20px auto 0 auto;
+  opacity: 0;
+}
+
+
+.buttons i {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.button-share-container:hover .buttons:not(:last-child) {
+  opacity: 1;
+  width: 40px;
+  height: 40px;
+  margin: 15px auto 0;
+  color:#FFF;
+  font-size:1.4em;
+}
+/* Styling for showing buttons at differnt speeds */
+
+.buttons:nth-last-child(1) {
+  -webkit-transition-delay: 25ms;
+  transition-delay: 25ms;
+  background-color: #2196f3;
+}
+
+.buttons:not(:last-child):nth-last-child(2) {
+  -webkit-transition-delay: 20ms;
+  transition-delay: 20ms;
+  background-color: #3b5998;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.buttons:not(:last-child):nth-last-child(3) {
+  -webkit-transition-delay: 40ms;
+  transition-delay: 40ms;
+  background-color: #007bb5;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.buttons:not(:last-child):nth-last-child(4) {
+  -webkit-transition-delay: 60ms;
+  transition-delay: 60ms;
+  background-size: contain;
+  background-color: #dd4b39;
+}
+
+.buttons:not(:last-child):nth-last-child(5) {
+  -webkit-transition-delay: 100ms;
+  transition-delay: 100ms;
+  background-size: contain;
+  background-color: #00aced;
+  
+}
+
+.buttons:not(:last-child):nth-last-child(6) {
+  -webkit-transition-delay: 100ms;
+  transition-delay: 100ms;
+  background-size: contain;
+  background-color: #00aced;
+}
+/* Show tooltip content on hover */
+
+[tooltip]:before {
+  bottom: 20%;
+  font-family: 'Roboto';
+  font-weight: 600;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background-color: #585858;
+  color: #fff;
+  content: attr(tooltip);
+  font-size: 12px;
+  visibility: hidden;
+  opacity: 0;
+  padding: 5px 7px;
+  margin-right: 10px;
+  position: absolute;
+  right: 100%;
+  white-space: nowrap;
+}
+
+[tooltip]:hover:before,
+[tooltip]:hover:after {
+  visibility: visible;
+  opacity: 1;
+}
+/* Rotate primary button on hover */
+
+.rotate {
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: transform;
+}
+
+.mainShareBtn i {
+    font-size: 2.0em;
+    color: white;
+        padding-left: 4px;
+    padding-top: 4px;
+}
+
+
+
+.mainShareBtn i:hover .rotate {
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  color: #339900;  
+}
+
+.border-between > [class*='col-']:before {
+ background: #e3e3e3;
+ bottom: 0;
+ content: " ";
+ left: 0;
+ position: absolute;
+ width: 1px;
+ top: 0;
+}
+.border-between > [class*='col-']:first-child:before {
+ display: none;
+}
+
+
+tr.ownedAccesory {
+    color: #20de20;
+}
+
+.loader  {
+      left: calc(50% - 100px);
+       top: calc(50% - 100px);
+  position: absolute;
+    z-index: 10;
+}
+
+.loader > div {
+  left: calc(50% - 100px);
+  position: relative;
+  background-color: White;
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.loader > div:nth-child(2) {
+  width: 180px;
+  height: 180px;
+  top: -190px;
+  left: calc(50% - 90px);
+  line-height: 180px;
+  text-align: center;
+}
+.loader > div div {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  filter: blur(30px);
+  -webkit-filter: blur(30px);
+  position: absolute;
+}
+.loader > div div:nth-child(1) {
+  background-color: red;
+  -webkit-animation: move 4s;
+  -webkit-animation-delay: 4.8s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  animation: move 4s;
+  animation-delay: 4.8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.loader > div div:nth-child(2) {
+  background-color: green;
+  -webkit-animation: move 3s;
+  -webkit-animation-delay: 0s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  animation: move 3s;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.loader > div div:nth-child(3) {
+  background-color: blue;
+  -webkit-animation: move 6s;
+  -webkit-animation-delay: 3.2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  animation: move 6s;
+  animation-delay: 3.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.loader > div div:nth-child(4) {
+  background-color: yellow;
+  -webkit-animation: move 5s;
+  -webkit-animation-delay: 1.6s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  animation: move 5s;
+  animation-delay: 1.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@-webkit-keyframes move {
+  0%, 100% {
+    top: 0%;
+    left: 0%;
+  }
+  25% {
+    top: 0%;
+    left: 50%;
+  }
+  50% {
+    top: 50%;
+    left: 50%;
+  }
+  75% {
+    top: 50%;
+    left: 0%;
+  }
+}
+@keyframes move {
+  0%, 100% {
+    top: 0%;
+    left: 0%;
+  }
+  25% {
+    top: 0%;
+    left: 50%;
+  }
+  50% {
+    top: 50%;
+    left: 50%;
+  }
+  75% {
+    top: 50%;
+    left: 0%;
+  }
+}
+
+.tobacoMix {
+    font-size: small
+}
+
+input.rating {
+    display: none;
+}
+
+@media only screen and (max-width: 800px) {
+        /* Force table to not be like tables anymore */
+        #tobaccoGrid table,
+        #tobaccoGrid thead,
+        #tobaccoGrid tbody,
+        #tobaccoGrid th,
+        #tobaccoGrid td,
+        #tobaccoGrid tr {
+        display: block;
+        }
+         
+        /* Hide table headers (but not display: none;, for accessibility) */
+        #tobaccoGrid thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        }
+         
+        #tobaccoGrid tr { border: 1px solid #ccc; }
+          
+        #tobaccoGrid td {
+        /* Behave like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align:left;
+        }
+         
+        #tobaccoGrid td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+        }
+         
+        /*
+        Label the data
+        */
+        #tobaccoGrid td:before { content: attr(data-title); }
+        }
+
+ #tobacoReviewModal .rating-input {
+        font-size: 25px;
+    }
+@media (min-width: 768px) {
+
+    #tobacoReviewModal .rating-input {
+        font-size: 20px;
+    }
+}
+
+/*.tobaccoBox {
+    /*margin: 2px;
+     border: 1px solid; 
+    height: 60px;
+    text-align: center;
+    font-weight: 300;
+    background: rgba(244, 244, 244, 0.14);
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    outline: 1px solid #000;
+    outline-offset: -5px;
+    padding: 10px;
+}*/
+
+.tobaccoBox {
+    text-align: center;
+}
+
+.gearImg {
+    /*width: 100%;*/
+    opacity: 0.85;
+    max-height: 185px;
+        
+}
+
+.gearBox {
+    /*width: 92%;*/
+    max-width: 300px;
+    display: table;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+    
+@media only screen and (max-width: 500px) {
+    .gearBox {
+        width: 92%;
+    }
+
+    .wizard-container {
+        padding-top: 20px!important;
+        z-index: 3;
+    }
+}   
+
+
+.gearContainer {
+    padding: 0.01em 16px;
+    height: 45px;
+}
+
+.tobaccoBox:hover {
+    background: #3f51b5;
+    color: white;
+}
+
+
+@media (hover:none), (hover:on-demand) {
+    .tobaccoBox:hover {
+        background:inherit;
+        color: inherit;
+    }
+
+    .tobaccoBox:hover span {
+        color: inherit!important;
+    }
+}
+
+    .tobaccoBox:hover span {
+        color: #e0e0e0;
+    }
+
+
+    .price {
+        font-weight: bold;
+    }
+
+    .tobaccoBox.active {
+        background: #3f51b5;
+        color: white;
+    }
+
+        .tobaccoBox.active span {
+            color: white;
+        }
+
+    /* adjust body when menu is open */
+    body.slide-active {
+        overflow-x: hidden
+    }
+    /*first child of #page-content so it doesn't shift around*/
+    .no-margin-top {
+        margin-top: 0px !important
+    }
+    /*wrap the entire page content but not nav inside this div if not a fixed top, don't add any top padding */
+    #page-content {
+        position: relative;
+        padding-top: 70px;
+        left: 0;
+    }
+
+        #page-content.slide-active {
+            padding-top: 0
+        }
+
+
+
+    /* put toggle bars on the left :: not using button */
+    #slide-nav .navbar-toggle {
+        cursor: pointer;
+        position: relative;
+        line-height: 0;
+        float: left;
+        margin: 0;
+        width: 30px;
+        height: 40px;
+        padding: 10px 0 0 0;
+        border: 0;
+        background: transparent;
+    }
+        /* icon bar prettyup - optional */
+        #slide-nav .navbar-toggle > .icon-bar {
+            width: 100%;
+            display: block;
+            height: 3px;
+            margin: 5px 0 0 0;
+        }
+
+        #slide-nav .navbar-toggle.slide-active .icon-bar {
+            background: orange
+        }
+
+    .navbar-header {
+        position: relative
+    }
+    /* un fix the navbar when active so that all the menu items are accessible */
+    .navbar.navbar-fixed-top.slide-active {
+        position: relative
+    }
+    /* screw writing importants and shit, just stick it in max width since these classes are not shared between sizes */
+    @media (max-width:767px) {
+        #slide-nav .container {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100%;
+        }
+
+        #slide-nav .navbar-header {
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        #slide-nav .navbar.slide-active {
+            position: absolute;
+            width: 80%;
+            top: -1px;
+            z-index: 1000;
+        }
+
+        #slide-nav #slidemenu {
+            background: #f7f7f7;
+            left: -100%;
+            width: 80%;
+            min-width: 0;
+            position: absolute;
+            padding-left: 0;
+            z-index: 2;
+            top: -8px;
+            margin: 0;
+        }
+
+            #slide-nav #slidemenu .navbar-nav {
+                min-width: 0;
+                width: 100%;
+                margin: 0;
+            }
+
+                #slide-nav #slidemenu .navbar-nav .dropdown-menu li a {
+                    min-width: 0;
+                    width: 80%;
+                    white-space: normal;
+                }
+
+        #slide-nav {
+            border-top: 0
+        }
+
+            #slide-nav.navbar-inverse #slidemenu {
+                background: #333
+            }
+        /* this is behind the navigation but the navigation is not inside it so that the navigation is accessible and scrolls*/
+        #navbar-height-col {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            bottom: 0;
+            width: 80%;
+            left: -80%;
+            background: #f7f7f7;
+        }
+
+            #navbar-height-col.inverse {
+                background: #333;
+                z-index: 1;
+                border: 0;
+            }
+
+        #slide-nav .navbar-form {
+            width: 100%;
+            margin: 8px 0;
+            text-align: center;
+            overflow: hidden;
+            /*fast clearfixer*/
+        }
+
+            #slide-nav .navbar-form .form-control {
+                text-align: center
+            }
+
+            #slide-nav .navbar-form .btn {
+                width: 100%
+            }
+    }
+
+    @media (min-width:768px) {
+        #page-content {
+            left: 0 !important
+        }
+
+        .navbar.navbar-fixed-top.slide-active {
+            position: fixed
+        }
+
+        .navbar-header {
+            left: 0 !important
+        }
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        /* Set the fixed height of the footer here */
+        height: 60px;
+        line-height: 60px; /* Vertically center the text there */
+        background-color: #f5f5f5;
+    }
+
+    .fa-material {
+        font-size: 24px;
+    }
+
+    .orderItem:hover {
+        background: #3f51b5;
+        color: white;
+    }
+
+
+
+    .orderItem.active {
+        background: #3f51b5;
+        color: white;
+    }
+
+    /* ----------------------------------------------------------------------
+  Discrete Range Slider - by Ravikumar Chauhan
+------------------------------------------------------------------------- */
+    .rkmd-slider.slider-discrete .slider .slider-handle {
+        position: relative;
+        z-index: 1;
+    }
+
+        .rkmd-slider.slider-discrete .slider .slider-handle .slider-label {
+            position: absolute;
+            top: -17.5px;
+            left: -2px;
+            width: 30px;
+            height: 30px;
+            -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+            border-radius: 50%;
+            -webkit-transform: scale(0.5) rotate(-45deg);
+            transform: scale(0.5) rotate(-45deg);
+            -webkit-transition: all .2s ease;
+            transition: all .2s ease;
+        }
+
+            .rkmd-slider.slider-discrete .slider .slider-handle .slider-label span {
+                position: absolute;
+                top: 7px;
+                left: 0px;
+                width: 100%;
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                opacity: 0;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+        .rkmd-slider.slider-discrete .slider .slider-handle.is-active {
+            top: 0px;
+            margin-left: -2px;
+            width: 4px;
+            height: 4px;
+        }
+
+            .rkmd-slider.slider-discrete .slider .slider-handle.is-active .slider-label {
+                top: -15px;
+                left: -2px;
+                border-radius: 15px 15px 15px 0;
+                -webkit-transform: rotate(-45deg) translate(23px, -25px);
+                transform: rotate(-45deg) translate(23px, -25px);
+            }
+
+                .rkmd-slider.slider-discrete .slider .slider-handle.is-active .slider-label span {
+                    opacity: 1;
+                }
+
+    .rkmd-slider.slider-discrete.slider-lightBlue .slider-label {
+        background-color: #03a9f4;
+    }
+
+    .rkmd-slider.slider-discrete.slider-teal .slider-label {
+        background-color: #009688;
+    }
+
+    .rkmd-slider.slider-discrete.slider-orange .slider-label {
+        background-color: #ff9800;
+    }
+
+    .rkmd-slider.slider-discrete.slider-amber .slider-label {
+        background-color: #ffc107;
+    }
+
+    .rkmd-slider.slider-discrete.slider-green .slider-label {
+        background-color: #4caf50;
+    }
+
+    .rkmd-slider.slider-discrete.slider-cyan .slider-label {
+        background-color: #00bcd4;
+    }
+
+    .rkmd-slider.slider-discrete.slider-indigo .slider-label {
+        background-color: #3f51b5;
+    }
+
+    .rkmd-slider.slider-discrete.slider-deepPurple .slider-label {
+        background-color: #673ab7;
+    }
+
+    .rkmd-slider.slider-discrete.slider-pink .slider-label {
+        background-color: #e91e63;
+    }
+
+    .rkmd-slider.slider-discrete.slider-red .slider-label {
+        background-color: #f44336;
+    }
+
+    .rkmd-slider.slider-discrete.slider-yellow .slider-label {
+        background-color: #ffeb3b;
+    }
+
+    .rkmd-slider.slider-discrete.slider-lime .slider-label {
+        background-color: #cddc39;
+    }
+
+    .rkmd-slider.slider-discrete.slider-brown .slider-label {
+        background-color: #795548;
+    }
+
+    /* ----------------------------------------------------------------------
+  Range Slider Color - by Ravikumar Chauhan
+------------------------------------------------------------------------- */
+    .rkmd-slider.slider-lightBlue .slider-fill,
+    .rkmd-slider.slider-lightBlue .slider-handle {
+        background-color: #03a9f4;
+    }
+
+    .rkmd-slider.slider-teal .slider-fill,
+    .rkmd-slider.slider-teal .slider-handle {
+        background-color: #009688;
+    }
+
+    .rkmd-slider.slider-orange .slider-fill,
+    .rkmd-slider.slider-orange .slider-handle {
+        background-color: #ff9800;
+    }
+
+    .rkmd-slider.slider-amber .slider-fill,
+    .rkmd-slider.slider-amber .slider-handle {
+        background-color: #ffc107;
+    }
+
+    .rkmd-slider.slider-green .slider-fill,
+    .rkmd-slider.slider-green .slider-handle {
+        background-color: #4caf50;
+    }
+
+    .rkmd-slider.slider-cyan .slider-fill,
+    .rkmd-slider.slider-cyan .slider-handle {
+        background-color: #00bcd4;
+    }
+
+    .rkmd-slider.slider-indigo .slider-fill,
+    .rkmd-slider.slider-indigo .slider-handle {
+        background-color: #3f51b5;
+    }
+
+    .rkmd-slider.slider-deepPurple .slider-fill,
+    .rkmd-slider.slider-deepPurple .slider-handle {
+        background-color: #673ab7;
+    }
+
+    .rkmd-slider.slider-pink .slider-fill,
+    .rkmd-slider.slider-pink .slider-handle {
+        background-color: #e91e63;
+    }
+
+    .rkmd-slider.slider-red .slider-fill,
+    .rkmd-slider.slider-red .slider-handle {
+        background-color: #f44336;
+    }
+
+    .rkmd-slider.slider-yellow .slider-fill,
+    .rkmd-slider.slider-yellow .slider-handle {
+        background-color: #ffeb3b;
+    }
+
+    .rkmd-slider.slider-lime .slider-fill,
+    .rkmd-slider.slider-lime .slider-handle {
+        background-color: #cddc39;
+    }
+
+    .rkmd-slider.slider-brown .slider-fill,
+    .rkmd-slider.slider-brown .slider-handle {
+        background-color: #795548;
+    }
+
+    .progress-bar {
+        background-color: rgba(255, 94, 0, 0.82);
+        position: absolute;
+        z-index: 0;
+        min-height: 5px;
+    }
+
+    .progress-text {
+        color: black;
+        z-index: 2;
+        position: absolute;
+    }
+
+    .mobileLink .active {
+        background-color: #3f51b5;
+        color: white;
+        font-weight: bold;
+    }
+
+    a.tableLink.active {
+        color: #3f51b5;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .tobaccoListStat i {
+        margin-right: 0 !important;
+    }
+
+    .tobaccoListStat :first-child {
+        margin-right: 0 !important;
+    }
+
+    .lang {
+        font-weight: bold;
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+
+/* Shared */
+.loginBtn {
+    box-sizing: border-box;
+    position: relative;
+    /* width: 13em;  - apply for fixed size */
+    margin: 0.2em;
+    padding: 0 15px 0 46px;
+    border: none;
+    text-align: left;
+    line-height: 34px;
+    white-space: nowrap;
+    border-radius: 0.2em;
+    font-size: 16px;
+    color: #FFF;
+}
+.loginBtn:before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 100%;
+}
+.loginBtn:focus {
+    outline: none;
+}
+.loginBtn:active {
+    box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+}
+
+
+/* Facebook */
+.loginBtn--facebook {
+    background-color: #4C69BA;
+    background-image: linear-gradient(#4C69BA, #3B55A0);
+    /*font-family: "Helvetica neue", Helvetica Neue, Helvetica, Arial, sans-serif;*/
+    text-shadow: 0 -1px 0 #354C8C;
+}
+.loginBtn--facebook:before {
+    border-right: #364e92 1px solid;
+    background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px no-repeat;
+}
+.loginBtn--facebook:hover,
+.loginBtn--facebook:focus {
+    background-color: #5B7BD5;
+    background-image: linear-gradient(#5B7BD5, #4864B1);
+}
+
+
+/* Google */
+.loginBtn--google {
+    /*font-family: "Roboto", Roboto, arial, sans-serif;*/
+    background: #DD4B39;
+}
+.loginBtn--google:before {
+    border-right: #BB3F30 1px solid;
+    background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px no-repeat;
+}
+.loginBtn--google:hover,
+.loginBtn--google:focus {
+    background: #E74B37;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.card.extraCard {
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    width: 200px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.resource-editor-icon, .resource-editor-icon:hover,  .resource-editor-icon:visited {
+    position: absolute;
+    display: inline;
+    height: 13px;
+    width: 13px;     
+    text-decoration: none;
+    z-index: 999999;
+    opacity: 0.35;
+    margin: -14px 0 0 -2px;
+    cursor: pointer;
+}
+.resource-editor-icon:hover {
+    opacity: 1;         
+}
+.resource-editor-icon:before {
+    font-family: fontawesome;
+    content: "\f024"; /* flag */
+    font-size: 9pt;
+    color: red;        
+}
+.resource-editor-button {   
+    z-index: 999999;
+    color: white;        
+    background-color: DarkGreen;
+    opacity: 0.35;     
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    padding: 7px 9px 5px 10px;        
+    border-radius: 50%;
+}
+
+.myGroup.card {
+    display: flex;
+    flex-direction: column;
+}
+
+#cookie-consent {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+.registrationSnack {
+    max-height: 500px !important;
+}
+    .registrationSnack .snackbar-content {
+        background-color: #0e1748d4 !important;
+        text-transform: uppercase;
+
+    }
+
+.registrationSnack ul {
+    text-align: right
+}
+
+@media (max-width: 768px) {
+   .registrationSnack  h1 {
+       font-size: 1.9rem;
+       margin-top: 18px;
+   }
+    .registrationSnack li {
+        font-size: 0.8rem;
+        padding-top: 5px;
+    }
+
+    .registrationSnack ul {
+        text-align: center;
+                 columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+    }
+
+    .registrationSnack .btn-lg {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .registrationSnack .btn-default {
+        font-size: 0.84rem;
+    }
+}

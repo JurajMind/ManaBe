@@ -1,0 +1,48 @@
+﻿@using smartHookah.Models
+@model smartHookah.Models.Place
+
+@{
+    ViewBag.Title =  $"Manage {Model.Name}";
+}
+
+<div class="card">
+
+   
+    <div class="card-block">
+        <a class="btn btn-success btn-raised" href="@Url.Action("DashBoard","Places",new{ id = Model.Id})">Place dashboard &nbsp;<i class="fa fa-dashboard"></i></a>
+        <a class="btn btn-warning btn-raised" href="@Url.Action("Place","Reservation",new{ id = Model.FriendlyUrl})">Place dashboard &nbsp;<i class="fa fa-rocket"></i></a>
+        <a class="btn btn-success btn-raised" href="@Url.Action("PublicDashBoard","Places",new{ id = Model.Id})">Public dashboard &nbsp;<i class="fa fa-dashboard"></i></a>
+        <hr />
+        <h3>Open orders (@Model.Orders.Count(a => a.State == OrderState.Open))</h3>
+        <div class="list-group">
+            @foreach (var order in Model.Orders.Where(a => a.State == OrderState.Open).OrderBy(a => a.Created))
+            {
+                <div class="list-group-item"><strong>@order.Created.ToString("hh:mm")</strong> &nbsp;<span>@(order.SmokeSessionMetaData.Tobacco != null ? $"{order.SmokeSessionMetaData.Tobacco.Brand.DisplayName} {order.SmokeSessionMetaData.Tobacco.AccName}" : "Unknown")</span>  <a href="@Url.Action("ProcessOrder",new {id = @order.Id})" class="btn btn-success">Go to order</a></div>
+            }
+        </div>
+        <div>
+            <h3>Ready (@Model.Orders.Count(a => a.State == OrderState.Ready))</h3>
+            <div class="list-group">
+                @foreach (var order in Model.Orders.Where(a => a.State == OrderState.Ready).OrderBy(a => a.Created))
+            {
+                    <div class="list-group-item">
+                        <a href="@Url.Action("SmokeSession", "SmokeSession", new {id = order.SmokeSession.SessionId})" class="list-group-item-heading">
+                            <span> @order.Created.ToString("d.M.yyyy hh:MM") @(order.SmokeSession.MetaData.Tobacco != null ? $"{order.SmokeSession.MetaData.Tobacco.Brand.DisplayName} {order.SmokeSession.MetaData.Tobacco.AccName}" : "Unknown")</span>
+                            <span class="btn btn-sm btn-success pull-right"></span>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+   
+  
+
+</div>
+@section dropmenu
+{
+    <a class="btn btn-info"href="@Url.Action("EditOpenHours",new {id = Model.Id})">Edit open hours&nbsp;<i class="fa fa-clock-o"></i></a>
+    <a class="btn btn-info"href="@Url.Action("EditPrice",new {id = Model.Id})">Edit prices &nbsp;<i class="fa fa-clock-o"></i></a>
+    <a class="btn btn-info"href="@Url.Action("ManageColors","Person",new {personId = Model.Person.Id})">Edit colors &nbsp;<i class="fa fa-lightbulb-o"></i></a>
+    <a class="btn btn-success"href="@Url.Action("Media","Places",new {id = Model.Id})">Medias &nbsp;<i class="fa fa-camera"></i></a>
+}

@@ -1,0 +1,25 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = @Home.Home.smokeEq;
+
+}
+
+
+    <div class="card-deck">
+        <div class="card text-center">
+            <img class="card-img-top" src="~/Content/icons/hookah.svg" style="max-height: 200px;width: 100%;" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">@Home.Home.hookahs</h4>
+               
+                <a href="@Url.Action("Index","Pipes")" class="btn btn-primary">@Home.Home.findMore</a>
+            </div>
+        </div>
+    <div class="card text-center">
+        <img class="card-img-top" src="~/Content/icons/bowl.svg" style="max-height: 200px;width: 100%;" alt="Card image cap">
+   <div class="card-body">
+            <h4 class="card-title">@Home.Home.bowls</h4>
+ 
+       <a href="@Url.Action("Index","Bowls")" class="btn btn-primary">@Home.Home.findMore</a>
+        </div>
+    </div></div>

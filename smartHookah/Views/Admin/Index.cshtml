@@ -1,0 +1,17 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Admin page";
+}
+
+<div class="card">
+    <div class="card-body">
+        <a class="btn btn-success" href="@Url.Action("Old","Home")">Old home</a>
+        <a class="btn btn-success" href="@Url.Action("All","Hookahs")">All hookah</a>
+        <br/>
+        <a class="btn btn-success" href="@Url.Action("Index","Brands")">Brands</a>
+        <br/>
+        <a class="btn btn-danger" href="@Url.Action("CleanEmptySmokeSession","Admin")">Clean session</a>
+        <a class="btn btn-danger" href="@Url.Action("CleanShortSession","Admin")">Clean short session</a>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿@using smartHookah.Models
+@model smartHookah.Controllers.SmokeSessionViewModel
+@{
+}
+<style>
+    .hash {
+        font-weight: bold;
+        font-size: 22px;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3>Smoke history</h3>
+        <hr/>
+        <div class="list-group">
+            @foreach (SmokeSession modelSmokeSession in Model.SmokeSessions)
+            {
+                @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
+            }
+        </div>
+    </div>
+</div>

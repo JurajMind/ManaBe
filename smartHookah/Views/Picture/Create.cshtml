@@ -1,0 +1,38 @@
+﻿@model smartHookah.Models.StandPicture
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Picture", FormMethod.Post, new { enctype = "multipart/form-data", id = "createForm" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>StandPicture</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+          <label> Picture, bmp max size 64 x 50</label>
+            <div class="col-md-10">
+                <label class="btn btn-primary">
+                    <input name="file" type="file" style="display:none;" onchange="$('#upload-file-file').html(this.files[0].name);">
+                    Upload
+                </label>
+                <span class='label label-info' id="upload-file-file"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

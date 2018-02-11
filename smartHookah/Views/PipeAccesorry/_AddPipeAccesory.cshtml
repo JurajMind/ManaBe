@@ -1,0 +1,18 @@
+﻿@model   smartHookah.Controllers.AddPipeAccesoryViewModel
+
+@{
+    Layout = null;
+}
+<table class="table table-striped">
+    <thead>
+
+    </thead>
+    @foreach (var item in Model.items)
+    {
+        var owned = Model.owndItemsId.Contains(item.Id);
+            <tr @(owned ? "class=ownedAccesory" : "")>
+                <td>@item.BrandName @item.AccName</td>
+                <td> <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id,this)" class="btn btn-success btn-sm btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button></td>
+            </tr>
+            }
+</table>

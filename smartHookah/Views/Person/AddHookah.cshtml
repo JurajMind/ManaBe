@@ -1,0 +1,11 @@
+﻿@model smartHookah.Controllers.AddHookahViewModel
+
+<h3>@Model.Person.Id</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("PersonId",Model.Person.Id);
+    @Html.DropDownListFor(m => m.SelectedHookah, Model.Hookahs.Select( h => new SelectListItem() {Value = h.Id.ToString(),Text = h.Name}),new {name = "SelectedHookah" });
+    <button class="btn btn-success">Save</button>
+    }

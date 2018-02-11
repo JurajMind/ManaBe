@@ -1,0 +1,33 @@
+﻿@model smartHookah.Models.Place
+
+@{
+    ViewBag.Title = @Model.Name + " add media";
+
+}
+
+<div class="card">
+    <h4 class="card-header">Upload picture</h4>
+    <div class="card-body">
+
+        @using (Html.BeginForm("AddMediaPost", "Places", FormMethod.Post, new {enctype = "multipart/form-data", id = "createForm"}))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("id", @Model.Id)
+            ;
+            <div class="well">
+
+                <div class="form-group">
+                    <label>Media</label>
+                    <div class="col-md-10">
+                        <label class="btn btn-primary">
+                            <input name="file" type="file" style="display: none;" onchange="$('#pictureFileInfo').html(this.files[0].name);">
+                            Upload
+                        </label>
+                        <span class='label label-info' id="pictureFileInfo"></span>
+                    </div>
+                </div>
+                <button>Upload</button>
+            </div>
+        }
+    </div>
+</div>

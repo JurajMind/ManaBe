@@ -1,0 +1,376 @@
+﻿    
+@model smartHookah.Controllers.TobacoMetadataModelViewModel
+
+<div class="card " style="margin-bottom: 40px;padding-bottom: 20px">
+<div class="card-header">
+    
+        <h4 class="pull-left">Tobacco</h4>
+    <div class="switch pull-right" style="padding-left: 40px;">
+        <label>
+            @Smoke.SmokeSession.myTobacco &nbsp;
+            <input id="ownTobacco" value="on" type="checkbox"  @(Model.MyTobacco ? "checked=\"checked\"" : "") onchange="ChangeTobbaco(this)" />
+        </label>
+    </div>
+    </div>
+   
+
+    <div class="row">
+                            
+        <input type="hidden" value="@Model.TobacoMixId" name="tobacoMixId"/>
+        <div class="col-sm-6">
+            <canvas id="myChart" width="250" height="250"></canvas>
+        </div>
+
+        <div class="col-sm-6 row" id="tobacoList">
+            @for (int i = 0; i < Model.TobacoMix.Count; i++)
+            {
+                var mix = Model.TobacoMix[i];
+                <div class="col-xs-6">
+                    <div class="tobacoBox">
+                        <span class="empty">@Smoke.SmokeSession.empty</span>
+                        <div class="flavor">
+                            <span class="mixBrand">@mix.TobaccoBrand</span>
+                            <br/>
+                            <span class="mixFlavor">@mix.TobacoFlavor</span>
+                        </div>
+                        <input name="tobacosMix[@i].Id" type="hidden" value="@mix.Id"/>
+                        <input class="tobacoId" name="tobacosMix[@i].tobaccoId" type="hidden" value="@mix.TobacoId"/>
+                        <input name="tobacosMix[@i].fraction" class="partin" type="hidden" value="@mix.Partin"/>
+                        <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn remove-tobaco-btn">
+                            <i class="material-icons">remove circle</i>
+                        </button>
+                        <button type="button" class="btn btn-secondary bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn edit-tobaco-btn">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn add-tobaco-btn">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+                </div>
+            }
+            @for (int i = Model.TobacoMix.Count; i < 4; i++)
+            {
+                <div class="col-xs-6">
+                    <div class="tobacoBox tobacoBoxEmpty">
+                        <span class="empty">Empty</span>
+                        <div class="flavor">
+                            <span class="mixBrand"></span>
+                            <br/>
+                            <span class="mixFlavor"></span>
+                        </div>
+                        <input class="tobacoId" name="tobacosMix[@i].tobaccoId" type="hidden" value=""/>
+                        <input name="tobacosMix[@i].fraction" class="partin" type="hidden" value="100"/>
+                        <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn remove-tobaco-btn">
+                            <i class="material-icons">remove circle</i>
+                        </button>
+                        <button type="button" class="btn btn-secondary bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn edit-tobaco-btn">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm btn-raised tobaco-btn add-tobaco-btn">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-inline row"  id="mixName" style="display: @(string.IsNullOrEmpty(Model.TobacoMixName)?"none":"block")">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Mix name:</label>
+                <input type="text" class="form-control" name="TobacoMixName" value="@Model.TobacoMixName" placeholder="Name of your mix"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Layer method:</label>
+                @Html.EnumDropDownListFor(x => x.LayerMethod, new {@class = "form-control", @name = "LayerMethod", @id = "LayerMethod"})
+            </div>
+        </div>
+
+        <div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@Html.Partial("_TobacoEditModal",Model.TobacoBrands.ToList())
+<script type="text/javascript">
+
+    var data = {
+        labels: [
+            "Red",
+            "Blue",
+            "Yellow"
+        ],
+        datasets: [
+            {
+                data: [300, 50, 100],
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#7CFC00"
+
+                ],
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#7CFC00"
+                ]
+            }]
+    };
+
+    var options = {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+    var myDoughnutChart;
+
+    function init() {
+        $('.add-tobaco-btn').click(OpenTobacoSelect);
+        $('.remove-tobaco-btn').click(RemoveTobacoSelect);
+        $('.edit-tobaco-btn').click(EditTobacoSelect);
+    }
+
+
+    function DrawnChart() {
+
+        if (window.myDoughnutChart !== undefined)
+            window.myDoughnutChart.destroy();
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+        ctx.canvas.width = 250;
+        ctx.canvas.height = 250;
+
+        var $nonEmptyBox = $('.tobacoBox:not(.tobacoBoxEmpty)');
+        data.labels = [];
+        data.datasets[0].data = [];
+
+        if ($nonEmptyBox.length > 1) {
+            $('#mixName').show();
+        } else {
+            $('#mixName').hide();
+        }
+        var totalWeight = 0;
+        $nonEmptyBox.each(function (index) {
+
+            var mixData = $(this).data('parts');
+
+            if (mixData != null) {
+                console.log(mixData);
+
+                mixData.forEach(function (element) {
+                    data.labels.push(element.brand + ' ' + element.name);
+                    data.datasets[0].data.push(element.fraction);
+                });
+                return true;
+            }
+
+
+
+            var brand = $(this).find('.mixBrand').text();
+            var flavor = $(this).find('.mixFlavor').text();
+            var weight = $(this).children('.partin').val();
+
+            data.labels.push(brand + ' ' + flavor);
+            data.datasets[0].data.push(weight);
+            totalWeight = totalWeight + parseInt(weight);
+        });
+
+        $('#tbWeight').val(totalWeight);
+
+        if (data.labels.length === 0) {
+            data.labels.push('No tobacco');
+            data.datasets[0].data.push(100);
+        }
+
+
+        myDoughnutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: options
+        });
+    }
+    function HideTobacoSelect() {
+        $('#tobacoSelect').modal('hide');
+
+
+    }
+
+    function RemoveTobacoSelect() {
+        var $box = $(this).parent('.tobacoBox');
+        $box.addClass("tobacoBoxEmpty");
+        $box.find('.mixBrand').text('');
+        $box.find('.mixFlavor').text('');
+        $box.find('.tobacoId').val('');
+        DrawnChart();
+    }
+
+    function SaveTobacoSelect() {
+        $('#tobacoSelect').modal('hide');
+        var $editer = $('.edited');
+        var tobacoId = $('#tobacoFlavor').val();
+
+        if ( $("#tobacoFlavor option:selected").data('parts')) {
+            $editer.attr('data-parts', $("#tobacoFlavor option:selected").data('parts'));
+        }
+
+        var tobaco = {
+            brand: $('#tobacoBrand').val(),
+            id: tobacoId,
+            name: $("#tobacoFlavor option:selected").text(),
+            partin: $('#partin').val()
+        }
+
+        $editer.removeClass('tobacoBoxEmpty');
+        $editer.find('.tobacoId').val(tobaco.id);
+        $editer.find('.mixBrand').text(tobaco.brand);
+        $editer.find('.mixFlavor').text(tobaco.name);
+        $editer.find('.partin').val(tobaco.partin);
+
+        console.log(tobaco);
+        $editer.removeClass('edited');
+        DrawnChart();
+    }
+
+    function OpenTobacoSelect(event) {
+        $('#tobacoSelect').modal('show');
+
+        $(this).parent('.tobacoBox').addClass('edited');
+
+    }
+
+    function EditTobacoSelect() {
+        var $box = $(this).parent('.tobacoBox');
+        var brand = $box.find('.mixBrand').text();
+        $('#tobacoBrand options').attr('selected', '');
+        $('#tobacoBrand option[value="'+brand+'"]').attr('selected','selected');
+        var tobacoId = $box.find('.tobacoId').val();
+        LoadEditTobacco(brand, tobacoId);
+        $('#tobacoSelect').modal('show');
+        $(this).parent('.tobacoBox').addClass('edited');
+
+    }
+
+    function LoadTobacco() {
+        $.ajax(
+            {
+                type:
+                    "GET",
+                url:
+                    '@Url.Action("GetTobaccoFlavor", "Tobacco")',
+                data:
+                {
+                    'id': $('#tobacoBrand').val(),
+                    'ownGear': $('#ownTobacco').is(':checked'),
+                },
+                dataType:
+                    'json',
+                success:
+                    function(data) {
+                        console.log(data);
+                        var options = $("#tobacoFlavor");
+                        options.empty();
+
+                        options.append($("<option />").val('').text('None'));
+                        $.each(data,
+                            function() {
+                                var $option = $("<option />").val(this.id).text(this.name);
+                                console.log(this.parts);
+                                if (this.parts != null) {
+                                    $option.data('parts', JSON.stringify(this.parts));
+                                    $option.attr('data-parts', JSON.stringify(this.parts));
+                                }
+                                options.append($option);
+                            }
+                        );
+                    }
+            }
+        );
+    }
+
+    function LoadEditTobacco(brand, flavorId) {
+        $.ajax(
+            {
+                type:
+                    "GET",
+                url:
+                    '@Url.Action("GetTobaccoFlavor", "Tobacco")',
+                data:
+                {
+                    'id': brand
+                },
+                dataType:
+                    'json',
+                success:
+                    function(data) {
+                        console.log(data);
+                        var options = $("#tobacoFlavor");
+                        options.empty();
+                        options.append($("<option />").val('').text('None').attr('selected','selected'));
+                        $.each(data,
+                            function() {
+                                if (this.id !== parseInt(flavorId))
+                                    options.append($("<option />").val(this.id).text(this.name));
+                                else {
+                                    options.append($("<option />")
+                                        .val(this.id)
+                                        .text(this.name)
+                                        .attr('selected', 'selected'));
+                                }
+                            }
+                        );
+                    }
+            }
+        );
+    }
+    function processOption($item, array) {
+        $item.empty();
+        $item.append($("<option />").val('').text('None'));
+        $.each(array,
+            function () {
+                $item.append($("<option />")
+                    .val(this.id)
+                    .text(this.name)
+                );
+
+            }
+        );
+    }
+
+    function ChangeTobbaco(checkbox) {
+        var myGearUrl = '@Url.Action("GetMyGear", "PipeAccesorry")';
+        var allGearUrl = '@Url.Action("GetAllGear", "PipeAccesorry")';
+
+        var url = "";
+
+        if ($(checkbox).is(":checked")) {
+            url = myGearUrl;
+        } else {
+            url = allGearUrl;
+        }
+
+        $.ajax(
+            {
+                type:
+                    "GET",
+                url: url,
+                dataType:
+                    'json',
+                success:
+                    function (data) {
+                        console.log(data);
+                        processOption($('#tobacoBrand'), data.tobacoBrands);
+                    }
+
+            }
+        );
+    }
+
+</script>

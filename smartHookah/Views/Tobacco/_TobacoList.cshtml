@@ -1,0 +1,27 @@
+﻿@using DocumentFormat.OpenXml.Bibliography
+@using PagedList.Mvc
+@model smartHookah.Controllers.TobaccoController.FilterTobaccoViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+
+    <h2 class="card-header"><i class="@ViewBag.Fa"></i> @ViewBag.Title</h2>
+
+    <div class="card-body">
+        @Html.Partial("_FilterTobaccoGrid", Model)
+    </div>
+    <a class="btn btn-default btn-raised" href="@Url.Action("Index")"><i class="fa fa-bar-chart"></i>&nbsp;@Tbc.Tobacco.allTobacco</a>
+    <a class="btn btn-default btn-raised" href="@Url.Action("Brand")"><i class="fa fa-building"></i>&nbsp;@Tbc.Tobacco.tobaccoByBrand</a>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-info btn-raised" href="@Url.Action("Smoked")"><i class="fa fa-users"></i>&nbsp;@Tbc.Tobacco.smokedTobacco</a>
+        <a class="btn btn-success btn-raised" href="@Url.Action("Owned")"><i class="fa fa-shopping-basket"></i>&nbsp;@Tbc.Tobacco.ownedTobacco</a>
+    }
+  
+</div>
+

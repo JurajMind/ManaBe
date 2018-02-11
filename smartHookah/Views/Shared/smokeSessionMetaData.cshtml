@@ -1,0 +1,121 @@
+﻿@using smartHookah.Helpers
+@using smartHookah.Models
+@model smartHookah.Models.SmokeSessionMetaData
+
+@{
+    Layout = null;
+}
+
+@if (!Model.BowlId.HasValue && !Model.PipeId.HasValue && !Model.TobaccoId.HasValue)
+{
+    <h4>No smoke session metadata</h4>
+    <input type="hidden" id="tobaccoEstimated" value="300"/>
+}
+else
+{
+    var estimatedTobacco = 300;
+    if (Model.Tobacco != null && Model.Tobacco.Statistics != null)
+    {
+        estimatedTobacco = (int)Model.Tobacco.Statistics.PufCount;
+    }
+
+    <input type="hidden" id="tobaccoEstimated" value="@estimatedTobacco" />
+    if (Model.Tobacco is TobaccoMix)
+    {
+        <text>
+            @Html.Partial("~/Views/Tobacco/_TobaccoMix.cshtml", Model.Tobacco as TobaccoMix)
+        </text>
+    }
+    <table class="table table-striped">
+        <tbody>
+
+        @if (Model.Tobacco is TobaccoMix)
+        {
+        }
+        else
+        {
+            <tr>
+                <td>
+                    <i class="fa fa-building"></i>&nbsp;@Smoke.SmokeSession.tobaccoBrand
+                </td>
+                <td>
+                    @if (Model.Tobacco == null)
+                    {
+                        <span>Unknown</span>
+                    }
+                    else
+                    {
+                        
+                            <a href="@Url.Action("ByBrand","Tobacco",new {brand = @Model.Tobacco.BrandName})">@Model.Tobacco.Brand.DisplayName&nbsp;<i class="fa fa-info-circle"></i></a>
+                       
+                    }
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Content/icons/tobacco.svg" width="18px" />&nbsp;@Smoke.SmokeSession.tobaccoFlavor
+                </td>
+                <td>
+                    @if (Model.Tobacco == null)
+                    {
+                        <span>Unknown</span>
+                    }
+                    else
+                    {
+                       
+                            <a href="@Url.Action("Details","Tobacco",new { id  = Model.Tobacco.Id})">@Model.Tobacco.AccName&nbsp;<i class="fa fa-info-circle"></i></a>
+                   }
+
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td>
+                <img src="~/Content/icons/hookah.svg" width="18px" />&nbsp;@Home.Home.hookah
+            </td>
+            <td>
+                @if (Model.Pipe != null)
+                {
+                    <span> @Model.Pipe.Brand.DisplayName&nbsp;@Model.Pipe.AccName&nbsp;<a href="@Url.Action("Details","PipeAccesorry",new {id = @Model.Pipe.Id})"><i class="fa fa-info-circle"></i></a></span>
+                }
+                else
+                {
+                    <span>@Smoke.SmokeSession.unknown</span>
+                }
+             
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <img src="~/Content/icons/bowl.svg" width="18px" />&nbsp;@Home.Home.bowl
+            </td>
+            <td>
+                @if (Model.Bowl != null)
+                {
+                    <span> @Model.Bowl.Brand.DisplayName&nbsp;@Model.Bowl.AccName&nbsp;<a href="@Url.Action("Details","PipeAccesorry",new {id = @Model.Bowl.Id})"><i class="fa fa-info-circle"></i></a></span>
+                }
+                else
+                {
+                    <span>@Smoke.SmokeSession.unknown</span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td><img src="~/Content/icons/pack.svg" width="18px" />&nbsp;@Smoke.SmokeSession.packStyle</td>
+            <td>@Model.PackType</td>
+        </tr>
+        <tr>
+            <td><img src="~/Content/icons/lotus.svg" width="18px" />&nbsp;@Smoke.SmokeSession.heatManager</td>
+            <td>@Model.HeatKeeper.EnumDescription()</td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-cubes"></i>&nbsp;@Smoke.SmokeSession.coal</td>
+            <td>@Model.CoalsCount @Smoke.SmokeSession.coal @Model.CoalType </td>
+        </tr>
+        </tbody>
+    </table>
+}

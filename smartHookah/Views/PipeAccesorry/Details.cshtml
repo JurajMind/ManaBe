@@ -1,0 +1,15 @@
+﻿@model smartHookah.Models.PipeAccesory
+
+@{
+    ViewBag.Title = "Details of ";
+}
+
+<div class="well">
+    
+    <h2>Details of @Model.GetTypeName() @Model.Brand.DisplayName @Model.AccName </h2>
+    
+    <div class="row">
+        <div class="col-md-6"><img src="@Model.Picture" alt="Picture"></div>
+        <div class="col-md-6">@Model.Brand.DisplayName</div>
+    </div>
+</div>

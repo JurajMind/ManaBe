@@ -1,0 +1,173 @@
+﻿@model smartHookah.Controllers.HookahDetailsViewModel
+@{
+    ViewBag.Title = @Model.Hookah.Name;
+}
+
+<div>
+   <div class="card">
+        <h4 class="card-header">Hookah</h4>
+        
+       <div class=" card-block row">
+           <dl class="dl-horizontal col-md-5">
+               <dt>
+                   @Html.DisplayNameFor(model => model.Hookah.Name)
+               </dt>
+
+               <dd>
+                   @Html.DisplayFor(model => model.Hookah.Name)
+               </dd>
+               <dt>
+                   @Html.DisplayNameFor(model => model.Hookah.Type)
+               </dt>
+
+               <dd>
+                   @Html.DisplayFor(model => model.Hookah.Type)
+               </dd>
+               <dt>
+                   @Html.DisplayNameFor(model => model.Hookah.Version)
+               </dt>
+
+               <dd>
+                   @Helper.UpdateVersionToString(@Model.Hookah.Version)
+               </dd>
+
+           </dl>
+           <div class="col-md-2">
+               <label>CurentPicture</label>
+               <img alt="Embedded Image" src="data:image/png;base64,@Model.Hookah.Setting.Picture.HtmlString" />
+               <hr/>
+
+           </div>
+           <div class="col-md-5">
+               <label>New picture</label>
+               @using (Html.BeginForm("SetPicture", "Picture", FormMethod.Post))
+               {
+                   @Html.AntiForgeryToken()
+                   <select name="picture" class="form-control">
+                       @foreach (var item in Model.Pictures)
+                       {
+                           <option @(@item.Value == Model.Hookah.Setting.PictureId.ToString() ? " selected=\"selected\"" : "") : value="@item.Value">@item.Value</option>
+                       }
+                   </select>
+                   <input type="hidden" name="id" value="@Model.Hookah.Id" />
+
+                   <button class="btn btn-success">Set</button>
+               }
+           </div>
+           
+           <div class="card-block">
+               @using (Html.BeginForm("ChangeName","Hookahs",FormMethod.Post))
+               {
+                   <input type="hidden" name="id" value="@Model.Hookah.Id"/>
+                   <div class="form-group form-inline">
+                       <label for="newName">New stand name</label>
+                       <input type="text" class="form-control" id="newName" aria-describedby="new name" placeholder="New name" name="newName">
+                       <button class="btn btn-success">Save&nbsp;<i class="fa fa-save"></i></button>
+                   </div>
+          
+
+               }
+           </div>
+           
+           <div class="card-block">
+               @using (Html.BeginForm("ChangeOffline","Hookahs",FormMethod.Post))
+               {
+                   <label>Curent staten : @(Model.Hookah.Offline?"Offline":"Online")</label>
+                   <input type="hidden" name="id" value="@Model.Hookah.Id"/>
+                   <div class="form-group form-inline">
+                    
+                       <select name="status" class="form-control">
+                           <option value="True">Offline</option>
+                           <option value="False">Online</option>
+                       </select>
+                       <button class="btn btn-success">Save&nbsp;<i class="fa fa-save"></i></button>
+                   </div>
+          
+
+               }
+           </div>
+           
+
+           <div class="card-block">
+               @using (Html.BeginForm("ChangeSleep", "Hookahs", FormMethod.Post))
+               {
+                   <label>Curent staten : @(Model.Hookah.AutoSleep ?  "Always wake" : "Auto sleep")</label>
+                   <input type="hidden" name="id" value="@Model.Hookah.Id" />
+                   <div class="form-group form-inline">
+
+                       <select name="status" class="form-control">
+                           <option value="True">Always wake</option>
+                           <option value="False">Auto sleep</option>
+                       </select>
+                       <button class="btn btn-success">Save&nbsp;<i class="fa fa-save"></i></button>
+                   </div>
+
+
+               }
+           </div>
+
+       
+       </div>
+
+    </div>
+  
+    <div class="card">
+        <h4 class="card-header">Updates</h4>
+        <div class="card-block row">
+
+            <div class="col-sm-6">
+                <select name="updates" id="updatesSelect" class="form-control">
+                    @foreach (var item in Model.Updates)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-sm-6">
+                <button class="btn btn-raised btn-danger" onclick="UpdateHookah()">Update</button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    
+    <div class="card">
+        <h4 class="card-header">Settings</h4>
+        <div class="card-block">        @Html.Partial("~/Views/DeviceControl/GetDeviceSetting.cshtml", Model.DeviceSetting)</div>
+        <hr />
+        <button class="btn btn-warning" onclick="SendComand('sleep','')">Go to sleep</button>
+    </div>
+ 
+    @section dropmenu
+    {
+        <a class="btn btn-warning" href="@Url.Action("DefaultMetadata", "DeviceControl", new {hookahId = Model.Hookah.Id})">Default metadata&nbsp;<i class="fa fa-cog"></i></a>
+            <a class="btn btn-danger" href="@Url.Action("UnAssignHookah",new{id = Model.Hookah.Id})">Remove stand&nbsp;<i class="fa fa-trash"></i></a>
+       
+    }
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        function UpdateHookah() {
+            var result = confirm("Are you sure to update your hookah?");
+            if (result) {
+                var updateId = $('#updatesSelect').val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("PromptUpdate", "Update", new {hookahId = @Model.Hookah.Id})',
+                    data: { 'updateId': updateId},
+                    dataType: 'json',
+                }).done(function (data) {
+                    window.alert(data.msg);
+                })
+    .fail(function () {
+        window.alert("Update fail");
+    });
+                ;
+            }
+        }
+    </script>   
+}

@@ -1,0 +1,48 @@
+﻿@model smartHookah.Models.Bowl
+
+@{
+    ViewBag.Title = $"{@Model.Brand.DisplayName} {@Model.AccName}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <img class="card-img-top" src="@Model.Picture" alt="Card image cap">
+    <div class="card-body">
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.AccName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.AccName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BrandName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BrandName)
+            </dd>
+
+        </dl>
+    </div>
+    
+        @section dropmenu
+        {
+            @if (User.IsInRole("Admin"))
+            {
+                <text>@Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |</text>
+            }
+          
+            <a href="@Url.Action("UploadPicture", "PipeAccesorry", new {id = Model.Id})" class="btn btn-info w-100">Upload pictures&nbsp;<i class="fa fa-camera-retro"></i></a>
+            
+        }
+      
+
+    
+    @Html.ActionLink("Back to List", "Index")
+</div>

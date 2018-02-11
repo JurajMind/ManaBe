@@ -1,0 +1,74 @@
+﻿@model smartHookah.Controllers.MixViewModel
+
+@{
+    ViewBag.Title = "Tobacco mixes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        
+   
+        @section dropmenu
+        {
+        <a class="btn btn-success dropdown-item" href="@Url.Action("CreateMix","Tobacco")">Create custom mix <i class="fa fa-plus"></i></a>
+
+        }
+    
+        <div class="card mb-3">
+            
+        
+
+    
+    @if (Model.Mixes.Any())
+     {
+         <h2 class="card-header">My last 5 mixes</h2>
+  
+         <div class="list-group">
+             @foreach (var mix in Model.Mixes)
+             {
+                 @Html.Partial("_TobacoMixListItem",mix)
+             }
+         </div>
+
+         <a href="@Url.Action("ShowMyMixes","Tobacco")"> Show all...</a>
+         <hr/>
+     }
+    else
+    {
+        <h2 class="card-header">No mixes</h2>
+    }
+        </div>
+    }
+    
+    <div class="card">
+        <h2 class="card-header">Featured mix creators</h2>
+
+
+        <div class="card-body">
+            <table class="table">
+
+                @foreach (var item in Model.MixBrands)
+            {
+                    <tr>
+                        <td>
+                            <img src="@item.Picture" height="50px" />
+                        </td>
+                        <td>
+                            <b> @item.DisplayName</b>
+                        </td>
+                        <td>
+                            @item.PipeAccesories.Count(a => a.AccName != null) mixes
+                        </td>
+                        <td>
+                            <a href="@Url.Action("MixBrand", new {id = item.Name})">Show mixes&nbsp;<i class="fa fa-info-circle"></i></a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

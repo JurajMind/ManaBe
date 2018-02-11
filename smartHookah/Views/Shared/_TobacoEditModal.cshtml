@@ -1,0 +1,59 @@
+﻿@model List<string>
+<div id="tobacoSelect" class="modal fade" role="dialog" style="z-index: 1600;">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Smoke.SmokeSession.selectBrandAndFlavor</h4>
+                <button type="button" class="close" aria-label="Close" onclick="HideTobacoSelect()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">@Smoke.SmokeSession.tobaccoBrand</label>
+                            <select id="tobacoBrand" class="form-control" onchange="LoadTobacco()">
+                                <option selected="selected">None</option>
+                                @foreach (var brand in Model.ToList())
+                                {
+                                    <option value="@brand">@brand</option>
+                                }
+                            </select>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">@Smoke.SmokeSession.tobaccoFlavor</label>
+                            <select id="tobacoFlavor" class="form-control">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                     
+                        <div class="form-group">
+                            <label class="bmd-label-floating">@Smoke.SmokeSession.tobaccoWeight</label>
+                            <input type="number" min="1" max="50" value="25" id="partin" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="HideTobacoSelect()">@Smoke.SmokeSession.close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveTobacoSelect()">@Smoke.SmokeSession.saveChanges</button>
+            </div>
+        </div>
+    </div>
+</div>

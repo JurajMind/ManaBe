@@ -1,0 +1,30 @@
+﻿@using System.Globalization
+@model System.Collections.Generic.ICollection<smartHookah.Models.BusinessHours>
+
+@{
+ 
+    Layout = null;
+}
+
+
+<table>
+   
+    @for (int i = 0; i < 7; i++)
+    {
+        <tr>
+        @{
+            var dayName= CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.DayNames[i]);
+            var day = Model.FirstOrDefault(a => a.Day == i);}
+            <td><strong>@dayName:</strong></td>
+        @if (day == null)
+        {
+            <td>Closed all day</td>
+        }
+        else
+        {
+            <td>@day.OpenTine.ToString(@"hh\:mm")- @day.CloseTime.ToString(@"hh\:mm") </td>
+    }
+    </tr>
+
+    }
+</table>

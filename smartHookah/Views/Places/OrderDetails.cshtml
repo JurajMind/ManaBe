@@ -1,0 +1,30 @@
+﻿@using smartHookah.Helpers
+@model smartHookah.Models.OrderDetailsViewModel
+
+@{
+    ViewBag.Title = @Order.Order.orderDetails;
+}
+
+<div class="card">
+    <h4 class="card-header">@Order.Order.orderTime: @Model.order.Created.ToString("dd.MM.yyyy hh:mm")</h4>
+   
+    <div class="card-block">
+        <strong>@Order.Order.orderState @Model.order.State.EnumDescription()</strong>
+
+        @Html.Partial("smokeSessionMetaData", Model.order.SmokeSessionMetaData)
+        
+        
+        <hr />
+        @Model.order.ExtraInfo
+    </div>
+    
+</div>
+
+@section dropmenu
+{
+  @Ajax.ActionLink("Cancel order","CancelOrder",new {id = Model.order.Id},new AjaxOptions()
+{
+    HttpMethod = "POST",
+    OnComplete = "location.reload()"
+})
+}

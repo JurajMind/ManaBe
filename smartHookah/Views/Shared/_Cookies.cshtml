@@ -1,0 +1,11 @@
+﻿@using smartHookah.Helpers
+ <div id="cookie-consent">
+    <div class="container">
+        <span>@LocalizationHelper.Translate("Cookies", "Common")</span>
+        <br/>
+        <div class="align-center">
+            <button class="btn btn-xs btn-success btn-raised" id="consent">@LocalizationHelper.Translate("CookiesOk", "Common")</button> 
+            <a href="https://www.google.com/policies/technologies/cookies/" target="_blank" class="btn btn-xs btn-default" id="learn-more">@LocalizationHelper.Translate("CookiesLearnMore", "Common")</a>
+        </div>
+    </div>
+</div>

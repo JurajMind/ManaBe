@@ -1,0 +1,28 @@
+﻿@using PagedList.Mvc
+@model smartHookah.Controllers.TobaccoController.FilterTobaccoViewModel
+@{
+    ViewBag.Title = "Tobaco by brand " + ViewBag.Brand;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+
+    @*<h2><i class="fa fa-bar-chart"></i>Tobacco chart</h2>*@
+
+    <div class="card-block">
+        <div>
+            @Html.Partial("_FilterTobaccoGrid", Model)
+        </div>
+        <a class="btn btn-default btn-raised" href="@Url.Action("Brand")">Tobacco by brand</a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-success btn-raised" href="@Url.Action("Smoked")">Smoked tobacco</a>
+            <a class="btn btn-success btn-raised" href="@Url.Action("Owned")">Owned tobacco</a>
+        }
+    </div>
+  
+</div>
+

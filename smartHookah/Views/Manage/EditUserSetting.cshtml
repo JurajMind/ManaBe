@@ -1,0 +1,16 @@
+﻿@model smartHookah.Models.PersonSetingViewModel
+
+@{
+    ViewBag.Title = "Edit User setting";
+    
+}
+
+<div class="well">
+@using (Html.BeginForm("EditUserSetting", "Manage", FormMethod.Post, new {  id = "editForm" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.Partial("_PersonSetting",Model);
+    <a class="btn btn-warning">Back</a>
+    <button class="btn btn-success btn-raised" type="submit">Save</button>
+    }
+</div>

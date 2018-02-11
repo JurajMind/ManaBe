@@ -1,0 +1,130 @@
+﻿@using smartHookah.Models
+@model smartHookah.Controllers.TobaccoDetailViewModel
+
+@{
+    ViewBag.Title = $"Details of {@Model.Tobacco.Brand.DisplayName} {@Model.Tobacco.AccName}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h2>Details of <a href="@Url.Action("ByBrand","Tobacco",new { brand = Model.Tobacco.BrandName })">@Model.Tobacco.Brand.DisplayName</a> @Model.Tobacco.AccName</h2>
+@if (Model.Tobacco.Statistics != null)
+{
+    <div class="mb-3">
+        @Html.Partial("_TobaccoStatistic", Model.Tobacco.Statistics)
+    </div>
+    <div class="mb-3">
+    </div>
+}
+else
+{
+    <h3>No statistics information</h3>
+}
+    
+    @if (Model.Tobacco.Tastes.Any())
+    {
+        <div class="card">
+            <h4 class="card-header">Tobacco taste</h4>
+            <div class="card-block">
+                @foreach (var t in @Model.Tobacco.Tastes)
+                {
+                    <ol>@t.CzName</ol>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.Tobacco is TobaccoMix)
+{
+ 
+    <div class="mb-3">
+        @Html.Partial("_TobaccoMix", Model.Tobacco as TobaccoMix)
+    </div>
+}
+
+    <div class="card">
+        <h4 class="card-header" >Reviews</h4>
+        <div class="card-block">
+            @if (Model.Tobacco.Reviews != null && Model.Tobacco.Reviews.Any())
+            {
+
+                <div class="mb-3">
+                    @Html.Partial("_TobaccoReviews", Model.Tobacco)
+                </div>
+            }
+            else
+            {
+                <h3 class="card-title">No tobacco reviews</h3>
+            }
+        </div>
+    </div>
+  
+    <div class="card mb-3">
+        <h3 class="card-header">Tobacco used in @Model.UsedInMix mix:</h3>
+        <div class="card-body">
+            @if (Model.NamedMix.Any())
+            {
+                <div class="list-group">
+
+                    @foreach (var mixTobacco in Model.NamedMix.Where(a => a.Statistics != null))
+                {
+                        @Html.Partial("_TobacoMixListItem", mixTobacco);
+                }
+
+                </div>
+            }
+            else
+            {
+                <h4>
+                    No named tobacco mix
+                </h4>
+            }
+        </div>
+    </div>
+    
+   
+    <div class="card">
+        <h3 class="card-header">Last smoke sessions:</h3>
+        <div class="card-body">
+            <div class="list-group">
+                @foreach (var session in Model.SmokeSession)
+            {
+                    @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", session)
+                }
+            </div>
+        </div>
+    </div>
+
+    <p>
+        @if (Model.CanDeleteMix)
+        {
+            @*<a class="btn btn-danger" href="@Url.Action("DeleteTobacoMix","Tobacco",new {id = Model.Tobacco.Id})"  onclick="return confirm('Are you sure to delete this mix?')">Delete mix <i class=" fa fa-trash"></i></a>*@
+        }
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>
+
+  @if (User.IsInRole("Admin"))
+  {
+      @section dropmenu
+                                          
+      {
+          <a class="btn btn-warning dropdown-item" href="@Url.Action("CalculateStatistic", new {id = Model.Tobacco.Id})">Recalculate</a>
+          @Html.ActionLink("Edit", "Edit", new { id = Model.Tobacco.Id ,@class="dropdown-item"}) 
+      }
+
+  }
+ 
+@section scripts {
+    <script type="text/javascript">
+        
+       
+
+        $(window).on('load', function () {
+                DrawnMixChart('mixChart');
+        });
+
+
+        
+    </script>
+    }

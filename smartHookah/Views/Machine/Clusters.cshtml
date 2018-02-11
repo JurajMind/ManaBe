@@ -1,0 +1,113 @@
+﻿@model smartHookah.Controllers.LearningSessionViewModel
+@{
+    ViewBag.Title = "Session additional information";
+}
+
+<div class="well">
+    <table class="table">
+        <thead>
+        <tr>
+            <td>#Person</td>
+            <td>#PufCount</td>
+        </tr>
+        </thead>
+        @{ var personCpufs = Model.Cpufs.GroupBy(a => a.Cluster);}
+        @{
+            foreach (var person in personCpufs)
+            {
+                <tr>
+                    <td>@person.Key</td>
+                    <td>@person.Count()</td>
+                </tr>
+            }
+        }
+    </table>
+
+    <div>
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    <div>
+        <canvas id="timeChart" width="400" height="400"></canvas>
+    </div>
+    
+    @using (Html.BeginForm("Clusters", "Machine", FormMethod.Get))
+    {
+        <div class="form-group form-inline">
+        <input type="hidden" name="id" value="@Model.SessionId"/>
+        <input type="number" min="1" max="5" name="persons" value="@Model.persons" class="form-control"/>
+            <button class="btn btn-success">Recalculate</button>
+        </div>
+    }
+
+</div>
+
+@section scripts
+{
+    <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var ttx = document.getElementById("timeChart").getContext('2d');
+        @{
+            var presureDivider = Model.Cpufs.Select(a => a.Presure).Average() > 100 ? 400 : 2;
+            var backroudColors = new[] {"#ff9933", "#6600ff", "#ccff33", "#DC143C", "#8A2BE2" };
+            var pData = personCpufs.Select(a => new
+            {
+                label = a.Key,
+                data = a.Select(b => new {x = b.Duration.TotalMilliseconds, y = b.Presure, r = 5}).ToArray(),
+                backgroundColor = backroudColors[a.Key]
+
+            });
+            var dData = new { datasets = pData };
+
+            var tData = personCpufs.Select(a => new
+            {
+                label = a.Key,
+                data = a.Select(b => new { x = b.TimeStamp.TimeOfDay.TotalSeconds, y = b.Duration.TotalMilliseconds, r = b.Presure / presureDivider}).ToArray(),
+                backgroundColor = backroudColors[a.Key]
+
+            });
+
+            var ttData = new {datasets = tData};
+
+            }
+
+
+
+
+
+        var dataPoints = @Html.Raw(Json.Encode(dData));
+        var timePoints = @Html.Raw(Json.Encode(ttData));
+       
+        var options = {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Presure'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'PufTime'
+                    }
+                }]
+
+            }
+        }
+
+        var myBubbleChart = new Chart(ctx, {
+            type: 'bubble',
+            data: dataPoints,
+            options : options
+
+        });
+
+        var timeCharts = new Chart(ttx, {
+            type: 'bubble',
+            data: timePoints,
+            options : options
+
+        });
+
+    </script>
+}

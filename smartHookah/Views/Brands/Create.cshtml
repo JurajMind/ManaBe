@@ -1,0 +1,93 @@
+﻿@model smartHookah.Models.Brand
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+   
+    @using (Html.BeginForm("Create", "Brands", FormMethod.Post, new { enctype = "multipart/form-data", id = "createForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4 class="card-header">Brand</h4>
+        <div class="card-body container form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Picture, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <label class="btn btn-primary" >
+                        <input  name="file" type="file" style="display:none;" onchange="$('#pictureFileInfo').html(this.files[0].name);">
+                        Upload
+                    </label>
+                    <span class='label label-info' id="pictureFileInfo"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Tobacco, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        <label>  @Html.CheckBoxFor(model => model.Tobacco)</label>
+                        @Html.ValidationMessageFor(model => model.Tobacco, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bowl, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        <label>   @Html.CheckBoxFor(model => model.Bowl)</label>
+                        @Html.ValidationMessageFor(model => model.Bowl, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Hookah, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        <label>    @Html.CheckBoxFor(model => model.Hookah)</label>
+                        @Html.ValidationMessageFor(model => model.Hookah, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.TobaccoMixBrand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        <label>    @Html.CheckBoxFor(model => model.TobaccoMixBrand)</label>
+                        @Html.ValidationMessageFor(model => model.TobaccoMixBrand, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

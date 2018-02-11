@@ -1,0 +1,15 @@
+﻿@model smartHookah.Models.DoneEvent
+
+<div class="list-group-item">
+    <div class="">
+       
+        <a href="@Url.Action("EventDetail",new {id = @Model.Event.Id})">@Model.Event.Name</a>
+    </div>
+    <div class="list-group-item-text">
+        <span>@Model.Obtain.ToString("dd.MM.yyyy")</span>
+        <span>@Model.Event.Description</span>
+
+    </div>
+
+</div>
+<div class="list-group-separator"></div>

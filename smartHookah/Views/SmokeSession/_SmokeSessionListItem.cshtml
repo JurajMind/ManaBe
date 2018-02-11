@@ -1,0 +1,118 @@
+﻿@using smartHookah.Models
+@model smartHookah.Models.SmokeSession
+
+@helper GetTobacoLabel()
+{
+    if (Model.MetaData != null && Model.MetaData.Tobacco != null)
+    {
+        if (Model.MetaData.Tobacco is TobaccoMix)
+        {
+            var mix = (TobaccoMix) Model.MetaData.Tobacco;
+            if (string.IsNullOrEmpty(mix.AccName))
+            {
+                @:Mix of @mix.Tobaccos.Count (
+                <span class="tobacoMix">
+                        
+                @foreach (var tobaco in mix.Tobaccos)
+                {
+                    <span>
+                                @tobaco.Tobacco.Brand.DisplayName @tobaco.Tobacco.AccName &
+                            </span>
+                }
+                    </span>
+                @:)
+            }
+            else
+            {
+                Write($"{mix.AccName} (mix)");
+            }
+        }
+        else
+        {
+            Write(@Model.MetaData.Tobacco.Brand.DisplayName + " " + @Model.MetaData.Tobacco.AccName);
+        }
+    }
+    else
+    {
+        Write("Unknown");
+    }
+}
+@helper GetHookahLabel()
+{
+    if (Model.MetaData != null && Model.MetaData.Pipe != null)
+    {
+        Write(@Model.MetaData.Pipe.Brand.DisplayName + " " + @Model.MetaData.Pipe.AccName);
+    }
+    else
+    {
+        Write("Unknown");
+    }
+}
+
+<div class="list-group-item">
+    @if (Model.Statistics == null)
+    {
+        <h5 class="list-group-item-heading row" >
+            <span class="col-md-3"> @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</span>
+            <span class="col-md-7">
+                <b>
+                    Live session
+                </b>
+            </span>
+        </h5>
+        <a href="@Url.Action("GetStatistics","SmokeSession",new {id = Model.Id})" class="col-md-2"><i class="material-icons">info</i>Go live</a>
+        
+    }
+    else
+    {
+
+        <a href="@Url.Action("GetStatistics","SmokeSession",new {id = Model.Id})" class="list-group-item-heading row w-100">
+            <span style="margin-right: 0" class="col-md-4 col-xs-12"> @Model.Statistics.Start.ToString("d.M.yyyy HH:mm")</span>
+            <span class="col-md-8 hidden-xs-down ">
+                <b>
+                    <b>
+                        @GetTobacoLabel()
+                    </b>
+                </b> from
+                <b>
+                    @GetHookahLabel()
+                </b>
+            </span>
+            <span class="hidden-md-up col-xs-12">
+                <img src="~/Content/icons/tobacco.svg" height="20" />&nbsp;<b>
+                    @GetTobacoLabel()
+
+                </b>
+            </span>
+            <span class="hidden-md-up col-xs-12"><img src="~/Content/icons/hookah.svg" height="20" />&nbsp;<b>@GetHookahLabel()</b></span>
+           
+        </a>
+      
+      
+        <div class="list-group-item-text row w-100 tobaccoListStat">
+            <div class="col-md-2 col-xs-6">
+                @if (Model.Review?.Overall != null)
+                {
+                    <input type="number" name="smoke" id="smoke" class="rating" value="@(Model.Review?.Overall)" data-readonly />
+                }
+            </div>
+            <div class="col-md-1 col-xs-6">
+                @{
+                    var anonymous = Model.MetaData?.AnonymPeopleCount ?? 0;
+                }
+                <i class="fa fa-user"></i>&nbsp;@(Model.Persons.Count + anonymous)
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <i class="fa fa-hashtag"></i>&nbsp;@Model.Statistics.PufCount &nbsp; pufs
+            </div>
+            <div class="col-md-2 col-xs-6"><i class="fa fa-clock-o"></i> &nbsp;@Model.Statistics.SmokeDuration.ToString(@"hh\:mm\:ss")</div>
+            <div class="col-md-2 col-xs-6">
+                <i class="fa fa-hourglass-start"></i> &nbsp;@((Model.Statistics.End - Model.Statistics.Start).ToString(@"hh\:mm\:ss"))
+            </div>
+            <div class="col-md-3 col-xs-6">
+                <i class="fa fa-trophy"></i> &nbsp;@Model.Statistics.LongestPuf.ToString(@"s\.fff") .sec
+            </div>
+        </div>
+    }
+</div>
+<hr/>

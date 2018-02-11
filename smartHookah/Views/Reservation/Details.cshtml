@@ -1,0 +1,104 @@
+﻿@using smartHookah.Models
+@using smartHookah.Support
+@using Person = Res.Person
+@model smartHookah.Controllers.ReservationDetailsViewModel
+
+@{
+    ViewBag.Title = "Detail rezervace";
+}
+
+<div class="card">
+    <h4 class="card-header">Rezervace v podniku @Model.Reservation.Place.Name <b class="pull-right">@Model.Reservation.Status</b></h4>
+</div>
+
+
+<div class="card-deck">
+    <div class="card">
+        <h4 class="card-header">@Person.activeSessions</h4>
+        <div class="card-body">
+            <div class="list-group ">
+                @foreach (var active in Model.ActiveSession)
+                {
+                    var ds = Model.DynamicSmokeSession[active.SessionId];
+                    if (ds == null)
+                    {
+                        continue;
+                    }
+
+                    <text>
+                        @{ Html.RenderPartial("~/Views/SmokeSession/_ActiveSession.cshtml", new ActiveSessionListItemViewModel()
+                           {
+                               DynamicSmokeSession = ds,
+                               SmokeSession = active
+                           }); }
+                    </text>
+                }
+                
+                
+                @if (!Model.ActiveSession.Any())
+                {
+                    <div class="card-text">
+                        <h5>No active sessions</h5>
+                    </div>
+                }
+                     
+
+            </div>
+        </div>
+
+    </div>
+    <div class="card">
+        <h4 class="card-header">Objednávky</h4>
+        <div class="card-body">
+            
+            <h5 class="card-text">Hookahs order</h5>
+            <ul>
+                @foreach (var hookahOrder in Model.Reservation.Orders)
+                {
+                    <li>@hookahOrder.State </li>
+                }
+               
+            </ul>
+        @if (Model.Reservation.Status != ReservationState.Canceled && Model.Reservation.Status != ReservationState.Denied)
+        {
+            <a href="@Url.Action("Order", "Places", new {id = @Model.Reservation.Place.FriendlyUrl, resId = @Model.Reservation.Id})" class="btn btn-success btn-raised">Objednat dymku</a>
+        }
+            <hr/>
+            
+        
+        </div>
+        <div class="card-footer">
+          
+        </div>
+
+    </div>
+    </div>
+
+<div class="card">
+    <div class="card-body">
+        @if (Model.Reservation.Status == ReservationState.Canceled || Model.Reservation.Status == ReservationState.Denied)
+        {
+            <a href="@Url.Action("Create",new {id = Model.Reservation.Place.ShortDescriptions})" class="btn btn-success">Vytvorit novou rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
+        }
+    @if (Model.Reservation.Status == ReservationState.Created)
+    {
+        @Ajax.FaActionLink("Cancel", "fa fa-trash-o", "CancelReservation", "Reservation", new {id = Model.Reservation.Id}, new AjaxOptions() {HttpMethod = "POST"}, new {@class = "btn btn-danger btn-raised"})
+    }
+    </div>
+</div>
+
+
+@if(Model.DoneSession.Any())
+    { 
+    <div class="card">
+        <h4 class="card-header">Ukoncene sessions</h4>
+        <div class="card-body list-group-flush">
+            <div class="list-group">
+                @foreach (SmokeSession modelSmokeSession in Model.DoneSession.OrderByDescending(a => a.Statistics.Start))
+                {
+                    @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
+                }
+            </div>
+        </div>
+    </div>
+    }

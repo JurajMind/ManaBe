@@ -1,0 +1,131 @@
+﻿@using System.Configuration
+@using System.Globalization
+@using smartHookah.Models
+@model smartHookah.Controllers.PlaceDetailsViewModel
+@{
+    var key = ConfigurationManager.AppSettings["googleMapApiKey"];
+    ViewBag.Title = @Model.Place.Name;
+}
+
+<style>
+    #map {
+        height: 400px;
+    }
+</style>
+<div class="card">
+    <h2 class="card-header"><img src="@Model.Place.LogoPath" width="40"/>@Model.Place.Name</h2>
+    <div class="card-group">
+        <div class="card col-md-6">
+            <div class="card-body" id="map"></div>
+        </div>
+        <div class="col-md-6 card">
+            <h4 class="card-title">@Model.Place.Descriptions</h4>
+            <dl class="card-body dl-horizontal">
+              
+                <dt><i class="fa fa-map"></i>&nbsp;Address</dt>
+
+                <dd>@Model.Place.Address.ToString()</dd>
+                <dt>Place is now @(Model.Place.IsOpen(DateTime.Now)?"Open":"Close")</dt>
+             
+                <dt>
+
+                </dt>
+                <dt>Today:</dt>
+                <dd>
+                         
+                               @{ var day = Model.Place.BusinessHours.FirstOrDefault(a => a.Day == (int) DateTime.Now.DayOfWeek); }
+                               @if (day == null)
+                                {
+                                   <text>
+                            Closed all day
+                                   </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                        @day.OpenTine.ToString(@"hh\:mm")- @day.CloseTime.ToString(@"hh\:mm") 
+                                    </text>
+
+                               }
+                    
+                    <button type="button" class="btn btn-sm btn-info" data-toggle="popover" title="Open hours" data-placement="top" data-content="@Html.Partial("_TimeTable",Model.Place.BusinessHours)">Show all</button>
+                            
+                </dd>
+                        
+                <dt><i class="fa fa-phone"></i>&nbsp;Contact</dt>
+                <dd>@Model.Place.PhoneNumber</dd>
+                <dt><i class="fa fa-facebook"></i>&nbsp;Facebook</dt>
+                <dd><a href="@Model.Place.Facebook">Link</a></dd>
+             
+
+            </dl>
+            <div class="row">
+                <div class="col-md-6">
+                    @if (User.Identity.IsAuthenticated && @Model.Place.AllowReservation)
+                    {
+                        <a class="btn btn-success btn-raised" href="@Url.Action("Create","Reservation",new {id = Model.Place.FriendlyUrl})">Vytvorit rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
+                    }
+                </div>
+                <div class="col-md-6">
+                    @if (User.Identity.IsAuthenticated && @Model.Place.AllowReservation)
+                    {
+                        <a class="btn btn-success" href="@Url.Action("Order","Places",new {id = Model.Place.FriendlyUrl})">Prezriet menu&nbsp;<i class="fa fa-shopping-basket"></i></a>
+                    }
+                </div>
+        </div>
+           
+        </div>
+    </div>
+    @if (Model.Place.Person != null)
+    {
+        
+ 
+        <div class="card">
+            <h4 class="card-header"><img src="~/Content/icons/tobacco.svg" width="18px" />Tobaccos</h4>
+            <div class="card-body container">
+                 @Html.Partial("~/Views/Person/_TobaccoList.cshtml", new TobaccoListViewModel() { CanEdit = false, Tobaccos = Model.Place.Person.Tobacco })
+
+            </div>
+        </div>
+    }
+    
+
+</div>
+
+@section scripts
+{
+    
+
+    <script>
+
+        $(function() {
+            $('[data-toggle="popover"]').popover({html:true});
+        });
+
+        var lat = @Model.Place.Address.Lat;
+        var lng = @Model.Place.Address.Lng;
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'),
+                {
+                    zoom: 16,
+                    center: new google.maps.LatLng(lat, lng),
+                    mapTypeId: 'roadmap'
+                });
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lng),
+                // icon: '@Model.Place.LogoPath',
+                map: map
+            });
+
+        };
+
+
+    </script>
+
+    <script async defer
+         
+            src="@($"https://maps.googleapis.com/maps/api/js?key={key}&callback=initMap")">
+    </script>
+    }

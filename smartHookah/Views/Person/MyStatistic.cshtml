@@ -1,0 +1,69 @@
+﻿@model smartHookah.Controllers.MyStatisticViewModel
+
+@{
+    ViewBag.Title = @Home.Home.statistics;
+}
+
+<div class="card mt-1">
+    <div class="dateBtn">
+        <button onclick="UpdateSmokeOverview(this, moment().add(7 * -1, 'days').format('DD.MM.YYYY'))" class="btn btn-default btn-raised">@Res.Person.last7Days</button>
+        <button onclick="UpdateSmokeOverview(this, moment().format('01.MM.YYYY'))" class="btn btn-default">@Res.Person.thisMonth</button>
+        <button onclick="UpdateSmokeOverview(this,moment().format('01.01.YYYY'))" class="btn btn-default">@Res.Person.thisYear</button>
+        <button onclick="UpdateSmokeOverview(this, '01.01.2016')" class="btn btn-default">@Res.Person.begining</button>
+        @*<button class="btn btn-default">Custom</button>*@
+    </div>
+</div>
+<div class="mt-1">
+    @using (Ajax.BeginForm("GetSmokeOverview", "Person",
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            OnBegin = "OnBegin",
+            UpdateTargetId = "sessions",
+            LoadingElementId = "loader",
+            OnComplete = "OnEnd",
+        }, new { @id = "sessionForm" }))
+    {
+        <input id="from" type="hidden" value="" name="from" />
+        <input id="to" type="hidden" value="" name="to" />
+    }
+    @Html.Partial("_Loader")
+    <div id="sessions"> @Html.Partial("_PersonSmokeSessionDetails", Model.session)</div>
+
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+
+        function ShowAll(direction) {
+            $('.showBtn').toggle();
+            if (direction === true) {
+                $('#hidenSmokeSession').slideDown();
+            } else {
+                $('#hidenSmokeSession').slideUp();
+            }
+        }
+
+        function UpdateSmokeOverview(btn, from) {
+            var to = moment().format("DD.MM.YYYY");
+
+            $('#from').val(from);
+            $('#to').val(to);
+            $('#sessionForm').submit();
+            $('.dateBtn button').removeClass('btn-raised');
+            $(btn).addClass('btn-raised');
+        }
+
+        function OnBegin() {
+            $("#sessions").css('opacity', 0.5);
+        }
+
+        function OnEnd() {
+            $("#sessions").css('opacity', 1);
+            $('.rating').rating({
+                readonly: true
+            });
+        }
+    </script>
+}

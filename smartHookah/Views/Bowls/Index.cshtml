@@ -1,0 +1,53 @@
+﻿@model IEnumerable<smartHookah.Models.Bowl>
+
+@{
+    ViewBag.Title = @Home.Home.bowls;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+ 
+
+    @section dropmenu
+    {
+        @Html.ActionLink("Create New", "Create", null, new { @class = "w-100 btn btn-success" })
+    }
+  
+    
+    <table class="table card-body">
+        <tr>
+            <th>
+             @Tbc.Tobacco.name
+            </th>
+            <th>
+                @Tbc.Tobacco.brand
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.OrderBy(a => a.BrandName ).ThenBy(a => a.AccName))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandName)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) 
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <text>
+                    |
+                            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
+                        </text>
+                    }
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

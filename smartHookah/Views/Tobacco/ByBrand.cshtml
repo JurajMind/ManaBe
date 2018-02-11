@@ -1,0 +1,26 @@
+﻿@using PagedList.Mvc
+@model smartHookah.Controllers.TobaccoController.FilterTobaccoViewModel
+@{
+    ViewBag.Title = ViewBag.Brand;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+
+    
+
+    
+   
+    <div class="card-block">
+        @Html.Partial("_FilterTobaccoGrid", Model)
+    </div>
+</div>
+
+
+@section dropmenu
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+
+}

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<smartHookah.Models.Brand>
+
+@{
+    ViewBag.Title = @Home.Home.tobacco;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+  
+
+    @section dropmenu
+    {
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-raised btn-success w-100" })
+    }
+
+    
+    <table class=" card-body table">
+        <tr>
+            <th>
+             @Tbc.Tobacco.name
+            </th>
+            <th>
+            
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    <img src="@item.Picture" height="50px" />
+                </td>
+                <td>
+                    @Html.ActionLink(@Home.Home.findMore, "ByBrand", new { brand = item.Name }) 
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

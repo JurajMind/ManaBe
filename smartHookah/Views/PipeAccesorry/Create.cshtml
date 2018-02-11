@@ -1,0 +1,117 @@
+﻿@model smartHookah.Models.PipeAccesory
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="well">
+    <h2>Create</h2>
+
+    @using (Html.BeginForm("Create","PipeAccesorry",FormMethod.Post,new {@id="createForm",onsubmit="return Validate()"}))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="col-md-2">Type</label>
+            <div class="input-group">
+                <select id="type" name="type" class="form-control" onchange="LoadBrand()">
+                    <option value="" selected="selected">None</option>
+                    <option value="tobacco">Tobacco</option>
+                    <option value="bowl">Bowl</option>
+                    <option value="pipe">Hookah</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-md-2">Brand</label>
+                    <div class="input-group">
+                        <select id="brand" class="form-control" name="BrandName">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+            </div>
+
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new {@class = "col-md-2"})
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.AccName, new {htmlAttributes = new {@class = "form-control",id = "Name"}})
+                    @Html.ValidationMessageFor(model => model.AccName, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <input type="hidden" name="add" value="false" id="add"/>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit"class="btn btn-success btn-raised">Create <i class="fa fa-plus"></i></button>
+                  
+                    <button type="button" onclick="AddSave()"class="btn btn-success">Create & Add <i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section scripts
+{
+    
+
+    <script type="text/javascript">
+
+      
+        function Validate() {
+            if ($('#brand').val() === '') {
+                alert("Please , select brand");
+                return false;
+            }
+
+            if ($('#Name').val() === '') {
+                alert("Please , write name");
+                return false;
+            }
+
+            return true;
+        }
+
+        function AddSave() {
+            $('#add').val('true');
+            $('#createForm').submit();
+        }
+
+        function
+            LoadBrand() {
+                $.ajax(
+                    {
+                        type:
+                            "GET",
+                        url:
+                            '@Url.Action("GetBrands", "PipeAccesorry")',
+                        data:
+                        {
+                            'type': $('#type').val()
+                        },
+                        dataType:
+                            'json',
+                        success:
+                            function (data) {
+                                var options = $("#brand");
+                                options.empty();
+                                options.append($("<option />").val('').text('None'));
+                                $.each(data.brans,
+                                    function (index,value) {
+                                        var $option = $("<option />").val(value).text(value);
+                                        options.append($option);
+                                    }
+                                );
+                            }
+                    }
+                );
+            }
+    </script>
+}

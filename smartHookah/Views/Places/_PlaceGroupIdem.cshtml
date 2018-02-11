@@ -1,0 +1,22 @@
+﻿@model smartHookah.Models.Place
+
+@{
+    var picture =  @Model.Medias.FirstOrDefault();
+    var src = "";
+    src = picture == null ? "https://lorempixel.com/320/180/nightlife/" : picture.GetSize(180);
+    var isOpen = Model.IsOpen(DateTime.Now);
+}
+
+<div class="myGroup card no-gutters col-sm-6 col-md-4 col-lg-3 m-a-1" style="padding: 0;">
+    <img class="card-img-top col-12" 
+       
+         alt="100%x180"  src="@src"  data-holder-rendered="true"  style="width: 100%">
+    <div class="card-body" style="padding: 15px">
+        <h4 class="card-title @isOpen">@Model.Name </h4>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.ShortDescriptions</h6>
+        <p class="card-text">@Model.Address</p>
+       
+    </div>
+    <div class="card-footer" style="text-align: center"><a href="@Url.Action("Details","Places",new { id = Model.FriendlyUrl})" class="btn btn-primary">@Home.Home.findMore</a></div>
+</div>
+

@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Qr reader";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    body {
+        width: 100%;
+        text-align: center;
+    }
+
+    img {
+        border: 0;
+    }
+
+    #main {
+        margin: 15px auto;
+        background: white;
+        overflow: auto;
+        width: 100%;
+    }
+
+    #header {
+        background: white;
+        margin-bottom: 15px;
+    }
+
+    #mainbody {
+        background: white;
+        width: 100%;
+        display: none;
+    }
+
+    #footer {
+        background: white;
+    }
+
+    #v {
+        width: 320px;
+        height: 240px;
+    }
+
+    #qr-canvas {
+        display: none;
+    }
+
+    #qrfile {
+        width: 320px;
+        height: 240px;
+    }
+
+    #mp1 {
+        text-align: center;
+        font-size: 35px;
+    }
+
+    #imghelp {
+        position: relative;
+        left: 0px;
+        top: -160px;
+        z-index: 100;
+        font: 18px arial,sans-serif;
+        background: #f0f0f0;
+        margin-left: 35px;
+        margin-right: 35px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 20px;
+    }
+
+</style>
+
+<div id="mainbody">
+    <table class="tsel" border="0" width="100%">
+        <tr>
+            <td valign="top" align="center" width="50%">
+                <table class="tsel" border="0">
+                    <tr>
+                        <td><button class="btn btn-success btn-raised selector" id="webcamimg" src="vid.png" onclick="setwebcam()" align="left"><i class="fa fa-video-camera"></i>&nbsp;Webcam</button></td>
+                        <td><button class="btn btn-raised selector" id="qrimg" src="cam.png" onclick="setimg()" align="right"><i class="fa fa-upload"></i>&nbsp;Upload</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <div id="outdiv">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td colspan="3" align="center">
+                <div id="result"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+        
+<canvas id="qr-canvas" width="800" height="600"></canvas>
+
+@Scripts.Render("~/bundles/qrReader")
+    @section scripts
+{
+        <script type="text/javascript">load();</script>
+    }

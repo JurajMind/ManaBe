@@ -1,0 +1,20 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Hookah page";
+   
+}
+
+<h2>title</h2>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function() {
+            var smoke = $.connection.smokeSessionHub;
+            smoke.client.pufChange = function(direction, dateTime) {
+                console.log(direction);
+            }
+            $.connection.hub.start();
+        });
+    </script>
+}
