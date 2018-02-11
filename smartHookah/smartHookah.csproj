@@ -2356,12 +2356,12 @@
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
-  <Target Name="RunWebpack">
+  <!--<Target Name="RunWebpack">
     <Exec Command="npm install" />
     <Exec Command="webpack" />
-  </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="RunWebpack">
-  </Target>
+  </Target> -->
+  <!--<Target Name="BeforeBuild" DependsOnTargets="RunWebpack">
+  </Target> -->
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
