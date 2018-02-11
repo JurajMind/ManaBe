@@ -1903,7 +1903,7 @@
     <Content Include="Views\Tobacco\CreateMix.cshtml" />
     <Content Include="Views\Tobacco\MyMixes.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
-    <Content Include="Views\Places\_PlaceGroupIdem.cshtml" />
+    <Content Include="Views\Places\_PlaceGroupItem.cshtml" />
     <Content Include="Views\Person\_TobaccoList.cshtml" />
     <Content Include="Views\Places\EditOpenHours.cshtml" />
     <Content Include="Views\Resources\Dummy.cshtml" />
