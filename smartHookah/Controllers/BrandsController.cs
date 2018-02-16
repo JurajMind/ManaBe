@@ -62,14 +62,14 @@ namespace smartHookah.Controllers
 
                 var path = $"/Content/BrandPicture/";
 
-                var displayArray = brand.Name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+                var displayArray = brand.DisplayName.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
                 brand.Name = new string(displayArray);
         
 
                 if (file != null)
                 {
                     var extension = System.IO.Path.GetExtension(file.FileName);
-                    brand.Picture = path + brand.DisplayName + extension;
+                    brand.Picture = path + brand.Name + extension;
 
                     file.SaveAs(Server.MapPath(brand.Picture));
                 }
