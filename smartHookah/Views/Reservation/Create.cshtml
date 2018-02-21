@@ -227,8 +227,11 @@
 
                     if (sum >= this.Selected.Persons) {
 
-                        if (this.Selected.Table == null)
+                        if (this.Selected.Table == null) {
+                            $("#tables").show(100);
                             return true;
+                        }
+                        
                         var _this = this;
                         var selectedTable = this.Reservations.Tables.filter(function(obj) {
                             return obj.Id === _this.Selected.Table;

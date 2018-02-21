@@ -33,6 +33,10 @@ namespace smartHookah.Controllers
             var hookahs = person.Hookahs.ToList();
             this.OnlineHookah = await IotDeviceHelper.GetState(hookahs.Select(a => a.Code).ToList());
 
+            this.ActiveReservations = db.Reservations.Where(a => a.Customers.Any(p => p.Id == person.Id)
+                                                                 && a.Status != ReservationState.Canceled
+                                                                 && DbFunctions.TruncateTime(a.Time) >= DateTime.UtcNow);
+
             this.Hookah = hookahs;
             this.ActiveSession = db.SmokeSessions.Where(a =>
                 a.Persons.Any(p => p.Id == person.Id) && a.Statistics == null).ToList();
@@ -42,6 +46,8 @@ namespace smartHookah.Controllers
             var activeHookah = this.ActiveSession.Select(a => a.Hookah).Union(hookahs).ToList();
             this.DynamicStatistic = SmokeSessionController.GetDynamicSmokeStatistic(activeHookah, a => a.SessionCode);
         }
+
+        public IQueryable<Reservation> ActiveReservations { get; set; }
     }
 
     public class ShowGearViewModel
