@@ -108,19 +108,21 @@ namespace smartHookah.Controllers
                     var duration = _slotDuration.Multiply(model.Duration);
                     var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
                     var reservation = table.Reservations.Where(a => a.Time.Date == parseDate && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied ).ToList();
-
-
-                    var time = DateTime.ParseExact(model.Time.ToString(), "HHmm", CultureInfo.InvariantCulture);
+                    
+                    var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4,'0'), "HHmm", CultureInfo.InvariantCulture);
                     parseDate = parseDate.AddHours(time.Hour);
                     parseDate = parseDate.AddMinutes(time.Minute);
                     var status = ReservationState.Created;
 
                     if (model.Persons > table.Capacity)
                         status = ReservationState.ConfirmationRequired;
+
+                    var person = UserHelper.GetCurentPerson(db);
+
                     var newReservation = new Reservation
                     {
                         Created = DateTime.Now,
-                        Person = UserHelper.GetCurentPerson(db),
+                        Person = person,
                         Persons = model.Persons,
                         PlaceId = id,
                         Status = status,
@@ -130,7 +132,8 @@ namespace smartHookah.Controllers
                             table
                         },
                         Duration = duration,
-                        Text = model.Text
+                        Text = model.Text,
+                        Customers = new List<Person>() { person}
                     };
 
                     if (!string.IsNullOrEmpty(model.Name))
@@ -149,6 +152,7 @@ namespace smartHookah.Controllers
                     if (!conflict)
                     {
                         db.Reservations.Add(newReservation);
+                        
                         await db.SaveChangesAsync();
 
                         SendReservationMail(newReservation);
