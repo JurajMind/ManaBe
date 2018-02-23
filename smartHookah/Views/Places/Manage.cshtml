@@ -10,7 +10,7 @@
    
     <div class="card-block">
         <a class="btn btn-success btn-raised" href="@Url.Action("DashBoard","Places",new{ id = Model.Id})">Place dashboard &nbsp;<i class="fa fa-dashboard"></i></a>
-        <a class="btn btn-warning btn-raised" href="@Url.Action("Place","Reservation",new{ id = Model.FriendlyUrl})">Place dashboard &nbsp;<i class="fa fa-rocket"></i></a>
+        <a class="btn btn-warning btn-raised" href="@Url.Action("Place","Reservation",new{ id = Model.FriendlyUrl})">Rezervace &nbsp;<i class="fa fa-table"></i></a>
         <a class="btn btn-success btn-raised" href="@Url.Action("PublicDashBoard","Places",new{ id = Model.Id})">Public dashboard &nbsp;<i class="fa fa-dashboard"></i></a>
         <hr />
         <h3>Open orders (@Model.Orders.Count(a => a.State == OrderState.Open))</h3>
