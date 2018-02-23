@@ -226,10 +226,11 @@ namespace smartHookah.Controllers
                 {
                     endTime += new TimeSpan(24, 0, 0);
                 }
-
+                var index = 0;
                 while (startTime <= endTime)
                 {
-                    timeSlot.Add(new TimeSlot {Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm")});
+                    timeSlot.Add(new TimeSlot {Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"),OrderIndex = index});
+                    index++;
                     startTime = startTime + _slotDuration;
                 }
             }
@@ -357,8 +358,11 @@ namespace smartHookah.Controllers
             if (reservation.Duration != duration)
                 reservation.Duration = duration;
 
-            if (reservation.Text != model.Text && string.IsNullOrEmpty(model.Text))
+            if (reservation.Text != model.Text && !string.IsNullOrEmpty(model.Text))
                 reservation.Text = model.Text;
+
+            if (reservation.Name != model.Name && !string.IsNullOrEmpty(model.Name))
+                reservation.Name = model.Name;
 
 
             if (reservation.Seats.All(a => a.Id != model.Table))
@@ -507,6 +511,8 @@ namespace smartHookah.Controllers
         public int CapacityLeft { get; set; }
 
         public int Id { get; set; }
+
+        public int OrderIndex { get; set; }
     }
 
     public class TableDto
