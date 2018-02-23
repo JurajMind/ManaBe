@@ -81,7 +81,7 @@
                     <div class="form-group col-md-2" style="display: inline-flex">
                         <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
                         <input id="datepicker" class="form-control" />
-                        <button class="btn btn-sm" onclick="$('#datepicker').datepicker().value(moment().format('DD.MM.YYYY'))">Today</button>
+                        <button class="btn btn-sm" onclick="$('#datepicker').datepicker().value(moment().format('DD.MM.YYYY'))">@LocalizationHelper.Translate("today", "Reservation")</button>
                     </div>
                  
                         <div class="form-group col-md-1">
@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="form-group col-md-1">
-                            <label><i class="fa fa-clock-o"></i>V podniku sa zdržím @LocalizationHelper.Translate("visitDuration", "Reservation")</label>
+                            <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("visitDuration", "Reservation")</label>
                             <select v-model="Selected.Duration" class="form-control" v-cloak>
                                 <option v-for="time in Reservations.Times" :value="time.Key">{{time.Value}}</option>
                             </select>
@@ -121,7 +121,8 @@
                         <textarea class="form-control" v-model="Selected.Text" id="exampleTextarea" rows="3"></textarea>
                     </div>
                     <div class="col-md-3">
-                        <a v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("create", "Reservation")</a>
+                        <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("create", "Reservation")</button>
+                        <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="clearReservation()"><i class="fa fa-eraser"></i></button>
                         <div v-if="!canCreateReservation">
                             <a v-on:click="changeReservation() " class="btn btn-warning btn-raised"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
                             <a v-if="selectedReservationStatus !=3 " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
@@ -187,6 +188,7 @@
 {
     <script type="text/javascript">
         var hub = $.connection.reservationHub;
+        Timer:null,
         $(function() {
             $('#datepicker').datepicker({
                 showOtherMonths: true,
@@ -388,7 +390,6 @@
                     Canceled: [],
                     Times: [],
                 }
-                
             },
             computed:
             {
@@ -415,7 +416,14 @@
                     this.Selected.Date = $("#datepicker").val();
                     this.loadReservations();
                 },
-
+                clearReservation() {
+                
+                     this.Selected.Name = '';
+                     this.Selected.Text = '';
+                     this.Selected.Duration = this.Reservations.Times[0].Key;
+                       
+                   
+                },
                 changeReservationStatus: function(status) {
                     $.post(
                         '/Reservation/UpdateStatus/',
