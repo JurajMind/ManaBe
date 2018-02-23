@@ -1,7 +1,9 @@
-﻿@model smartHookah.Controllers.CreateReservationModel
+﻿@using smartHookah.Helpers
+@using Westwind.Globalization
+@model smartHookah.Controllers.CreateReservationModel
 
 @{
-    ViewBag.Title = @Model.place.Name + "Prehlad rezervacii";
+    ViewBag.Title = @Model.place.Name +" - "+ DbRes.T("reservationOverview","reservation");
 
 }
 @Styles.Render("~/Content/gij")
@@ -12,25 +14,44 @@
      .container {
          max-width: 99%;
      }
-    td.timeSlot :hover {
-        background-color: aqua;
+    td.timeSlot:hover {
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        opacity: 0.9;
     }
 
     td.timeSlot.taken {
-        background-color: red;
+        background-color: #f44336;
     }
 
     td.timeSlot.confirmed {
         background-color: yellow;
     }
 
+     td.timeSlot.over {
+         opacity: 0.5;
+     }
+
     td.timeSlot.free {
-        background-color: green;
+        background-color: #4caf50;
     }
 
      td.timeSlot.selected {
-         background-color: darkgray;
+         box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 10px 10px rgba(0,0,0,0.5);
+         border-color: black;
+         border-width: 2px 0 0 2px;
+         opacity: 0.9;
+         cursor: move;
      }
+
+     td.timeSlot.free.selected {
+         box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 10px 10px rgba(0,0,0,0.5);
+         border-color: black;
+         border-width: 2px 0 0 2px;
+         opacity: 0.9;
+         background-color: aliceblue;
+         cursor: default;
+     }
+
 
     td.timeSlot {
         border: 1px solid;
@@ -38,6 +59,15 @@
 
     td.tableCapacity {
         font-weight: bold;
+    }
+
+    .controlls {
+        float: right;
+    }
+
+    ul.canceled {
+            column-count: 4;
+    list-style-type: none;
     }
 
 
@@ -48,25 +78,26 @@
         <div class="card-body">
           
                 <div class="row">
-                    <div class="form-group col-md-2">
-                        <label><i class="fa fa-calendar"></i>&nbsp;Datum</label>
+                    <div class="form-group col-md-2" style="display: inline-flex">
+                        <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
                         <input id="datepicker" class="form-control" />
+                        <button class="btn btn-sm" onclick="$('#datepicker').datepicker().value(moment().format('DD.MM.YYYY'))">Today</button>
                     </div>
                  
                         <div class="form-group col-md-1">
-                            <label><i class="fa fa-clock-o"></i>Misto</label>
+                            <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("place", "Reservation")</label>
                             <select v-model="Selected.Table" class="form-control" v-cloak>
                                 <option v-for="time in Reservations.Tables" :value="time.Id">{{time.Name}}</option>
                             </select>
                         </div>
                         <div class="form-group col-md-1">
-                            <label><i class="fa fa-clock-o"></i>Cas</label>
+                            <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("time", "Reservation")</label>
                             <select v-model="Selected.Time" class="form-control" v-cloak>
                                 <option v-for="time in Reservations.TimeSlots" :value="time.Value">{{time.Text}}</option>
                             </select>
                         </div>
                         <div class="form-group col-md-1">
-                            <label><i class="fa fa-users">Osoby</i></label>
+                            <label><i class="fa fa-users">@LocalizationHelper.Translate("persons", "Reservation")</i></label>
                             <select v-model="Selected.Persons" name="persons" class="form-control" v-cloak>
                                 <option v-for="n in 8" :value="n">{{n}}</option>
                                 <option value="100">100</option>
@@ -74,28 +105,28 @@
                         </div>
 
                         <div class="form-group col-md-1">
-                            <label><i class="fa fa-clock-o"></i>V podniku sa zdržím</label>
+                            <label><i class="fa fa-clock-o"></i>V podniku sa zdržím @LocalizationHelper.Translate("visitDuration", "Reservation")</label>
                             <select v-model="Selected.Duration" class="form-control" v-cloak>
                                 <option v-for="time in Reservations.Times" :value="time.Key">{{time.Value}}</option>
                             </select>
                         </div>
 
                         <div class="form-group col-md-1">
-                            <label for="exampleTextarea" class="bmd-label-floating">Jméno</label>
+                            <label for="exampleTextarea" class="bmd-label-static">@LocalizationHelper.Translate("name", "Reservation")</label>
                             <input type="text" class="form-control" v-model="Selected.Name" id="exampleTextarea" rows="3" />
                         </div>
 
                     <div class="form-group col-md-1">
-                        <label for="exampleTextarea" class="bmd-label-floating">Správa</label>
+                        <label for="exampleTextarea" class="bmd-label-static">@LocalizationHelper.Translate("message", "Reservation")</label>
                         <textarea class="form-control" v-model="Selected.Text" id="exampleTextarea" rows="3"></textarea>
                     </div>
                     <div class="col-md-3">
-                        <a v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()">Create</a>
+                        <a v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("create", "Reservation")</a>
                         <div v-if="!canCreateReservation">
-                            <a v-on:click="changeReservation() "class="btn btn-warning btn-raised">Change</a>
-                            <a v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised">Confirm</a>
-                            <a v-on:click="changeReservationStatus(1)" class="btn btn-danger btn-raised">Cancel</a>
-                            <a v-on:click="addTable()" class="btn btn-danger btn-raised">Add table</a>
+                            <a v-on:click="changeReservation() " class="btn btn-warning btn-raised"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
+                            <a v-if="selectedReservationStatus !=3 " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
+                            <a v-on:click="addTable()" class="btn btn-info btn-raised"> <i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("addTable", "Reservation")</a>
+                            <a v-on:click="changeReservationStatus(1)" class="btn btn-danger btn-raised"><i class="fa fa-trash"></i>&nbsp;@LocalizationHelper.Translate("cancel", "Reservation")</a>
                         </div>
                     </div>
                     </div>
@@ -107,8 +138,8 @@
                 <table class="table table-responsive reservationTable">
                     <thead>
                     <tr>
-                        <th>Table</th>
-                        <th></th>
+                        <th>@LocalizationHelper.Translate("table", "Reservation")</th>
+                        <th><i class="fa fa-users"></i></th>
                         <th v-for="time in Reservations.TimeSlots">{{time.Text}}</th>
                     </tr>
                     </thead>
@@ -133,90 +164,18 @@
     </div>
     <div>  <div class="card-deck">
             <div class="card">
-                <h4 class="card-header">Canceled reservation</h4>
+                <h4 class="card-header">@LocalizationHelper.Translate("canceledReservation", "Reservation")</h4>
                 <div class="card-body">
-                    <div class="list-group">
-                        <div v-for="canceled in Reservations.Canceled">
-                           {{canceled.Name}}
-                        </div>
-                    </div>
+                    <ul class="canceled"> 
+                        <li v-for="canceled in Reservations.Canceled">
+                            {{canceled.Name}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    <div class="modal fade" id="controll">
-        <div class="modal-dialog" role="dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Reservation Details</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label><i class="fa fa-clock-o"></i>Misto</label>
-                        <select v-model="Selected.Table" class="form-control" v-cloak>
-                            <option v-for="time in Reservations.Tables" :value="time.Id">{{time.Name}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fa fa-clock-o"></i>Cas</label>
-                        <select v-model="Selected.Time" class="form-control" v-cloak>
-                            <option v-for="time in Reservations.TimeSlots" :value="time.Value">{{time.Text}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fa fa-users">Osoby</i></label>
-                        <select v-model="Selected.Persons" name="persons" class="form-control" v-cloak>
-                            <option v-for="n in 8" :value="n" >{{n}}</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                   
-                    <div class="form-group">
-                            <label><i class="fa fa-clock-o"></i>V podniku sa zdržím</label>
-                            <select v-model="Selected.Duration" class="form-control" v-cloak>
-                                <option v-for="time in Reservations.Times" :value="time.Key">{{time}}</option>
-                            </select>
-                        </div>
-                    
-                    <div class="form-group">
-                        <label for="exampleTextarea" class="bmd-label-floating">Jméno</label>
-                        <input type="text" class="form-control" v-model="Selected.Name" id="exampleTextarea" rows="3"/>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="exampleTextarea" class="bmd-label-floating">Správa</label>
-                        <textarea class="form-control" v-model="Selected.Text" id="exampleTextarea" rows="3"></textarea>
-                    </div>
-                    <hr />
-                        
-                        <a v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()">Create</a>
-                    <div v-if="!canCreateReservation">
-                        <a class="btn btn-warning btn-raised">Change</a>
-                        <a   v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised">Confirm</a>
-                        <a v-on:click="changeReservationStatus(1)" class="btn btn-danger btn-raised">Cancel</a>
-                    </div>
-
-                   
-
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Order.Order.close</button>
-                </div>
-
-
-                <!-- /.modal-content -->
-
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
 
 </div>
 <script src="https://unpkg.com/vue-multiselect@2.0.6"></script>
@@ -248,21 +207,19 @@
             {
                 props: ["table", "times", "reservations", "selected", "selection"],
                 template:
-                    `
-                       <tr>
-                        <td>{{table.Name}}</td>           
+                    `<tr>
+                        <td>{{table.Name}}</td>
                         <td class='tableCapacity'>{{table.Capacity}}</td>
-                        <reservation-colunm 
-                            v-for="time,index in times" 
-                            :key="time.Value" 
-                            v-bind:table="table" 
-                            v-bind:timeSlot="time" 
+                        <reservation-colunm
+                            v-for="time,index in times"
+                            :key="time.Value"
+                            v-bind:table="table"
+                            v-bind:timeSlot="time"
                             v-bind:index="index"
                             v-bind:reservation="reservations[time.Id]"
                             v-bind:selected="selected" v-bind:selection="selection">
-                                
                         </reservation-colunm>
-                        </tr>                        
+                        </tr>
                     `
 
             }
@@ -273,17 +230,25 @@
                 props: ["table", "timeSlot", "index", "reservation", "selected", "selection"],
                 template:
                     `
-                       <td v-bind:colspan="colSpan" v-if="display" class="timeSlot taken" v-on:click="onTakenClick()" v-bind:class="{confirmed : confirmed,selected : check}">
+            <td v-on:dragstart="dragStart($event)" v-on:dragend="dragEnd()" :draggable="check" v-bind:colspan="colSpan" v-if="display" class="timeSlot taken" v-on:click="onTakenClick()" v-bind:class="{confirmed : confirmed,selected : check}">
                                  <div v-if="colSpan !== 0">
-                                   {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{table.Capacity}}/{{reservation.Persons}}
-                                </div>                       
+                                   {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )  
+                                    <i v-if="reservation.Message" class="fa fa-comment" data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>    
+                                    <div class="controlls" v-if="check && !confirmed" >
+                                        <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i></div>                                
+                                </div>
                         </td>
-                          <td v-else-if="!timeSlot.Reserved" class="timeSlot free"  v-bind:class="{selected : check}"  v-on:click="onFreeClick()">
-                                
-                              
-                        </td>                     
+                          <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">
+
+
+                        </td>
 
                     `,
+                data: function() {
+                    return {
+                        over: false
+                    }
+                },
                 computed: {
                     colSpan: function() {
                         if (this.reservation == undefined)
@@ -294,7 +259,7 @@
                     confirmed: function() {
                         if (this.reservation == undefined)
                             return false;
-                        if (this.reservation.State !== 0)
+                        if (this.reservation.State !== 0 && this.reservation.State !== 6)
                             return true;
                         return false;
 
@@ -322,7 +287,44 @@
                             this.selected.Reservation = null;
                         this.selected.TimeIndex = this.index;
                     },
+                    dragStart: function(ev) {
+                        ev.dataTransfer.setData("reservation", this.reservation.Id);
+                        ev.dataTransfer.setData("table", this.table.Id);
+                        // console.log(ev);
+                    },
+                    dragEnd: function() {
+                        this.over = false;
+                    },
+                    drop: function(ev) {
+                        // ev.dataTransfer.setData("text", ev.target.id);
+                        var reservation = ev.dataTransfer.getData("reservation");
+                        var changedTable = ev.dataTransfer.getData("table");
+                        console.log(reservation);
+                        this.selected.Reservation = reservation;
+                        this.selected.Table = this.table.Id;
+                        this.selected.Time = this.timeSlot.Value;
+                        this.selected.LastReservedTable = changedTable;
+                        var _this = this;
+                        var newSelectedTime = this.timeSlot.Value;
+                        var table = this.table.Id;
+                        this.$root.changeReservation(function() {
+                            _this.selected.Table = table;
+                            _this.selected.Time = newSelectedTime;
+                        });
 
+
+                    },
+                    allowDrop: function(ev) {
+                        ev.preventDefault();
+                    },
+                    dragEnter: function() {
+                        this.over = true;
+
+                    },
+                    dragLeave: function() {
+                        this.over = false;
+
+                    },
                     onTakenClick: function() {
 
                         this.selected.Reservation = this.reservation.Id;
@@ -331,7 +333,11 @@
                         this.selected.Duration = this.reservation.TimeSlots;
                         this.onFreeClick(true);
                         this.selected.LastReservedTable = this.table.Id;
+                    },
+                    confirmReservation: function() {
+                        this.$root.changeReservationStatus(3);
                     }
+
 
                 }
             }
@@ -359,7 +365,7 @@
             },
 
             data: {
-                DeniedReason: null,             
+                DeniedReason: null,
                 PlaceId: placeId,
                 Selected: {
                     Table: null,
@@ -382,6 +388,7 @@
                     Canceled: [],
                     Times: [],
                 }
+                
             },
             computed:
             {
@@ -394,6 +401,13 @@
                         result.push(i);
                     }
                     return result;
+                },
+                selectedReservationStatus: function () {
+                    if (this.Selected.Reservation) {
+                        var res = this.Reservations.TodayReservation[this.Selected.Reservation];
+                        return res ? res.State : -1;
+                    }
+                    return -1;
                 }
             },
             methods: {
@@ -408,7 +422,8 @@
                         {
                             id: this.Selected.Reservation,
                             state: status
-                        }, function(data) {
+                        },
+                        function(data) {
                             //v.loadReservations();
                         });
                 },
@@ -418,12 +433,13 @@
                         {
                             id: this.Selected.Reservation,
                             tableId: this.Selected.Table,
-                            
-                        },function(data) {
-                           // v.loadReservations();
+
+                        },
+                        function(data) {
+                            // v.loadReservations();
                         });
                 },
-                changeReservation: function() {
+                changeReservation: function(callback) {
 
                     $.post(
                         '/Reservation/ChangeReservation',
@@ -432,40 +448,42 @@
                             model: this.Selected,
                             tableId: this.Selected.LastReservedTable
                         },
-                        function(data) {
+                        function (data) {
+                            if (callback)
+                                callback();
                             //v.loadReservations();
                         }
                     );
                 },
-            loadReservations: function() {
-                var _this = this;
-                $.getJSON('/Reservation/PlaceReservation/',
-                    {
-                        id: placeId,
-                        date: this.Selected.Date,
-                    },
-                    function(json) {
-                        _this.Reservations = json;
-                        if (json.TimeSlots.length > 0)
-                            _this.Selected.Time = json.TimeSlots[0].Value;
+                loadReservations: function() {
+                    var _this = this;
+                    $.getJSON('/Reservation/PlaceReservation/',
+                        {
+                            id: placeId,
+                            date: this.Selected.Date,
+                        },
+                        function(json) {
+                            _this.Reservations = json;
+                            if (json.TimeSlots.length > 0)
+                                _this.Selected.Time = json.TimeSlots[0].Value;
 
-                        if (_this.Reservations.Times.length > 0)
-                            _this.Selected.Duration = _this.Reservations.Times[0].Key;
-                       
-                    });
-            },
-            postReservation: function() {
-                var req = $.post(
-                    '/Reservation/PostReservation?id=' + '@Model.place.Id',
-                    this.Selected,
-                    function(data) {
-                        //v.loadReservations();
-                    });
+                            if (_this.Reservations.Times.length > 0)
+                                _this.Selected.Duration = _this.Reservations.Times[0].Key;
+
+                        });
+                },
+                postReservation: function() {
+                    var req = $.post(
+                        '/Reservation/PostReservation?id=' + '@Model.place.Id',
+                        this.Selected,
+                        function(data) {
+                            //v.loadReservations();
+                        });
 
 
+                }
             }
-        }
-    });
+        });
 
         hub.client.reload = v.loadReservations;
     </script>
