@@ -1,19 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Newtonsoft.Json.Linq;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookahCommon;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DeviceControlController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the DeviceControlController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace smartHookah.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
+
+    using Newtonsoft.Json.Linq;
+
+    using smartHookah.Helpers;
+    using smartHookah.Models;
+
+    using smartHookahCommon;
+
     public class DeviceControlController : Controller
     {
         private readonly SmartHookahContext db;
@@ -25,15 +35,16 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
         {
-            var model = new DefaultMetadataViewModel();
-            model.hookahId = hookahId;
-            model.personId = personId;
+            var model = new DefaultMetadataViewModel { hookahId = hookahId, personId = personId };
             SmokeSessionMetaData metadata = null;
             if (hookahId != null)
             {
-                var hookah = db.Hookahs.FirstOrDefault(a => a.Id == hookahId);
+                var hookah = this.db.Hookahs.FirstOrDefault(a => a.Id == hookahId);
                 if (hookah != null)
+                {
                     metadata = hookah.DefaultMetaData;
+                }
+                    
             }
 
 

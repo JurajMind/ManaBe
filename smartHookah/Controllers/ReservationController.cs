@@ -347,7 +347,7 @@ namespace smartHookah.Controllers
 
             var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
 
-            var time = DateTime.ParseExact(model.Time.ToString(), "HHmm", CultureInfo.InvariantCulture);
+            var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4, '0'), "HHmm", CultureInfo.InvariantCulture);
             parseDate = parseDate.AddHours(time.Hour);
             parseDate = parseDate.AddMinutes(time.Minute);
 
@@ -516,27 +516,64 @@ namespace smartHookah.Controllers
         public string Name { get; set; }
     }
 
+    /// <summary>
+    /// The reservation dto.
+    /// </summary>
     public class ReservationDto
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReservationDto"/> class.
+        /// </summary>
+        /// <param name="res">
+        /// The res.
+        /// </param>
+        /// <param name="slot">
+        /// The slot.
+        /// </param>
         public ReservationDto(Reservation res, TimeSpan slot)
         {
-            Name = res.DisplayName;
-            TimeSlots = (int) (res.Duration.Ticks / slot.Ticks);
-            Id = res.Id;
-            Persons = res.Persons;
-            State = res.Status;
+            this.Name = res.DisplayName;
+            this.TimeSlots = (int) (res.Duration.Ticks / slot.Ticks);
+            this.Id = res.Id;
+            this.Persons = res.Persons;
+            this.State = res.Status;
+            this.Message = res.Text;
         }
 
+        /// <summary>
+        /// Gets or sets  reservation message
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time slots.
+        /// </summary>
         public int TimeSlots { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the persons.
+        /// </summary>
         public int Persons { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the state.
+        /// </summary>
         public ReservationState State { get; set; }
     }
 
+    /// <summary>
+    /// The create reservation model.
+    /// </summary>
     public class CreateReservationModel
     {
         public Place place { get; set; }
