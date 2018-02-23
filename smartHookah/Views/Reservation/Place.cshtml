@@ -213,7 +213,7 @@
                         <td class='tableCapacity'>{{table.Capacity}}</td>
                         <reservation-colunm
                             v-for="(time,index) in timesOrder"
-                            :key="time.OrderIndex"
+                            :key="index"
                             v-bind:table="table"
                             v-bind:timeSlot="time"
                             v-bind:index="index"
@@ -251,7 +251,7 @@
                                 </div>
                         </td>
                           <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">
-                        {{index}}
+                      
                         </td>
 
                     `,
