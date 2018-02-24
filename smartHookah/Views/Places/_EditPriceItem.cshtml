@@ -4,12 +4,7 @@
     @Html.Hidden($"items[{Model.Index}].Id",Model.Item.Id)
     <td > <strong> @Model.Item.PipeAccesory.Brand.DisplayName @Model.Item.PipeAccesory.AccName</strong></td>
   
-    <td>
-        <select class="form-control" name="@($"items[{Model.Index}].Currency")">
-            <option selected="selected" value="CZK">CZK</option>
-            <option  value="EUR">€</option>
-        </select>
-
+  
         @for (var i = 0; i < Model.PriceGroups.Count; i++)
         {
             var pc = Model.PriceGroups[i];
@@ -22,9 +17,9 @@
 
             <td>
                 <input class="form-control" type="hidden" name="@($"items[{Model.Index}].Prices[{i}].Id")" value="@pc.Id"/>
-                <input class="form-control" name="@($"items[{Model.Index}].Prices[{i}].Price")" value="@price"/>
+                <input class="form-control" type="number" min="-1"  name="@($"items[{Model.Index}].Prices[{i}].Price")" value="@price.ToString(System.Globalization.CultureInfo.InvariantCulture)"/>
             </td>
         }
 
-    </td>
+    
 </tr>

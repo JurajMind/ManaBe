@@ -1,36 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
-using GuigleAPI;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Redis;
-using smartHookahCommon;
-
-namespace smartHookah.Controllers
+﻿namespace smartHookah.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Resources;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Http;
+    using System.Web.Mvc;
+
+    using GuigleAPI;
+
+    using smartHookah.Helpers;
+    using smartHookah.Models;
+    using smartHookah.Models.Redis;
+
+    using smartHookahCommon;
+
+    /// <summary>
+    /// The places controller.
+    /// </summary>
     public class PlacesController : Controller
     {
+        /// <summary>
+        /// The db.
+        /// </summary>
         private readonly SmartHookahContext db;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlacesController"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
         public PlacesController(SmartHookahContext db)
         {
             this.db = db;
         }
 
-        // GET: Places
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             var model = new PlaceIndexViewModel();
@@ -42,28 +62,47 @@ namespace smartHookah.Controllers
                 var ownPlace = model.Places.FirstOrDefault(a => a.Managers.Contains(person));
 
                 if (ownPlace != null)
+                {
                     model.ownPlaceId = ownPlace.Id;
+                }
             }
-            return View(model);
+            return this.View(model);
         }
 
+        /// <summary>
+        /// The order details.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> OrderDetails(int id)
         {
-            var order = await db.HookahOrders.FindAsync(id);
+            var order = await this.db.HookahOrders.FindAsync(id);
 
-            var model = new OrderDetailsViewModel();
-            model.order = order;
-            return View(model);
+            var model = new OrderDetailsViewModel { order = order };
+            return this.View(model);
         }
 
+        /// <summary>
+        /// The process order.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> ProcessOrder(int id)
         {
-            var order = await db.HookahOrders.FindAsync(id);
+            var order = await this.db.HookahOrders.FindAsync(id);
 
             var model = new ProcessOrderViewModel();
             var person = order.Place.Person;
             model.SmokeMetadataModalViewModel =
-                SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(db, order.SmokeSessionMetaData, person);
+                SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(this.db, order.SmokeSessionMetaData, person);
             model.order = order;
 
             var hookahs = person.Hookahs.ToList();
@@ -72,7 +111,7 @@ namespace smartHookah.Controllers
             model.Hookahs = new List<Hookah>();
             foreach (var sessionId in hookahSessionId)
             {
-                var session = db.SmokeSessions.Include(a => a.Pufs).FirstOrDefault(a => a.SessionId == sessionId);
+                var session = this.db.SmokeSessions.Include(a => a.Pufs).FirstOrDefault(a => a.SessionId == sessionId);
 
                 var pufs = RedisHelper.GetPufs(sessionId);
 
@@ -83,7 +122,7 @@ namespace smartHookah.Controllers
                     model.Hookahs.Add(session.Hookah);
             }
             model.Seats = order.Place.Seats.ToList();
-            return View(model);
+            return this.View(model);
         }
 
         [System.Web.Mvc.HttpPost]
@@ -397,14 +436,21 @@ namespace smartHookah.Controllers
             if (place == null)
                 return RedirectToAction("Index", "Places");
 
-
-            if (place.BaseHookahPrice != model.BasePrice &&
-                (place.Currency != model.Currency || place.Currency != null))
+            if (place.Currency != model.Currency)
             {
-                place.BaseHookahPrice = model.BasePrice;
                 place.Currency = model.Currency;
+                this.db.Places.AddOrUpdate(place);
+            }
 
-                db.Places.AddOrUpdate(place);
+            foreach (var placePriceGroup in place.PriceGroups)
+            {
+                var newPriceGroup = model.priceGroup.FirstOrDefault(a => a.Id == placePriceGroup.Id && a.PriceValue != placePriceGroup.Price);
+                if(newPriceGroup == null)
+                    continue;
+
+                placePriceGroup.Price = newPriceGroup.PriceValue;
+                this.db.PriceGroup.AddOrUpdate(placePriceGroup);
+
             }
 
             var gear = place.Person.OwnedPipeAccesories.ToList();
@@ -425,19 +471,17 @@ namespace smartHookah.Controllers
                         priceGroup.PriceGroupId = price.Id;
                         priceGroup.OwnPipeAccesoriesId = gearItem.Id;
                         gearItem.Prices.Add(priceGroup);
-                        priceGroup.Price = price.Price;
+                        priceGroup.Price = price.PriceValue;
                         db.PriceGroupPrice.AddOrUpdate(priceGroup);
                     }
                     else
                     {
-                        if (priceGroup.Price != price.Price)
+                        if (priceGroup.Price != price.PriceValue)
                         {
-                            priceGroup.Price = price.Price;
-                            db.PriceGroupPrice.AddOrUpdate(priceGroup);
+                            priceGroup.Price = price.PriceValue;
+                            this.db.PriceGroupPrice.AddOrUpdate(priceGroup);
                         }
                             
-
-                        
                     }
                 }
 
@@ -730,6 +774,7 @@ namespace smartHookah.Controllers
             var model = new SeatManagerModel();
             model.Seats = place.Seats.ToList();
             model.PlaceId = id.Value;
+            model.place = place;
             return View(model);
         }
 
@@ -763,10 +808,19 @@ namespace smartHookah.Controllers
                 if (placeSeat == null)
                     continue;
 
-                if (placeSeat.Name == s.Name)
-                    continue;
+                if (placeSeat.Name == s.Name && placeSeat.Capacity == s.Capacity) continue;
 
-                placeSeat.Name = s.Name;
+                if (placeSeat.Name != s.Name)
+                {
+                    placeSeat.Name = s.Name;
+                }
+
+
+                if (placeSeat.Capacity != s.Capacity)
+                {
+                    placeSeat.Capacity = s.Capacity;
+                }
+                  
 
                 db.Seats.AddOrUpdate(placeSeat);
             }
@@ -781,7 +835,7 @@ namespace smartHookah.Controllers
 
             await db.SaveChangesAsync();
 
-            return RedirectToAction("Seat", id);
+            return RedirectToAction("Seat",new {id = id});
         }
 
 

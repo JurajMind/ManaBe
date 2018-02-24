@@ -13,9 +13,10 @@
                 @for (int i = 0; i < Model.Seats.Count; i++)
                 {
                     <div class="seat form-group d-inline-block">
-                        <input type="hidden" name="seat[i].Id" value="@Model.Seats[i].Id"/>
+                        <input type="hidden" name="seat[@i].Id" value="@Model.Seats[i].Id"/>
                         <input type="text" name="seat[@i].Name" value="@Model.Seats[i].Name"/>
-                        <button class="btn btn-danger bmd-btn-fab-sm">Remove</button>
+                        <input type="number" min="1" step="1" name="seat[@i].Capacity" value="@Model.Seats[i].Capacity" />
+                        <button type="button" class="btn btn-danger bmd-btn-fab-sm">Remove</button>
                     </div>
                 }
             </div>
@@ -23,6 +24,7 @@
         }
         <div class="form-group d-inline-block">
             <input id="newSeat" type="text"/>
+            <input id="capacity" type="number"/>
             <button onclick="addSeat()">Add</button>
         </div>
     </div>
@@ -34,13 +36,19 @@
         function addSeat() {
             var count = $('.seat').length;
             var name = $('#newSeat').val();
+            var capacity = $('#newcapacitySeat').val();
             $('#newSeat').val('');
             $('.seats').append('<div class="seat form-group d-inline-block">' +
                 '<input  type="text" name="seat[' +
                 count +
                 '].Name" value="' +
                 name +
-                '" /><button class="btn btn-danger bmd-btn-fab-sm" >Remove</button></div>');
+                '" />' + ' <input type="number" min="1" step="1" name="seat[' +
+                count +
+                '.Capacity" value="' +
+                capacity +
+                '" />'+
+                '<button class="btn btn-danger bmd-btn-fab-sm" >Remove</button></div>');
 
         }
     </script>

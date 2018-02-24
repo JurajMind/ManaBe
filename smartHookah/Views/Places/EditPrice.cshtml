@@ -27,19 +27,19 @@
 {
     @Html.Hidden("PlaceId",Model.PlaceId)
     @Html.AntiForgeryToken()
-    <label>Base hookah price</label>
-    <input  class="form-control" type="number" value="@Model.BasePrice.ToString(System.Globalization.CultureInfo.InvariantCulture)" min="0" name="@($"BasePrice")" />
-   
+    <label>Currency</label>
+
     <select class="form-control" name="Currency">
-        <option selected="selected" value="CZK">CZK</option>
-        <option  value="EUR">€</option>
+        <option @(Model.Currency == "CZK" ? "selected=\"selected\"" : "") value="CZK">CZK</option>
+        <option @(Model.Currency == "EUR" ? "selected=\"selected\"" : "") value="EUR">EUR</option>
     </select>
+
+    
     <hr/>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Name</th>
-            <th>Currency</th>
             @foreach (var pc in @Model.PriceGroups)
             {
                 <th>@pc.Name</th>
@@ -51,52 +51,55 @@
         
         <tbody>
         <tr>
-            <td colspan="3"><h3>Tobacco</h3></td>
+            <td colspan="4"><h3>Group price</h3></td>
+            
         </tr>
-     
+        <tr>
+            <td></td>
+            @for (var i = 0; i < @Model.PriceGroups.Count; i++)
+            {
+                var pc = @Model.PriceGroups[i];
+                <td>
+                    <input class="form-control" type="hidden" name="@($"priceGroup[{i}].Id")" value="@pc.Id"/>
+                    <input class="form-control" type="number" name="@($"priceGroup[{i}].Price")" value="@pc.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"/>
+                </td>
+            }
+        </tr>
+        <tr>
+            <td colspan="4">
+                <h3>Tobacco</h3></td>
+        </tr>
+
         @foreach (var tbc in Tobacco)
         {
-            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
-            {
-                Item = tbc,
-                Index = index,
-                PriceGroups = Model.PriceGroups
-            })
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel() { Item = tbc, Index = index, PriceGroups = Model.PriceGroups })
             index = index + 1;
         }
 
-      
+
         <tr>
-            <td colspan="3"><h3>Hookah</h3></td>
+            <td colspan="4">
+                <h3>Hookah</h3></td>
         </tr>
         @foreach (var tbc in Hookah)
         {
-            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
-            {
-                Item = tbc,
-                Index = index,
-                PriceGroups = Model.PriceGroups
-            })
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel() { Item = tbc, Index = index, PriceGroups = Model.PriceGroups })
             index = index + 1;
         }
 
         <tr>
-            <td colspan="3"><h3>Bowl</h3></td>
+            <td colspan="4">
+                <h3>Bowl</h3></td>
         </tr>
         @foreach (var tbc in Bowl)
         {
-            @Html.Partial("_EditPriceItem", new EditPriceItemModel()
-            {
-                Item = tbc,
-                Index = index,
-                PriceGroups = Model.PriceGroups
-            })
+            @Html.Partial("_EditPriceItem", new EditPriceItemModel() { Item = tbc, Index = index, PriceGroups = Model.PriceGroups })
             index = index + 1;
         }
         </tbody>
     </table>
     <a href="@Url.Action("Manage",new {id = Model.PlaceId})" class="btn btn-success btn-danger">Cancel&nbsp;<i class="fa fa-step-backward"></i></a>
-    <button class="btn btn-success btn-raised">Save&nbsp;<i class="fa fa-save"></i></button>
+    <button  type="submit" class="btn btn-success btn-raised">Save&nbsp;<i class="fa fa-save"></i></button>
 
 }
 </div>

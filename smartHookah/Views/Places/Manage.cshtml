@@ -43,6 +43,7 @@
 {
     <a class="btn btn-info"href="@Url.Action("EditOpenHours",new {id = Model.Id})">Edit open hours&nbsp;<i class="fa fa-clock-o"></i></a>
     <a class="btn btn-info"href="@Url.Action("EditPrice",new {id = Model.Id})">Edit prices &nbsp;<i class="fa fa-clock-o"></i></a>
+    <a class="btn btn-info"href="@Url.Action("Seat",new {id = Model.Id})">Edit seats &nbsp;<i class="fa fa-clipboard"></i></a>
     <a class="btn btn-info"href="@Url.Action("ManageColors","Person",new {personId = Model.Person.Id})">Edit colors &nbsp;<i class="fa fa-lightbulb-o"></i></a>
     <a class="btn btn-success"href="@Url.Action("Media","Places",new {id = Model.Id})">Medias &nbsp;<i class="fa fa-camera"></i></a>
 }
