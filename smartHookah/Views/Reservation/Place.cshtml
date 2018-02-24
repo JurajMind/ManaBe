@@ -404,8 +404,9 @@
                     Reservations: [],
                     Canceled: [],
                     Times: [],
+                    MinimumReservationTime : 0,
                 },
-                AddTableMode: false
+                AddTableMode: false,
             },
             computed:
             {
@@ -496,7 +497,7 @@
                                 _this.Selected.Time = json.TimeSlots[0].Value;
 
                             if (_this.Reservations.Times.length > 0)
-                                _this.Selected.Duration = _this.Reservations.Times[0].Key;
+                                _this.Selected.Duration = _this.Reservations.Times[_this.Reservations.MinimumReservationTime].Key;
 
                         });
                 },
