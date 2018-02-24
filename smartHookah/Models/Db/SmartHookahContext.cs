@@ -79,6 +79,9 @@ namespace smartHookah.Models
         public DbSet<TobaccoTaste> TobaccoTastes { get; set; }
 
         public DbSet<PriceGroupPrice> PriceGroupPrice { get; set; }
+
+        public DbSet<PriceGroup> PriceGroup { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

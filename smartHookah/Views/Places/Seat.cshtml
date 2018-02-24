@@ -7,21 +7,23 @@
 
 <div class="card">
     <div class="card-block">
+        <div>@Html.Raw(@Model.place.Map)</div>
         <ul>
             @foreach (var s in Model.Seats)
             {
-                <li><div style="text-align: center">
-                        @Html.QRCode(@Url.Action("Order", "Places", new {id = s.Place.FriendlyUrl, code = s.Code}, this.Request.Url.Scheme), 256, 2, QrCodeHelper.QRCodeErrorCorrectionLevel.High)
-                   
-                        <h1>Code:@s.Code</h1>
-                        <h2>@s.Name</h2>
-                        <img src="@s.Place.LogoPath" height="80px" style="position: relative;top: -260px;"/>
+                <li>
+                    <div style="text-align: center">
+
+                        <h2>@s.Name Kapacita :@s.Capacity</h2>
+
                     </div>
-                   
-            </li>
+                    
+                </li>
 
             }
         </ul>
+        <a class="btn btn-success btn-raised" href="@Url.Action("EditSeat","Places",new {id = Model.PlaceId})">Edit seats</a>
+        <a class="btn btn-danger" href="@Url.Action("Manage","Places",new {id = Model.PlaceId})">Back</a>
     </div>
 
 </div>

@@ -244,7 +244,7 @@
                     `
             <td v-on:dragstart="dragStart($event)" v-on:dragend="dragEnd()" :draggable="check" v-bind:colspan="colSpan" v-if="display" class="timeSlot taken" v-on:click="onTakenClick()" v-bind:class="{confirmed : confirmed,selected : check}">
                                  <div v-if="colSpan !== 0">
-                                   {{index}} {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )
+                                {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )
                                     <i v-if="reservation.Message" class="fa fa-comment" data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
                                     <div class="controlls" v-if="check && !confirmed" >
                                         <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i></div>

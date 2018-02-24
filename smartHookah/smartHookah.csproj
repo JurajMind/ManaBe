@@ -971,6 +971,7 @@
     <Compile Include="Controllers\QrCodeReaderController.cs" />
     <Compile Include="Controllers\ResourcesController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Models\SeatManagerModel.cs" />
     <Compile Include="Models\SmokeSessionGetStaticsticsModel.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\DbHelper.cs" />

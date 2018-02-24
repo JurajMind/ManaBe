@@ -8,6 +8,8 @@ using smartHookah.Models.Redis;
 
 namespace smartHookah.Models
 {
+    using System.Globalization;
+
     public class SeatDto
     {
         public string Code { get; set; }
@@ -19,22 +21,16 @@ namespace smartHookah.Models
         }
     }
 
-    public class SeatManagerModel
-    {
-        public List<Seat> Seats { get; set; }
-
-        public int PlaceId { get; set; }
-    }
-
     public class EditPricePostModel
     {
         public int PlaceId { get; set; }
 
-        public decimal BasePrice { get; set; }
+        public List<EditPricePostItemPriceGroup> priceGroup { get; set; }
 
         public string Currency { get; set; }
         public List<EditPricePostItems> Items { get; set; }
 
+        public decimal BasePrice { get; set; }
     }
 
     public class EditPricePostItems
@@ -49,7 +45,21 @@ namespace smartHookah.Models
     public class EditPricePostItemPriceGroup
     {
         public int Id { get; set; }
-        public decimal Price { get; set; }
+        public string Price { get; set; }
+
+        public decimal PriceValue
+        {
+            get
+            {
+                if (this.Price == null) return -1;
+                decimal price;
+                this.Price = this.Price.Replace(',', '.');
+                decimal.TryParse(this.Price, NumberStyles.Any, CultureInfo.InvariantCulture, out price);
+
+
+                return price;
+            }
+        }
     }
 
     public class EditPriceViewModel
