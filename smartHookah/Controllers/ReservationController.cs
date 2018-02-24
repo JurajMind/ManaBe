@@ -247,7 +247,14 @@ namespace smartHookah.Controllers
 
             model.Times = new List<KeyValuePair<int, string>>();
 
-            for (int i = place.MinimumReservationTime; i < 9; i++)
+            var minReservationTime = place.MinimumReservationTime;
+            model.MinimumReservationTime = place.MinimumReservationTime;
+            if (includeReservation)
+            {
+                minReservationTime = 1;
+            }
+
+            for (int i = minReservationTime; i < 9; i++)
             {
                 var text = $"{ i * 0.5} hodiny";
                 model.Times.Add(new KeyValuePair<int, string>(i, text));
@@ -594,5 +601,7 @@ namespace smartHookah.Controllers
         public IEnumerable<ReservationDto> Canceled { get; set; }
 
         public List<KeyValuePair<int,string>> Times { get; set; }
+
+        public int MinimumReservationTime { get; set; }
     }
 }

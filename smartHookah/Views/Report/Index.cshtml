@@ -1,0 +1,65 @@
+﻿@model smartHookah.Controllers.PostBugModel
+
+@{
+    ViewBag.Title = "Bug report";
+    var url = "Unknown";
+    if (ViewBag.Url != null)
+    {
+        url = ViewBag.Url.ToString();
+    }
+
+}
+
+<div class="card">
+    <h4 style="color:red" class="card-header"><i class="fa fa-bug"></i>&nbsp;Bug report</h4>
+    <div class="card-body">
+        
+        @using (Html.BeginForm("PostBug","Report"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("Url", url);
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.Label("Strucny popis", htmlAttributes: new { @class = "control-label col-md-2 bmd-label-static" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Detailnejsi popis", htmlAttributes: new { @class = "control-label  bmd-label-static" ,@for="steps" ,@style="padding-left:15px"})
+                 
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Steps, new { htmlAttributes = new { @class = "form-control", @id = "steps" } })
+                        @Html.ValidationMessageFor(model => model.Steps, "", new { @class = "text-danger" })
+                    </div>
+                  
+                </div>
+                
+                <div class="form-group">
+                    @Html.Label("Zavaznost", htmlAttributes: new { @class = "control-label col-md-2 bmd-label-static" })
+                    <div class="col-md-10">
+                        <select name="Priority" class="form-control">
+                            <option  value="1">1 - Blocker</option>
+                            <option value="1">2 - Vysoká</option>
+                            <option selected="selected" value="3">3 - Stredná</option>
+                            <option value="4">4 - Nice to have</option>
+                          
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Steps, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" value="Create" class="btn btn-success btn-raised"><i class="fa fa-plus"></i>&nbsp;Create </button>
+                        <a class="btn btn-info btn-raised"  href="@Url.Action("Index","Home")"><i class="fa fa-home"></i>&nbsp;Go home</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
