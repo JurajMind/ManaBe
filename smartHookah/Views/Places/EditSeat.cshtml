@@ -36,7 +36,7 @@
         function addSeat() {
             var count = $('.seat').length;
             var name = $('#newSeat').val();
-            var capacity = $('#newcapacitySeat').val();
+            var capacity = $('#capacity').val();
             $('#newSeat').val('');
             $('.seats').append('<div class="seat form-group d-inline-block">' +
                 '<input  type="text" name="seat[' +
@@ -45,7 +45,7 @@
                 name +
                 '" />' + ' <input type="number" min="1" step="1" name="seat[' +
                 count +
-                '.Capacity" value="' +
+                '].Capacity" value="' +
                 capacity +
                 '" />'+
                 '<button class="btn btn-danger bmd-btn-fab-sm" >Remove</button></div>');
