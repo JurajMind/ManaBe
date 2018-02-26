@@ -167,7 +167,11 @@
                 <div class="card-body">
                     <ul class="canceled">
                         <li v-for="canceled in Reservations.Canceled">
+                            {{canceled.TimeText}} :
+                            <span v-if="Reservations.Times[canceled.TimeSlots]">{{Reservations.Times[canceled.TimeSlots].Value}}</span>
                             {{canceled.Name}}
+                            <i class="fa fa-undo" v-on:click="changeReservationStatus(5,canceled.Id)"></i>
+
                         </li>
                     </ul>
                 </div>
@@ -194,7 +198,6 @@
                     weekStartDay: 1,
                     uiLibrary: 'materialdesign',
                     format: 'dd.mm.yyyy',
-                    minDate: moment().format('YYYY.MM.DD'),
                     value: moment().format('DD.MM.YYYY'),
                     change: function() {
                         v.dateChanged();
@@ -439,13 +442,16 @@
                     this.Selected.Text = '';
                     this.Selected.Duration = this.Reservations.Times[0].Key;
 
-
+                    f
                 },
-                changeReservationStatus: function(status) {
+                changeReservationStatus: function (status, reservationId = null) {
+                    if (reservationId == null) {
+                        reservationId = this.Selected.Reservation;
+                    }
                     $.post(
                         '/Reservation/UpdateStatus/',
                         {
-                            id: this.Selected.Reservation,
+                            id: reservationId,
                             state: status
                         },
                         function(data) {

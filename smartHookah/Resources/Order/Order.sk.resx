@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="orderYourHookah" xml:space="preserve">
+    <value>Objednať svoju fajku</value>
+  </data>
+  <data name="currentOrderPrice" xml:space="preserve">
+    <value>Vaša objednávka je teraz</value>
+  </data>
+  <data name="whatTobacco" xml:space="preserve">
+    <value>Aký tabak (až 4 práchute do mixu)</value>
+  </data>
+  <data name="yourTastePreferences" xml:space="preserve">
+    <value>Vaše preferencie chute</value>
+  </data>
+  <data name="randomMix" xml:space="preserve">
+    <value>Náhodný mix</value>
+  </data>
+  <data name="selectPreparedMixes" xml:space="preserve">
+    <value>Vyberte si z našich mixov</value>
+  </data>
+  <data name="whatHookah" xml:space="preserve">
+    <value>Akú fajku chcete?</value>
+  </data>
+  <data name="whatBowl" xml:space="preserve">
+    <value>Akú korunku chcete?</value>
+  </data>
+  <data name="dropExtra" xml:space="preserve">
+    <value>Pridať niečo naviac</value>
+  </data>
+  <data name="cantChoose" xml:space="preserve">
+    <value>Nemôžete si vybrať? Proste nám napíšte Vaše prianie</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Ďalej</value>
+  </data>
+  <data name="finish" xml:space="preserve">
+    <value>Dokončiť</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Predošlé</value>
+  </data>
+  <data name="orderConfirm" xml:space="preserve">
+    <value>Potvrdiť Vašu objednávku</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="orderPrice" xml:space="preserve">
+    <value>Cena objednávky</value>
+  </data>
+  <data name="order" xml:space="preserve">
+    <value>Objednať</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Zavrieť</value>
+  </data>
+  <data name="letusChoose" xml:space="preserve">
+    <value>Nechajte to na nás</value>
+  </data>
+  <data name="orderDetails" xml:space="preserve">
+    <value>Detaily objednávky</value>
+  </data>
+  <data name="orderState" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="orderTime" xml:space="preserve">
+    <value>Čas objednávky</value>
+  </data>
+  <data name="seatSpecify" xml:space="preserve">
+    <value>Upresnenie miesta</value>
+  </data>
+  <data name="seatCode" xml:space="preserve">
+    <value>Kód stolu</value>
+  </data>
+  <data name="pleaseEnterTableCode" xml:space="preserve">
+    <value>Prosím zadajte kód stolu</value>
+  </data>
+  <data name="proceedToOrder" xml:space="preserve">
+    <value>Pokračujte v objednávke</value>
+  </data>
+  <data name="menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+</root>

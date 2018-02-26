@@ -10,6 +10,72 @@ using System.Web.Mvc;
 
 namespace smartHookah.Filters
 {
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Owin;
+
+    using Newtonsoft.Json;
+
+    public class IPGeographicalLocation
+    {
+        [JsonProperty("ip")]
+        public string IP { get; set; }
+
+        [JsonProperty("country_code")]
+
+        public string CountryCode { get; set; }
+
+        [JsonProperty("country_name")]
+
+        public string CountryName { get; set; }
+
+        [JsonProperty("region_code")]
+
+        public string RegionCode { get; set; }
+
+        [JsonProperty("region_name")]
+
+        public string RegionName { get; set; }
+
+        [JsonProperty("city")]
+
+        public string City { get; set; }
+
+        [JsonProperty("zip_code")]
+
+        public string ZipCode { get; set; }
+
+        [JsonProperty("time_zone")]
+
+        public string TimeZone { get; set; }
+
+        [JsonProperty("latitude")]
+
+        public float Latitude { get; set; }
+
+        [JsonProperty("longitude")]
+
+        public float Longitude { get; set; }
+
+        [JsonProperty("metro_code")]
+
+        public int MetroCode { get; set; }
+
+        private IPGeographicalLocation() { }
+
+        public static async Task<IPGeographicalLocation> QueryGeographicalLocationAsync(string ipAddress)
+        {
+            WebClient client = new WebClient();
+          
+            string result =  client.DownloadString("http://freegeoip.net/json/" + ipAddress);
+
+            return JsonConvert.DeserializeObject<IPGeographicalLocation>(result);
+        }
+    }
+
     public class LocalizationAttribute : ActionFilterAttribute
     {
         private readonly string _DefaultLanguage = ConfigurationManager.AppSettings["DefaultLanguage"];
@@ -17,6 +83,12 @@ namespace smartHookah.Filters
         public LocalizationAttribute(string defaultLanguage)
         {
             _DefaultLanguage = defaultLanguage;
+        }
+
+        public string GetDefaultLocalitazion(string ip)
+        {
+            IPGeographicalLocation model =  IPGeographicalLocation.QueryGeographicalLocationAsync(ip).Result;
+            return model.CountryCode;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -54,9 +126,16 @@ namespace smartHookah.Filters
 
             if (filterContext.RouteData.Values["lang"] == null || Thread.CurrentThread.CurrentCulture != new CultureInfo(lang))
             {
+                try
+                {
+                    Thread.CurrentThread.CurrentCulture =
+                        Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
+                }
+                catch (Exception e)
+                {
+                    throw new NotSupportedException(string.Format("ERROR: Invalid language code '{0}'.", lang));
+                }
 
-                Thread.CurrentThread.CurrentCulture =
-                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
             }
 
         }
@@ -80,13 +159,24 @@ namespace smartHookah.Filters
             HttpCookie cookie = filterContext.HttpContext.Request.Cookies.Get("manapipes-lang");
             DateTime now = DateTime.Now;
 
-            if (cookie == null)
-                return _DefaultLanguage;
 
+            if (cookie == null)
+            {
+                var userLanguages = filterContext.HttpContext.Request.UserLanguages;
+                if (userLanguages != null && userLanguages.Count() > 0)
+                {
+                    return userLanguages.First();
+                }
+                else
+                {
+                    return this._DefaultLanguage;
+                }
+            }
             // Set the cookie value.
             return cookie.Value;
-
         }
+
+     
 
         private static void StoreLanguage(ActionExecutingContext filterContext, string lang)
         {
