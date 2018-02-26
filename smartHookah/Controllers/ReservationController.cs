@@ -211,7 +211,7 @@ namespace smartHookah.Controllers
             var timeSlot = new List<TimeSlot>();
 
             var placeTime = place.BusinessHours.FirstOrDefault(a => a.Day == todayDay);
-
+            var model = new ReservationInfo();
             if (placeTime != null)
             {
                 var startTime = placeTime.OpenTine;
@@ -231,9 +231,9 @@ namespace smartHookah.Controllers
                 {
                     timeSlot.Add(new TimeSlot {Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"),OrderIndex = index});
                     index++;
-                    startTime = startTime + _slotDuration;
+                    startTime = startTime + this._slotDuration;
                 }
-            }
+           
 
 
             var todayReservation =
@@ -243,7 +243,7 @@ namespace smartHookah.Controllers
             var todayActiveReservation = todayReservation
                 .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied).ToList();
 
-            var model = new ReservationInfo();
+            
 
             model.Times = new List<KeyValuePair<int, string>>();
 
@@ -258,6 +258,11 @@ namespace smartHookah.Controllers
             {
                 var text = $"{ i * 0.5} hodiny";
                 model.Times.Add(new KeyValuePair<int, string>(i, text));
+            }
+
+            if (includeReservation)
+            {
+                model.Times.Add(new KeyValuePair<int, string>(index, "Do zavíračky"));
             }
 
 
@@ -295,6 +300,7 @@ namespace smartHookah.Controllers
 
 
             model.TimeSlots = timeSlot;
+            }
             return model;
         }
 
@@ -551,7 +557,10 @@ namespace smartHookah.Controllers
             this.Persons = res.Persons;
             this.State = res.Status;
             this.Message = res.Text;
+            this.TimeText = res.Time.TimeOfDay.ToString(@"hh\:mm");
         }
+
+        public string TimeText { get; set; }
 
         /// <summary>
         /// Gets or sets  reservation message
