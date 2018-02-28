@@ -9,7 +9,7 @@
     <ul>
         @foreach (var place in Model)
         {
-            <li?>@place.Name <a href="@Url.Action("Manage",new {id = place.Id})" class="btn btn-default">Manage</a></li?>
+            <li>@place.Name <a href="@Url.Action("Manage",new {id = place.Id})" class="btn btn-default">Manage</a></li>
         }
     </ul>
 </div>

@@ -16,6 +16,8 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
+    using Accord.IO;
+
     [System.Web.Mvc.Authorize]
     public class ReservationController : Controller
     {
@@ -353,6 +355,8 @@ namespace smartHookah.Controllers
             if (reservation == null)
                 return Json(new {success = false, msg = "Reservation not found"});
 
+            var oldReservation = new ReservationDto(reservation, this._slotDuration);
+
             if (reservation.Persons != model.Persons)
                 reservation.Persons = model.Persons;
 
@@ -395,7 +399,8 @@ namespace smartHookah.Controllers
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
             ReservationContext.Clients.Group(reservation.PlaceId.ToString()).reload();
-            return Json(new {success = true});
+            return Json(new {oldRes= oldReservation,
+                            newRes = new ReservationDto(reservation,this._slotDuration),success = true});
         }
 
         public async Task<JsonResult> AddTable(int id, int tableId)
@@ -558,6 +563,7 @@ namespace smartHookah.Controllers
             this.State = res.Status;
             this.Message = res.Text;
             this.TimeText = res.Time.TimeOfDay.ToString(@"hh\:mm");
+            
         }
 
         public string TimeText { get; set; }

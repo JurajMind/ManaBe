@@ -21,7 +21,7 @@ namespace smartHookah.Helpers
 
             var span = new TagBuilder("span");
             span.Attributes.Add("data-resource-id", id);
-
+            span.Attributes.Add("data-resource-set", set);
             return new HtmlString(text + span.ToString(TagRenderMode.Normal));
             
         }

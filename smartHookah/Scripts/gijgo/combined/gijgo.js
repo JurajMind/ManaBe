@@ -13237,10 +13237,10 @@ gj.datepicker.config = {
              *     });
              * </script>
              */
-            rightIcon: '<i class="gj-icon event" />',
+            rightIcon: '<i class="fa fa-calendar" />',
 
-            previousMonth: '<i class="gj-icon chevron-left" />',
-            nextMonth: '<i class="gj-icon chevron-right" />'
+            previousMonth: '<i class="fa fa-chevron-left" />',
+            nextMonth: '<i class="fa fa-chevron-right" />'
         },
 
         fontSize: undefined,

@@ -176,7 +176,7 @@ function isResourceEditingEnabled() {
 
 function showEditorForm(e) {
     e.preventDefault();
-    var adminUrl = "LocalizationAdmin/";
+    var adminUrl = "https://app.manapipes.com/LocalizationAdmin/";
     var editorWindowOpenOptions = "height=600, width=900, left=30, top=30";
     var editorWindowName =  "_localization-resource-editor";
 

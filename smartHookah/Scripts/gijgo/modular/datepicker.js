@@ -6,7 +6,9 @@
  * Released under the MIT license
  */
 /* global window alert jQuery gj */
-/**  */gj.datepicker = {
+/**
+  */
+gj.datepicker = {
     plugins: {},
     messages: {
         'en-us': {
@@ -17,43 +19,75 @@
 
 gj.datepicker.config = {
     base: {
-        /** Whether to display dates in other months at the start or end of the current month.         */        showOtherMonths: false,
+        /** Whether to display dates in other months at the start or end of the current month.
+         */
+        showOtherMonths: false,
 
         /** Whether days in other months shown before or after the current month are selectable.
-         * This only applies if the showOtherMonths option is set to true.         */        selectOtherMonths: true,
+         * This only applies if the showOtherMonths option is set to true.
+         */
+        selectOtherMonths: true,
 
-        /** The width of the datepicker.         */        width: undefined,
+        /** The width of the datepicker.
+         */
+        width: undefined,
 
-        /** The minimum selectable date. When not set, there is no minimum         */        minDate: undefined,
+        /** The minimum selectable date. When not set, there is no minimum
+         */
+        minDate: undefined,
 
-        /** The maximum selectable date. When not set, there is no maximum         */        maxDate: undefined,
+        /** The maximum selectable date. When not set, there is no maximum
+         */
+        maxDate: undefined,
 
-        /** Specifies the format, which is used to format the value of the DatePicker displayed in the input.         */        format: 'mm/dd/yyyy',
+        /** Specifies the format, which is used to format the value of the DatePicker displayed in the input.
+         */
+        format: 'mm/dd/yyyy',
 
-        /** The name of the UI library that is going to be in use.         */        uiLibrary: 'materialdesign',
+        /** The name of the UI library that is going to be in use.
+         */
+        uiLibrary: 'materialdesign',
 
-        /** The name of the icons library that is going to be in use. Currently we support Material Icons, Font Awesome and Glyphicons.         */        iconsLibrary: 'materialicons',
+        /** The name of the icons library that is going to be in use. Currently we support Material Icons, Font Awesome and Glyphicons.
+         */
+        iconsLibrary: 'materialicons',
 
-        /** The initial datepicker value.         */        value: undefined,
+        /** The initial datepicker value.
+         */
+        value: undefined,
 
-        /** Day of the week start. 0 (Sunday) to 6 (Saturday)         */        weekStartDay: 0,
+        /** Day of the week start. 0 (Sunday) to 6 (Saturday)
+         */
+        weekStartDay: 0,
 
-        /** An array or function that will be used to determine which dates to be disabled for selection by the widget.         */        disableDates: undefined,
+        /** An array or function that will be used to determine which dates to be disabled for selection by the widget.
+         */
+        disableDates: undefined,
 
         /** An array that will be used to determine which days of week to be disabled for selection by the widget.
-         * The array needs to contains only numbers where 0 is Sunday, 1 is Monday and etc.         */        disableDaysOfWeek: undefined,
+         * The array needs to contains only numbers where 0 is Sunday, 1 is Monday and etc.
+         */
+        disableDaysOfWeek: undefined,
 
-        /** Whether to display week number in year on the left side of the calendar.         */        calendarWeeks: false,
+        /** Whether to display week number in year on the left side of the calendar.
+         */
+        calendarWeeks: false,
 
-        /** Whether to enable keyboard navigation.         */        keyboardNavigation: true,
+        /** Whether to enable keyboard navigation.
+         */
+        keyboardNavigation: true,
 
-        /** The language that needs to be in use.         */        locale: 'en-us',
+        /** The language that needs to be in use.
+         */
+        locale: 'en-us',
 
         icons: {
-            /** datepicker icon definition.             */            rightIcon: '<i class="gj-icon event" />',
+            /** datepicker icon definition.
+             */
+            rightIcon: '<i class="fa fa-calendar" />',
 
-            previousMonth: '<i class="gj-icon chevron-left" />',
-            nextMonth: '<i class="gj-icon chevron-right" />'
+            previousMonth: '<i class="fa fa-chevron-left" />',
+            nextMonth: '<i class="fa-icon fa-chevron-right" />'
         },
 
         fontSize: undefined,
@@ -598,17 +632,23 @@ gj.datepicker.methods = {
 gj.datepicker.events = {
     /**
      * Triggered when the datepicker value is changed.
-     *     */    change: function ($datepicker) {
+     *
+     */
+    change: function ($datepicker) {
         return $datepicker.triggerHandler('change');
     },
 
     /**
-     * Event fires when the calendar is opened.     */    open: function ($datepicker) {
+     * Event fires when the calendar is opened.
+     */
+    open: function ($datepicker) {
         return $datepicker.triggerHandler('open');
     },
 
     /**
-     * Event fires when the calendar is closed.     */    close: function ($datepicker) {
+     * Event fires when the calendar is closed.
+     */
+    close: function ($datepicker) {
         return $datepicker.triggerHandler('close');
     }
 };
@@ -617,19 +657,27 @@ gj.datepicker.widget = function ($element, jsConfig) {
     var self = this,
         methods = gj.datepicker.methods;
 
-    /** Gets or sets the value of the datepicker.     */    self.value = function (value) {
+    /** Gets or sets the value of the datepicker.
+     */
+    self.value = function (value) {
         return methods.value(this, value);
     };
 
-    /** Remove datepicker functionality from the element.     */    self.destroy = function () {
+    /** Remove datepicker functionality from the element.
+     */
+    self.destroy = function () {
         return methods.destroy(this);
     };
 
-    /** Open the calendar.     */    self.open = function () {
+    /** Open the calendar.
+     */
+    self.open = function () {
         gj.datepicker.methods.open(this);
     };
 
-    /** Close the calendar.     */    self.close = function () {
+    /** Close the calendar.
+     */
+    self.close = function () {
         gj.datepicker.methods.close(this);
     };
 
