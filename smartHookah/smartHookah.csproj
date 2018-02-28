@@ -1883,8 +1883,8 @@
     <Content Include="Scripts\ripples.js" />
     <Content Include="Scripts\smoothie.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Updates\1.0.2\Stable\32\vodna.txt" />
-    <Content Include="Updates\1.0.2\Stable\60\vodna.txt" />
+    <Content Include="Views\Updates\1.0.2\Stable\32\vodna.txt" />
+    <Content Include="Views\Updates\1.0.2\Stable\60\vodna.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1970,7 +1970,7 @@
     <Content Include="Views\DeviceControl\GetDeviceSetting.cshtml" />
     <Content Include="Views\Person\DashBoard.cshtml" />
     <Content Include="Views\SmokeSession\_TobacoMetaDataSelector.cshtml" />
-    <Content Include="Updates\1.bin" />
+    <Content Include="Views\Updates\1.bin" />
     <Content Include="Views\Game\Snow.cshtml" />
     <Content Include="Views\Update\Create.cshtml" />
     <Content Include="Views\Update\Delete.cshtml" />

@@ -72,7 +72,7 @@
                     <h4>@Order.Order.selectPreparedMixes</h4>
                     <div class="row" style="margin: 10px;">
                         <mix-box v-for="item in Menu.Mixes" :key="item.Name"
-                                  v-bind:item="item" v-bind:selection="Selected.Tobacco" v-bind:max="1" v-bind:matrix="actualPrice">
+                                 v-bind:item="item" v-bind:selection="Selected.Tobacco" v-bind:max="1" v-bind:matrix="actualPrice">
 
                         </mix-box>
                     </div>
@@ -80,13 +80,13 @@
                 <div class="tab-pane" id="hookah" role="tab">
                     <h4 v-if="CanOrder" class="info-text">@Order.Order.whatHookah</h4>
                  
-                        <div class="row justify-content-start" style="margin: 10px;">
-                            <gear-box v-for="item in Menu.Hookah" :key="item.Name"
-                                      v-bind:item="item" v-bind:selection="Selected.Hookah" v-bind:max="1" v-bind:matrix="actualPrice" v-bind:canorder="CanOrder">
+                    <div class="row justify-content-start" style="margin: 10px;">
+                        <gear-box v-for="item in Menu.Hookah" :key="item.Name"
+                                  v-bind:item="item" v-bind:selection="Selected.Hookah" v-bind:max="1" v-bind:matrix="actualPrice" v-bind:canorder="CanOrder">
 
-                            </gear-box>
-                        </div>
+                        </gear-box>
                     </div>
+                </div>
                
 
                 <div class="tab-pane" id="bowl" role="tab">
@@ -99,35 +99,35 @@
                     </div>
                 </div>
 
-            <div class="tab-pane" id="description" role="tab">
-                <h4 class="info-text"> @Order.Order.dropExtra </h4>
-                <div  v-if="CanOrder" class="row">
+                <div class="tab-pane" id="description" role="tab">
+                    <h4 class="info-text"> @Order.Order.dropExtra </h4>
+                    <div  v-if="CanOrder" class="row">
                  
-                    <div class="col-sm-6">
-                        <div class="form-group bmd-form-group">
-                            <label for="descriptionText"class="bmd-label-floating">@Order.Order.cantChoose</label>
-                            <textarea v-model="Selected.Description" class="form-control" id="descriptionText" placeholder="" rows="9"></textarea>
+                        <div class="col-sm-6">
+                            <div class="form-group bmd-form-group">
+                                <label for="descriptionText"class="bmd-label-floating">@Order.Order.cantChoose</label>
+                                <textarea v-model="Selected.Description" class="form-control" id="descriptionText" placeholder="" rows="9"></textarea>
+                            </div>
+
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group label-floating">
+                                <h4 class="info-text">Extra items</h4>
+                                <extra-item v-for="item in Menu.Extra" :key="item.Name"
+                                            v-bind:item="item" v-bind:selection="Selected.Extra">
 
+                                </extra-item>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group label-floating">
-                            <h4 class="info-text">Extra items</h4>
-                            <extra-item v-for="item in Menu.Extra" :key="item.Name"
-                                        v-bind:item="item" v-bind:selection="Selected.Extra">
-
-                            </extra-item>
+                    <div v-else class="card-deck">
+                        <div v-for="item in Menu.Extra" :key="item.Name">
+                            <div class="card extraCard">
+                                <h4> {{item.Name}}</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div v-else class="card-deck">
-                    <div v-for="item in Menu.Extra" :key="item.Name">
-                        <div class="card extraCard">
-                            <h4> {{item.Name}}</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
                 <div class="wizard-footer">
                     <div class="clearfix"></div>
                     <div class="pull-right">
@@ -146,6 +146,11 @@
                 </div></div>
         </form>
     </div>
+    
+    @section modals
+    {
+        
+ 
     <div class="modal fade" id="confirm">
         <div class="modal-dialog" role="dialog">
             <div class="modal-content">
@@ -203,6 +208,7 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+    }
 </div>
 
 
