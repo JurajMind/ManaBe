@@ -1,4 +1,5 @@
 ﻿@using smartHookah.Helpers
+@using smartHookah.Migrations
 @using Westwind.Globalization
 @model smartHookah.Controllers.CreateReservationModel
 
@@ -28,6 +29,10 @@
         background-color: yellow;
     }
 
+    td.timeSlot.visitconfirmed {
+        background-color: #03a9f4;
+    }
+
     td.timeSlot.over {
         opacity: 0.5;
     }
@@ -42,6 +47,7 @@
         border-width: 2px 0 0 2px;
         opacity: 0.9;
         cursor: move;
+        font-weight: bold;
     }
 
     td.timeSlot.free.selected {
@@ -70,6 +76,39 @@
         column-count: 4;
         list-style-type: none;
     }
+
+    .bmd-drawer-f-l > .bmd-layout-drawer {
+        top: 0!important;
+        left: 0!important;
+        width: 240px!important;
+        height: 100%!important;
+        -webkit-transform: translateX(-250px)!important;
+        -ms-transform: translateX(-250px)!important;
+        -o-transform: translateX(-250px)!important;
+        transform: translateX(-250px)!important;
+    }
+    .bmd-drawer-f-l > .bmd-layout-header, .bmd-drawer-f-l > .bmd-layout-content {
+        margin-left: 0!important;
+    }
+
+    .bmd-layout-header > .navbar {
+        min-height: 3rem;
+    }
+
+    button.navbar-toggler {
+        display: inline-block!important;
+    }
+
+    header.bmd-layout-header {
+        width: 100%!important;
+    }
+
+    @@media (max-width: 1400px) {
+       
+        .table th, .table td {
+            padding: 0.5rem;}
+
+    }
 </style>
 
 <div id="app">
@@ -77,10 +116,10 @@
         <div class="card-body">
 
             <div class="row">
-                <div class="form-group col-md-1" style="display: inline-flex">
+                <div class="form-group col-md-2">
                     <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
                     <input id="datepicker" class="form-control" />
-                    <div style="display: inline-flex;margin-top: 35px;margin-right: 35px;">   
+                    <div>   
                         <button class="btn btn-sm btn-raised" onclick="changeDate(-1)"><i class="fa fa-chevron-left"></i></button>
                         <button class="btn btn-sm btn-raised" onclick="$('#datepicker').datepicker().value(moment().format('DD.MM.YYYY'))">@LocalizationHelper.Translate("today", "Reservation")</button>
                         <button class="btn btn-sm btn-raised" onclick="changeDate(1)"><i class="fa fa-chevron-right"></i></button>
@@ -127,10 +166,16 @@
                     <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("create", "Reservation")</button>
                     <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="clearReservation()"><i class="fa fa-eraser"></i></button>
                     <div v-if="!canCreateReservation">
-                        <a v-on:click="changeReservation() " class="btn btn-warning btn-raised"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
-                        <a v-if="selectedReservationStatus !=3 " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
-                        <a v-on:click="addTableStart()" class="btn btn-info btn-raised" v-bind:class="{ 'btn-success': AddTableMode }"> <i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("addTable", "Reservation")</a>
-                        <a v-on:click="changeReservationStatus(1)" class="btn btn-danger btn-raised"><i class="fa fa-trash"></i>&nbsp;@LocalizationHelper.Translate("cancel", "Reservation")</a>
+                        <div  v-if="selectedReservationStatus == 3">
+                            <a v-on:click="changeReservationStatus(4)" class="btn btn-success btn-raised"><i class="fa fa-heart"></i>&nbsp;@LocalizationHelper.Translate("visit", "Reservation")</a>
+                            <a v-on:click="changeReservationStatus(7)" v-if="selectedReservationStatus == 3" class="btn btn-danger btn-raised"><i class="fa fa-bomb"></i>&nbsp;@LocalizationHelper.Translate("noVisit", "Reservation")</a>
+                            <br/>
+                        </div>
+                        <a v-if="selectedReservationStatus == 0 || selectedReservationStatus == 5  " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-check"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
+                        <a v-on:click="changeReservation() " class="btn btn-warning btn-raised btn-sm"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
+                        
+                        <a v-on:click="addTableStart()" class="btn btn-info btn-raised btn-sm" v-bind:class="{ 'btn-success': AddTableMode }"> <i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("addTable", "Reservation")</a>
+                        <a v-on:click="cancelReservation()" class="btn btn-danger btn-raised btn-sm"><i class="fa fa-trash"></i>&nbsp;@LocalizationHelper.Translate("cancel", "Reservation")</a>
                     </div>
                 </div>
             </div>
@@ -138,8 +183,8 @@
 
 
 
-            <div>
-                <table class="table table-responsive reservationTable">
+            <div class="table-responsive">
+                <table class="table table-bordered reservationTable">
                     <thead>
                         <tr>
                             <th>@LocalizationHelper.Translate("table", "Reservation")</th>
@@ -171,10 +216,11 @@
                 <div class="card-body">
                     <ul class="canceled">
                         <li v-for="canceled in Reservations.Canceled">
+                            <i class="fa" v-bind:class="[canceled.State == 7 ? 'fa-bomb':'', canceled.State == 1 ? 'fa-trash':'' ]"></i>
                             {{canceled.TimeText}} :
                             <span v-if="Reservations.Times[canceled.TimeSlots]">{{Reservations.Times[canceled.TimeSlots].Value}}</span>
                             {{canceled.Name}}
-                            <i class="fa fa-undo" v-on:click="changeReservationStatus(5,canceled.Id)"></i>
+                            <i class="fa fa-undo" v-on:click="changeReservationStatus(3,canceled.Id)"></i>
 
                         </li>
                     </ul>
@@ -194,32 +240,32 @@
 @section scripts
 {
     <script type="text/javascript">
-        var hub = $.connection.reservationHub;
-        Timer:null,
-            $(function() {
-                $('#datepicker').datepicker({
-                    showOtherMonths: true,
-                    weekStartDay: 1,
-                    uiLibrary: 'materialdesign',
-                    format: 'dd.mm.yyyy',
-                    value: moment().format('DD.MM.YYYY'),
-                    change: function() {
-                        v.dateChanged();
-                    }
-                });
-            })
+    var hub = $.connection.reservationHub;
+    Timer:null,
+        $(function() {
+            $('#datepicker').datepicker({
+                showOtherMonths: true,
+                weekStartDay: 1,
+                uiLibrary: 'materialdesign',
+                format: 'dd.mm.yyyy',
+                value: moment().format('DD.MM.YYYY'),
+                change: function() {
+                    v.dateChanged();
+                }
+            });
+        })
 
-        var placeId = @Model.place.Id;
+    var placeId = @Model.place.Id;
 
-        function changeDate(offset) {
-            $('#datepicker').datepicker().value(moment().add(offset, 'days').format('DD.MM.YYYY'));
-        }
+    function changeDate(offset) {
+        $('#datepicker').datepicker().value(moment().add(offset, 'days').format('DD.MM.YYYY'));
+    }
 
-        Vue.component('reservation-row',
-            {
-                props: ["table", "times", "reservations", "selected", "selection"],
-                template:
-                    `<tr>
+    Vue.component('reservation-row',
+        {
+            props: ["table", "times", "reservations", "selected", "selection"],
+            template:
+                `<tr>
                         <td>{{table.Name}}</td>
                         <td class='tableCapacity'>{{table.Capacity}}</td>
                         <reservation-colunm
@@ -231,143 +277,168 @@
                             v-bind:reservation="reservations[time.Id]"
                             v-bind:selected="selected" v-bind:selection="selection">
                         </reservation-colunm>
+                  
                         </tr>
                     `,
-                computed: {
-                    timesOrder: function() {
-                        if (this.times[0].Value === 0) {
+            computed: {
+                timesOrder: function() {
 
-                            var b = this.times.shift();
-                            this.times.push(b);
-                            return this.times;
-                        }
-                        return this.times;
+                    function compare(a, b) {
+                        var aValue = a.Value > 999 ? a.Value : a.Value + 3000;
+                        var bValue = b.Value > 999 ? b.Value : b.Value + 3000;
+                        if (aValue < bValue)
+                            return -1;
+                        if (aValue > bValue)
+                            return 1;
+                        return 0;
                     }
 
+                    return this.times.sort(compare);
                 }
 
-            });
+            }
+
+        });
 
         Vue.component('reservation-colunm',
             {
                 props: ["table", "timeSlot", "index", "reservation", "selected", "selection"],
                 template:
-                    `
-            <td v-on:dragstart="dragStart($event)" v-on:dragend="dragEnd()" :draggable="check" v-bind:colspan="colSpan" v-if="display" class="timeSlot taken" v-on:click="onTakenClick()" v-bind:class="{confirmed : confirmed,selected : check}">
+                `
+            <td v-on:dragstart="dragStart($event)" v-on:dragend="dragEnd()" :draggable="check" v-bind:colspan="colSpan" v-if="display" class="timeSlot taken" v-on:click="onTakenClick()" v-bind:class="[stateText,check ? 'selected' : '']">
                                  <div v-if="colSpan !== 0">
                                 {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )
-                                    <i v-if="reservation.Message" class="fa fa-comment" data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
-                                    <div class="controlls" v-if="check && !confirmed" >
-                                        <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i></div>
+                                    <i v-if="reservation.Message" class="fa fa-comment"  data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
+                                    <div class="controlls" v-if="check && unconfirmed" >
+                                        <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i>
+                                        </div>
+                                         <div class="controlls" v-if="check && unvisited" >
+                                        <i style="cursor:pointer" class="fa fa-heart" v-on:click="confirmVisit()"></i>
+                                    </div>
                                 </div>
+                               
+                             
                         </td>
-                          <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">
-                      
+                          <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">                           
                         </td>
 
                     `,
-                data: function() {
-                    return {
-                        over: false
-                    }
-                },
-                computed: {
-                    colSpan: function() {
-                        if (this.reservation == undefined)
-                            return 0;
-
-                        return this.reservation.TimeSlots;
-                    },
-                    confirmed: function() {
-                        if (this.reservation == undefined)
-                            return false;
-                        if (this.reservation.State !== 0 && this.reservation.State !== 6)
-                            return true;
-                        return false;
-
-                    },
-                    display: function() {
-                        if (this.timeSlot.Reserved && this.reservation != undefined) {
-                            return true;
-                        }
-                        return false;
-                    },
-                    check: function() {
-                        if (this.selected.Table !== this.table.Id)
-                            return false;
-
-                        return this.selection.indexOf(this.index) > -1;
-                    }
-
-                },
-                methods: {
-                    onFreeClick: function(taken = false) {
-
-                        this.selected.Table = this.table.Id;
-                        this.selected.Time = this.timeSlot.Value;
-                        this.selected.TimeIndex = this.index;
-
-                        if (this.$root.AddTableMode) {
-                            this.$root.addTable();
-                            return;
-                        }
-                        if (!taken)
-                            this.selected.Reservation = null;
-                      
-                    },
-                    dragStart: function(ev) {
-                        ev.dataTransfer.setData("reservation", this.reservation.Id);
-                        ev.dataTransfer.setData("table", this.table.Id);
-                        // console.log(ev);
-                    },
-                    dragEnd: function() {
-                        this.over = false;
-                    },
-                    drop: function(ev) {
-                        // ev.dataTransfer.setData("text", ev.target.id);
-                        var reservation = ev.dataTransfer.getData("reservation");
-                        var changedTable = ev.dataTransfer.getData("table");
-                        console.log(reservation);
-                        this.selected.Reservation = reservation;
-                        this.selected.Table = this.table.Id;
-                        this.selected.Time = this.timeSlot.Value;
-                        this.selected.LastReservedTable = changedTable;
-                        var _this = this;
-                        var newSelectedTime = this.timeSlot.Value;
-                        var table = this.table.Id;
-                        this.$root.changeReservation(function() {
-                            _this.selected.Table = table;
-                            _this.selected.Time = newSelectedTime;
-                        });
-
-
-                    },
-                    allowDrop: function(ev) {
-                        ev.preventDefault();
-                    },
-                    dragEnter: function() {
-                        this.over = true;
-
-                    },
-                    dragLeave: function() {
-                        this.over = false;
-
-                    },
-                    onTakenClick: function() {
-
-                        this.selected.Reservation = this.reservation.Id;
-                        this.selected.Persons = this.reservation.Persons;
-                        this.selected.Name = this.reservation.Name;
-                        this.selected.Duration = this.reservation.TimeSlots;
-                        this.onFreeClick(true);
-                        this.selected.LastReservedTable = this.table.Id;
-                    },
-                    confirmReservation: function() {
-                        this.$root.changeReservationStatus(3);
-                    }
-
-
+                data: function () {
+                return {
+                    over: false
                 }
+            },
+            computed: {
+                colSpan: function() {
+                    if (this.reservation == undefined)
+                        return 0;
+
+                    return this.reservation.TimeSlots;
+                },
+                unconfirmed: function() {
+                    if (this.reservation == undefined)
+                        return false;
+                    if (this.reservation.State === 0  || this.reservation.State === 5)
+                        return true;
+                    return false;
+                },
+                unvisited: function() {
+                    if (this.reservation == undefined)
+                        return false;
+                    if (this.reservation.State === 3)
+                        return true;
+                    return false;
+                },
+                display: function() {
+                    if (this.timeSlot.Reserved && this.reservation != undefined) {
+                        return true;
+                    }
+                    return false;
+                },
+                check: function() {
+                    if (this.selected.Table !== this.table.Id)
+                        return false;
+
+                    return this.selection.indexOf(this.index) > -1;
+                },
+                stateText: function() {
+                    if (this.reservation == null)
+                        return "";
+                    return this.reservation.StateText;
+                }
+
+            },
+            methods: {
+                onFreeClick: function(taken = false) {
+
+                    this.selected.Table = this.table.Id;
+                    this.selected.Time = this.timeSlot.Value;
+                    this.selected.TimeIndex = this.index;
+
+                    if (this.$root.AddTableMode) {
+                        this.$root.addTable();
+                        return;
+                    }
+                    if (!taken)
+                        this.selected.Reservation = null;
+
+                },
+                dragStart: function(ev) {
+                    ev.dataTransfer.setData("reservation", this.reservation.Id);
+                    ev.dataTransfer.setData("table", this.table.Id);
+                    // console.log(ev);
+                },
+                dragEnd: function() {
+                    this.over = false;
+                },
+                drop: function(ev) {
+                    // ev.dataTransfer.setData("text", ev.target.id);
+                    var reservation = ev.dataTransfer.getData("reservation");
+                    var changedTable = ev.dataTransfer.getData("table");
+                    console.log(reservation);
+                    this.selected.Reservation = reservation;
+                    this.selected.Table = this.table.Id;
+                    this.selected.Time = this.timeSlot.Value;
+                    this.selected.LastReservedTable = changedTable;
+                    var _this = this;
+                    var newSelectedTime = this.timeSlot.Value;
+                    var table = this.table.Id;
+                    this.$root.changeReservation(function() {
+                        _this.selected.Table = table;
+                        _this.selected.Time = newSelectedTime;
+                    });
+
+
+                },
+                allowDrop: function(ev) {
+                    ev.preventDefault();
+                },
+                dragEnter: function() {
+                    this.over = true;
+
+                },
+                dragLeave: function() {
+                    this.over = false;
+
+                },
+                onTakenClick: function() {
+
+                    this.selected.Reservation = this.reservation.Id;
+                    this.selected.Persons = this.reservation.Persons;
+                    this.selected.Name = this.reservation.Name;
+                    this.selected.Duration = this.reservation.TimeSlots;
+                    this.onFreeClick(true);
+                    this.selected.LastReservedTable = this.table.Id;
+                },
+                confirmReservation: function() {
+                    this.$root.changeReservationStatus(3);
+                },
+                confirmVisit: function() {
+                    this.$root.changeReservationStatus(4);
+                }
+
+
+            }
             }
         );
 
@@ -415,7 +486,7 @@
                     Reservations: [],
                     Canceled: [],
                     Times: [],
-                    MinimumReservationTime : 0,
+                    MinimumReservationTime: 0,
                 },
                 AddTableMode: false,
             },
@@ -449,10 +520,15 @@
                     this.Selected.Name = '';
                     this.Selected.Text = '';
                     this.Selected.Duration = this.Reservations.Times[0].Key;
-
-                    f
+                    
                 },
-                changeReservationStatus: function (status, reservationId = null) {
+                cancelReservation() {
+                    var r = confirm(" @DbRes.T("confirmCancel","Reservation")");
+                    if (r == true) {
+                        this.changeReservationStatus(1);
+                    } 
+                },
+                changeReservationStatus: function(status, reservationId = null) {
                     if (reservationId == null) {
                         reservationId = this.Selected.Reservation;
                     }
@@ -466,7 +542,7 @@
                             //v.loadReservations();
                         });
                 },
-                addTable: function () {
+                addTable: function() {
                     this.AddTableMode = false;
                     $.post(
                         '/Reservation/AddTable/',
@@ -511,7 +587,8 @@
                                 _this.Selected.Time = json.TimeSlots[0].Value;
 
                             if (_this.Reservations.Times.length > 0)
-                                _this.Selected.Duration = _this.Reservations.Times[_this.Reservations.MinimumReservationTime].Key;
+                                _this.Selected.Duration =
+                                    _this.Reservations.Times[_this.Reservations.MinimumReservationTime].Key;
 
                         });
                 },
