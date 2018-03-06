@@ -109,8 +109,11 @@ namespace smartHookah.Controllers
                     var parseDate = DateTime.ParseExact(model.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     var duration = _slotDuration.Multiply(model.Duration);
                     var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
-                    var reservation = table.Reservations.Where(a => a.Time.Date == parseDate && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied ).ToList();
-                    
+                    var reservation = table.Reservations.Where(a => a.Time.Date == parseDate && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit ).ToList();
+                    var place = await db.Places.FindAsync(id);
+                    if(place == null)
+                         return Json(new { success = false});
+
                     var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4,'0'), "HHmm", CultureInfo.InvariantCulture);
                     parseDate = parseDate.AddHours(time.Hour);
                     parseDate = parseDate.AddMinutes(time.Minute);
@@ -120,6 +123,11 @@ namespace smartHookah.Controllers
                         status = ReservationState.ConfirmationRequired;
 
                     var person = UserHelper.GetCurentPerson(db);
+
+                    if (place.Managers.Any(a => a.Id == person.Id))
+                    {
+                        status = ReservationState.Confirmed;
+                    }
 
                     var newReservation = new Reservation
                     {
@@ -243,7 +251,7 @@ namespace smartHookah.Controllers
                     .ToList();
 
             var todayActiveReservation = todayReservation
-                .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied).ToList();
+                .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit).ToList();
 
             
 
@@ -277,7 +285,7 @@ namespace smartHookah.Controllers
                     todayActiveReservation.ToDictionary(a => a.Id.ToString(),
                         a => new ReservationDto(a, _slotDuration));
                 model.Canceled = todayReservation
-                    .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied)
+                    .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied || a.Status == ReservationState.NonVisit)
                     .Select(a => new ReservationDto(a, _slotDuration));
             }
 
@@ -563,9 +571,17 @@ namespace smartHookah.Controllers
             this.State = res.Status;
             this.Message = res.Text;
             this.TimeText = res.Time.TimeOfDay.ToString(@"hh\:mm");
-            
+            this.StateText = res.Status.ToString().ToLower();
         }
 
+        /// <summary>
+        /// Gets or sets the state text.
+        /// </summary>
+        public string StateText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time text.
+        /// </summary>
         public string TimeText { get; set; }
 
         /// <summary>
