@@ -1467,7 +1467,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\BrandPicture\kaya-shisha.jpg" />
     <Content Include="Content\critical.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -2105,6 +2104,7 @@
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Content\BrandPicture\" />
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
     <Folder Include="Resources\NewFolder1\" />
