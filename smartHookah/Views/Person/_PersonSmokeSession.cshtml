@@ -140,15 +140,3 @@
             </div>
         </div>
 
-
-<div class="card mt-2">
-    <h4 class="card-header">@Smoke.SmokeSession.smokeSessions</h4>
-    <div class="card-body list-group-flush">
-        <div class="list-group">
-            @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start))
-            {
-                @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
-            }
-        </div>
-    </div>
-</div>

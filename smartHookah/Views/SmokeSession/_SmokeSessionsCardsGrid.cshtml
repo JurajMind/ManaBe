@@ -1,0 +1,32 @@
+﻿@using smartHookah.Models
+@model IEnumerable<SmokeSession>
+
+<script type="text/javascript">
+    function flip(ele) {
+        $(ele).toggleClass('flipped');
+    }
+</script>
+
+<div class="session-cards-grid">
+    @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Take(9))
+    {
+        @Html.Partial("~/Views/SmokeSession/_SmokeSessionCardItem.cshtml", modelSmokeSession)
+    }
+    
+   
+</div>
+
+<div class="session-cards-grid" id="hidenSmokeSession" style="display: none">
+    @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Skip(9))
+    {
+        @Html.Partial("~/Views/SmokeSession/_SmokeSessionCardItem.cshtml", modelSmokeSession)
+    }
+</div>
+
+@if (Model.OrderByDescending(a => a.Statistics.Start).Skip(9).Any())
+{
+                
+    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(true)">@Smoke.SmokeSession.showAll&nbsp;<i class="fa fa-arrow-down"></i></button>
+    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(false)"style="display:none">@Smoke.SmokeSession.hide <i class="fa fa-arrow-up"></i></button>
+                
+}

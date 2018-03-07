@@ -1467,6 +1467,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\BrandPicture\kaya-shisha.jpg" />
     <Content Include="Content\critical.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -2097,12 +2098,13 @@
     <Content Include="Views\Shared\_VueLayout.cshtml" />
     <Content Include="Views\Shared\_Cookies.cshtml" />
     <Content Include="Views\Shared\_Registration.cshtml" />
+    <Content Include="Views\SmokeSession\_SmokeSessionCardItem.cshtml" />
+    <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Content\BrandPicture\" />
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
     <Folder Include="Resources\NewFolder1\" />
@@ -2464,6 +2466,7 @@
     <EmbeddedResource Include="Resources\Home\Home.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Home.cs.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Home\Home.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

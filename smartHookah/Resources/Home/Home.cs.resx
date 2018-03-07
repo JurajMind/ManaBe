@@ -181,7 +181,7 @@
     <value>Zadat</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>Načítávám</value>
+    <value>Načítám ...</value>
   </data>
   <data name="findMore" xml:space="preserve">
     <value>Vstoupit</value>

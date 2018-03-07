@@ -1,11 +1,6 @@
-﻿@using smartHookah.Models
-@model smartHookah.Models.SmokeSession
-
-<script type="text/javascript">
-    function flip(ele) {
-        $(ele).toggleClass('flipped');
-    }
-</script>
+﻿@using smartHookah.Controllers
+@using smartHookah.Models
+@model SmokeSession
 
 @helper GetTobacoLabel()
     {
@@ -16,26 +11,33 @@
                 var mix = (TobaccoMix)Model.MetaData.Tobacco;
                 if (string.IsNullOrEmpty(mix.AccName))
                 {
-                    @:Mix of @mix.Tobaccos.Count:
-                    <ul class="tobacoMix">
+                    @:Mix of @mix.Tobaccos.Count: <br />
 
-                        @foreach (var tobaco in mix.Tobaccos)
-                        {
-                            <li>
-                                @tobaco.Tobacco.Brand.DisplayName @tobaco.Tobacco.AccName
-                            </li>
-                        }
-                    </ul>
+
+
+
+                    foreach (var tobaco in mix.Tobaccos)
+                    {
+                        <b>
+                            &nbsp;<i class="fa fa-leaf"></i>&nbsp;@tobaco.Tobacco.Brand.DisplayName @tobaco.Tobacco.AccName   <br />
+                        </b>
+                    }
                     @:
                 }
                 else
                 {
-                    Write($"{mix.AccName} (mix)");
+                    <i class="fa fa-leaf"></i>
+                    <b>
+                        @mix.AccName
+                    </b>
                 }
             }
             else
             {
-                Write(@Model.MetaData.Tobacco.Brand.DisplayName + " " + @Model.MetaData.Tobacco.AccName);
+                <i class="fa fa-leaf"></i>
+                <b>
+                    @Model.MetaData.Tobacco.Brand.DisplayName @Model.MetaData.Tobacco.AccName
+                </b>
             }
         }
         else
@@ -47,7 +49,12 @@
     {
         if (Model.MetaData != null && Model.MetaData.Pipe != null)
         {
-            Write(@Model.MetaData.Pipe.Brand.DisplayName + " " + @Model.MetaData.Pipe.AccName);
+            <i>
+                from&nbsp;
+            </i>
+            <b>
+                @Model.MetaData.Pipe.Brand.DisplayName @Model.MetaData.Pipe.AccName
+            </b>
         }
         else
         {
@@ -59,71 +66,65 @@
     {
         if (Model.MetaData != null && Model.MetaData.Pipe != null && Model.MetaData.Pipe.Brand.Picture != null)
         {
-            <img url="@Model.MetaData.Pipe.Brand.Picture.ToString()" />
+            <img class="session-logo-img" src="@Model.MetaData.Pipe.Brand.Picture" />
         }
         else
         {
-            <img src="~/Content/images/icons/icon-128x128.png"/>
+            <img class="session-logo-img" src="~/Content/images/icons/icon-384x384.png" />
         }
 }
 
-
-
-<section class="session-card-container">
-
-    @if (Model.Statistics == null)
-    {
-        <div class="card session-card">
-            <div class="front">
-                <h5>
-                    @DateTime.Now.ToString("dd.MM.yyyy HH:mm")<br />
-                    <b>
-                        Live session
-                    </b>
-                </h5>
-                <a href="@Url.Action("GetStatistics","SmokeSession",new {id = Model.Id})" class="col-md-2"><i class="material-icons">info</i>Go live</a>
-            </div>
-            <div class="back"></div>
-        </div>
-    }
-    else
-    {
-        <div class="card session-card " onclick="flip(this)">
-            <div class="card-body">
-                <div class="front">
-                    <!--
-        <i class="fa fa-calendar"></i>&nbsp;@Model.Statistics.Start.ToString("d.M.yyyy HH:mm")<br />
-        <center>@GetHookahLogo()</center><br />
-        <b>@GetTobacoLabel()</b><br />
-        from <b>@GetHookahLabel()</b>-->
-                    <div class="row">
-                        <div class="col-4 session-logo">
-                            logo
-                        </div>
-                        <div class="col-8 session-tobaccos">
-                            tanz all de wey
-                        </div>
-                    </div>
-                    <div class="session-hookah">
-                        henlo fren
-                    </div>
+<div class="session-card-container">
+    <div class="card session-card" onclick="flip(this)">
+        <div class="front">
+            <div class="row" style="max-width: 100%">
+                <div class="card-header col-md-12 session-date session-card-row-1">
+                    <i class="fa fa-calendar"></i>&nbsp;@Model.Statistics.Start.ToString("d.M.yyyy HH:mm")
                 </div>
+            </div>
+            <div class="row" style="max-width: 100%;">
+                <div class="col-md-5 col-sm-5 col-xs-5 session-logo session-card-row-2">
+                    @GetHookahLogo()
+                </div>
+                <div class="col-md-7 col-sm-7 col-xs-7 session-tobaccos session-card-row-2">
+                    @GetTobacoLabel()
+                </div>
+            </div>
+            <div class="row" style="max-width: 100%;">
+                <div class="col-md-12 col-sm-12 col-xs-12 session-hookah session-card-row-3">
+                    @GetHookahLabel()
+                </div>
+            </div>
+        </div>
 
-                <div class="back">
-                    @{
-            var anonymous = Model.MetaData?.AnonymPeopleCount ?? 0;
+        <div class="back">
+            <div class="row" style="max-width: 100%;">
+                <div class="col-md-12 col-sm-12 col-xs-12 session-details">
+                    @if (Model.Review?.Overall != null)
+                    {
+                        <input type="number" name="smoke" id="smoke" class="rating" value="@(Model.Review?.Overall)" data-readonly /><br />
                     }
+
+                    @{
+                        var anonymous = Model.MetaData?.AnonymPeopleCount ?? 0;
+                    }
+
                     <i class="fa fa-user"></i>&nbsp;@(Model.Persons.Count + anonymous)<br />
+
                     <i class="fa fa-hashtag"></i>&nbsp;@Model.Statistics.PufCount &nbsp; pufs<br />
+
                     <i class="fa fa-clock-o"></i> &nbsp;@Model.Statistics.SmokeDuration.ToString(@"hh\:mm\:ss")<br />
+
                     <i class="fa fa-hourglass-start"></i> &nbsp;@((Model.Statistics.End - Model.Statistics.Start).ToString(@"hh\:mm\:ss"))<br />
-                    <i class="fa fa-trophy"></i> &nbsp;@Model.Statistics.LongestPuf.ToString(@"s\.fff") .sec
-                    <br />
-                    <a href="@Url.Action("GetStatistics","SmokeSession",new {id = Model.Id})" style="position: absolute; bottom: 15px; right: 15px;">
-                        MORE INFO&nbsp;<i class="fa fa-info-circle"></i>
+
+                    <i class="fa fa-trophy"></i> &nbsp;@Model.Statistics.LongestPuf.ToString(@"s\.fff") .sec<br />
+
+                    <a href="@Url.Action("GetStatistics", "SmokeSession", new {id = Model.Id})" class="btn btn-default" style="position:absolute; bottom:0; right:0;">
+                        @Res.Person.moreInfo&nbsp;<i class="fa fa-info-circle"></i>
                     </a>
                 </div>
             </div>
         </div>
-    }
-</section>
+    </div>
+</div>
+
