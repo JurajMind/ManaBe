@@ -8,6 +8,10 @@ namespace smartHookah.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "DisplayName")]
+        public string DisplayName { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -79,6 +83,10 @@ namespace smartHookah.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "User name")]
+        public string DisplayName { get; set; }
     }
 
     public class ResetPasswordViewModel
