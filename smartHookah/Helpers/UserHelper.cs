@@ -34,6 +34,13 @@ namespace smartHookah.Helpers
 
         public static string GetUserNameUni(this IIdentity identity)
         {
+            var user =
+                System.Web.HttpContext.Current.GetOwinContext()
+                    .GetUserManager<ApplicationUserManager>()
+                    .FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            if (user != null && user.DisplayName != null) return user.DisplayName;
+
             return identity.Name;
         }
     }

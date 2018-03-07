@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using smartHookah.Helpers
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -7,7 +8,7 @@
 
         <img src="/Content/BrandPicture/Manapipes.png" class="avatar">
         <div class="account">
-            <span>@User.Identity.GetUserName() </span>
+            <span>@User.Identity.GetUserNameUni() </span>
             <div class="dropdown">
                 <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="nav-account-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="material-icons">arrow_drop_down</i>
