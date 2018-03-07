@@ -293,13 +293,13 @@
         $.stayInWebApp();
         $('body').bootstrapMaterialDesign();
 
-        if (document.cookie.indexOf("cookies") < 0) {
-            $('#cookie-consent').slideDown('slow');
-        }
-        $('#consent').on('click', function () {
-            document.cookie = "cookies=yes; max-age=" + (5*365*24*60*60);
-            $('#cookie-consent').slideUp('slow');
-        });
+        //if (document.cookie.indexOf("cookies") < 0) {
+        //    $('#cookie-consent').slideDown('slow');
+        //}
+        //$('#consent').on('click', function () {
+        //    document.cookie = "cookies=yes; max-age=" + (5*365*24*60*60);
+        //    $('#cookie-consent').slideUp('slow');
+        //});
         
 
     });
