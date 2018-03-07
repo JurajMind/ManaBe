@@ -1102,3 +1102,145 @@ input.rating {
         font-size: 0.84rem;
     }
 }
+
+/*flippnig smoke session cards classes*/
+
+.session-cards-grid {
+    width: inherit;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
+}
+
+@media screen and (max-width: 445px) {
+    .session-cards-grid {
+        width: inherit;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
+
+.session-card-container {
+    max-width: 100%;
+    height: 14em;
+    position: relative;
+    border: none;
+    perspective: 800px;
+    margin: 10px;
+}
+
+.session-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+}
+
+.session-card div {
+    color: black;
+    position: relative;
+    backface-visibility: hidden;
+    overflow: hidden;
+}
+
+.session-card .front {
+    height: 100%;
+    margin: 0;
+    background-color: white;  
+}
+
+.session-card .back {
+    height: 100%;
+    width: 100%;
+    transform: rotateX(180deg);
+    background-color: white;
+    margin-top: -14em;
+}
+
+.session-card:hover{
+    transform:rotateX(10deg);
+}
+
+.session-card.flipped:hover {
+   transform: rotateX(170deg);
+}
+
+.session-card.flipped {
+    transform: rotateX(180deg);
+}
+
+.session-card-row-1 {
+    height: 3em;
+}
+
+.session-card-row-2 {
+    height: 8em;
+    white-space: nowrap;
+}
+
+.session-card-row-3 {
+    height: 3em;
+}
+
+.session-date {
+    padding-left: 1em;
+    padding-top: 1em;
+    position: fixed;
+}
+
+.session-logo {
+    object-fit: contain;
+    overflow: hidden;
+    position: fixed;
+    float: left;
+}
+
+.session-tobaccos {
+    text-overflow: ellipsis;
+    overflow: initial;
+    white-space: initial;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 1em;
+    padding-left: 0.5em;
+    float: right;
+}
+
+.session-hookah {
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    display: table-cell;
+    vertical-align: bottom;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.session-logo-img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.session-details {
+    line-height: 200%;
+    padding: 1em;
+    height: 14em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.session-graph {
+    height: 14em;
+    overflow: hidden;
+}
+
+/*^^flippnig smoke session cards classes^^*/

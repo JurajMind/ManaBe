@@ -154,28 +154,12 @@
 <div class="card">
     <h4 class="card-header">Smoke session</h4>
     <div class="card-body list-group-flush">
-        <div class="list-group">
-            @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Take(10))
-            {
-                @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
-            }
-            <div style="display: none" id="hidenSmokeSession">
-                @foreach (SmokeSession modelSmokeSession in Model.OrderByDescending(a => a.Statistics.Start).Skip(10))
-                {
-                    @Html.Partial("~/Views/SmokeSession/_SmokeSessionListItem.cshtml", modelSmokeSession)
-                }
-            </div>
-            @if (Model.OrderByDescending(a => a.Statistics.Start).Skip(10).Any())
-            {
-                
-                    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(true)">@Smoke.SmokeSession.showAll&nbsp;<i class="fa fa-arrow-down"></i></button>
-                    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(false)"style="display:none">@Smoke.SmokeSession.hide <i class="fa fa-arrow-up"></i></button>
-                
-            }
+        @Html.Partial("~/Views/SmokeSession/_SmokeSessionsCardsGrid.cshtml", Model)
         
-        </div>
+ 
+
     </div>
 </div>
 
-@Html.Partial("_TimeStatistics",Model);
-@Html.Partial("_HookahStatistics", Model);
+@Html.Partial("_TimeStatistics",Model)
+@Html.Partial("_HookahStatistics", Model)
