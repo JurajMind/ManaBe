@@ -224,7 +224,7 @@ namespace smartHookah.Models
             //Check if reservation is not created by manager
             if(this.Place.Managers.Any(a => a.Id == this.PersonId))
             {
-                return this.Person.User.First().Email;
+              //  return this.Person.User.First().Email;
                 return null;
             }
            return this.Person.User.First().Email;
