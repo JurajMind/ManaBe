@@ -255,6 +255,17 @@ gj.core = {
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
             monthShortNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        'cs-cz': {
+            monthNames: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'],
+
+            monthShortNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+                'sk-sk': {
+                    monthNames: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
+
+                    monthShortNames: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+
         }
     },
 
@@ -12817,6 +12828,12 @@ gj.datepicker = {
     messages: {
         'en-us': {
             weekDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+        },
+        'cs-cz': {
+            weekDays: ['N', 'P', 'U', 'S', 'Š', 'P', 'S']
+        },
+        'sk-sk': {
+            weekDays: ['N', 'P', 'U', 'S', 'Š', 'P', 'S']
         }
     }
 };

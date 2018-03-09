@@ -1,10 +1,12 @@
 ﻿@using smartHookah.Helpers
 @using smartHookah.Migrations
 @using Westwind.Globalization
+@using System.Globalization
 @model smartHookah.Controllers.CreateReservationModel
 
 @{
-    ViewBag.Title = @Model.place.Name + " - " + DbRes.T("reservationOverview", "reservation");
+    var dayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.DayNames[(int)DateTime.Now.DayOfWeek]);
+    ViewBag.Title = @Model.place.Name + $" - <span id='titleDay'>{dayName}</span> <span id='titleDate'>{DateTime.Now.ToString("d.M.yyyy")}</span>";
 
 }
 @Styles.Render("~/Content/gij")
@@ -78,17 +80,18 @@
     }
 
     .bmd-drawer-f-l > .bmd-layout-drawer {
-        top: 0!important;
-        left: 0!important;
-        width: 240px!important;
-        height: 100%!important;
-        -webkit-transform: translateX(-250px)!important;
-        -ms-transform: translateX(-250px)!important;
-        -o-transform: translateX(-250px)!important;
-        transform: translateX(-250px)!important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 240px !important;
+        height: 100% !important;
+        -webkit-transform: translateX(-250px) !important;
+        -ms-transform: translateX(-250px) !important;
+        -o-transform: translateX(-250px) !important;
+        transform: translateX(-250px) !important;
     }
+
     .bmd-drawer-f-l > .bmd-layout-header, .bmd-drawer-f-l > .bmd-layout-content {
-        margin-left: 0!important;
+        margin-left: 0 !important;
     }
 
     .bmd-layout-header > .navbar {
@@ -96,18 +99,18 @@
     }
 
     button.navbar-toggler {
-        display: inline-block!important;
+        display: inline-block !important;
     }
 
     header.bmd-layout-header {
-        width: 100%!important;
+        width: 100% !important;
     }
 
     @@media (max-width: 1400px) {
-       
-        .table th, .table td {
-            padding: 0.5rem;}
 
+        .table th, .table td {
+            padding: 0.5rem;
+        }
     }
 </style>
 
@@ -119,7 +122,7 @@
                 <div class="form-group col-md-2">
                     <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
                     <input id="datepicker" class="form-control" />
-                    <div>   
+                    <div>
                         <button class="btn btn-sm btn-raised" onclick="changeDate(-1)"><i class="fa fa-chevron-left"></i></button>
                         <button class="btn btn-sm btn-raised" onclick="$('#datepicker').datepicker().value(moment().format('DD.MM.YYYY'))">@LocalizationHelper.Translate("today", "Reservation")</button>
                         <button class="btn btn-sm btn-raised" onclick="changeDate(1)"><i class="fa fa-chevron-right"></i></button>
@@ -166,14 +169,14 @@
                     <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="postReservation()"><i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("create", "Reservation")</button>
                     <button v-if="canCreateReservation" class="btn btn-success btn-raised" v-on:click="clearReservation()"><i class="fa fa-eraser"></i></button>
                     <div v-if="!canCreateReservation">
-                        <div  v-if="selectedReservationStatus == 3">
+                        <div v-if="selectedReservationStatus == 3">
                             <a v-on:click="changeReservationStatus(4)" class="btn btn-success btn-raised"><i class="fa fa-heart"></i>&nbsp;@LocalizationHelper.Translate("visit", "Reservation")</a>
                             <a v-on:click="changeReservationStatus(7)" v-if="selectedReservationStatus == 3" class="btn btn-danger btn-raised"><i class="fa fa-bomb"></i>&nbsp;@LocalizationHelper.Translate("noVisit", "Reservation")</a>
-                            <br/>
+                            <br />
                         </div>
                         <a v-if="selectedReservationStatus == 0 || selectedReservationStatus == 5  " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-check"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
                         <a v-on:click="changeReservation() " class="btn btn-warning btn-raised btn-sm"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
-                        
+
                         <a v-on:click="addTableStart()" class="btn btn-info btn-raised btn-sm" v-bind:class="{ 'btn-success': AddTableMode }"> <i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("addTable", "Reservation")</a>
                         <a v-on:click="cancelReservation()" class="btn btn-danger btn-raised btn-sm"><i class="fa fa-trash"></i>&nbsp;@LocalizationHelper.Translate("cancel", "Reservation")</a>
                     </div>
@@ -231,12 +234,9 @@
 
 
 </div>
-<script src="https://unpkg.com/vue-multiselect@2.0.6"></script>
-<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.0.6/dist/vue-multiselect.min.css">
 @Scripts.Render("~/bundles/gij")
 @Scripts.Render("~/bundles/vue")
 @Scripts.Render("~/bundles/babel")
-@Scripts.Render("~/Scripts/lodash.min.js")
 @section scripts
 {
     <script type="text/javascript">
@@ -248,6 +248,7 @@
                 weekStartDay: 1,
                 uiLibrary: 'materialdesign',
                 format: 'dd.mm.yyyy',
+                locale: '@LocalizationHelper.getCurentCultureString()',
                 value: moment().format('DD.MM.YYYY'),
                 change: function() {
                     v.dateChanged();
@@ -258,7 +259,7 @@
     var placeId = @Model.place.Id;
 
     function changeDate(offset) {
-        $('#datepicker').datepicker().value(moment().add(offset, 'days').format('DD.MM.YYYY'));
+        $('#datepicker').datepicker().value(moment($('#datepicker').datepicker().value(),'DD.MM.YYYY').add(offset, 'days').format('DD.MM.YYYY'));
     }
 
     Vue.component('reservation-row',
@@ -277,7 +278,7 @@
                             v-bind:reservation="reservations[time.Id]"
                             v-bind:selected="selected" v-bind:selection="selection">
                         </reservation-colunm>
-                  
+
                         </tr>
                     `,
             computed: {
@@ -316,10 +317,10 @@
                                         <i style="cursor:pointer" class="fa fa-heart" v-on:click="confirmVisit()"></i>
                                     </div>
                                 </div>
-                               
-                             
+
+
                         </td>
-                          <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">                           
+                          <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">
                         </td>
 
                     `,
@@ -513,6 +514,18 @@
             methods: {
                 dateChanged() {
                     this.Selected.Date = $("#datepicker").val();
+
+                    var date = moment($('#datepicker').datepicker().value(), 'DD.MM.YYYY').locale('@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName');
+                    var titleDate = date.format('D.M.YYYY');
+                    $('#titleDate').text(titleDate);
+                    try {
+                        var titleDay = date.format('dddd').capitalize();
+                        $('#titleDay').text(titleDay);
+                    } catch (e) {
+                        var titleDay = date.format('dddd');
+                        $('#titleDay').text(titleDay);
+                    }
+                  
                     this.loadReservations();
                 },
                 clearReservation() {
@@ -520,13 +533,13 @@
                     this.Selected.Name = '';
                     this.Selected.Text = '';
                     this.Selected.Duration = this.Reservations.Times[0].Key;
-                    
+
                 },
                 cancelReservation() {
                     var r = confirm(" @DbRes.T("confirmCancel","Reservation")");
                     if (r == true) {
                         this.changeReservationStatus(1);
-                    } 
+                    }
                 },
                 changeReservationStatus: function(status, reservationId = null) {
                     if (reservationId == null) {
