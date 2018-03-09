@@ -109,6 +109,18 @@ namespace smartHookah.Models
             }
         }
 
+        [NotMapped]
+        public string DisplayName
+        {
+            get {
+                var displayName = User.First().DisplayName;
+                if (string.IsNullOrEmpty(displayName))
+                    return User.First().Email;
+
+                return displayName;
+            }
+        }
+
 
     }
 

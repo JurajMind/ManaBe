@@ -144,12 +144,14 @@ namespace smartHookah.Controllers
                         },
                         Duration = duration,
                         Text = model.Text,
-                        Customers = new List<Person>() { person}
+                        Customers = new List<Person>() { person},
+                        Name  = person.DisplayName                        
                     };
 
                     if (!string.IsNullOrEmpty(model.Name))
                         newReservation.Name = model.Name;
 
+                  
 
                     //scope.Complete();
                     var conflict = false;
@@ -373,7 +375,7 @@ namespace smartHookah.Controllers
 
             if (reservation.Place.Managers.Contains(person))
             {
-                reservation.Status = state;
+               
 
                 if (state == ReservationState.Confirmed)
                 {
@@ -384,11 +386,11 @@ namespace smartHookah.Controllers
                     }
                 }
                    
-                if(state == ReservationState.Denied && reservation.Status == ReservationState.ConfirmationRequired)
+                if(state == ReservationState.Canceled && reservation.Status == ReservationState.ConfirmationRequired)
                 {
                     await SendReservationDeniedMail(reservation);
                 }
-
+                reservation.Status = state;
                 db.Reservations.AddOrUpdate(reservation);
                 await db.SaveChangesAsync();
                 ReservationContext.Clients.Group(reservation.PlaceId.ToString()).reload();
@@ -402,6 +404,7 @@ namespace smartHookah.Controllers
                 db.Reservations.AddOrUpdate(reservation);
                 await db.SaveChangesAsync();
                 ReservationContext.Clients.Group(id.ToString()).reload();
+                await SendReservationDeniedMail(reservation);
                 return Json(new {success = true});
             }
 
