@@ -23,10 +23,11 @@ namespace smartHookah.Controllers
     {
         private TimeSpan _slotDuration = new TimeSpan(0, 30, 0);
         private readonly SmartHookahContext db;
-
+        private EmailService emailService;
         public ReservationController(SmartHookahContext db)
         {
             this.db = db;
+            this.emailService = new EmailService();
         }
 
         private static IHubContext ReservationContext => GlobalHost.ConnectionManager.GetHubContext<ReservationHub>();
@@ -165,7 +166,7 @@ namespace smartHookah.Controllers
                         
                         await db.SaveChangesAsync();
 
-                        SendReservationMail(newReservation);
+                        await SendReservationMail(newReservation);
                     }
                     scope.Commit();
                     ReservationContext.Clients.Group(id.ToString()).reload();
@@ -184,8 +185,48 @@ namespace smartHookah.Controllers
             return null;
         }
 
-        private void SendReservationMail(Reservation newReservation)
+        private async Task SendReservationMail(Reservation newReservation)
         {
+           
+            if (newReservation.Status == ReservationState.Created)
+            {
+                await SendReservationCreatemMail(newReservation);
+            }
+
+            // DEBUG
+            if (newReservation.Status == ReservationState.Confirmed)
+            {
+                await SendReservationCreatemMail(newReservation);
+            }
+
+            if (newReservation.Status == ReservationState.ConfirmationRequired)
+            {
+                await SendReservationConfirmRequiredMail(newReservation);
+            }
+        }
+
+        private async Task SendReservationCreatemMail(Reservation newReservation)
+        {
+            var email = newReservation.getEmail();
+           await emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirm.cshtml", newReservation);
+        }
+
+        private async Task SendReservationConfirmMail(Reservation newReservation)
+        {
+            var email = newReservation.getEmail();
+            await emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
+        }
+
+        private async Task SendReservationDeniedMail(Reservation newReservation)
+        {
+            var email = newReservation.getEmail();
+            await emailService.SendTemplateAsync(email, "Zamítnutí rezervace", "reservationDenied.cshtml", newReservation);
+        }
+
+        private async Task SendReservationConfirmRequiredMail(Reservation newReservation)
+        {
+            var email = newReservation.getEmail();
+            await emailService.SendTemplateAsync(email, "Rezervace čeká na potvrzení", "reservationWaitForConfirm.cshtml", newReservation);
         }
 
         private bool CheckReservation(List<Reservation> reservation, Reservation newReservation)
@@ -335,7 +376,18 @@ namespace smartHookah.Controllers
                 reservation.Status = state;
 
                 if (state == ReservationState.Confirmed)
+                {
                     RedisHelper.SetReservationToTable(reservation.PlaceId.ToString(), reservation.Id);
+                    if(reservation.Status == ReservationState.ConfirmationRequired)
+                    {
+                        await SendReservationConfirmMail(reservation);
+                    }
+                }
+                   
+                if(state == ReservationState.Denied && reservation.Status == ReservationState.ConfirmationRequired)
+                {
+                    await SendReservationDeniedMail(reservation);
+                }
 
                 db.Reservations.AddOrUpdate(reservation);
                 await db.SaveChangesAsync();

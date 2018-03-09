@@ -1,0 +1,57 @@
+﻿@using smartHookah.Models
+@{
+    Reservation reservation = ViewBag.Model;
+}
+
+<!-- START CENTERED WHITE CONTAINER -->
+<span class="preheader">Rezervace zamítnutá</span>
+<table class="main">
+
+    <!-- START MAIN CONTENT AREA -->
+    <tr>
+        <td class="wrapper">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <p>Vaše rezervace byla vytvořná Už se na Vás těšíme!</p>
+                        <p>Přehled Vaší rezervace do podniku @reservation.Place.Name</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    Jméno:
+                                </td>
+                                <td>
+                                    @reservation.Person.Name
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Datum a čas:
+                                </td>
+                                <td>
+                                    @reservation.Time.ToString("d.M.yyyy hh:mm")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Počet osob:
+                                </td>
+                                <td>
+                                    @reservation.Persons
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr />
+
+                        <p> Podnik @reservation.Place.Name se nachází na adresse @reservation.Place.Address</p>
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- END MAIN CONTENT AREA -->
+</table>
+
