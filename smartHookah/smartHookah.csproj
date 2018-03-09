@@ -835,6 +835,7 @@
     <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Helpers\InlineHelper.cs" />
     <Compile Include="Migrations\201710281304391_sessionSeat.cs" />
     <Compile Include="Migrations\201710281304391_sessionSeat.Designer.cs">
@@ -2042,6 +2043,12 @@
     <Content Include="Views\Home\VueTest.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
+    <Content Include="Views\Emails\_EmailLayout.cshtml" />
+    <Content Include="Views\Emails\test.cshtml" />
+    <Content Include="Views\Emails\reservationDenied.cshtml" />
+    <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
+    <Content Include="Views\Emails\reservationConfirm.cshtml" />
+    <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
@@ -2109,6 +2116,7 @@
     <Folder Include="Content\PlacePictures\" />
     <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Share\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

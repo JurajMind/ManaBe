@@ -19,6 +19,37 @@ namespace smartHookah
 {
     public class EmailService : IIdentityMessageService
     {
+
+        public Task SendTemplateAsync(string mailAdress,string subject,string template,object model)
+        {
+            if(mailAdress == null)
+            {
+                return null;
+            }
+
+            // template path
+            var viewPath = Path.Combine("~/Views/Emails", template);
+            viewPath = HttpContext.Current.Server.MapPath(viewPath);
+            // read the content of template and pass it to the Email constructor
+            var layoutPath = HttpContext.Current.Server.MapPath("~/Views/Emails/_EmailLayout.cshtml");
+            var layout = File.ReadAllLines(layoutPath);
+
+            var index = Array.FindIndex(layout,a => a.Contains("#BODY#"));
+
+            var first = layout.Take(index);
+            var seccond = layout.Skip(index + 1);
+                          
+            var readedTemplate = File.ReadLines(viewPath);
+
+            var compile = first.Concat(readedTemplate).Concat(seccond);
+         
+            var email = new Email(string.Join("", compile));
+            email.ViewBag.Model = model;
+            email.SetFrom("app@manapipes.com", "App smoke-o-bot");
+            return email.SendAsync(mailAdress, subject);
+        }
+
+
         public Task SendAsync(IdentityMessage message)
         {
             // template path
