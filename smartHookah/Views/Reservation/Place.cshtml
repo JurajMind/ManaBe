@@ -174,7 +174,7 @@
                             <a v-on:click="changeReservationStatus(7)" v-if="selectedReservationStatus == 3" class="btn btn-danger btn-raised"><i class="fa fa-bomb"></i>&nbsp;@LocalizationHelper.Translate("noVisit", "Reservation")</a>
                             <br />
                         </div>
-                        <a v-if="selectedReservationStatus == 0 || selectedReservationStatus == 5  " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-check"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
+                        <a v-if="selectedReservationStatus == 6 || selectedReservationStatus == 5  " v-on:click="changeReservationStatus(3)" class="btn btn-success btn-raised"><i class="fa fa-check"></i>&nbsp;@LocalizationHelper.Translate("confirm", "Reservation")</a>
                         <a v-on:click="changeReservation() " class="btn btn-warning btn-raised btn-sm"><i class="fa fa-edit"></i>&nbsp;@LocalizationHelper.Translate("change", "Reservation")</a>
 
                         <a v-on:click="addTableStart()" class="btn btn-info btn-raised btn-sm" v-bind:class="{ 'btn-success': AddTableMode }"> <i class="fa fa-plus-circle"></i>&nbsp;@LocalizationHelper.Translate("addTable", "Reservation")</a>
@@ -310,7 +310,7 @@
                                  <div v-if="colSpan !== 0">
                                 {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )
                                     <i v-if="reservation.Message" class="fa fa-comment"  data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
-                                    <div class="controlls" v-if="check && unconfirmed" >
+                                        <div class="controlls" v-if="check && unconfirmed" >
                                         <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i>
                                         </div>
                                          <div class="controlls" v-if="check && unvisited" >
@@ -339,7 +339,7 @@
                 unconfirmed: function() {
                     if (this.reservation == undefined)
                         return false;
-                    if (this.reservation.State === 0  || this.reservation.State === 5)
+                    if (this.reservation.State === 6  || this.reservation.State === 5)
                         return true;
                     return false;
                 },
