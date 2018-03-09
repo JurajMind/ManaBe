@@ -15,6 +15,28 @@ namespace smartHookah.Helpers
 
     public static class LocalizationHelper
     {
+        public static string getCurentCultureString()
+        {
+            var isoLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+            switch (isoLang)
+            {
+                case "en":
+                    {
+                        return "en-us";
+                    }
+                case "cs":{
+                        return "cs-cz";
+                    }
+                case "sk":
+                    {
+                        return "sk-sk";
+                    }
+                default:
+                    return "en-us";
+            }
+        }
+
         public static HtmlString Translate(string id, string set)
         {
             string text = DbRes.T(id, set);

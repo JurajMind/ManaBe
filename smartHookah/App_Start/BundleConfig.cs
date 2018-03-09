@@ -77,7 +77,7 @@ namespace smartHookah
                 "~/Scripts/jquery.signalR-2.2.2.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
-                "~/Scripts/moment.js",
+                "~/Scripts/moment-with-locales.js",
                 "~/Scripts/moment-duration-format.js"
             ));
 
