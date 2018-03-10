@@ -17,6 +17,7 @@ using smartHookahCommon;
 namespace smartHookah.Controllers
 {
     using Accord.IO;
+    using System.Web.Hosting;
 
     [System.Web.Mvc.Authorize]
     public class ReservationController : Controller
@@ -110,7 +111,11 @@ namespace smartHookah.Controllers
                     var parseDate = DateTime.ParseExact(model.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     var duration = _slotDuration.Multiply(model.Duration);
                     var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
-                    var reservation = table.Reservations.Where(a => a.Time.Date == parseDate && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit ).ToList();
+                    var reservation = table.Reservations.Where(a => a.Time.Date == parseDate &&
+                    a.Status != ReservationState.Canceled 
+                    && a.Status != ReservationState.Denied 
+                    && a.Status != ReservationState.NonVisit ).ToList();
+
                     var place = await db.Places.FindAsync(id);
                     if(place == null)
                          return Json(new { success = false});
@@ -159,7 +164,9 @@ namespace smartHookah.Controllers
                     {
                         conflict = Colide(reservation1, newReservation);
                         if (conflict)
-                            break;
+                        {
+                            return Json(new { success = false,msg="Conflict" });
+                        }
                     }
 
                     if (!conflict)
@@ -168,7 +175,7 @@ namespace smartHookah.Controllers
                         
                         await db.SaveChangesAsync();
 
-                        await SendReservationMail(newReservation);
+                        SendReservationMail(newReservation);
                     }
                     scope.Commit();
                     ReservationContext.Clients.Group(id.ToString()).reload();
@@ -187,45 +194,48 @@ namespace smartHookah.Controllers
             return null;
         }
 
-        private async Task SendReservationMail(Reservation newReservation)
+        private void SendReservationMail(Reservation newReservation)
         {
            
             if (newReservation.Status == ReservationState.Created)
             {
-                await SendReservationCreatemMail(newReservation);
+                SendReservationCreatemMail(newReservation);
             }
 
             // DEBUG
             if (newReservation.Status == ReservationState.Confirmed)
             {
-                await SendReservationCreatemMail(newReservation);
+                SendReservationCreatemMail(newReservation);
             }
 
             if (newReservation.Status == ReservationState.ConfirmationRequired)
             {
-                await SendReservationConfirmRequiredMail(newReservation);
+                SendReservationConfirmRequiredMail(newReservation);
             }
         }
 
-        private async Task SendReservationCreatemMail(Reservation newReservation)
-        {
-            var email = newReservation.getEmail();
-           emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirm.cshtml", newReservation);
+        private void SendReservationCreatemMail(Reservation newReservation)
+        {  
+                var email = newReservation.getEmail();
+                 emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
+       
         }
 
-        private async Task SendReservationConfirmMail(Reservation newReservation)
+        private void SendReservationConfirmMail(Reservation newReservation)
         {
             var email = newReservation.getEmail();
              emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
         }
 
-        private async Task SendReservationDeniedMail(Reservation newReservation)
+        private void SendReservationDeniedMail(Reservation newReservation)
         {
-            var email = newReservation.getEmail();
-             emailService.SendTemplateAsync(email, "Zamítnutí rezervace", "reservationDenied.cshtml", newReservation);
+            
+                var email = newReservation.getEmail();
+                emailService.SendTemplateAsync(email, "Zamítnutí rezervace", "reservationDenied.cshtml", newReservation);
+            
         }
 
-        private async Task SendReservationConfirmRequiredMail(Reservation newReservation)
+        private void SendReservationConfirmRequiredMail(Reservation newReservation)
         {
             var email = newReservation.getEmail();
             emailService.SendTemplateAsync(email, "Rezervace čeká na potvrzení", "reservationWaitForConfirm.cshtml", newReservation);
@@ -366,7 +376,7 @@ namespace smartHookah.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateStatus(int id, ReservationState state)
         {
-            var reservation = await db.Reservations.FindAsync(id);
+            var reservation = db.Reservations.Where(a => a.Id == id).Include(r => r.Place).Include(r => r.Person).Include(r => r.Place.Address).FirstOrDefault();
 
             if (reservation == null)
                 return Json(new {success = true});
@@ -382,13 +392,13 @@ namespace smartHookah.Controllers
                     RedisHelper.SetReservationToTable(reservation.PlaceId.ToString(), reservation.Id);
                     if(reservation.Status == ReservationState.ConfirmationRequired)
                     {
-                        await SendReservationConfirmMail(reservation);
+                        SendReservationConfirmMail(reservation);
                     }
                 }
                    
                 if(state == ReservationState.Canceled && reservation.Status == ReservationState.ConfirmationRequired)
                 {
-                    await SendReservationDeniedMail(reservation);
+                    SendReservationDeniedMail(reservation);
                 }
                 reservation.Status = state;
                 db.Reservations.AddOrUpdate(reservation);
@@ -404,7 +414,7 @@ namespace smartHookah.Controllers
                 db.Reservations.AddOrUpdate(reservation);
                 await db.SaveChangesAsync();
                 ReservationContext.Clients.Group(id.ToString()).reload();
-                await SendReservationDeniedMail(reservation);
+                SendReservationDeniedMail(reservation);
                 return Json(new {success = true});
             }
 

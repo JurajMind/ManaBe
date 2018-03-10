@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using Mailzory;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -20,18 +21,18 @@ namespace smartHookah
     public class EmailService : IIdentityMessageService
     {
 
-        public Task SendTemplateAsync(string mailAdress,string subject,string template,object model)
+        public void SendTemplateAsync(string mailAdress,string subject,string template,object model)
         {
             if(mailAdress == null)
             {
-                return null;
+                return;
             }
 
             // template path
             var viewPath = Path.Combine("~/Views/Emails", template);
-            viewPath = HttpContext.Current.Server.MapPath(viewPath);
+            viewPath = HostingEnvironment.MapPath(viewPath);
             // read the content of template and pass it to the Email constructor
-            var layoutPath = HttpContext.Current.Server.MapPath("~/Views/Emails/_EmailLayout.cshtml");
+            var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.cshtml");
             var layout = File.ReadAllLines(layoutPath);
 
             var index = Array.FindIndex(layout,a => a.Contains("#BODY#"));
@@ -46,7 +47,19 @@ namespace smartHookah
             var email = new Email(string.Join("", compile));
             email.ViewBag.Model = model;
             email.SetFrom("app@manapipes.com", "App smoke-o-bot");
-            return email.SendAsync(mailAdress, subject);
+            HostingEnvironment.QueueBackgroundWorkItem(async ct =>
+            {
+                try
+                {
+                  await email.SendAsync(mailAdress, subject);
+                }
+                catch (Exception ex)
+                {
+                    // handle & log exception
+                }
+            });
+
+          
         }
 
 

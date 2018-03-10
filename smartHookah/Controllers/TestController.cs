@@ -14,7 +14,7 @@ namespace smartHookah.Controllers
         public async Task Send()
         {
             var emailService = new EmailService();
-            await emailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtml", null);
+            emailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtml", null);
            
         }
     }
