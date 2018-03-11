@@ -1,9 +1,11 @@
 ﻿@using smartHookah.Models
+@using System.Configuration
 @using smartHookah.Support
 @using Person = Res.Person
 @model smartHookah.Controllers.ReservationDetailsViewModel
 
 @{
+    var key = ConfigurationManager.AppSettings["googleMapApiKey"];
     ViewBag.Title = "Detail rezervace";
 }
 
@@ -11,85 +13,133 @@
     <h4 class="card-header">Rezervace v podniku @Model.Reservation.Place.Name <b class="pull-right">@Model.Reservation.Status</b></h4>
 </div>
 
+@if (Model.Reservation.Status == ReservationState.Created || Model.Reservation.Status == ReservationState.Confirmed)
+{
+
+}
+@if (Model.Reservation.Status == ReservationState.VisitConfirmed)
+{
+    <div class="card">
+        <div class="card-body row">
+            <span class="col-md-offset-4 col-md-2 col-xs-6"> <i class="fa fa-calendar @Model.Reservation.Status.ToString().ToLower()"></i>&nbsp;@Model.Reservation.Time.ToString("dd.MM.yyyy")</span>
+            <span class="col-md-2 col-xs-6"><i class="fa fa-clock-o"></i>&nbsp;@Model.Reservation.Time.ToString("hh:mm")</span>
+            <span class="col-md-2 col-xs-6"> <i class="fa fa-hourglass-half"></i>&nbsp;@Model.Reservation.Duration.ToString(@"hh\:mm")</span>
+            <span class="col-md-1 col-xs-6"><i class=" fa fa-users"></i>&nbsp;@Model.Reservation.Persons</span>
+        </div>
+    </div>
+}
+
 
 <div class="card-deck">
-    <div class="card">
-        <h4 class="card-header">@Person.activeSessions</h4>
-        <div class="card-body">
-            <div class="list-group ">
-                @foreach (var active in Model.ActiveSession)
-                {
-                    var ds = Model.DynamicSmokeSession[active.SessionId];
-                    if (ds == null)
+    @if (Model.Reservation.Status == ReservationState.VisitConfirmed)
+    {
+        <div class="card">
+            <h4 class="card-header">@Person.activeSessions</h4>
+            <div class="card-body">
+                <div class="list-group ">
+                    @foreach (var active in Model.ActiveSession)
                     {
-                        continue;
+                        var ds = Model.DynamicSmokeSession[active.SessionId];
+                        if (ds == null)
+                        {
+                            continue;
+                        }
+
+                        <text>
+                            @{ Html.RenderPartial("~/Views/SmokeSession/_ActiveSession.cshtml", new ActiveSessionListItemViewModel()
+                                {
+                                    DynamicSmokeSession = ds,
+                                    SmokeSession = active
+                                }); }
+                        </text>
                     }
 
-                    <text>
-                        @{ Html.RenderPartial("~/Views/SmokeSession/_ActiveSession.cshtml", new ActiveSessionListItemViewModel()
-                           {
-                               DynamicSmokeSession = ds,
-                               SmokeSession = active
-                           }); }
-                    </text>
-                }
-                
-                
-                @if (!Model.ActiveSession.Any())
-                {
-                    <div class="card-text">
-                        <h5>No active sessions</h5>
-                    </div>
-                }
-                     
+
+                    @if (!Model.ActiveSession.Any())
+                    {
+                        <div class="card-text">
+                            <h5>No active sessions</h5>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <j4 class="col-md-12 row card-header">
+                <span class="col-md-3 col-xs-6"> <i class="fa fa-calendar @Model.Reservation.Status.ToString().ToLower()"></i>&nbsp;@Model.Reservation.Time.ToString("dd.MM.yyyy")</span>
+                <span class="col-md-3 col-xs-6"><i class="fa fa-clock-o"></i>&nbsp;@Model.Reservation.Time.ToString("hh:mm")</span>
+                <span class="col-md-3 col-xs-6"> <i class="fa fa-hourglass-half"></i>&nbsp;@Model.Reservation.Duration.ToString(@"hh\:mm")</span>
+                <span class="col-md-3 col-xs-6"><i class=" fa fa-users"></i>&nbsp;@Model.Reservation.Persons</span>
+
+            </j4>
+            <div class="card-body row">
+                <div class="card col-md-12" id="map" style="height:30rem"></div>
+                <hr />
 
             </div>
         </div>
+    }
 
-    </div>
-    <div class="card">
-        <h4 class="card-header">Objednávky</h4>
-        <div class="card-body">
-            
-            <h5 class="card-text">Hookahs order</h5>
-            <ul>
-                @foreach (var hookahOrder in Model.Reservation.Orders)
+
+
+    @if (Model.Reservation.Status == ReservationState.Created
+        || Model.Reservation.Status == ReservationState.Confirmed
+        || Model.Reservation.Status == ReservationState.VisitConfirmed)
+    {
+        <div class="card">
+            <h4 class="card-header">Objednávky  <a href="@Url.Action("Order", "Places", new { id = @Model.Reservation.Place.FriendlyUrl, resId = @Model.Reservation.Id })" class="btn btn-success btn-raised pull-right">Objednat dýmku (alfa)</a></h4>
+            <div class="card-body">
+
+                
+                <ul>
+                    @foreach (var hookahOrder in Model.Reservation.Orders)
+                    {
+                        <li>@hookahOrder.State </li>
+                    }
+
+                </ul>
+              
+                @if(!Model.Reservation.Orders.Any())
                 {
-                    <li>@hookahOrder.State </li>
-                }
-               
-            </ul>
-        @if (Model.Reservation.Status != ReservationState.Canceled && Model.Reservation.Status != ReservationState.Denied)
-        {
-            <a href="@Url.Action("Order", "Places", new {id = @Model.Reservation.Place.FriendlyUrl, resId = @Model.Reservation.Id})" class="btn btn-success btn-raised">Objednat dymku</a>
-        }
-            <hr/>
-            
-        
-        </div>
-        <div class="card-footer">
-          
-        </div>
+                    <h5>Žádní objednávky</h5>                }
 
-    </div>
-    </div>
+
+
+
+
+            </div>
+          
+
+        </div>
+    }
+</div>
 
 <div class="card">
     <div class="card-body">
-        @if (Model.Reservation.Status == ReservationState.Canceled || Model.Reservation.Status == ReservationState.Denied)
-        {
-            <a href="@Url.Action("Create",new {id = Model.Reservation.Place.ShortDescriptions})" class="btn btn-success">Vytvorit novou rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
-        }
-    @if (Model.Reservation.Status == ReservationState.Created)
+        @if (Model.Reservation.Status == ReservationState.Canceled || Model.Reservation.Status == ReservationState.Denied || Model.Reservation.Status == ReservationState.NonVisit)
     {
-        @Ajax.FaActionLink("Cancel", "fa fa-trash-o", "CancelReservation", "Reservation", new {id = Model.Reservation.Id}, new AjaxOptions() {HttpMethod = "POST"}, new {@class = "btn btn-danger btn-raised"})
-    }
+        <a href="@Url.Action("Create",new {id = Model.Reservation.Place.ShortDescriptions})" class="btn btn-success">Vytvorit novou rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
+}
+        @if (Model.Reservation.Status == ReservationState.Created || Model.Reservation.Status == ReservationState.ConfirmationRequired || Model.Reservation.Status == ReservationState.Confirmed)
+    {
+        @Ajax.FaActionLink("Cancel", "fa fa-trash-o", "CancelReservation", "Reservation", new { id = Model.Reservation.Id }, new AjaxOptions() { HttpMethod = "POST",OnComplete= "location.reload();" }, new { @class = "btn btn-danger btn-raised" })
+
+        @section dropmenu{
+            @Ajax.FaActionLink("Cancel", "fa fa-trash-o", "CancelReservation", "Reservation", new { id = Model.Reservation.Id }, new AjaxOptions() { HttpMethod = "POST", OnComplete = "location.reload();" }, new { @class = "btn btn-danger btn-raised" })
+        }
+}
     </div>
 </div>
 
 
-@if(Model.DoneSession.Any())
-    { 
+@if (Model.DoneSession.Any())
+{
     <div class="card">
         <h4 class="card-header">Ukoncene sessions</h4>
         <div class="card-body list-group-flush">
@@ -101,4 +151,42 @@
             </div>
         </div>
     </div>
-    }
+}
+
+
+@section scripts
+{
+
+
+    <script>
+
+        $(function() {
+            $('[data-toggle="popover"]').popover({html:true});
+        });
+
+        var lat = @Model.Reservation.Place.Address.Lat;
+        var lng = @Model.Reservation.Place.Address.Lng;
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'),
+                {
+                    zoom: 16,
+                    center: new google.maps.LatLng(lat, lng),
+                    mapTypeId: 'roadmap'
+                });
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lng),
+                // icon: '@Model.Reservation.Place.LogoPath',
+                map: map
+            });
+
+        };
+
+
+    </script>
+
+    <script async defer
+            src="@($"https://maps.googleapis.com/maps/api/js?key={key}&callback=initMap")">
+    </script>
+}

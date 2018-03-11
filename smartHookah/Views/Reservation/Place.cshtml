@@ -285,8 +285,9 @@
                 timesOrder: function() {
 
                     function compare(a, b) {
-                        var aValue = a.Value > 999 ? a.Value : a.Value + 3000;
-                        var bValue = b.Value > 999 ? b.Value : b.Value + 3000;
+
+                        var aValue = a.Value > 400 ? a.Value : a.Value + 3000;
+                        var bValue = b.Value > 400 ? b.Value : b.Value + 3000;
                         if (aValue < bValue)
                             return -1;
                         if (aValue > bValue)
@@ -318,9 +319,10 @@
                                     </div>
                                 </div>
 
-
+              
                         </td>
                           <td v-on:drop="drop($event)" v-on:dragover="allowDrop($event)"   v-on:dragenter="dragEnter()"  v-on:dragleave="dragLeave()"  v-else-if="!timeSlot.Reserved"  v-bind:class="{selected : check,over:over}" class="timeSlot free"   v-on:click="onFreeClick()">
+
                         </td>
 
                     `,

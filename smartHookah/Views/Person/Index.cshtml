@@ -25,6 +25,31 @@
         color: black;
     }
 
+    i.confirmed, i.created {
+        color: white;
+        background-color: #4caf50;
+        padding: 5px;
+        margin: -5px;
+        border-radius: 10px;
+    }
+
+    i.confirmationrequired {
+        color: white;
+        background-color: #ff5722;
+        padding: 5px;
+        margin: -5px;
+        border-radius: 10px;
+    }
+
+
+    i.visitconfirmed {
+        color: white;
+        background-color: #03a9f4;
+        padding: 5px;
+        margin: -5px;
+        border-radius: 10px;
+    }
+
 </style>
 
 <div>
@@ -108,8 +133,8 @@
                     @foreach (var reservations in Model.ActiveReservations.OrderBy(a => a.Time))
                     {
                         <div class="list-group-item tobaccoListStat">
-                            <div class="list-group-item-heading row w-100">  
-                                <span class="col-md-2 col-xs-6"> <i class="fa fa-calendar"></i>&nbsp;@reservations.Time.ToString("dd.MM.yyyy")</span>
+                            <div class="list-group-item-heading row w-100" title="@reservations.Status">  
+                                <span class="col-md-2 col-xs-6"> <i class="fa fa-calendar @reservations.Status.ToString().ToLower()"></i>&nbsp;@reservations.Time.ToString("dd.MM.yyyy")</span>
                                 <span class="col-md-2 col-xs-6"><i class="fa fa-clock-o"></i>&nbsp;@reservations.Time.ToString("hh:mm")</span>
                                 <span class="col-md-2 col-xs-6"> <i class="fa fa-hourglass-half"></i>&nbsp;@reservations.Duration.ToString(@"hh\:mm")</span>
                                 <span class="col-md-1 col-xs-6"><i class=" fa fa-users"></i>&nbsp;@reservations.Persons</span>

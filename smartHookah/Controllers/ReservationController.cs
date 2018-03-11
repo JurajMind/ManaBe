@@ -160,13 +160,28 @@ namespace smartHookah.Controllers
 
                     //scope.Complete();
                     var conflict = false;
+                    var notConfirm = false;
                     foreach (var reservation1 in reservation)
                     {
+                       // Check if new reservation is not in conflick
                         conflict = Colide(reservation1, newReservation);
                         if (conflict)
                         {
-                            return Json(new { success = false,msg="Conflict" });
+                            // Check if is in conflick with uncofirm reservation
+                            if (reservation1.Status == ReservationState.ConfirmationRequired)
+                                notConfirm = true;
+                            else {
+                                notConfirm = false;
+                                break;
+                            }
                         }
+                    }
+
+                    // If is in conflict in non confirm reservation, change status to confirmation requered as well
+                    if(notConfirm)
+                    {
+                        conflict = false;
+                        newReservation.Status = ReservationState.ConfirmationRequired;
                     }
 
                     if (!conflict)
@@ -177,9 +192,10 @@ namespace smartHookah.Controllers
 
                         SendReservationMail(newReservation);
                     }
+
                     scope.Commit();
                     ReservationContext.Clients.Group(id.ToString()).reload();
-                    return Json(new {success = true, id = newReservation.Id});
+                    return Json(new {success = !conflict, id = newReservation.Id});
                 }
                 catch (Exception e)
                 {
