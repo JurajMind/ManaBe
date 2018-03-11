@@ -370,6 +370,11 @@
                     return this.reservation.StateText;
                 }
 
+                },
+            mounted() {
+                this.$root.$on('drop', data => {
+                    this.over = false;
+                });
             },
             methods: {
                 onFreeClick: function(taken = false) {
@@ -402,14 +407,16 @@
                     this.selected.Reservation = reservation;
                     this.selected.Table = this.table.Id;
                     this.selected.Time = this.timeSlot.Value;
+                    this.selected.TimeIndex = this.index;
                     this.selected.LastReservedTable = changedTable;
                     var _this = this;
-                    var newSelectedTime = this.timeSlot.Value;
+                    var newSelectedTime = this.index;
                     var table = this.table.Id;
                     this.$root.changeReservation(function() {
                         _this.selected.Table = table;
                         _this.selected.Time = newSelectedTime;
                     });
+                    this.$root.$emit('drop', null);
 
 
                 },
@@ -553,8 +560,8 @@
                             id: reservationId,
                             state: status
                         },
-                        function(data) {
-                            //v.loadReservations();
+                        function (data) {
+                          
                         });
                 },
                 addTable: function() {
@@ -573,8 +580,8 @@
                 addTableStart: function() {
                     this.AddTableMode = true;
                 },
-                changeReservation: function(callback) {
-
+                changeReservation: function (callback) {
+                   
                     $.post(
                         '/Reservation/ChangeReservation',
                         {
@@ -585,7 +592,8 @@
                         function(data) {
                             if (callback)
                                 callback();
-                            //v.loadReservations();
+                          
+                         
                         }
                     );
                 },
