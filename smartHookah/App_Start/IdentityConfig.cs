@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
+using log4net;
 using Mailzory;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -20,7 +21,7 @@ namespace smartHookah
 {
     public class EmailService : IIdentityMessageService
     {
-
+        private readonly ILog logger = LogManager.GetLogger(typeof(EmailService));
         public void SendTemplateAsync(string mailAdress,string subject,string template,object model)
         {
             if(mailAdress == null)
@@ -55,7 +56,7 @@ namespace smartHookah
                 }
                 catch (Exception ex)
                 {
-                    // handle & log exception
+                    logger.Error(ex);
                 }
             });
 
@@ -74,9 +75,7 @@ namespace smartHookah
             var email = new Email(message.Body);
 
 
-            // set ViewBag properties (you can also use strongly typed models)
-            email.ViewBag.Name = "Johnny";
-            email.ViewBag.Content = "Mailzory Is Funny";
+         
          
             // set Attachments (Optional)
             //email.Attachments.Add(new Attachment("Attachments/attach1.pdf"));
