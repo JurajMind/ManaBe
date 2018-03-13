@@ -519,6 +519,9 @@ namespace smartHookah.Controllers
 
         private bool Colide(Reservation reservation, Reservation tableReservation)
         {
+            //Cant colide with self
+            if (reservation.Id == tableReservation.Id)
+                return false;
             var firstTimes = TakenTime(reservation, _slotDuration, true).Select(a => a.Value);
             var secondTimes = TakenTime(tableReservation, _slotDuration, true).Select(a => a.Value);
 
