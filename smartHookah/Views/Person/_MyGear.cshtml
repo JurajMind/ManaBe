@@ -139,7 +139,7 @@
 
     $(window).on('shown.bs.modal', function () {
         if (type !== '') {
-            $('#type').val(type);
+            $('#type').val(type).change();
         }
     });
 
