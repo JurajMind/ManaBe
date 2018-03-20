@@ -110,8 +110,8 @@
             );
     }
     
-    function AddNewGear(gearId,element) {
-        $.ajax(
+    function AddNewGear(gearId, gearAmount, element) {
+    $.ajax(
     {
         type:
             "POST",
@@ -120,7 +120,8 @@
         data:
         {
             'id': gearId,
-            'personId':@Model,
+            'amount': gearAmount,
+            'personId':@Model
         },
         dataType:
             'html',
