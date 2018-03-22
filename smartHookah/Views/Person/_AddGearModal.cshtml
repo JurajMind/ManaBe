@@ -1,4 +1,5 @@
-﻿@model string
+﻿@using smartHookah.Helpers
+@model string
 
 @{
     Layout = null;
@@ -11,13 +12,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Add to my gear</h4>
+                <h4 class="modal-title">@LocalizationHelper.Translate("AddGearHeader", "AddGearModal")</h4>
                </div>
             <div class="modal-body">
                 @Html.Hidden("userId",Model)
                 <div class="row">
                     <div class="col-md-6">
-                        <label>Type</label>
+                        <label>@LocalizationHelper.Translate("AddGearType", "AddGearModal")</label>
                         <div class="input-group">
                             <select id="type" class="form-control" onchange="LoadBrand()">
                                 <option value="" selected="selected">None</option>
@@ -29,7 +30,7 @@
 
                     </div>
                     <div class="col-md-6">
-                        <label>Brand</label>
+                        <label>@LocalizationHelper.Translate("AddGearBrand", "AddGearModal")</label>
                         <div class="input-group">
                             <select id="brand" class="form-control" onchange="LoadItems()">
                                 <option value="">None</option>
@@ -38,8 +39,8 @@
                     </div>
                 </div>
             </div>
-            <label>Cant find your gear? Please create new</label>
-            <a class="btn btn-success" href="@Url.Action("Create","PipeAccesorry")">Create and add new gear<i class="fa fa-plus-circle"></i></a>
+            <label style="padding-left: 1em">@LocalizationHelper.Translate("AddGearCantFind", "AddGearModal")</label>
+            <a class="btn btn-success" href="@Url.Action("Create","PipeAccesorry")">@LocalizationHelper.Translate("AddGearCreateBtn", "AddGearModal")&nbsp;<i class="fa fa-plus-circle"></i></a>
             <hr />
             
             <div id="items"></div>
@@ -47,7 +48,7 @@
 
             <!-- /.modal-content -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@LocalizationHelper.Translate("AddGearCloseBtn", "AddGearModal")</button>
             </div>
         </div>
         <!-- /.modal-dialog -->
