@@ -103,13 +103,13 @@
     @if (User.Identity.IsAuthenticated)
     {
         <button class="btn btn-default" onclick="SetDefault()">
-            Set default
+            @LocalizationHelper.Translate("GetDevSettingsSetDefault", "SmokeSession")
         </button>
     }
 
-    <button class="btn btn-default disabled" onclick="UseDefault()">
-        Use default
-    </button>
+        <button class="btn btn-default disabled" onclick="UseDefault()">
+            @LocalizationHelper.Translate("GetDevSettingsUseDefault", "SmokeSession")
+        </button>
 
     <hr/>
 </div>
