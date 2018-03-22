@@ -36,9 +36,9 @@
                     }
                     @if (Model.CanEdit)
                     {
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
-                        @LocalizationHelper.Translate("MyGearAddMyGear", "MyGear")&nbsp;<i class="fa fa-plus"></i>
-                    </button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" name="tobacco" onclick="getName(this)">
+                            @LocalizationHelper.Translate("MyGearAddMyGear", "MyGear")&nbsp;<i class="fa fa-plus"></i>
+                        </button>
 
                     }
                 </div>
@@ -60,7 +60,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
                       @if (Model.CanEdit)
                         {
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" name="pipe" onclick="getName(this)">
                                 Add my gear&nbsp;<i class="fa fa-plus"></i>
                             </button>
 
@@ -101,7 +101,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ex2">
                         @if (Model.CanEdit)
                         {
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" name="bowl" onclick="getName(this)">
                                 Add my gear&nbsp;<i class="fa fa-plus"></i>
                             </button>
 
@@ -130,3 +130,18 @@
 
 </div>
 
+<script type="text/javascript">
+
+    var type = '';
+
+    function getName (elem) {
+        type = elem.name;
+    }
+
+    $(window).on('shown.bs.modal', function () {
+        if (type !== '') {
+            $('#type').val(type).change();
+        }
+    });
+
+</script>
