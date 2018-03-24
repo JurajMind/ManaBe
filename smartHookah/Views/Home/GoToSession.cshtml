@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using smartHookah.Helpers
+@model dynamic
 
 @{
     ViewBag.Title = @Home.Home.goToSession;
@@ -9,11 +10,11 @@
         @using (Html.BeginForm("GoToSession", "Home", FormMethod.Post))
         {
             <div class="form-group form-group-lg label-floating is-empty">
-                <label for="i6" class="control-label">@Home.Home.sessionCode</label>
+                <label for="i6" class="control-label">@LocalizationHelper.Translate("GoToSessionCode", "Smokesession")</label>
                 <input type="text" class="form-control" id="i6" name="id">
-                <span class="help-block">@Home.Home.pleaseEnter</span>
+                <span class="help-block">@LocalizationHelper.Translate("GoToSessionEnterCode", "Smokesession")</span>
             </div>
-            <button class="btn btn-success btn-raised">@Home.Home.Go&nbsp;<i class="fa fa-check"></i></button>
+            <button class="btn btn-success btn-raised">@LocalizationHelper.Translate("GoToSessionConnect", "Smokesession")&nbsp;<i class="fa fa-check"></i></button>
         }
     </div>
 </div>

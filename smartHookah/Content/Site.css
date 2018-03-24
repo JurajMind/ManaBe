@@ -1244,3 +1244,9 @@ input.rating {
 }
 
 /*^^flippnig smoke session cards classes^^*/
+
+.add-gear-input-area {
+    align-self: right;
+    align-items: right;
+    align-content: right;
+}
