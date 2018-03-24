@@ -2066,7 +2066,6 @@
     <Content Include="Views\Tobacco\_TobacoMixListItem.cshtml" />
     <Content Include="Views\Tobacco\_TobaccoMix.cshtml" />
     <Content Include="Views\Tobacco\_TobaccoReviews.cshtml" />
-    <Content Include="Views\Person\_TobacoMyGearPartial.cshtml" />
     <Content Include="Views\PipeAccesorry\Create.cshtml" />
     <Content Include="Views\Shared\_TobacoEdit.cshtml" />
     <Content Include="Views\Shared\_TobacoEditModal.cshtml" />
