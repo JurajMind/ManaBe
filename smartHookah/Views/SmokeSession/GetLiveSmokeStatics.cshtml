@@ -1,4 +1,5 @@
 ﻿@using smartHookah.Controllers
+@using smartHookah.Helpers
 @using smartHookah.Models
 @using smartHookah.Support
 
@@ -16,17 +17,17 @@
     
     <tbody>
     <tr style="display: none">
-        <td><strong># of pufs</strong></td>
+        <td><strong>@LocalizationHelper.Translate("GetLiveSSNumOfPuffs", "SmokeSession")</strong></td>
         <td class="pufCount">@Model.PufCount</td>
     </tr>
         <tr style="display: none" >
-            <td><strong>Estimated tobacco stamina</strong></td>
+            <td><strong>@LocalizationHelper.Translate("GetLiveSSTobStamina", "SmokeSession")</strong></td>
             <td class="tobaccoStamina"></td>
         </tr>
     @if (true)
     {
         <tr style="display: none">
-            <td><strong>Last puf</strong></td>
+            <td><strong>@LocalizationHelper.Translate("GetLiveSSLastPuff", "SmokeSession")</strong></td>
             <td><span id="lastDuration">@Model.LastPufDuration.ToString(@"s\.fff") sec</span>.<span id="lastPufTime" data-time="@Model.LastPufTime.ToString("dd-MM-yyyy HH:mm:ss")"></span></td>
         </tr>
 
@@ -35,18 +36,18 @@
             <td>@(((double)Model.LastPresure/(double)Model.MaxPresure)* 100) %</td>
         </tr>*@
         <tr>
-            <td><strong><i class="fa fa-clock-o"></i> &nbsp;Smoke time</strong></td>
+            <td><strong><i class="fa fa-clock-o"></i> &nbsp;@LocalizationHelper.Translate("GetLiveSSSmokeTime", "SmokeSession")</strong></td>
             <td><span id="smokeDuration">@Model.Duration.ToString(@"hh\:mm\:ss")</span></td>
         </tr>
 
         <tr>
-            <td><strong><i class="fa fa-trophy"></i>&nbsp;Longest puf</strong></td>
+            <td><strong><i class="fa fa-trophy"></i>&nbsp;@LocalizationHelper.Translate("GetLiveSSLongestPuff", "SmokeSession")</strong></td>
             <td><span id="longestPufsec">@Model.LongestPuf.ToString(@"s\.fff") sec.</span></td>
         </tr>}
         
     <tr>
-        <td><strong><i class="fa fa-hourglass-half"></i>&nbsp;Smoking session time </strong></td>
-        <td> <span id="smokeSessionDuration">@((DateTime.UtcNow - Model.Start).ToString(@"hh\:mm\:ss"))</span> started at <span data-time="@Model.Start.ToString("dd-MM-yyyy HH:mm:ss")" id="smokeSessionStart"></span></td>
+        <td><strong><i class="fa fa-hourglass-half"></i>&nbsp;@LocalizationHelper.Translate("GetLiveSSSessionDuration", "SmokeSession")</strong></td>
+        <td> <span id="smokeSessionDuration">@((DateTime.UtcNow - Model.Start).ToString(@"hh\:mm\:ss"))</span> @LocalizationHelper.Translate("GetLiveSSStarted", "SmokeSession") <span data-time="@Model.Start.ToString("dd-MM-yyyy HH:mm:ss")" id="smokeSessionStart"></span></td>
     </tr>
 
     </tbody>
