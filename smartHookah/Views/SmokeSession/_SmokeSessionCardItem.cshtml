@@ -1,4 +1,5 @@
 ﻿@using smartHookah.Controllers
+@using smartHookah.Helpers
 @using smartHookah.Models
 @model SmokeSession
 
@@ -11,11 +12,8 @@
                 var mix = (TobaccoMix)Model.MetaData.Tobacco;
                 if (string.IsNullOrEmpty(mix.AccName))
                 {
-                    @:Mix of @mix.Tobaccos.Count: <br />
-
-
-
-
+                    @:@LocalizationHelper.Translate("CardMixOf", "SmokeSession") @mix.Tobaccos.Count: <br />
+                    
                     foreach (var tobaco in mix.Tobaccos)
                     {
                         <b>
@@ -50,7 +48,7 @@
         if (Model.MetaData != null && Model.MetaData.Pipe != null)
         {
             <i>
-                from&nbsp;
+                @LocalizationHelper.Translate("CardFrom", "SmokeSession")&nbsp;
             </i>
             <b>
                 @Model.MetaData.Pipe.Brand.DisplayName @Model.MetaData.Pipe.AccName
@@ -111,7 +109,7 @@
 
                     <i class="fa fa-user"></i>&nbsp;@(Model.Persons.Count + anonymous)<br />
 
-                    <i class="fa fa-hashtag"></i>&nbsp;@Model.Statistics.PufCount &nbsp; pufs<br />
+                    <i class="fa fa-hashtag"></i>&nbsp;@Model.Statistics.PufCount &nbsp;@LocalizationHelper.Translate("CardPuffs", "SmokeSession")<br />
 
                     <i class="fa fa-clock-o"></i> &nbsp;@Model.Statistics.SmokeDuration.ToString(@"hh\:mm\:ss")<br />
 
@@ -120,7 +118,7 @@
                     <i class="fa fa-trophy"></i> &nbsp;@Model.Statistics.LongestPuf.ToString(@"s\.fff") .sec<br />
 
                     <a href="@Url.Action("GetStatistics", "SmokeSession", new {id = Model.Id})" class="btn btn-default" style="position:absolute; bottom:0; right:0;">
-                        @Res.Person.moreInfo&nbsp;<i class="fa fa-info-circle"></i>
+                        @LocalizationHelper.Translate("MoreInfo", "Common")&nbsp;<i class="fa fa-info-circle"></i>
                     </a>
                 </div>
             </div>
