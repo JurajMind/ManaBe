@@ -9,10 +9,10 @@
                             <div class="card ">
                                 <div class="card-header">
                                     
-                                    <h4 class="pull-left">@Smoke.SmokeSession.myGear</h4>
+                                    <h4 class="pull-left">@LocalizationHelper.Translate("_MDEditMyGear", "SmokeSession")</h4>
                                         <div class="switch pull-right" style="padding-left: 40px;">
                                             <label>
-                                              @Smoke.SmokeSession.myGear &nbsp;
+                                                @LocalizationHelper.Translate("_MDEditMyGear", "SmokeSession") &nbsp;
                                                 <input id="ownGear" value="" class="form-control" type="checkbox" @(Model.MyGear ? "checked=\"checked\"" : "") onclick="ChangeGear(this)" />
 
                                             </label>
@@ -20,14 +20,14 @@
                                 </div>
                                 <div class="card-body container">
                                     <div class="form-group">
-                                        <label class="bmd-label-floating" for="hookah">@Home.Home.hookah</label>
+                                        <label class="bmd-label-floating" for="hookah">@LocalizationHelper.Translate("_MDEditHookah", "SmokeSession")</label>
 
                                         @Html.DropDownListPipe("hookah", Model.Pipes, Model.SelectedPipe, new { id = "hookah", @name = "hookah", @class = "form-control" })
 
                                     </div>
                                     <hr />
                                     <div class="form-group">
-                                        <label class="bmd-label-floating" for="bowl">@Home.Home.bowl</label>
+                                        <label class="bmd-label-floating" for="bowl">@LocalizationHelper.Translate("_MDEditBowl", "SmokeSession")</label>
 
                                         @Html.DropDownListPipe("bowl", Model.Bowl, Model.SelectedBowl, new { id = "bowl", @name = "bowl", @class = "form-control" })
                                     </div>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="card">
                                
-                                    <h3 class="card-title">@Smoke.SmokeSession.persons</h3>
+                                <h3 class="card-title">@LocalizationHelper.Translate("_MDEditPersons", "SmokeSession")</h3>
                               
                                 <div class="card-body">
                                     <div class="container">
@@ -50,7 +50,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 
-                                    <h3 class="card-header">@Smoke.SmokeSession.packAndCoals</h3>
+                                <h3 class="card-header">@LocalizationHelper.Translate("_MDEditPackCoals", "SmokeSession")</h3>
                                 
                                 <div class="card-body container">
                                     
@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label for="basic-url">@Smoke.SmokeSession.heatManager</label>
+                                            <label for="basic-url">@LocalizationHelper.Translate("_MDEditHMS", "SmokeSession")</label>
                                             @Html.EnumDropDownListFor(x => x.HeatKeeper, new {@class = "form-control", @name = "HeatKeeper", @id = "HeatKeeper"})
                                         </div>
                                         </div>
@@ -72,13 +72,13 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label class="bmd-label-floating">@Smoke.SmokeSession.coalType</label>
+                                                <label class="bmd-label-floating">@LocalizationHelper.Translate("_MDEditCoalType", "SmokeSession")</label>
                                             @Html.EnumDropDownListFor(x => x.CoalType, new {@class = "form-control", @name = "CoalType", @id = "CoalType"})
                                         </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label class="bmd-label-floating">@Smoke.SmokeSession.coalCount</label>
+                                                <label class="bmd-label-floating">@LocalizationHelper.Translate("_MDEditCoalCount", "SmokeSession")</label>
                                             <input type="number" min="0" max="10" value="@Model.CoalsCount.ToString(CultureInfo.InvariantCulture)" id="CoalsCount" class="form-control" name="CoalsCount"
                                                    step="0.5"/>
                                         </div>

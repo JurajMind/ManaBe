@@ -1,14 +1,16 @@
-﻿@model List<string>
+﻿@using smartHookah.Helpers
+@model List<string>
 
 <div>
-    <label>Tobacco brand</label>
+    <label>@LocalizationHelper.Translate("MDSelectorTobaccoBrand", "SmokeSession")</label>
     <div class="input-group">
         @Html.DropDownList("tobacoBrand",new SelectList(Model.Select(a => new SelectListItem() {Value =  a,Text =  a})),new {id="tobacoBrand",@class="form-control", onchange = "LoadTobacco()" })
     </div>
-    <label>Tobacco flavor</label>
+    <label>@LocalizationHelper.Translate("MDSelectorTobaccoFlavor", "SmokeSession")</label>
     <div class="input-group disabled">
         <select id="tobacoFlavor" class="form-control">
-            <option>None</option>
+            <option>@LocalizationHelper.Translate("None", "Common")</option>
         </select>
 </div>
 </div>
+s
