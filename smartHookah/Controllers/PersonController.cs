@@ -392,16 +392,16 @@ namespace smartHookah.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> AddGear(int id, int? personId = null)
+        public async Task<ActionResult> AddGear(int id, int? amount, int? personId = null)
         {
             var person = new Person();
-            AddGear(id, db, out person,personId);
+            AddGear(id, amount, db, out person,personId);
 
             var model = ShowGearViewModel(person);
             return View("_MyGear", model);
         }
 
-        public static void AddGear(int id, SmartHookahContext db,out Person person, int? personId = null)
+        public static void AddGear(int id, int? amount, SmartHookahContext db,out Person person, int? personId = null)
         {
             
             if (!personId.HasValue)
@@ -422,6 +422,7 @@ namespace smartHookah.Controllers
             {
                 Person = person,
                 PipeAccesory = newAccesory,
+                Amount = Convert.ToInt32(amount),
                 CreatedDate =  DateTime.UtcNow,
 
             });
