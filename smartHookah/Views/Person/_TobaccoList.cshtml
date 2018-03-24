@@ -10,7 +10,7 @@
             @foreach (var tobacco in tobaccoGrb)
             {
                 <li style="display: table-row">
-                    <span style="display: table-cell">@tobacco.BrandName @tobacco.AccName </span>
+                    <span style="display: table-cell">@tobacco.AccName </span>
                     <a class="btn btn-sm btn-success " style="display: table-cell" href="@Url.Action("Details", "Tobacco", new {id = tobacco.Id})">
                         <i class="fa fa-info-circle"></i>
                     </a>
