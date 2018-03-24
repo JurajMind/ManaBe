@@ -8,7 +8,7 @@
 
 @if (!Model.BowlId.HasValue && !Model.PipeId.HasValue && !Model.TobaccoId.HasValue)
 {
-    <h4>No smoke session metadata</h4>
+    <h4>@LocalizationHelper.Translate("sSMetaDataNone", "SmokeSession")</h4>
     <input type="hidden" id="tobaccoEstimated" value="300"/>
 }
 else
@@ -36,7 +36,7 @@ else
         {
             <tr>
                 <td>
-                    <i class="fa fa-building"></i>&nbsp;@Smoke.SmokeSession.tobaccoBrand
+                    <i class="fa fa-building"></i>&nbsp;@LocalizationHelper.Translate("sSMetaDataTobBrand", "SmokeSession")
                 </td>
                 <td>
                     @if (Model.Tobacco == null)
@@ -54,7 +54,7 @@ else
             </tr>
             <tr>
                 <td>
-                    <img src="~/Content/icons/tobacco.svg" width="18px" />&nbsp;@Smoke.SmokeSession.tobaccoFlavor
+                    <img src="~/Content/icons/tobacco.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataTobFlavor", "SmokeSession")
                 </td>
                 <td>
                     @if (Model.Tobacco == null)
@@ -73,7 +73,7 @@ else
 
         <tr>
             <td>
-                <img src="~/Content/icons/hookah.svg" width="18px" />&nbsp;@Home.Home.hookah
+                <img src="~/Content/icons/hookah.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataHookah", "SmokeSession")
             </td>
             <td>
                 @if (Model.Pipe != null)
@@ -82,7 +82,7 @@ else
                 }
                 else
                 {
-                    <span>@Smoke.SmokeSession.unknown</span>
+                    <span>@LocalizationHelper.Translate("Common", "Unknown")</span>
                 }
              
 
@@ -91,7 +91,7 @@ else
 
         <tr>
             <td>
-                <img src="~/Content/icons/bowl.svg" width="18px" />&nbsp;@Home.Home.bowl
+                <img src="~/Content/icons/bowl.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataBowl", "SmokeSession")
             </td>
             <td>
                 @if (Model.Bowl != null)
@@ -100,21 +100,21 @@ else
                 }
                 else
                 {
-                    <span>@Smoke.SmokeSession.unknown</span>
+                    <span>@LocalizationHelper.Translate("Unknown", "Common")</span>
                 }
             </td>
         </tr>
         <tr>
-            <td><img src="~/Content/icons/pack.svg" width="18px" />&nbsp;@Smoke.SmokeSession.packStyle</td>
+            <td><img src="~/Content/icons/pack.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataPackStyle", "SmokeSession")</td>
             <td>@Model.PackType</td>
         </tr>
         <tr>
-            <td><img src="~/Content/icons/lotus.svg" width="18px" />&nbsp;@Smoke.SmokeSession.heatManager</td>
+            <td><img src="~/Content/icons/lotus.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataHMS", "SmokeSession")</td>
             <td>@Model.HeatKeeper.EnumDescription()</td>
         </tr>
         <tr>
-            <td><i class="fa fa-cubes"></i>&nbsp;@Smoke.SmokeSession.coal</td>
-            <td>@Model.CoalsCount @Smoke.SmokeSession.coal @Model.CoalType </td>
+            <td><i class="fa fa-cubes"></i>&nbsp;@LocalizationHelper.Translate("sSMetaDataCoal", "SmokeSession")</td>
+            <td>@Model.CoalsCount @LocalizationHelper.Translate("sSMetaDataCoalOfType", "SmokeSession") @Model.CoalType </td>
         </tr>
         </tbody>
     </table>

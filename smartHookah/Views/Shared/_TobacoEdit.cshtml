@@ -1,14 +1,15 @@
 ﻿    
+@using smartHookah.Helpers
 @model smartHookah.Controllers.TobacoMetadataModelViewModel
 
 <div class="card " style="margin-bottom: 40px;padding-bottom: 20px">
 <div class="card-header">
     
-        <h4 class="pull-left">Tobacco</h4>
+    <h4 class="pull-left">@LocalizationHelper.Translate("_TobaccoEditTitle", "SmokeSession")</h4>
     <div class="switch pull-right" style="padding-left: 40px;">
         <label>
-            @Smoke.SmokeSession.myTobacco &nbsp;
-            <input id="ownTobacco" value="on" type="checkbox"  @(Model.MyTobacco ? "checked=\"checked\"" : "") onchange="ChangeTobbaco(this)" />
+            @LocalizationHelper.Translate("_TobaccoEditMyTob", "SmokeSession") &nbsp;
+            <input id="ownTobacco" value="on" type="checkbox" @(Model.MyTobacco ? "checked=\"checked\"" : "") onchange="ChangeTobbaco(this)" />
         </label>
     </div>
     </div>
@@ -27,7 +28,7 @@
                 var mix = Model.TobacoMix[i];
                 <div class="col-xs-6">
                     <div class="tobacoBox">
-                        <span class="empty">@Smoke.SmokeSession.empty</span>
+                        <span class="empty">@LocalizationHelper.Translate("_TobaccoEditEmpty", "SmokeSession")</span>
                         <div class="flavor">
                             <span class="mixBrand">@mix.TobaccoBrand</span>
                             <br/>
