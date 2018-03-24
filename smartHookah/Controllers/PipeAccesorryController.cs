@@ -90,7 +90,7 @@ namespace smartHookah.Controllers
                 if (add)
                 {
                     var person = new Person();
-                    PersonController.AddGear(accesory.Id,db,out person,UserHelper.GetCurentPerson(db).Id);
+                    PersonController.AddGear(accesory.Id,0,db,out person,UserHelper.GetCurentPerson(db).Id);
                     return RedirectToAction("MyGear", "Person");
                 }
 
@@ -240,6 +240,7 @@ namespace smartHookah.Controllers
             var model = new AddPipeAccesoryViewModel();
             model.items = items;
             model.owndItemsId = person.OwnedPipeAccesories.Where(a => a.DeleteDate == null).Select(a => a.PipeAccesoryId).ToList();
+            model.accessoryType = type;
 
             return View("_AddPipeAccesory", model);
         }
@@ -256,5 +257,7 @@ namespace smartHookah.Controllers
     {
         public List<PipeAccesory> items;
         public List<int> owndItemsId;
+        public string accessoryType;
+        public int amount;
     }
 }

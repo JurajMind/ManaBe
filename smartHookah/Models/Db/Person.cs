@@ -11,6 +11,8 @@ namespace smartHookah.Models
 {
     public class Person
     {
+        private bool _isPlace;
+
         [Key]
         public int Id { get; set; }
 
@@ -41,6 +43,12 @@ namespace smartHookah.Models
         public Place Place
         {
             get { return Places.FirstOrDefault(); }
+        }
+
+        [NotMapped]
+        public bool IsPlace
+        {
+            get { return Places.Count > 0; }
         }
 
         public virtual ICollection<HookahOrder> Orders { get; set; }

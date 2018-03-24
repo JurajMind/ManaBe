@@ -1,4 +1,5 @@
-﻿@using smartHookah.Models
+﻿@using smartHookah.Helpers
+@using smartHookah.Models
 @model IEnumerable<SmokeSession>
 
 <script type="text/javascript">
@@ -26,7 +27,7 @@
 @if (Model.OrderByDescending(a => a.Statistics.Start).Skip(9).Any())
 {
                 
-    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(true)">@Smoke.SmokeSession.showAll&nbsp;<i class="fa fa-arrow-down"></i></button>
-    <button class="btn btn-default btn-raised showBtn" onclick="ShowAll(false)"style="display:none">@Smoke.SmokeSession.hide <i class="fa fa-arrow-up"></i></button>
+<button class="btn btn-default btn-raised showBtn" onclick="ShowAll(true)">@LocalizationHelper.Translate("CardGridShowAll", "SmokeSession")<i class="fa fa-arrow-down"></i></button>
+<button class="btn btn-default btn-raised showBtn" onclick="ShowAll(false)" style="display:none">@LocalizationHelper.Translate("CardGridHide", "SmokeSession") <i class="fa fa-arrow-up"></i></button>
                 
 }
