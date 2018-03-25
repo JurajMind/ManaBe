@@ -12,38 +12,13 @@ namespace smartHookah
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-
-            AutoMapper.Mapper.Initialize(cfg =>
-            {
-                
-                cfg.CreateMap<SmokeSession, SmokeSessionDto>()
-                    .ForMember(customerDto => customerDto.Id, map => map.MapFrom(
-                                customer => MySqlFuncs.LTRIM(MySqlFuncs.StringConvert(customer.Id))));
-                
-                cfg.CreateMap<SmokeSessionDto, SmokeSession>()
-                .ForMember(customer => customer.Id, map => map.MapFrom(
-                    customerDto => MySqlFuncs.IntParse(customerDto.Id)));
-
-                cfg.CreateMap<PipeAccesoryDto, PipeAccesory>()
-             .ForMember(customer => customer.Id, map => map.MapFrom(
-                 customerDto => MySqlFuncs.IntParse(customerDto.Id)));
-
-                cfg.CreateMap<PipeAccesory, PipeAccesoryDto>()
-                 .ForMember(customerDto => customerDto.Id, map => map.MapFrom(
-                             customer => MySqlFuncs.LTRIM(MySqlFuncs.StringConvert(customer.Id))));
-
-            });
-
-
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "ActionApi",
-                routeTemplate: "api/{controller}/{action}/{id}"
-             
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults:new {id = RouteParameter.Optional}
             );
 
             config.Routes.MapHttpRoute(

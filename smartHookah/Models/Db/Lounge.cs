@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace smartHookah.Models
 {
+    using System.Data.Entity.Spatial;
+
     public class Place
     {
         [Key]
@@ -284,7 +286,9 @@ namespace smartHookah.Models
         [MaxLength(10)]
        public string Lng { get; set; }
 
-   
+        public DbGeography Location { get; set; }
+
+
         public override string ToString()
         {
             return $"{Street} {Number} {City} {ZIP}";
