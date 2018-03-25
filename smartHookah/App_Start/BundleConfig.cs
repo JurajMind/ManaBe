@@ -140,8 +140,13 @@ namespace smartHookah
             .Include("~/Content/bmd.css")
             .Include("~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content").Include(
+                "~/Content/range-sliders.css"));
 
-        
+            bundles.Add(new ScriptBundle("~/Scripts").Include(
+                "~/Scripts/global.js"));
+
+
         }
     }
 }
