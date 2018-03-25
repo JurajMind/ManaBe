@@ -5,6 +5,7 @@
     using System.Configuration;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.Entity.Spatial;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -556,6 +557,7 @@
                 var firstResult = result.Results.First();
                 address.Lat = firstResult.Geometry.Location.Lat.ToString(CultureInfo.InvariantCulture);
                 address.Lng = firstResult.Geometry.Location.Lng.ToString(CultureInfo.InvariantCulture);
+                address.Location = DbGeography.FromText($"POINT({  address.Lat} {  address.Lng})");
             }
 
             return address;
