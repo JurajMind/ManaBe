@@ -1540,6 +1540,7 @@
     <Content Include="Content\nouislider.css" />
     <Content Include="Content\nouislider.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\range-slider.css" />
     <Content Include="Content\season.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\select2.min.css" />
@@ -1709,6 +1710,8 @@
     <Content Include="dist\vendor-manifest.json" />
     <Content Include="Content\gijgo\fonts\gijgo-material.woff" />
     <Content Include="Content\gijgo\fonts\gijgo-material.ttf" />
+    <Content Include="Content\range-slider.css.map" />
+    <Content Include="Content\range-slider.scss" />
     <None Include="LocalizationAdmin\scripts\_references.js" />
     <Content Include="LocalizationAdmin\Partials\AddResourceDialog.html" />
     <Content Include="LocalizationAdmin\Partials\CommentDialog.html" />
@@ -2085,7 +2088,6 @@
     <Content Include="Views\Tobacco\_TobacoMixListItem.cshtml" />
     <Content Include="Views\Tobacco\_TobaccoMix.cshtml" />
     <Content Include="Views\Tobacco\_TobaccoReviews.cshtml" />
-    <Content Include="Views\Person\_TobacoMyGearPartial.cshtml" />
     <Content Include="Views\PipeAccesorry\Create.cshtml" />
     <Content Include="Views\Shared\_TobacoEdit.cshtml" />
     <Content Include="Views\Shared\_TobacoEditModal.cshtml" />

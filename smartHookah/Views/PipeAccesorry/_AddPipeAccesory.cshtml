@@ -1,8 +1,23 @@
-﻿@model   smartHookah.Controllers.AddPipeAccesoryViewModel
+﻿@using smartHookah.Helpers
+@model   smartHookah.Controllers.AddPipeAccesoryViewModel
 
 @{
     Layout = null;
 }
+<style>
+    .input-format {
+        display: inline-block;
+        vertical-align: middle;
+        width: 4em;
+    }
+
+    .td-input {
+        align-content: right;
+        text-align: right;
+        width: fit-content;
+    }
+</style>
+
 <table class="table table-striped">
     <thead>
 
@@ -10,9 +25,28 @@
     @foreach (var item in Model.items)
     {
         var owned = Model.owndItemsId.Contains(item.Id);
-            <tr @(owned ? "class=ownedAccesory" : "")>
-                <td>@item.BrandName @item.AccName</td>
-                <td> <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id,this)" class="btn btn-success btn-sm btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button></td>
-            </tr>
-            }
+        <tr @(owned ? "class=ownedAccesory" : "")>
+            <td style="display:inline-block">@item.AccName</td>
+            <td class="td-input">
+                @switch (Model.accessoryType)
+                {
+                    case "pipe":
+                            <input @(UserHelper.GetCurentPerson().IsPlace ? "" : "style=display:none;") @(owned ? "disabled=\"disabled\"" : "") class="form-control input-format" id="@item.Id" type="number" min="1" step="1" value="1"/>
+                            <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, document.getElementById('@item.Id').value, this)" class="btn btn-success btn-md btn-raised btn-fab btn-fab-mini" ><i class="fa fa-plus"></i></button>
+                        break;
+                    case "bowl":
+                            <input @(UserHelper.GetCurentPerson().IsPlace ? "" : "style=display:none;") @(owned ? "disabled=\"disabled\"" : "") class="form-control input-format" id="@item.Id" type="number" min="1" step="1" value="1"/>
+                            <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, document.getElementById('@item.Id').value, this)" class="btn btn-success btn-md btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button>
+                        break;
+                    case "tobacco":
+                            <input @(owned ? "disabled=\"disabled\"" : "") class="form-control input-format" id="@item.Id" type="number" min="1" step="5" value="50"/>
+                            <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, document.getElementById('@item.Id').value, this)" class="btn btn-success btn-md btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button>
+                        break;
+                }
+                <!--
+                <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, this)" class="btn btn-success btn-sm btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button> 
+                -->
+            </td>
+        </tr>
+    }
 </table>

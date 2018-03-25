@@ -42,15 +42,15 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label class="bmd-label-floating">@Device.pufBr</label>
-                    <input class="form-control" step="10" value="@Model.Setting.PufBrightness" type="number" min="0" max="255" onchange="BrChanged(1, this.value)" id="pufSlider"/>
+                    <input class="form-control" step="1" value="@Model.Setting.PufBrightness" type="range" min="0" max="255" onchange="BrChanged(1, this.value)" id="puffSlider"/>
                 </div>
 
-
+                
                 @if (Model.HookahVersion > 1000024)
                 {
                     <div class="form-group col-sm-6">
                         <label class="bmd-label-floating">@Device.pufSpeed</label>
-                        <input class="form-control" step="10" value="@Model.Setting.PufSpeed" type="number" min="10" max="255" onchange="SpeedChanged(1, this.value)" id="pufSpeedSlider"/>
+                        <input class="form-control" step="1" value="@Model.Setting.PufSpeed" type="range" min="0" max="245" onchange="SpeedChanged(1, this.value)" id="puffSpeedSlider"/>
                     </div>
                 }
             </div>
@@ -70,14 +70,17 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label class="bmd-label-floating">@Device.idleBr</label>
-                    <input class="form-control" step="10" value="@Model.Setting.IdleBrightness" type="number" min="0" max="255" onchange="BrChanged(0, this.value)" id="idleSlider"/>
+                    <div class="form-control">
+                        <i class="fa fa-sun-o"></i>
+                        <input class="pmd-range-slider" step="1" value="@Model.Setting.IdleBrightness" type="range" min="0" max="255" onchange="BrChanged(0, this.value)" id="idleSlider" />
+                    </div>
                 </div>
 
                 @if (Model.HookahVersion > 1000024)
                 {
                     <div class="form-group col-sm-6">
                         <label class="bmd-label-floating">@Device.idleSpeed</label>
-                        <input class="form-control" step="10" value="@Model.Setting.IdleSpeed" type="number" min="10" max="255" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider"/>
+                        <input class="form-control" step="1" value="@Model.Setting.IdleSpeed" type="range" min="0" max="245" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider"/>
                     </div>
                 }
             </div>
@@ -115,7 +118,6 @@
 </div>
 
 <script type="text/javascript">
-
     $(function() {
 
         @{
@@ -128,6 +130,9 @@
                 @h.ToString(CultureInfo.InvariantCulture),
                 @s.ToString(CultureInfo.InvariantCulture),
                 @v.ToString(CultureInfo.InvariantCulture));
+
+        $('#idleSpeedSlider')[0].value = (255 - @Model.Setting.IdleSpeed); 
+        $('#puffSpeedSlider')[0].value = (255 - @Model.Setting.PufSpeed);
     });
 
     function SendColor() {
@@ -137,7 +142,6 @@
     }
 
     function SendComand(cmd, data) {
-        console.log(cmd + ':' + data);
         console.log(cmd + ':' + data);
         $.ajax({
             type: "POST",
@@ -179,7 +183,7 @@
     }
 
     function SpeedChanged(index, value) {
-        SendComand('speed', index + ':' + value);
+        SendComand('speed', index + ':' + (255 - value));
     }
 
     function Restart() {
