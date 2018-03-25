@@ -25,15 +25,13 @@ namespace smartHookah.Controllers.Mobile
         }
 
         [HttpGet]
-        [Route("api/Mobile/Person/")]
-        public async Task<GetPersonActiveSession> GetHome()
+        [ActionName("DefaultAction")]
+        public async Task<string> GetHome()
         {
             var persons = UserHelper.GetCurentPersonIQuerable(_db);
 
             var person = persons.Include(a => a.SmokeSessions.Select(b => b.MetaData))
                 .Include(a => a.SmokeSessions.Select(b => b.Statistics)).FirstOrDefault();
-
-            var model = new GetPersonActiveSession();
 
             var session = person.SmokeSessions.Where(a => a.StatisticsId == null);
             //model.Hookahs = person.Hookahs.Select(a => new HookahDTO(a)).ToList();
@@ -46,16 +44,12 @@ namespace smartHookah.Controllers.Mobile
                 
             //}
 
-            return model;
+            return session.ToString();
         }
+
+      
     }
 
-    public class GetPersonActiveSession
-    {
-        //public List<HookahDTO> Hookahs { get; set; }
 
-        public List<SmokeSessionDto> ActiveSessions { get; set; }
-
-    }
 }
 
