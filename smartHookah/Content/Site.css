@@ -1250,4 +1250,75 @@ input.rating {
     align-items: right;
     align-content: right;
 }
-/*^^flippnig smoke session cards classes^^*/
+
+/*range sliders  vv*/
+
+input[type="range"] {
+    margin: auto;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 1em;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0; /* iOS */
+}
+
+::-webkit-slider-runnable-track {
+    background: #ddd;
+}
+
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1em;
+    height: 1em;
+    background: #444;
+    box-shadow: -100vw 0 0 100vw #3f51b5;
+    border: none;
+}
+
+::-moz-range-track {
+    height: 1em;
+    background: #ddd;
+}
+
+::-moz-range-thumb {
+    background: #444;
+    height: 1em;
+    width: 1em;
+    border: none;
+    border-radius: 0 !important;
+    box-shadow: -100vw 0 0 100vw #3f51b5;
+    box-sizing: border-box;
+}
+
+::-ms-fill-lower {
+    background: #3f51b5;
+}
+
+::-ms-thumb {
+    background: #444;
+    border: none;
+    height: 1em;
+    width: 1em;
+    box-sizing: border-box;
+}
+
+::-ms-ticks-after {
+    display: none;
+}
+
+::-ms-ticks-before {
+    display: none;
+}
+
+::-ms-track {
+    background: #ddd;
+    color: transparent;
+    height: 1em;
+    border: none;
+}
+
+::-ms-tooltip {
+    display: none;
+}

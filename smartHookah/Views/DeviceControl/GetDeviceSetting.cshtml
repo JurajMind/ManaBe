@@ -41,16 +41,19 @@
 
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label class="bmd-label-floating">@Device.pufBr</label>
-                    <input class="form-control" step="1" value="@Model.Setting.PufBrightness" type="range" min="0" max="255" onchange="BrChanged(1, this.value)" id="puffSlider"/>
+                    <label class="bmd-label-floating"><img src="~/Content/icons/brightness.svg" style="height: 1em" />&nbsp;@Device.pufBr</label>
+                    <div class="form-control">
+                        <input step="1" value="@Model.Setting.PufBrightness" type="range" min="0" max="255" onchange="BrChanged(1, this.value)" id="puffSlider" />
+                    </div>
                 </div>
-
                 
                 @if (Model.HookahVersion > 1000024)
                 {
                     <div class="form-group col-sm-6">
-                        <label class="bmd-label-floating">@Device.pufSpeed</label>
-                        <input class="form-control" step="1" value="@Model.Setting.PufSpeed" type="range" min="0" max="245" onchange="SpeedChanged(1, this.value)" id="puffSpeedSlider"/>
+                        <label class="bmd-label-floating"><img src="~/Content/icons/speed.svg" style="height: 1em" />&nbsp;@Device.pufSpeed</label>
+                        <div class="form-control">
+                            <input step="1" value="@Model.Setting.PufSpeed" type="range" min="0" max="245" onchange="SpeedChanged(1, this.value)" id="puffSpeedSlider" />
+                        </div>
                     </div>
                 }
             </div>
@@ -69,18 +72,19 @@
 
             <div class="row">
                 <div class="form-group col-sm-6">
-                    <label class="bmd-label-floating">@Device.idleBr</label>
+                    <label class="bmd-label-floating"><img src="~/Content/icons/brightness.svg" style="height: 1em" />&nbsp;@Device.idleBr</label>
                     <div class="form-control">
-                        <i class="fa fa-sun-o"></i>
-                        <input class="pmd-range-slider" step="1" value="@Model.Setting.IdleBrightness" type="range" min="0" max="255" onchange="BrChanged(0, this.value)" id="idleSlider" />
+                        <input style="display:inline-block" step="1" value="@Model.Setting.IdleBrightness" type="range" min="0" max="255" onchange="BrChanged(0, this.value)" id="idleSlider" />
                     </div>
                 </div>
 
                 @if (Model.HookahVersion > 1000024)
                 {
                     <div class="form-group col-sm-6">
-                        <label class="bmd-label-floating">@Device.idleSpeed</label>
-                        <input class="form-control" step="1" value="@Model.Setting.IdleSpeed" type="range" min="0" max="245" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider"/>
+                        <label class="bmd-label-floating"><img src="~/Content/icons/speed.svg" style="height: 1em"/>&nbsp;@Device.idleSpeed</label>
+                        <div class="form-control">
+                            <input step="1" value="@Model.Setting.IdleSpeed" type="range" min="0" max="245" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider" />
+                        </div>
                     </div>
                 }
             </div>
@@ -178,12 +182,23 @@
         SendComand('led', index + ':' + $(`#${value}`).val());
     }
 
+    var BrTimer;
+    var SpeedTimer;
+
     function BrChanged(index, value) {
-        SendComand('br', index + ':' + value);
+        if (BrTimer != null) {
+            clearTimeout(BrTimer);
+            BrTimer = null;
+        }
+        BrTimer = setTimeout(function () { SendComand('br', index + ':' + value); }, 1000);
     }
 
     function SpeedChanged(index, value) {
-        SendComand('speed', index + ':' + (255 - value));
+        if (SpeedTimer != null) {
+            clearTimeout(SpeedTimer);
+            SpeedTimer = null;
+        }
+        SpeedTimer = setTimeout(function () { SendComand('speed', index + ':' + (255 - value)); }, 1000);
     }
 
     function Restart() {
