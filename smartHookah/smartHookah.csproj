@@ -1500,8 +1500,6 @@
     <Content Include="Content\highcharts.css" />
     <Content Include="Content\icons\blow.svg" />
     <Content Include="Content\icons\bowl.svg" />
-    <Content Include="Content\icons\brightness-high.svg" />
-    <Content Include="Content\icons\brightness-low.svg" />
     <Content Include="Content\icons\brightness.svg" />
     <Content Include="Content\icons\cloud.svg" />
     <Content Include="Content\icons\hookah.svg" />
