@@ -120,7 +120,8 @@ namespace smartHookah.Helpers
         private static string UserId(SmartHookahContext db)
         {
             var userIdentity = System.Web.HttpContext.Current.User.Identity.GetUserId();
-           if(userIdentity != null)        return userIdentity;
+           if(userIdentity != null)
+                return userIdentity;
             var userId = HttpContext.Current.User.Identity.GetUserIdUni(db);
             return userId;
         }

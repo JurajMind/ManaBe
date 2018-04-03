@@ -228,5 +228,8 @@ namespace smartHookah.Models
         public System.Data.Entity.DbSet<smartHookah.Models.EventRecepie> EventRecepies { get; set; }
 
         public System.Data.Entity.DbSet<smartHookah.Models.Media> Media { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Client> Clients { get; set; }
     }
 }
