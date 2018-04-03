@@ -2076,6 +2076,7 @@
     <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
     <Content Include="Views\Emails\reservationConfirm.cshtml" />
     <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
+    <Content Include="Views\DeviceControl\SignalR.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />

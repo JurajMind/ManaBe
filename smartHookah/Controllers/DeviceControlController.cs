@@ -33,6 +33,11 @@ namespace smartHookah.Controllers
             this.db = db;
         }
 
+        public async Task<ActionResult> SignalR()
+        {
+            return this.View();
+        }
+
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
         {
             var model = new DefaultMetadataViewModel { hookahId = hookahId, personId = personId };
