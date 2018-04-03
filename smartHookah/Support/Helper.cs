@@ -6,6 +6,8 @@ using System.Web;
 
 namespace smartHookah
 {
+    using System.Security.Cryptography;
+
     public static class Helper
     {
         public static int UpdateVersionToInt(string versionString)
@@ -19,6 +21,17 @@ namespace smartHookah
             }
 
             return int.Parse(resultString.ToString());
+        }
+
+        public static string GetHash(string input)
+        {
+            HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider();
+
+            byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input);
+
+            byte[] byteHash = hashAlgorithm.ComputeHash(byteValue);
+
+            return Convert.ToBase64String(byteHash);
         }
 
         public static string UpdateVersionToString(int version)
