@@ -51,7 +51,16 @@ namespace smartHookah
             
             bool isDebug = false;
             //Debug.Assert(isDebug = true);
-            manager.AddOrUpdate("AutoEnd", Job.FromExpression(() => AutoEnd.EndSmokeSessions(null, isDebug)), Cron.MinuteInterval(15));
+            var onDev = ConfigurationManager.AppSettings["idDevel"];
+            if (onDev == null)
+            {
+                manager.AddOrUpdate("AutoEnd", Job.FromExpression(() => AutoEnd.EndSmokeSessions(null, isDebug)), Cron.MinuteInterval(15));
+            }
+            else
+            {
+                manager.RemoveIfExists("AutoEnd");
+            }
+         
             
             app.MapSignalR();
             ConfigureOAuth(app);
