@@ -1,0 +1,51 @@
+﻿@model dynamic
+    @{
+        Layout = null;
+    }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+    <div>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/signalr")
+        <script src="~/signalr/hubs"></script>
+        
+        <script>
+                        var hub = $.connection.smokeSessionHub;
+
+            hub.client.updateStats = function(stats) {
+            }
+
+            hub.client.pufChange = function (direction, directionGraphValue) {
+            }
+
+            hub.client.serviceRequest = function() {             
+            }
+
+            $.connection.hub.start()
+                .done(function() {
+                    hub.server.joinSession('Test');
+                });
+
+            $.connection.hub.disconnected(function() {
+                console.log("disconected");
+                setTimeout(function() {
+                        $.connection.hub.start()
+                            .done(function() {
+                                hub.server.joinSession('Test');
+                            });
+                        console.log("reconect");
+                        $('#statisticForm').submit();
+                    },
+                    5000); // Re-start connection after 5 seconds
+            });
+        </script>
+
+    </div>
+</body>
+</html>
