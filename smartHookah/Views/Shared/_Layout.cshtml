@@ -27,7 +27,7 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <title>@ViewBag.Title - ManaPipes</title>
+    <title>@ViewBag.Title - ManaPipes</title>f
     @*@Styles.Render("~/Content/cssAll")*@
 
     @Styles.Render("~/Content/font-awesome")
@@ -36,11 +36,13 @@
     @Styles.Render("~/Content/material")
     @*@Styles.RenderFormat(" <link rel=\"preload\" href=\"{0}\" as=\"style\" onload=\"this.rel='stylesheet'\">", "~/Content/material")*@
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/select2")
+
 
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/select2")
+    @*Scripts.Render("~/bundles/select2")
+        @Styles.Render("~/Content/select2")
+    *@
 
     @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/jqueryval")
 
@@ -54,8 +56,33 @@
         <script type="text/javascript" async src="~/LocalizationAdmin/scripts/ww.resourceEditor.js"></script>
     }
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js" async></script>
+
 
     <script type='text/javascript'>
+        $(document).ready(function () {
+            $('select').select2({
+                theme: "material"
+            });
+
+            $(".select2-selection__arrow")
+                .addClass("material-icons")
+                .html("arrow_drop_down");
+        });
+
+        $(document).on('focus', '.select2', function (e) {
+            if (e.originalEvent) {
+                $(this).parent().addClass('is-focused');
+            }
+        });
+
+        $(document).on('blur', '.select2', function (e) {
+            if (e.originalEvent && !($(this).hasClass('select2-container--open') > 0)) {
+                $(this).parent().removeClass('is-focused');
+            }
+        });
+
         var appInsights = window.appInsights ||
             function (config) {
                 function r(config) {
