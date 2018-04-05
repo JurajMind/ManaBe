@@ -1518,10 +1518,12 @@
     <Content Include="Content\highcharts.css" />
     <Content Include="Content\icons\blow.svg" />
     <Content Include="Content\icons\bowl.svg" />
+    <Content Include="Content\icons\brightness.svg" />
     <Content Include="Content\icons\cloud.svg" />
     <Content Include="Content\icons\hookah.svg" />
     <Content Include="Content\icons\lotus.svg" />
     <Content Include="Content\icons\pack.svg" />
+    <Content Include="Content\icons\speed.svg" />
     <Content Include="Content\icons\tobacco.svg" />
     <Content Include="Content\images\bg.jpg" />
     <Content Include="Content\images\hallo.png" />
