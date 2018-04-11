@@ -1,0 +1,172 @@
+﻿@model smartHookah.Models.Place
+@{
+    ViewBag.Title = $"{Model.Name} statistics";
+}
+
+
+
+<div class="card" id="stats">
+    <div class="row">
+
+        <div class="card col-md-12">
+            <h4 class="card-header">Summary</h4>
+            <div class="card-body row">
+                <div class="col-md-6">
+                    <h5>Start: {{statsData.Start}}</h5>
+                    <h5>Duration: {{statsData.DataSpan}}</h5>
+                </div>
+                <div class="col-md-6">
+                    <h5>#Reservations : {{statsData.ReservationCount}}</h5>
+                    <h5>#Customers : {{statsData.customers}}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-deck">
+            <div class="card">
+                <h4 class="card-header">Day distribution</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.dayDistribution.Data" v-bind:labels="statsData.dayDistribution.Labels" v-bind:label="'Day'" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-header">Reservation start distribution</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.timeDistribution.Data" v-bind:labels="statsData.timeDistribution.Labels" v-bind:label="'Time'" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-header">Reservation duration</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.visitDuration.Data" v-bind:labels="statsData.visitDuration.Labels" v-bind:label="'Visit duration'" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-header">Group size</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.groupSize.Data" v-bind:labels="statsData.groupSize.Labels" v-bind:label="'Group size'" />
+                </div>
+            </div>
+            <div class="card">
+                <h4 class="card-header">Month visits</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.monthVisit.Data" v-bind:labels="statsData.monthVisit.Labels" v-bind:label="'Month visits'" />
+                </div>
+            </div>
+            <div class="card">
+                <h4 class="card-header">Week visits</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.weekVisits.Data" v-bind:labels="statsData.weekVisits.Labels" v-bind:label="'Week visits'" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-header">Table ussage</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.tableUssage.Data" v-bind:labels="statsData.tableUssage.Labels" v-bind:label="'Table ussage'" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    @Scripts.Render("~/bundles/gij")
+    @Scripts.Render("~/bundles/vue")
+    @section scripts
+    {
+        <script>
+            var placeId = '@Model.FriendlyUrl';
+        Vue.component('line-chart',
+            {
+                extends: VueChartJs.Line,
+                props: ["Labels", "Data", "Label"],
+                watch: {
+                    Data: function(newVal) {
+                        this.render();
+                        return newVal;
+                    }
+                },
+                methods: {
+                    color() {
+                        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    },
+                    render() {
+                        this.renderChart({
+                            labels: this.Labels,
+                            datasets: [
+                                {
+                                    label: this.Label,
+                                    backgroundColor: this.color(),
+                                        data: this.Data
+                                    }
+                                ]
+                            },
+                            { responsive: true, maintainAspectRatio: false });
+                    }
+                }
+            });
+
+
+        var v = new Vue({
+            el: '#stats',
+            created: function () { this.loadData(); },
+
+            data: {
+                statsData: {
+                    dayDistribution: {
+                        Data: null,
+                        Labels: null
+                    },
+                    timeDistribution: {
+                        Data: null,
+                        Labels: null
+                    },
+                    groupSize: {
+                        Data: null,
+                        Labels: null
+                    },
+                    monthVisit: {
+                        Data: null,
+                        Labels: null
+                    },
+                    weekVisits: {
+                        Data: null,
+                        Labels: null
+                    },
+                    tableUssage: {
+                        Data: null,
+                        Labels: null
+                    },
+                    visitDuration: {
+                        Data: null,
+                        Labels: null
+                    },
+                    Start: null,
+                    Duration: null,
+                    ReservationCount: 0,
+                    customers:0
+
+                },
+                option: {
+                    week: null,
+                }
+            },
+            methods: {
+                loadData() {
+                    var _this = this;
+                    $.getJSON('/Places/getStatisticData',
+                        {
+                            id:placeId
+                        },
+                        function(json) {
+                            _this.statsData = json;
+                        })
+                }
+            }
+            })
+        </script>
+    }
