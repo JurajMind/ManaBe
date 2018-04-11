@@ -821,6 +821,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\Api\AnimController.cs" />
@@ -840,6 +841,8 @@
     <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\Mobile\PlaceController.cs" />
     <Compile Include="Controllers\Mobile\SmokeSessionController.cs" />
+    <Compile Include="Models\ViewModel\OrderSpecificModel.cs" />
+    <Compile Include="Models\ViewModel\PriceGroupDto.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -926,7 +929,7 @@
     <Compile Include="Models\ViewModel\EditOpenHoursViewModel.cs" />
     <Compile Include="Controllers\GamificationController.cs" />
     <Compile Include="Controllers\GetPlaceMenuModel.cs" />
-    <Compile Include="Controllers\Hours.cs" />
+    <Compile Include="Models\ViewModel\Hours.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Models\ViewModel\OrderHookahViewModel.cs" />
@@ -2135,6 +2138,7 @@
     <Content Include="Views\SmokeSession\_SmokeSessionCardItem.cshtml" />
     <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Places\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
