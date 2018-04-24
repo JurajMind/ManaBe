@@ -11,7 +11,7 @@ namespace smartHookah.Controllers
         // GET: Info
         public ActionResult Index()
         {
-            return View();
+            return null;
         }
     }
 }
