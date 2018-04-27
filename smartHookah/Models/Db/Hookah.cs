@@ -22,6 +22,9 @@ namespace smartHookah.Models
             Version = modelHookah.Version;
             Type = modelHookah.Type;
             Setting = new HookahSetting(modelHookah.Setting);
+            AutoSessionEndTime = modelHookah.AutoSessionEndTime;
+            AutoSleep = modelHookah.AutoSleep;
+            UpdateType = modelHookah.UpdateType;
 
         }
         public int Id { get; set; }
