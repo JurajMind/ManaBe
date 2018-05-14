@@ -1,8 +1,8 @@
 /*
- * Gijgo Tree v1.8.1
+ * Gijgo Tree v1.9.6
  * http://gijgo.com/tree
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery gj */
@@ -226,7 +226,7 @@ gj.tree.methods = {
         var i, id, nodeData, result = [],
             data = $tree.data();
         for (i = 0; i < response.length; i++) {
-            id = data.primaryKey ? response[i][data.primaryKey] : data.autoGenId++;
+            id = data.primaryKey && response[i][data.primaryKey] ? response[i][data.primaryKey] : data.autoGenId++;
             nodeData = { id: id, data: response[i] };
             if (response[i][data.childrenField] && response[i][data.childrenField].length) {
                 nodeData.children = gj.tree.methods.getRecords($tree, response[i][data.childrenField]);
@@ -538,6 +538,21 @@ gj.tree.methods = {
         return $result;
     },
 
+    getAll: function ($tree, records) {
+        var i, $node, id, targetRecord,
+            result = [],
+            childrenField = $tree.data('childrenField');
+
+        for (i = 0; i < records.length; i++) {
+            targetRecord = JSON.parse(JSON.stringify(records[i].data));
+            if (records[i].children.length) {
+                targetRecord[childrenField] = gj.tree.methods.getAll($tree, records[i].children);
+            }
+            result.push(targetRecord);
+        }
+        return result;
+    },
+
     addNode: function ($tree, data, $parent, position) {
         var level,
             newNodeData = gj.tree.methods.getRecords($tree, [data])[0];
@@ -564,7 +579,7 @@ gj.tree.methods = {
 
     remove: function ($tree, $node) {
         gj.tree.methods.removeDataById($tree, $node.attr('data-id'), $tree.data('records'));
-        $node.remove();    
+        $node.remove();
         return $tree;
     },
 
@@ -578,6 +593,16 @@ gj.tree.methods = {
                 gj.tree.methods.removeDataById($tree, id, records[i].children);
             }
         }
+    },
+
+    update: function ($tree, id, newRecord) {
+        var data = $tree.data(),
+            $node = $tree.getNodeById(id),
+            oldRecord = $tree.getDataById(id);
+        oldRecord = newRecord;
+        $node.find('>[data-role="wrapper"]>[data-role="display"]').html(newRecord[data.textField]);
+        gj.tree.events.nodeDataBound($tree, $node, id, newRecord);
+        return $tree;
     },
 
     getChildren: function ($tree, $node, cascade) {
@@ -687,6 +712,11 @@ gj.tree.methods = {
     };
 
     /**
+     * Update node from the tree.     */    self.updateNode = function (id, record) {
+        return methods.update(this, id, record);
+    };
+
+    /**
      * Destroy the tree.     */    self.destroy = function () {
         return methods.destroy(this);
     };
@@ -729,6 +759,11 @@ gj.tree.methods = {
     /**
      * Return node by text.     */    self.getNodeByText = function (text) {
         return methods.getNodeByText(this.children('ul'), text);
+    };
+
+    /**
+     * Return an array with all records presented in the tree.     */    self.getAll = function () {
+        return methods.getAll(this, this.data('records'));
     };
 
     /**
@@ -1040,8 +1075,9 @@ gj.tree.widget.constructor = gj.tree.widget;
 	    createNodeMouseMoveHandler: function ($tree, $node, $display) {
             return function (e) {
                 if ($tree.data('dragReady')) {
-                    $tree.data('dragReady', false);
                     var data = $tree.data(), $dragEl, $wrapper, offsetTop, offsetLeft;
+
+                    $tree.data('dragReady', false);
                     $dragEl = $display.clone().wrap('<div data-role="wrapper"/>').closest('div')
                         .wrap('<li class="' + data.style.item + '" />').closest('li')
                         .wrap('<ul class="' + data.style.list + '" />').closest('ul');
@@ -1114,7 +1150,7 @@ gj.tree.widget.constructor = gj.tree.widget;
                         $indicator, middle;
 	                if (!success && $wrapper.droppable('isOver', mousePosition)) {
 	                    middle = $wrapper.position().top + ($wrapper.outerHeight() / 2);
-	                    if (mousePosition.top < middle) {
+	                    if (mousePosition.y < middle) {
 	                        $wrapper.addClass(data.style.dropAbove).removeClass(data.style.dropBelow);
 	                    } else {
 	                        $wrapper.addClass(data.style.dropBelow).removeClass(data.style.dropAbove);
@@ -1270,6 +1306,7 @@ gj.tree.widget.constructor = gj.tree.widget;
                     $expander = $node.find('>[data-role="wrapper"]>[data-role="expander"]'),
                     $expander.attr('data-mode', 'open');
                     $expander.empty().append(data.icons.collapse);
+                    gj.tree.events.dataBound($tree);
                 }
             };
         },
