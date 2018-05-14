@@ -1,8 +1,8 @@
 /*
- * Gijgo Dialog v1.8.1
+ * Gijgo Dialog v1.9.6
  * http://gijgo.com/dialog
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery */
@@ -16,9 +16,9 @@ gj.dialog.config = {
         /** If set to true, the dialog will automatically open upon initialization.
          * If false, the dialog will stay hidden until the open() method is called.         */        autoOpen: true,
 
-        /** Specifies whether the dialog should close when it has focus and the user presses the escape (ESC) key.         */        closeOnEscape: true,
-
         /** Specifies whether the dialog should have a close button in right part of dialog header.         */        closeButtonInHeader: true,
+
+        /** Specifies whether the dialog should close when it has focus and the user presses the escape (ESC) key.         */        closeOnEscape: true,
 
         /** If set to true, the dialog will be draggable by the title bar.         */        draggable: true,
 
@@ -26,15 +26,13 @@ gj.dialog.config = {
 
         /** The language that needs to be in use.         */        locale: 'en-us',
 
-        /** The minimum height in pixels to which the dialog can be resized.         */        minHeight: undefined,
-
         /** The maximum height in pixels to which the dialog can be resized.         */        maxHeight: undefined,
 
-        /** The width of the dialog.         */        width: 300,
+        /** The maximum width in pixels to which the dialog can be resized.         */        maxWidth: undefined,
+
+        /** The minimum height in pixels to which the dialog can be resized.         */        minHeight: undefined,
 
         /** The minimum width in pixels to which the dialog can be resized.         */        minWidth: undefined,
-
-        /** The maximum width in pixels to which the dialog can be resized.         */        maxWidth: undefined,
 
         /** If set to true, the dialog will have modal behavior.
          * Modal dialogs create an overlay below the dialog, but above other page elements and you can't interact with them.         */        modal: false,
@@ -46,6 +44,8 @@ gj.dialog.config = {
         /** The title of the dialog. Can be also set through the title attribute of the html element.         */        title: undefined,
 
         /** The name of the UI library that is going to be in use. Currently we support Material Design and Bootstrap.         */        uiLibrary: undefined,
+
+        /** The width of the dialog.         */        width: 300,
 
         style: {
             modal: 'gj-modal',
@@ -306,14 +306,16 @@ gj.dialog.methods = {
         $dialog.append($('<div class="gj-resizable-handle gj-resizable-se"></div>').draggable($.extend(true, {}, config)));
     },
 
-    resize: function (e, offset) {
-        var $el, $dialog, data, height, width, top, left, result = false;
+    resize: function (e, newPosition) {
+        var $el, $dialog, position, data, height, width, top, left, result = false;
 
         $el = $(this);
         $dialog = $el.parent();
+        position = gj.core.position(this);
+        offset = { top: newPosition.top - position.top, left: newPosition.left - position.left };
         data = $dialog.data();
 
-        //TODO: Include margins in the calculations
+        // TODO: Include margins in the calculations
         if ($el.hasClass('gj-resizable-n')) {
             height = $dialog.height() - offset.top;
             top = $dialog.offset().top + offset.top;
@@ -508,4 +510,12 @@ gj.dialog.messages['pt-br'] = {
 gj.dialog.messages['ru-ru'] = {
     Close: 'Закрыть',
     DefaultTitle: 'Сообщение'
+};
+gj.dialog.messages['es-es'] = {
+    Close: 'Cerrar',
+    DefaultTitle: 'Titulo por defecto'
+};
+gj.dialog.messages['it-it'] = {
+    Close: 'Chiudi',
+    DefaultTitle: 'Dialogo'
 };
