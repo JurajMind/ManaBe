@@ -24,9 +24,17 @@ TABLE.gj-grid THEAD TH [data-role="sorticon"] {
     display: inline-block;
 }
 
-TABLE.gj-grid > thead > tr > th {
+TABLE.gj-grid THEAD TH {
     overflow: hidden;
-    /*position: relative;*/
+    text-overflow: ellipsis;
+}
+
+TABLE.gj-grid.autogrow-header-row THEAD TH {
+    overflow: auto;
+    text-overflow: initial;
+    white-space: pre-wrap;
+    -ms-word-break: break-word;
+    word-break: break-word;
 }
 
 TABLE.gj-grid > tbody > tr > td {
@@ -40,6 +48,14 @@ table.gj-grid tbody div[data-role="display"] {
     white-space: pre-wrap;
     -ms-word-break: break-word;
     word-break: break-word;
+}
+
+table.gj-grid.fixed-body-rows tbody div[data-role="display"] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -ms-word-break: initial;
+    word-break: initial;
 }
 
 table.gj-grid tfoot DIV[data-role="display"] {
@@ -115,7 +131,6 @@ table.gj-grid-bootstrap tbody tr td div[data-role="display"] {
 .gj-grid-md th {
     position: relative;
     vertical-align: bottom;
-    text-overflow: ellipsis;
     font-weight: 700;
     line-height: 31px;
     letter-spacing: 0;
@@ -253,7 +268,6 @@ table.gj-grid-md thead th.gj-grid-select-all {
 
 .gj-grid-md tfoot tr[data-role="pager"] .gj-dropdown-md [role="presenter"] [role="display"] {
     text-align: right;
-    padding: 0px;
 }
 
 .gj-grid-md tfoot tr[data-role="pager"] .gj-grid-md-limit-select {
@@ -364,23 +378,23 @@ span.gj-grid-column-resizer {
 .gj-grid-md thead tr th.gj-grid-left-border,
 .gj-grid-md tbody tr td.gj-grid-left-border
 {
-    border-left: 2px solid #777;
+    border-left: 3px solid #777;
 }
 .gj-grid-md thead tr th.gj-grid-right-border,
 .gj-grid-md tbody tr td.gj-grid-right-border
 {
-    border-right: 2px solid #777;
+    border-right: 3px solid #777;
 }
 
 .gj-grid-bootstrap thead tr th.gj-grid-left-border,
 .gj-grid-bootstrap tbody tr td.gj-grid-left-border
 {
-    border-left: 2px solid #ddd;
+    border-left: 5px solid #ddd;
 }
 .gj-grid-bootstrap thead tr th.gj-grid-right-border,
 .gj-grid-bootstrap tbody tr td.gj-grid-right-border
 {
-    border-right: 2px solid #ddd;
+    border-right: 5px solid #ddd;
 }
 .gj-dirty {
     position: absolute;
@@ -495,19 +509,19 @@ span.gj-grid-column-resizer {
     background-color: #fff;
 }
 
-.gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-datepicker-bootstrap [role="right-icon"] .input-group-text {
-    border:0px;
+.gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-datepicker-bootstrap [role="right-icon"] button {
+    border: 0px;
     border-radius: 0px;
     width: 43px;
     position: relative;
-    background-color: #fff;
 }
 
-/*.gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-datepicker-bootstrap [role="right-icon"] .gj-icon,
+.gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-datepicker-bootstrap [role="right-icon"] .gj-icon,
 .gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-datepicker-bootstrap [role="right-icon"] .material-icons {
-    top: 12px;
+    top: 13px;
     left: 10px;
-}*/
+    font-size: 24px;
+}
 
 .gj-grid-bootstrap-4 tbody tr td[data-mode="edit"] .gj-checkbox-bootstrap {
     display: inline-block;
