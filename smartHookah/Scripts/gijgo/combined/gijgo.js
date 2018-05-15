@@ -261,7 +261,27 @@ gj.core = {
             pm: 'PM',
             ok: 'Ok',
             cancel: 'Cancel'
-        }
+        },
+        'cs-cz': {
+            monthNames: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'],
+            weekDaysMin: ['S', 'P', 'U', 'S', 'Č', 'P', 'S'],
+            weekDaysShort: ["Ne", "Po", "Ut", "Str", "Čt", "Pá", "So"],
+            weekDays: ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"],
+            monthShortNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            am: 'dopo',
+            pm: 'popo',
+            ok: 'Ok',
+            cancel: 'Zuši'
+        },
+        'sk-sk': {
+            monthNames: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
+            weekDaysMin: ['S', 'P', 'U', 'S', 'Š', 'P', 'S'],
+            weekDaysShort: ["Ne", "Po", "Ut", "Str", "Št", "Pia", "So"],
+            weekDays: ["Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"],
+            monthShortNames: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+    }
+
+       
     },
 
     /** 
