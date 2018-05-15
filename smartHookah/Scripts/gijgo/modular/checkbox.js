@@ -1,8 +1,8 @@
 /*
- * Gijgo Checkbox v1.8.1
+ * Gijgo Checkbox v1.9.6
  * http://gijgo.com/checkbox
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery */
