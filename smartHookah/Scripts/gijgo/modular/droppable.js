@@ -1,8 +1,8 @@
 /*
- * Gijgo Droppable v1.8.1
+ * Gijgo Droppable v1.9.6
  * http://gijgo.com/droppable
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery */
@@ -39,8 +39,8 @@ gj.droppable.methods = {
             if ($dropEl.isDragging) {
                 var hoverClass = $dropEl.data('hoverClass'),
                     mousePosition = {
-                        left: $dropEl.mouseX(e),
-                        top: $dropEl.mouseY(e)
+                        x: $dropEl.mouseX(e),
+                        y: $dropEl.mouseY(e)
                     },
                     newIsOver = gj.droppable.methods.isOver($dropEl, mousePosition);
                 if (newIsOver != $dropEl.isOver) {
@@ -75,10 +75,10 @@ gj.droppable.methods = {
     },
 
     isOver: function ($dropEl, mousePosition) {
-        var offsetTop = $dropEl.offset().top;// + parseInt($dropEl.css("border-top-width")) + parseInt($dropEl.css("margin-top")) + parseInt($dropEl.css("padding-top")),
-        offsetLeft = $dropEl.offset().left;// + parseInt($dropEl.css("border-left-width")) + parseInt($dropEl.css("margin-left")) + parseInt($dropEl.css("padding-left"));
-        return mousePosition.left > offsetLeft && mousePosition.left < (offsetLeft + $dropEl.outerWidth(true))
-            && mousePosition.top > offsetTop && mousePosition.top < (offsetTop + $dropEl.outerHeight(true));
+        var offsetTop = $dropEl.offset().top,
+            offsetLeft = $dropEl.offset().left;
+        return mousePosition.x > offsetLeft && mousePosition.x < (offsetLeft + $dropEl.outerWidth(true))
+            && mousePosition.y > offsetTop && mousePosition.y < (offsetTop + $dropEl.outerHeight(true));
     },
 
     destroy: function ($dropEl) {
