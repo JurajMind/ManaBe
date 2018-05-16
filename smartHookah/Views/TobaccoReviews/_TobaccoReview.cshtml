@@ -39,7 +39,7 @@
     <div class="form-group col-sm-6">
         <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</label>
         <div class="form-control">
-            <textarea id="Text" class="col-sm-12" rows="10" v-bind:disabled="edit" v-model="review.text" ></textarea>
+            <textarea id="Text" class="col-sm-12" rows="10" v-bind:disabled="edit" v-model="review.Text" ></textarea>
         </div>
     </div>
 
@@ -48,45 +48,38 @@
 </div>
 
 <script type="text/javascript">
-    
+
     var vm = new Vue({
         el: '#tobaccoReview',
 
         data: {
             review: {
-                Id: 0,
-                AuthorId: 0,
-                PublishDate: null,
+                Id: '',
+                AuthorId: '',
                 Quality: 0,
                 Taste: 0,
                 Smoke: 0,
                 Overall: 0,
                 Text: '',
-                ReviewedTobaccoId: 0,
-                SmokeSessionId: 0
+                ReviewedTobaccoId: '',
+                SmokeSessionId: ''
             },
             edit: false
         },
 
-        computed: {
-            sessionId: function () {
-                return $("input[name='sessionId']").val();
-            }
-        },
-
         created: function () {
-            console.log("created function");
+            console.log("created function, session id: " + this.getSessionId());
 
             $.getJSON('/TobaccoReviews/GetReviewVue/',
                 {
-                    sessionId: this.review.SmokeSessionId
+                    sessionId: this.getSessionId()
                 },
-                function (data) {
-                    console.log("created get json"); 
+                function(data) {
+                    console.log("created get json");
                     if (data != null) {
                         this.review = data;
                         this.edit = true;
-                        console.log("created data not null"); 
+                        console.log("created data not null");
                     }
                 });
         },
@@ -95,10 +88,12 @@
             saveReview: function () {
                 console.log("saving function");
                 
+                this.review.SmokeSessionId = this.getSessionId();
+
                 $.ajax({
                     type: "POST",
                     url: "/TobaccoReviews/SaveVueReview/", 
-                    data: JSON.stringify(vm.review),
+                    data: JSON.stringify(this.review),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(data) {
@@ -110,6 +105,10 @@
                         console.log("Error saving review.");
                     }
                 });
+            },
+
+            getSessionId: function () {
+                return $("input[name='sessionId']").val();
             }
         }
     });
