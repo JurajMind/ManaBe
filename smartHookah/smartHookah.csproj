@@ -2027,7 +2027,6 @@
     <Content Include="Views\TobaccoReviews\Details.cshtml" />
     <Content Include="Views\TobaccoReviews\Edit.cshtml" />
     <Content Include="Views\TobaccoReviews\Index.cshtml" />
-    <Content Include="Views\TobaccoReviews\TobaccoReviewModal.cshtml" />
     <Content Include="Views\QrCodeReader\Index.cshtml" />
     <Content Include="Views\Shared\_MetadataAndReview.cshtml" />
     <Content Include="Views\Person\ShowGear.cshtml" />
@@ -2081,7 +2080,6 @@
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
-    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
     <Content Include="Views\SmokeSession\_SmokeSessionListItem.cshtml" />
     <Content Include="Views\Tobacco\_SortedTobacco.cshtml" />
     <Content Include="Views\Tobacco\Index.cshtml" />
@@ -2135,6 +2133,7 @@
     <Content Include="Views\SmokeSession\_SmokeSessionCardItem.cshtml" />
     <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />

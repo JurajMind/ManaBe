@@ -79,7 +79,7 @@ namespace smartHookah.Controllers
                     tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
                 else
                 {
-                    return Json(new {success = false , msg = "Please fill tobaco information first"});
+                    return Json(new {success = false , msg = "Please fill tobacco information first"});
                 }
 
                 if (UserHelper.GetCurentPerson() == null)
@@ -185,7 +185,26 @@ namespace smartHookah.Controllers
             }
             base.Dispose(disposing);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetReviewVue(int? sessionId)
+        {
+            var review = (sessionId == null) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SmokeSessionId == sessionId);
+            
+            return (review != null) ? Json(review, JsonRequestBehavior.AllowGet) : null;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> SaveVueReview([Bind(Include = "Id,AuthorId,PublishDate,Quality,Taste,Smoke,Overall,Text,ReviewedTobaccoId,SmokeSessionId")] TobaccoReview tobaccoReview)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TobaccoReviews.AddOrUpdate(tobaccoReview);
+                await db.SaveChangesAsync();
+                return Json(tobaccoReview, JsonRequestBehavior.AllowGet);
+            }
+
+            return null;
+        }
     }
-
-
 }

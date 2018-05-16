@@ -1,0 +1,118 @@
+﻿@using smartHookah.Helpers
+@model smartHookah.Models.TobaccoReview
+
+<div id="tobaccoReview" class="form-horizontal align-center">
+    <h4>@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</h4>
+
+    <div class="form-group col-sm-6">
+        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevSmokeQ", "SmokeSession")</label>
+        <div class="form-control">
+            <span style="display: inline-block">{{review.Smoke + '/10'}}</span>
+            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Smoke" v-bind:disabled="edit" v-model="review.Smoke" />
+        </div>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTobTaste", "SmokeSession")</label>
+        <div class="form-control">
+            <span style="display: inline-block">{{review.Taste + '/10'}}</span>
+            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Taste" v-bind:disabled="edit" v-model="review.Taste" />
+        </div>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTobaccoQ", "SmokeSession")</label>
+        <div class="form-control">
+            <span style="display: inline-block">{{review.Quality + '/10'}}</span>
+            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Quality" v-bind:disabled="edit" v-model="review.Quality" />
+        </div>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevOverallRating", "SmokeSession")</label>
+        <div class="form-control">
+            <span style="display: inline-block">{{review.Overall + '/10'}}</span>
+            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Rating" v-bind:disabled="edit" v-model="review.Overall" />
+        </div>
+    </div>
+    
+    <div class="form-group col-sm-6">
+        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</label>
+        <div class="form-control">
+            <textarea id="Text" class="col-sm-12" rows="10" v-bind:disabled="edit" v-model="review.text" ></textarea>
+        </div>
+    </div>
+
+    <button class="btn btn-default" v-bind:disabled="!edit" v-on:click="edit = !edit">@LocalizationHelper.Translate("Edit", "Common")</button>
+    <button class="btn btn-default" v-bind:disabled="edit" v-on:click="saveReview()">@LocalizationHelper.Translate("SaveChanges", "Common")</button>
+</div>
+
+<script type="text/javascript">
+    
+    var vm = new Vue({
+        el: '#tobaccoReview',
+
+        data: {
+            review: {
+                Id: 0,
+                AuthorId: 0,
+                PublishDate: null,
+                Quality: 0,
+                Taste: 0,
+                Smoke: 0,
+                Overall: 0,
+                Text: '',
+                ReviewedTobaccoId: 0,
+                SmokeSessionId: 0
+            },
+            edit: false
+        },
+
+        computed: {
+            sessionId: function () {
+                return $("input[name='sessionId']").val();
+            }
+        },
+
+        created: function () {
+            console.log("created function");
+
+            $.getJSON('/TobaccoReviews/GetReviewVue/',
+                {
+                    sessionId: this.review.SmokeSessionId
+                },
+                function (data) {
+                    console.log("created get json"); 
+                    if (data != null) {
+                        this.review = data;
+                        this.edit = true;
+                        console.log("created data not null"); 
+                    }
+                });
+        },
+
+        methods: {
+            saveReview: function () {
+                console.log("saving function");
+                
+                $.ajax({
+                    type: "POST",
+                    url: "/TobaccoReviews/SaveVueReview/", 
+                    data: JSON.stringify(vm.review),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        Console.log("Review saved.");
+                        this.review = data;
+                        this.edit = true;
+                    },
+                    error: function(data) {
+                        console.log("Error saving review.");
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+
