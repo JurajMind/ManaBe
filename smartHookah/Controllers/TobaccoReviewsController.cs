@@ -187,15 +187,15 @@ namespace smartHookah.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetReviewVue(int? sessionId)
+        public async Task<JsonResult> GetReviewVue(string sessionId)
         {
-            var review = (sessionId == null) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SmokeSessionId == sessionId);
+            var review = (sessionId == null) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SmokeSession.SessionId == sessionId);
             
             return (review != null) ? Json(review, JsonRequestBehavior.AllowGet) : null;
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveVueReview([Bind(Include = "Id,AuthorId,PublishDate,Quality,Taste,Smoke,Overall,Text,ReviewedTobaccoId,SmokeSessionId")] TobaccoReview tobaccoReview)
+        public async Task<JsonResult> SaveVueReview([Bind(Include = "Id,AuthorId,Quality,Taste,Smoke,Overall,Text,ReviewedTobaccoId,SmokeSessionId")] TobaccoReview tobaccoReview)
         {
             if (ModelState.IsValid)
             {
