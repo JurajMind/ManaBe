@@ -44,6 +44,8 @@
                                                                                     }, new { @id = "statisticForm" }))
 {
     <input type="hidden" value="@Model.SessionId" name="sessionId" />
+    <input type="hidden" value="@Model.Session.Id" name="smokeSessionId" />
+    <input type="hidden" value="@Model.MetaData.Tobacco.Id" name="tobaccoId" />
 }
 
 <div class="card">
@@ -119,7 +121,7 @@
 
 
         <div id="Reviews" class="tab-pane" role="tabpanel">
-                @Html.Partial("~/Views/TobaccoReviews/_TobaccoReview.cshtml", Model.SessionReview)
+                @Html.Partial("~/Views/TobaccoReviews/_TobaccoReview.cshtml")
         </div>
 
         @if (!Model.Share)
