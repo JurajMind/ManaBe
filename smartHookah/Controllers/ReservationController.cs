@@ -480,7 +480,7 @@ namespace smartHookah.Controllers
 
                 foreach (var res in tableReservation)
                     if (Colide(reservation, res))
-                        return Json(new {success = false, msg = "New reservation colided"});
+                        return Json(new {success = false, msg = $"Reservation colided with {res.Name}"});
 
                 reservation.Seats.Add(table);
             }

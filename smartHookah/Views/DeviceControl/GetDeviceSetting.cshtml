@@ -12,7 +12,7 @@
 
 <div id="settings">
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-bottom: 1rem;">
         <li class="nav-item" style="width: 49%">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#action" role="tab" aria-controls="home" aria-expanded="true">@Device.action</a>
         </li>
@@ -20,18 +20,18 @@
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#idle" role="tab" aria-controls="profile">@Device.idle</a>
         </li>
     </ul>
-
+    <br/>
     <div class="tab-content container" id="myTabContent">
         <div class="tab-pane active" id="action" role="tabpanel" aria-labelledby="home-tab">
             <div class="row">
-                <div class="col-sm-6 form-group">
+                <div class="col-sm-6 form-group" style="margin-bottom: 2rem;">
                     <label class="bmd-label-floating">@Device.pufAnimation</label>
                     <div class="input-group">
                         @Html.AnimationDropdown(Model.PufAnimation, Model.HookahVersion, "form-control", "pufAnimation", "AnimationChanged(1, 'pufAnimation')")
                     </div>
                 </div>
 
-                <div class="col-sm-6 form-group">
+                <div class="col-sm-6 form-group" style="margin-bottom: 2rem;">
                     <label class="bmd-label-floating">@Device.blowAnimation</label>
                     <div class="input-group">
                         @Html.AnimationDropdown(Model.BlowAnimation, Model.HookahVersion, "form-control", "blowAnimation", "AnimationChanged(2, 'blowAnimation')")
@@ -62,7 +62,7 @@
 
         <div class="tab-pane fade" id="idle" role="tabpanel" aria-labelledby="profile-tab">
             <div class="row">
-                <div class="col-sm-12 form-group">
+                <div class="col-sm-12 form-group " style="margin-bottom: 2rem;">
                     <label class="bmd-label-floating">@Device.idleAnimation</label>
                     <div class="input-group">
                         @Html.AnimationDropdown(Model.IdleAnimation, Model.HookahVersion, "form-control", "idleAnimation", "AnimationChanged(0, 'idleAnimation')")
@@ -80,7 +80,7 @@
 
                 @if (Model.HookahVersion > 1000024)
                 {
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-6" >
                         <label class="bmd-label-floating"><img src="~/Content/icons/speed.svg" style="height: 1em"/>&nbsp;@Device.idleSpeed</label>
                         <div class="form-control">
                             <input step="1" value="@Model.Setting.IdleSpeed" type="range" min="0" max="245" onchange="SpeedChanged(0, this.value)" id="idleSpeedSlider" />
