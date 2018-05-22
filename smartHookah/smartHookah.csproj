@@ -2137,6 +2137,7 @@
     <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
+    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
