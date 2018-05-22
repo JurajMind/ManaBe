@@ -44,6 +44,8 @@
                                                                                     }, new { @id = "statisticForm" }))
 {
     <input type="hidden" value="@Model.SessionId" name="sessionId" />
+    <input type="hidden" value="@Model.Session.Id" name="smokeSessionId" />
+    <input type="hidden" value="@Model.MetaData.Tobacco.Id" name="tobaccoId" />
 }
 
 <div class="card">
@@ -116,22 +118,10 @@
                 </button>
             }
         </div>
-        <div id="Reviews" class="tab-pane" role="tabpanel">
 
-            
-               
-                    <div id="reviewTable">
-                        @Html.Partial("~/Views/TobaccoReviews/smokeSessionReview.cshtml", Model.SessionReview)
-                    </div>
-           
-           
-            @if (!Model.Share)
-            {
-                <button type="button" id="tobacoReview" class="btn btn-info btn-raised" style="display:@(Model.MetaData.TobaccoId.HasValue?"block":"none")" data-toggle="modal" data-target="#tobacoReviewModal">
-                   @Smoke.SmokeSession.writeTobaccoReview
-                </button>
-                <br />
-            }
+
+        <div id="Reviews" class="tab-pane" role="tabpanel">
+                @Html.Partial("~/Views/TobaccoReviews/_TobaccoReview.cshtml")
         </div>
 
         @if (!Model.Share)
@@ -169,10 +159,6 @@
         <div class="metadataModalWraper">@Html.Partial("smokeMetaDataModal", Model.SmokeMetadataModalModal)</div>
 
 
-        <div class="reviewWraper">
-            @Html.Partial("~/Views/TobaccoReviews/TobaccoReviewModal.cshtml", Model.SessionReview)
-        </div>
-
         <div class="modal fade" id="smokeCodeModal">
             <div class="modal-dialog" role="dialog">
                 <div class="modal-content">
@@ -202,13 +188,6 @@
 
 }
 
-
-
-
-
-
-
-
 @if(User.Identity.IsAuthenticated) { 
 <nav class="button-assign-container">
     <a class="assb button mainShareBtn" href="#" onClick="return false;" style=" @(Model.IsAssigned ? "display:none;" : "") ">
@@ -219,7 +198,6 @@
     </a>
 </nav>
  }
-
 
 <nav class="button-share-container">
     

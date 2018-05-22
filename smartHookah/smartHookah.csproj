@@ -831,6 +831,7 @@
     <Compile Include="Controllers\Api\AnimationController.cs" />
     <Compile Include="Controllers\Api\CleanAllController.cs" />
     <Compile Include="Controllers\Api\EndSessionController.cs" />
+    <Compile Include="Controllers\Api\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\Api\WearablesController.cs" />
     <Compile Include="Controllers\Api\MsBandController.cs" />
     <Compile Include="Controllers\Api\Ping.cs" />
@@ -922,6 +923,8 @@
     <Compile Include="Migrations\201803252005595_locations.Designer.cs">
       <DependentUpon>201803252005595_locations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\DTO.cs" />
+    <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
     <Compile Include="Models\ViewModel\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />
     <Compile Include="Models\Db\SmokeEvent.cs" />
@@ -2046,7 +2049,6 @@
     <Content Include="Views\TobaccoReviews\Details.cshtml" />
     <Content Include="Views\TobaccoReviews\Edit.cshtml" />
     <Content Include="Views\TobaccoReviews\Index.cshtml" />
-    <Content Include="Views\TobaccoReviews\TobaccoReviewModal.cshtml" />
     <Content Include="Views\QrCodeReader\Index.cshtml" />
     <Content Include="Views\Shared\_MetadataAndReview.cshtml" />
     <Content Include="Views\Person\ShowGear.cshtml" />
@@ -2102,7 +2104,6 @@
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
-    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
     <Content Include="Views\SmokeSession\_SmokeSessionListItem.cshtml" />
     <Content Include="Views\Tobacco\_SortedTobacco.cshtml" />
     <Content Include="Views\Tobacco\Index.cshtml" />
@@ -2157,6 +2158,8 @@
     <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Places\Statistics.cshtml" />
+    <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
+    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
@@ -2164,7 +2167,6 @@
     <Folder Include="Content\BrandPicture\" />
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
-    <Folder Include="Models\Dto\" />
     <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Share\" />
     <Folder Include="Views\Test\" />
