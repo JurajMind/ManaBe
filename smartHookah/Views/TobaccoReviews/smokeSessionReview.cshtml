@@ -1,0 +1,52 @@
+﻿@using smartHookah.Models
+@model smartHookah.Models.TobaccoReview
+
+@{
+    Layout = null;
+}
+
+@if (Model.ReviewedTobaccoId  == 0)
+{
+    <h4>@Smoke.SmokeSession.noReview</h4>
+}
+else
+{
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td>
+                   @Smoke.SmokeSession.smokeQuality
+                </td>
+                <td>
+                    <input type="number" name="smoke" id="smoke" class="rating form-control" value="@Model.Smoke" data-readonly />
+                </td>
+            </tr>
+
+            <tr>
+                <td> @Smoke.SmokeSession.tobaccoTaste</td>
+                <td>
+                    <input type="number" name="smoke" id="smoke" class="rating form-control" value="@Model.Taste" data-readonly/>
+                </td>
+            </tr>
+        <tr>
+            <td>
+                @Smoke.SmokeSession.tobaccoQuality
+            </td>
+            <td>
+                <input type="number" name="smoke" id="smoke" class="rating form-control" value="@Model.Quality" data-readonly/>
+            </td>
+        </tr>
+        <tr>
+            <td>@Smoke.SmokeSession.overallRating</td>
+            <td>
+                <input type="number" name="smoke" id="smoke" class="rating form-control" value="@Model.Overall" data-readonly/>
+            </td>
+        </tr>
+        <tr>
+            <td>Text :</td>
+            <td>@(Model.Text ?? "No text review")</td>
+        </tr>
+
+        </tbody>
+    </table>
+}
