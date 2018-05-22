@@ -827,6 +827,7 @@
     <Compile Include="Controllers\Api\AnimationController.cs" />
     <Compile Include="Controllers\Api\CleanAllController.cs" />
     <Compile Include="Controllers\Api\EndSessionController.cs" />
+    <Compile Include="Controllers\Api\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\Api\WearablesController.cs" />
     <Compile Include="Controllers\Api\MsBandController.cs" />
     <Compile Include="Controllers\Api\Ping.cs" />
@@ -916,6 +917,8 @@
     <Compile Include="Migrations\201803252005595_locations.Designer.cs">
       <DependentUpon>201803252005595_locations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\DTO.cs" />
+    <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
     <Compile Include="Models\ViewModel\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />
     <Compile Include="Models\Db\SmokeEvent.cs" />
@@ -2141,7 +2144,6 @@
     <Folder Include="Content\BrandPicture\" />
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
-    <Folder Include="Models\Dto\" />
     <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Share\" />
     <Folder Include="Views\Test\" />

@@ -1517,6 +1517,7 @@ input[type="range"] {
     width: 100%;
     cursor: pointer;
     border-radius: 0; /* iOS */
+    margin: 1em;
 }
 
 ::-webkit-slider-runnable-track {
@@ -1616,3 +1617,16 @@ input[type="range"] {
 .nav-link.active {
     border-color: #3f51b5 !important
 }
+
+/*review texarea expanding*/
+
+.review-text {
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+
+
+
+
