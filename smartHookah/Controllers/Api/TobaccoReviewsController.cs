@@ -13,7 +13,12 @@ namespace smartHookah.Controllers.Api
 {
     public class TobaccoReviewsController : ApiController
     {
-        private SmartHookahContext db = new SmartHookahContext();
+        private readonly SmartHookahContext db;
+
+        public TobaccoReviewsController(SmartHookahContext db)
+        {
+            this.db = db;
+        }
 
         [System.Web.Mvc.HttpGet]
         public async Task<TobaccoReviewDTO> GetReviewVue(int sessionId)
@@ -48,7 +53,7 @@ namespace smartHookah.Controllers.Api
                     Text = tobaccoReviewDto.Text
                 };
                 var smokeSession = await db.SmokeSessions.FindAsync(tobaccoReview.SmokeSessionId);
-                tobaccoReview.PublishDate = DateTime.Now;
+                tobaccoReview.PublishDate = DateTime.UtcNow;
                 if (smokeSession.MetaData.TobaccoId.HasValue)
                     tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
                 else

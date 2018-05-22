@@ -81,8 +81,6 @@
 
         methods: {
             saveReview: function () {
-                console.log("saving function");
-                
                 this.review.SmokeSessionId = this.getSessionId();
 
                 var jqxhr = $.ajax({
@@ -102,7 +100,6 @@
                     success: function(data) {
                         vm.$data.review = data;
                         vm.$data.edit = true;
-                        console.log("Saved and updated.");
                     }
                 }).fail(function(jqXHR, exception) {
                     var msg = '';
