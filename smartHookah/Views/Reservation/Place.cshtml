@@ -574,7 +574,9 @@
 
                         },
                         function(data) {
-                            // v.loadReservations();
+                            if (data.success === false) {
+                                window.alert(data.message);
+                            }
                         });
                 },
                 addTableStart: function() {
@@ -592,7 +594,9 @@
                         function(data) {
                             if (callback)
                                 callback();
-                          
+                            if (data.success === false) {
+                                window.alert(data.message);
+                            }
                          
                         }
                     );

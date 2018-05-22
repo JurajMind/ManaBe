@@ -1,8 +1,8 @@
 /*
- * Gijgo Editor v1.8.1
+ * Gijgo Editor v1.9.6
  * http://gijgo.com/editor
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery */
@@ -27,7 +27,7 @@ gj.editor.config = {
         buttons: undefined,
 
         style: {
-            wrapper: 'gj-editor-md',
+            wrapper: 'gj-editor gj-editor-md',
             buttonsGroup: 'gj-button-md-group',
             button: 'gj-button-md',
             buttonActive: 'active'
@@ -36,7 +36,7 @@ gj.editor.config = {
 
     bootstrap: {
         style: {
-            wrapper: 'gj-editor-bootstrap',
+            wrapper: 'gj-editor gj-editor-bootstrap',
             buttonsGroup: 'btn-group',
             button: 'btn btn-default gj-cursor-pointer',
             buttonActive: 'active'
@@ -45,7 +45,7 @@ gj.editor.config = {
 
     bootstrap4: {
         style: {
-            wrapper: 'gj-editor-bootstrap',
+            wrapper: 'gj-editor gj-editor-bootstrap',
             buttonsGroup: 'btn-group',
             button: 'btn btn-outline-secondary gj-cursor-pointer',
             buttonActive: 'active'
@@ -106,37 +106,48 @@ gj.editor.methods = {
     },
 
     initialize: function ($editor) {
-        var self = this, data = $editor.data(), $group, $btn,
-            $body = $editor.children('div[data-role="body"]'),
-            $toolbar = $editor.children('div[data-role="toolbar"]');
+        var self = this, data = $editor.data(),
+            $group, $btn, wrapper, $body, $toolbar;
+
+        $editor.hide();
+
+        if ($editor[0].parentElement.attributes.role !== 'wrapper') {
+            wrapper = document.createElement('div');
+            wrapper.setAttribute('role', 'wrapper');
+            $editor[0].parentNode.insertBefore(wrapper, $editor[0]);
+            wrapper.appendChild($editor[0]);
+        }
 
         gj.editor.methods.localization(data);
-
-        $editor.addClass(data.style.wrapper);
+        $(wrapper).addClass(data.style.wrapper);
         if (data.width) {
-            $editor.width(data.width);
+            $(wrapper).width(data.width);
         }
 
+        $body = $(wrapper).children('div[role="body"]');
         if ($body.length === 0) {
-            $editor.wrapInner('<div data-role="body"></div>');
-            $body = $editor.children('div[data-role="body"]');
+            $body = $('<div role="body"></div>');
+            $(wrapper).append($body);
+            if ($editor[0].innerText) {
+                $body[0].innerHTML = $editor[0].innerText;
+            }
         }
-
         $body.attr('contenteditable', true);
-
         $body.on('keydown', function (e) {
-            if (gj.editor.events.changing($editor) === false) {
+            var key = event.keyCode || event.charCode;
+            if (gj.editor.events.changing($editor) === false && key !== 8 && key !== 46) {
                 e.preventDefault();
             }
         });
-
         $body.on('mouseup keyup mouseout cut paste', function (e) {
             self.updateToolbar($editor, $toolbar);
             gj.editor.events.changed($editor);
+            $editor.html($body.html());
         });
 
+        $toolbar = $(wrapper).children('div[role="toolbar"]');
         if ($toolbar.length === 0) {
-            $toolbar = $('<div data-role="toolbar"></div>');
+            $toolbar = $('<div role="toolbar"></div>');
             $body.before($toolbar);
 
             for (var group in data.buttons) {
@@ -152,7 +163,7 @@ gj.editor.methods = {
             }
         }
 
-        $body.height(data.height - $toolbar.outerHeight());
+        $body.height(data.height - gj.core.height($toolbar[0], true));
     },
 
     localization: function (data) {
@@ -160,26 +171,26 @@ gj.editor.methods = {
         if (typeof (data.buttons) === 'undefined') {
             data.buttons = [
                 [
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.bold + '" data-role="bold">' + data.icons.bold + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.italic + '" data-role="italic">' + data.icons.italic + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.strikethrough + '" data-role="strikethrough">' + data.icons.strikethrough + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.underline + '" data-role="underline">' + data.icons.underline + '</button>'
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.bold + '" role="bold">' + data.icons.bold + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.italic + '" role="italic">' + data.icons.italic + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.strikethrough + '" role="strikethrough">' + data.icons.strikethrough + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.underline + '" role="underline">' + data.icons.underline + '</button>'
                 ],
                 [
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.listBulleted + '" data-role="insertunorderedlist">' + data.icons.listBulleted + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.listNumbered + '" data-role="insertorderedlist">' + data.icons.listNumbered + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.indentDecrease + '" data-role="outdent">' + data.icons.indentDecrease + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.indentIncrease + '" data-role="indent">' + data.icons.indentIncrease + '</button>'
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.listBulleted + '" role="insertunorderedlist">' + data.icons.listBulleted + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.listNumbered + '" role="insertorderedlist">' + data.icons.listNumbered + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.indentDecrease + '" role="outdent">' + data.icons.indentDecrease + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.indentIncrease + '" role="indent">' + data.icons.indentIncrease + '</button>'
                 ],
                 [
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignLeft + '" data-role="justifyleft">' + data.icons.alignLeft + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignCenter + '" data-role="justifycenter">' + data.icons.alignCenter + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignRight + '" data-role="justifyright">' + data.icons.alignRight + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignJustify + '" data-role="justifyfull">' + data.icons.alignJustify + '</button>'
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignLeft + '" role="justifyleft">' + data.icons.alignLeft + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignCenter + '" role="justifycenter">' + data.icons.alignCenter + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignRight + '" role="justifyright">' + data.icons.alignRight + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.alignJustify + '" role="justifyfull">' + data.icons.alignJustify + '</button>'
                 ],
                 [
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.undo + '" data-role="undo">' + data.icons.undo + '</button>',
-                    '<button type="button" class="' + data.style.button + '" title="' + msg.redo + '" data-role="redo">' + data.icons.redo + '</button>'
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.undo + '" role="undo">' + data.icons.undo + '</button>',
+                    '<button type="button" class="' + data.style.button + '" title="' + msg.redo + '" role="redo">' + data.icons.redo + '</button>'
                 ]
             ];
         }
@@ -187,9 +198,9 @@ gj.editor.methods = {
 
     updateToolbar: function ($editor, $toolbar) {
         var data = $editor.data();
-        $buttons = $toolbar.find('[data-role]').each(function() {
+        $buttons = $toolbar.find('[role]').each(function() {
             var $btn = $(this),
-                cmd = $btn.attr('data-role');
+                cmd = $btn.attr('role');
 
             if (cmd && document.queryCommandEnabled(cmd) && document.queryCommandValue(cmd) === "true") {
                 $btn.addClass(data.style.buttonActive);
@@ -201,12 +212,12 @@ gj.editor.methods = {
 
     executeCmd: function ($editor, $body, $toolbar, $btn) {
         $body.focus();
-        document.execCommand($btn.attr('data-role'), false);
+        document.execCommand($btn.attr('role'), false);
         gj.editor.methods.updateToolbar($editor, $toolbar);
     },
 
     content: function ($editor, html) {
-        var $body = $editor.children('div[data-role="body"]');
+        var $body = $editor.parent().children('div[role="body"]');
         if (typeof (html) === "undefined") {
             return $body.html();
         } else {
@@ -215,13 +226,17 @@ gj.editor.methods = {
     },
 
     destroy: function ($editor) {
+        var $wrapper;
         if ($editor.attr('data-editor') === 'true') {
-            $editor.removeClass($editor.data().style.wrapper);
+            $wrapper = $editor.parent();
+            $wrapper.children('div[role="body"]').remove();
+            $wrapper.children('div[role="toolbar"]').remove();
+            $editor.unwrap();
             $editor.removeData();
             $editor.removeAttr('data-guid');
             $editor.removeAttr('data-editor');
             $editor.off();
-            $editor.empty();
+            $editor.show();
         }
         return $editor;
     }
@@ -377,4 +392,36 @@ gj.editor.messages['ru-ru'] = {
 	alignJustify: 'Выровнять по ширине',
 	undo: 'Назад',
 	redo: 'Вперед'
+};
+gj.editor.messages['es-es'] = {
+    bold: 'Negrita',
+    italic: 'Italica',
+    strikethrough: 'Tachado',
+    underline: 'Subrayado',
+    listBulleted: 'Puntos',
+    listNumbered: 'Lista numerada',
+    indentDecrease: 'Disminuir indentacion',
+    indentIncrease: 'Aumentar indentacion',
+    alignLeft: 'Alineación izquierda',
+    alignCenter: 'Alineación centrada',
+    alignRight: 'Alineación derecha',
+    alignJustify: 'Alineación justificada',
+    undo: 'Deshacer',
+    redo: 'Repetir'
+};
+gj.editor.messages['it-it'] = {
+    bold: 'Grassetto',
+    italic: 'Corsivo',
+    strikethrough: 'Barrato',
+    underline: 'Sottolineato',
+    listBulleted: 'Lista puntata',
+    listNumbered: 'Lista numerata',
+    indentDecrease: 'sposta testo a sinistra',
+    indentIncrease: 'sposta testo a destra',
+    alignLeft: 'Allineamento a sinistra',
+    alignCenter: 'Centrato',
+    alignRight: 'Allineamento a destra',
+    alignJustify: 'Giustificato',
+    undo: 'Annulla',
+    redo: 'Ripeti'
 };

@@ -1,8 +1,8 @@
 /*
- * Gijgo Draggable v1.8.1
+ * Gijgo Draggable v1.9.6
  * http://gijgo.com/draggable
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery */
@@ -17,25 +17,32 @@ gj.draggable.config = {
 
         /** If set to false, restricts dragging on vertical direction.         */        vertical: true,
 
-        /** If set to false, restricts dragging on horizontal direction.         */        horizontal: true
+        /** If set to false, restricts dragging on horizontal direction.         */        horizontal: true,
+
+        /** Constrains dragging to within the bounds of the specified element.         */        containment: undefined
     }
 };
 
 gj.draggable.methods = {
     init: function (jsConfig) {
-        var $handleEl, $dragEl = this;
+        var $handleEl, data, $dragEl = this;
 
         gj.widget.prototype.init.call(this, jsConfig, 'draggable');
+        data = this.data();
         $dragEl.attr('data-draggable', 'true');
 
         $handleEl = gj.draggable.methods.getHandleElement($dragEl);
 
         $handleEl.on('touchstart mousedown', function (e) {
-            $dragEl.attr('data-draggable-dragging', true);
-            $dragEl.removeAttr('data-draggable-x').removeAttr('data-draggable-y');
-            $dragEl.css('position', 'absolute');
-            gj.documentManager.subscribeForEvent('touchmove', $dragEl.data('guid'), gj.draggable.methods.createMoveHandler($dragEl));
-            gj.documentManager.subscribeForEvent('mousemove', $dragEl.data('guid'), gj.draggable.methods.createMoveHandler($dragEl));
+            var position = gj.core.position($dragEl[0]);
+            $dragEl[0].style.top = position.top + 'px';
+            $dragEl[0].style.left = position.left + 'px';
+            $dragEl[0].style.position = 'fixed';
+
+            $dragEl.attr('draggable-dragging', true);
+            $dragEl.removeAttr('draggable-x').removeAttr('draggable-y');
+            gj.documentManager.subscribeForEvent('touchmove', $dragEl.data('guid'), gj.draggable.methods.createMoveHandler($dragEl, $handleEl, data));
+            gj.documentManager.subscribeForEvent('mousemove', $dragEl.data('guid'), gj.draggable.methods.createMoveHandler($dragEl, $handleEl, data));
         });
 
         gj.documentManager.subscribeForEvent('mouseup', $dragEl.data('guid'), gj.draggable.methods.createUpHandler($dragEl));
@@ -52,44 +59,74 @@ gj.draggable.methods = {
 
     createUpHandler: function ($dragEl) {
         return function (e) {
-            if ($dragEl.attr('data-draggable-dragging') === 'true') {
-                $dragEl.attr('data-draggable-dragging', false);
+            if ($dragEl.attr('draggable-dragging') === 'true') {
+                $dragEl.attr('draggable-dragging', false);
                 gj.documentManager.unsubscribeForEvent('mousemove', $dragEl.data('guid'));
                 gj.documentManager.unsubscribeForEvent('touchmove', $dragEl.data('guid'));
-                gj.draggable.events.stop($dragEl, { left: $dragEl.mouseX(e), top: $dragEl.mouseY(e) });
+                gj.draggable.events.stop($dragEl, { x: $dragEl.mouseX(e), y: $dragEl.mouseY(e) });
             }
         };
     },
 
-    createMoveHandler: function ($dragEl) {
+    createMoveHandler: function ($dragEl, $handleEl, data) {
         return function (e) {
-            var x, y, offsetX, offsetY, prevX, prevY;
-            if ($dragEl.attr('data-draggable-dragging') === 'true') {
-                x = Math.round($dragEl.mouseX(e));
-                y = Math.round($dragEl.mouseY(e));
-                prevX = $dragEl.attr('data-draggable-x');
-                prevY = $dragEl.attr('data-draggable-y');
-                if (prevX && prevY) {                
-                    offsetX = $dragEl.data('horizontal') ? x - parseInt(prevX, 10) : 0;
-                    offsetY = $dragEl.data('vertical') ? y - parseInt(prevY, 10) : 0;
-                    if (false !== gj.draggable.events.drag($dragEl, offsetX, offsetY, x, y)) {
-                        gj.draggable.methods.move($dragEl, offsetX, offsetY);
-                    }
+            var mouseX, mouseY, offsetX, offsetY, prevX, prevY;
+            if ($dragEl.attr('draggable-dragging') === 'true') {
+                mouseX = Math.round($dragEl.mouseX(e));
+                mouseY = Math.round($dragEl.mouseY(e));
+                prevX = $dragEl.attr('draggable-x');
+                prevY = $dragEl.attr('draggable-y');
+                if (prevX && prevY) {
+                    offsetX = data.horizontal ? mouseX - parseInt(prevX, 10) : 0;
+                    offsetY = data.vertical ? mouseY - parseInt(prevY, 10) : 0;
+                    gj.draggable.methods.move($dragEl[0], data, offsetX, offsetY, mouseX, mouseY);
                 } else {
-                    gj.draggable.events.start($dragEl, x, y);
+                    gj.draggable.events.start($dragEl, mouseX, mouseY);
                 }
-                $dragEl.attr('data-draggable-x', x);
-                $dragEl.attr('data-draggable-y', y);
+                $dragEl.attr('draggable-x', mouseX);
+                $dragEl.attr('draggable-y', mouseY);
             }
         }
     },
 
-    move: function ($dragEl, offsetX, offsetY) {
-        var target = $dragEl.get(0),
-            top = target.style.top ? parseInt(target.style.top) : $dragEl.position().top,
-            left = target.style.left ? parseInt(target.style.left) : $dragEl.position().left;
-        target.style.top = (top + offsetY) + 'px';
-        target.style.left = (left + offsetX) + 'px';
+    move: function (dragEl, data, offsetX, offsetY, mouseX, mouseY) {
+        var contPosition, maxTop, maxLeft,
+            position = gj.core.position(dragEl),
+            newTop = position.top + offsetY,
+            newLeft = position.left + offsetX;
+
+        if (data.containment) {
+            contPosition = gj.core.position(data.containment);
+            maxTop = contPosition.top + gj.core.height(data.containment) - gj.core.height(dragEl);
+            maxLeft = contPosition.left + gj.core.width(data.containment) - gj.core.width(dragEl);
+            if (newTop > contPosition.top && newTop < maxTop) {
+                if (contPosition.top >= mouseY || contPosition.bottom <= mouseY) {
+                    newTop = position.top;
+                }
+            } else {
+                if (newTop <= contPosition.top) {
+                    newTop = contPosition.top + 1;
+                } else {
+                    newTop = maxTop - 1;
+                }
+            }
+            if (newLeft > contPosition.left && newLeft < maxLeft) {
+                if (contPosition.left >= mouseX || contPosition.right <= mouseX) {
+                    newLeft = position.left;
+                }
+            } else {
+                if (newLeft <= contPosition.left) {
+                    newLeft = contPosition.left + 1;
+                } else {
+                    newLeft = maxLeft - 1;
+                }
+            }
+        }
+
+        if (false !== gj.draggable.events.drag($(dragEl), newTop, newLeft, mouseX, mouseY)) {
+            dragEl.style.top = newTop + 'px';
+            dragEl.style.left = newLeft + 'px';
+        }
     },
 
     destroy: function ($dragEl) {
@@ -108,14 +145,14 @@ gj.draggable.methods = {
 gj.draggable.events = {
     /**
      * Triggered while the mouse is moved during the dragging, immediately before the current move happens.
-     *     */    drag: function ($dragEl, offsetX, offsetY, mouseX, mouseY) {
-        return $dragEl.triggerHandler('drag', [{ top: offsetY, left: offsetX }, { top: mouseY, left: mouseX }]);
+     *     */    drag: function ($dragEl, newTop, newLeft, mouseX, mouseY) {
+        return $dragEl.triggerHandler('drag', [{ top: newTop, left: newLeft }, { x: mouseX, y: mouseY }]);
     },
 
     /**
      * Triggered when dragging starts.
      *     */    start: function ($dragEl, mouseX, mouseY) {
-        $dragEl.triggerHandler('start', [{ top: mouseY, left: mouseX }]);
+        $dragEl.triggerHandler('start', [{ x: mouseX, y: mouseY }]);
     },
 
     /**

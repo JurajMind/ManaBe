@@ -11,8 +11,54 @@ using UrlHelper = System.Web.Http.Routing.UrlHelper;
 
 namespace smartHookah.Support
 {
+    using smartHookah.Controllers;
+
     public static class Extensions
     {
+
+        // This presumes that weeks start with Monday.
+        // Week 1 is the 1st week of the year with a Thursday in it.
+        public static int GetIso8601WeekOfYear(this DateTime time)
+        {
+            // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
+            // be the same week# as whatever Thursday, Friday or Saturday are,
+            // and we always get those right
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(time);
+            if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+            {
+                time = time.AddDays(3);
+            }
+
+            // Return the week of our adjusted day
+            return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
+        /// <summary>
+        /// The to plot data.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PlotData"/>.
+        /// </returns>
+        public static PlotData ToPlotData<G,T>(
+            this IEnumerable<IGrouping<G, T>> data,Func<G, string> name,Func<IGrouping<G,T>,IComparable> order = null)
+        {
+            IOrderedEnumerable<IGrouping<G, T>> d;
+            if (order != null)
+            {
+                d = data.OrderBy(order);
+                
+            }
+            else
+            {
+                d = data.OrderBy(a => a.Key);
+            }
+      
+            
+            return new PlotData(d.Select(a => name(a.Key)).ToList(),d.Select(a => a.Count()).ToList());
+        }
         public static MvcHtmlString FaActionLink(this AjaxHelper ajaxHelper, string text,string fontAwesome, string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes)
         {
             var repID = Guid.NewGuid().ToString();
