@@ -30,6 +30,9 @@ namespace smartHookah.Models
         public virtual ICollection<SimilarAccesories> SimilarAccesories { get; set; }
 
         public virtual ICollection<Media> Mediae { get; set; }
+
+        public virtual ICollection<Person> FavoritdBy { get; set; }
+
         [MaxLength(128)]
         public string Picture { get; set; }
 
