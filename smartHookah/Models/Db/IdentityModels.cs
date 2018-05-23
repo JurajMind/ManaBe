@@ -7,6 +7,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace smartHookah.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Security.Cryptography;
+
+    using RazorEngine;
+
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
@@ -24,6 +30,15 @@ namespace smartHookah.Models
 
         [MaxLength(50)]
         public string DisplayName { get; set; }
+
+        public int GetHash()
+        {
+            var mystring = $"email: {this.Email} id:{this.Id}";
+            MD5 md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(System.Text.Encoding.UTF8.GetBytes(mystring));
+            var ivalue = BitConverter.ToInt32(hashed, 0);
+            return ivalue;
+        }
 
 
     }
