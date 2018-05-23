@@ -8,15 +8,24 @@ using smartHookah.Models;
 
 namespace smartHookah.Controllers
 {
+    using System.Configuration;
+    using System.Threading.Tasks;
+
+    using MailChimp.Net;
+    using MailChimp.Net.Interfaces;
+    using MailChimp.Net.Models;
+
     [Authorize(Roles = "Admin")]
     
     public class AdminController : Controller
     {
         private SmartHookahContext db;
 
+        private IMailChimpManager manager;
         public AdminController(SmartHookahContext context)
         {
             this.db = context;
+            this.manager = new MailChimpManager(ConfigurationManager.AppSettings["MailChimpApiKey"]);
         }
         // GET: Admin
         public ActionResult Index()
@@ -48,6 +57,26 @@ namespace smartHookah.Controllers
             db.DbPufs.RemoveRange(smokesession.SelectMany(a => a.Pufs));
             db.SaveChanges();
             return View("CleanEmptySmokeSession", smokesession.Count());
+        }
+
+        public async Task<ActionResult> UpdateMailChimp()
+        {
+            var listId = "5ec4bd2f5a";
+
+            var users = db.Users;
+
+            foreach (var applicationUser in users)
+            {
+                var member = new Member { EmailAddress = applicationUser.Email, StatusIfNew = Status.Subscribed };
+                // Use the Status property if updating an existing member
+
+                member.MergeFields.Add("NAME", applicationUser.Person.DisplayName);
+                member.MergeFields.Add("HASH", applicationUser.GetHash());
+                await this.manager.Members.AddOrUpdateAsync(listId, member);
+            }
+
+            return null;
+
         }
 
     }

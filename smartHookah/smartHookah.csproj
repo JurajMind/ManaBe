@@ -167,6 +167,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MailChimp.Net.V3, Version=1.8.0.0, Culture=neutral, PublicKeyToken=37d26d538413c581, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailChimp.Net.V3.1.8.0.0\lib\net45\MailChimp.Net.V3.dll</HintPath>
+    </Reference>
     <Reference Include="Mailzory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Mailzory.1.2.0\lib\net461\Mailzory.dll</HintPath>
     </Reference>
@@ -824,6 +827,10 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Migrations\201805231838494_gdpr.cs" />
+    <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
+      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -1455,6 +1462,7 @@
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Support\DataAnotation.cs" />
     <Compile Include="Support\DTO.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\FixedSizeQueue.cs" />
@@ -1680,6 +1688,9 @@
     <Content Include="ClientApp\components\nav-menu.vue" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
+      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
@@ -2101,6 +2112,8 @@
     <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Account\_PersonData.cshtml" />
+    <Content Include="Views\Account\_TermOfUssage.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
