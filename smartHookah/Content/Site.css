@@ -1603,7 +1603,7 @@ input[type="range"] {
 ::-ms-track {
     background: #ddd;
     color: transparent;
-    height: 1em;
+    height: 3em;
     border: none;
 }
 
@@ -1618,7 +1618,7 @@ input[type="range"] {
     border-color: #3f51b5 !important
 }
 
-/*review texarea expanding*/
+/*tobacco reviews*/
 
 .review-text {
     -webkit-transition: all .5s ease;
@@ -1626,6 +1626,12 @@ input[type="range"] {
     transition: all .5s ease;
 }
 
+.review-slider {
+    display: inline;
+    position: relative;
+    padding: 0;
+    right: 16px;
+}
 
 
 
