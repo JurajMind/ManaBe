@@ -204,6 +204,14 @@ namespace smartHookah.Controllers
             }, JsonRequestBehavior.AllowGet) : null;
         }
 
+        public async Task<JsonResult> GetTobaccoFilled(int sessionId)
+        {
+            var smokeSession = await db.SmokeSessions.FindAsync(sessionId);
+            if(smokeSession.MetaData.TobaccoId.HasValue)
+                return Json("yeah boiiiiiiiiiiii", JsonRequestBehavior.AllowGet);
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public async Task<JsonResult> SaveVueReview([Bind(Include = "Id,Quality,Taste,Smoke,Overall,Text,SmokeSessionId")] TobaccoReviewDTO tobaccoReviewDto)
         {
