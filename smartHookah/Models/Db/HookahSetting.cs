@@ -29,6 +29,8 @@
             this.IdleSpeed = setting.IdleSpeed;
             this.PufSpeed = setting.PufSpeed;
 
+
+
          
 
 

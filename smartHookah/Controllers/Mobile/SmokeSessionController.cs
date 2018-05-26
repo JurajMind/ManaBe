@@ -13,6 +13,7 @@ namespace smartHookah.Controllers.Mobile
     using smartHookah.Helpers;
     using smartHookah.Models;
 
+    [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController
     {
         private SmartHookahContext _db;
@@ -22,6 +23,8 @@ namespace smartHookah.Controllers.Mobile
         }
 
         [HttpGet]
+        [Route("Active")]
+        [Authorize]
         public async Task<List<string>> Active()
         {
             var persons = UserHelper.GetCurentPersonIQuerable(_db);
