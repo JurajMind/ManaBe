@@ -27,6 +27,16 @@ namespace smartHookah.Controllers
             this.db = db;
         }
 
+        public async Task<ActionResult> Gdpr(string email, string token)
+        {
+            var user = this.db.Users.FirstOrDefault(a => a.Email == email);
+            if (user == null) return RedirectToAction("Index", "Home");
+
+            user.Person.Gdpr = true;
+
+            db.Persons.AddOrUpdate(user.Person);
+            await db.SaveChangesAsync();
+        }
     
         // GET: Person
         public async Task<ActionResult> Index(int? id)
