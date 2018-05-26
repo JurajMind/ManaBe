@@ -1,50 +1,46 @@
 ﻿@using smartHookah.Helpers
-@model smartHookah.Models.TobaccoReview
 
-<div id="tobaccoReview" class="form-horizontal align-center">
-    <h4>@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</h4>
-
-    <div class="form-group col-sm-6">
-        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevSmokeQ", "SmokeSession")</label>
+<div id="tobaccoReview" class="form-horizontal" style="margin-left: auto; margin-right: auto; max-width: 40em">
+    <fieldset class="form-group">
+        <div class="bmd-label-static">@LocalizationHelper.Translate("_TobaccoRevSmokeQ", "SmokeSession")&nbsp;-&nbsp;<h6 style="display: inline; font-weight: bold">{{review.Smoke + '/10'}}</h6></div>
         <div class="form-control">
-            <span style="display: inline-block">{{review.Smoke + '/10'}}</span>
-            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Smoke" v-bind:disabled="edit" v-model="review.Smoke" />
+            <input class="col-md-12 review-slider" type="range" min="0" max="10" step="1" id="Smoke" v-bind:disabled="edit" v-model="review.Smoke" />
+        </div>
+    </fieldset>
+
+    <div class="form-group">
+        <div class="bmd-label-static">@LocalizationHelper.Translate("_TobaccoRevTobTaste", "SmokeSession")&nbsp;-&nbsp;<h6 style="display: inline; font-weight: bold">{{review.Taste + '/10'}}</h6></div>
+        <div class="form-control">
+            <input class="col-md-12 review-slider" type="range" min="0" max="10" step="1" id="Taste" v-bind:disabled="edit" v-model="review.Taste" />
         </div>
     </div>
 
-    <div class="form-group col-sm-6">
-        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTobTaste", "SmokeSession")</label>
+    <div class="form-group">
+        <div class="bmd-label-static">@LocalizationHelper.Translate("_TobaccoRevTobaccoQ", "SmokeSession")&nbsp;-&nbsp;<h6 style="display: inline; font-weight: bold">{{review.Quality + '/10'}}</h6></div>
         <div class="form-control">
-            <span style="display: inline-block">{{review.Taste + '/10'}}</span>
-            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Taste" v-bind:disabled="edit" v-model="review.Taste" />
+            <input class="col-md-12 review-slider" type="range" min="0" max="10" step="1" id="Quality" v-bind:disabled="edit" v-model="review.Quality" />
         </div>
     </div>
 
-    <div class="form-group col-sm-6">
-        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTobaccoQ", "SmokeSession")</label>
+    <div class="form-group">
+        <div class="bmd-label-static">@LocalizationHelper.Translate("_TobaccoRevOverallRating", "SmokeSession")&nbsp;-&nbsp;<h6 style="display: inline; font-weight: bold">{{review.Overall + '/10'}}</h6></div>
         <div class="form-control">
-            <span style="display: inline-block">{{review.Quality + '/10'}}</span>
-            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Quality" v-bind:disabled="edit" v-model="review.Quality" />
+            <input class="col-md-12 review-slider" type="range" min="0" max="10" step="1" id="Rating" v-bind:disabled="edit" v-model="review.Overall" />
         </div>
     </div>
 
-    <div class="form-group col-sm-6">
-        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevOverallRating", "SmokeSession")</label>
-        <div class="form-control">
-            <span style="display: inline-block">{{review.Overall + '/10'}}</span>
-            <input style="display: inline-block" type="range" min="0" max="10" step="1" id="Rating" v-bind:disabled="edit" v-model="review.Overall" />
-        </div>
-    </div>
-    
-    <div class="form-group col-sm-6">
-        <label class="bmd-label-floating">@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</label>
-        <div class="form-control">
-            <textarea id="Text" class="col-sm-12" rows="10" v-bind:disabled="edit" v-model="review.Text" ></textarea>
+    <div class="form-group">
+        <label class="bmd-label-static">@LocalizationHelper.Translate("_TobaccoRevTextReview", "SmokeSession")</label>
+        <div>
+            <textarea  class="col-md-12 review-text form-control" id="Text" v-bind:disabled="edit" v-model="review.Text"></textarea>
         </div>
     </div>
 
-    <button class="btn btn-default" v-bind:disabled="!edit" v-on:click="edit = !edit">@LocalizationHelper.Translate("Edit", "Common")</button>
-    <button class="btn btn-default" v-bind:disabled="edit" v-on:click="saveReview()">@LocalizationHelper.Translate("SaveChanges", "Common")</button>
+    <div class="form-group">
+        <button class="btn btn-primary btn-raised" v-bind:disabled="!edit" v-on:click="edit = !edit">@LocalizationHelper.Translate("Edit", "Common")</button>
+        <button class="btn btn-success btn-raised" style="float:right" v-bind:disabled="edit" v-on:click="saveReview()">@LocalizationHelper.Translate("SaveChanges", "Common")</button>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -55,61 +51,95 @@
         data: {
             review: {
                 Id: '',
-                AuthorId: '',
                 Quality: 0,
                 Taste: 0,
                 Smoke: 0,
                 Overall: 0,
                 Text: '',
-                ReviewedTobaccoId: '',
                 SmokeSessionId: ''
             },
             edit: false
         },
 
         created: function () {
-            console.log("created function, session id: " + this.getSessionId());
-
             $.getJSON('/TobaccoReviews/GetReviewVue/',
                 {
                     sessionId: this.getSessionId()
                 },
                 function(data) {
-                    console.log("created get json");
                     if (data != null) {
-                        this.review = data;
-                        this.edit = true;
-                        console.log("created data not null");
+                        vm.$data.review = data;
+                        vm.$data.edit = true;
+                        if (getTextLines() < 11) {
+                            $("#Text").animate({ rows: getTextLines() }, 'fast');
+                        } else {
+                            $("#Text").animate({ rows: 10 }, 'fast');
+                        }
                     }
                 });
         },
 
         methods: {
             saveReview: function () {
-                console.log("saving function");
-                
                 this.review.SmokeSessionId = this.getSessionId();
 
-                $.ajax({
+                var jqxhr = $.ajax({
                     type: "POST",
-                    url: "/TobaccoReviews/SaveVueReview/", 
-                    data: JSON.stringify(this.review),
+                    url: "/TobaccoReviews/SaveVueReview/",
+                    data: JSON.stringify({
+                        Id: this.review.Id,
+                        Quality: this.review.Quality,
+                        Taste: this.review.Taste,
+                        Smoke: this.review.Smoke,
+                        Overall: this.review.Overall,
+                        Text: this.review.Text,
+                        SmokeSessionId: this.review.SmokeSessionId
+                    }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(data) {
-                        Console.log("Review saved.");
-                        this.review = data;
-                        this.edit = true;
-                    },
-                    error: function(data) {
-                        console.log("Error saving review.");
+                        vm.$data.review = data;
+                        vm.$data.edit = true;
                     }
+                }).fail(function(jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    console.log(msg);
                 });
             },
 
             getSessionId: function () {
-                return $("input[name='sessionId']").val();
+                return $("input[name='smokeSessionId']").val();
             }
+        }
+    });
+
+    function getTextLines() {
+        var lines = vm.$data.review.Text.split(/\r\n|\r|\n/);
+        return lines.length;
+    }
+
+    $('#Text').on("focus", function () {
+        if (getTextLines() < 10) {
+            $(this).animate({ rows: 10 }, 'fast');
+        }
+    }).on("blur", function () {
+        if (getTextLines() < 11) {
+            $(this).animate({ rows: getTextLines() }, 'fast');
         }
     });
 </script>

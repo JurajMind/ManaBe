@@ -1,8 +1,8 @@
 /*
- * Gijgo DropDown v1.8.1
+ * Gijgo DropDown v1.9.6
  * http://gijgo.com/dropdown
  *
- * Copyright 2014, 2017 gijgo.com
+ * Copyright 2014, 2018 gijgo.com
  * Released under the MIT license
  */
 /* global window alert jQuery gj */
@@ -23,7 +23,9 @@ gj.dropdown.config = {
 
         /** The width of the dropdown.         */        width: undefined,
 
-        optionsDisplay: 'materialdesign',
+        /** The maximum height of the dropdown list. When set to auto adjust to the screen height.         */        maxHeight: 'auto',
+
+        /** Placeholder. This label appear only if the value is not set yet.         */        placeholder: undefined,
 
         fontSize: undefined,
 
@@ -32,7 +34,9 @@ gj.dropdown.config = {
         /** The name of the icons library that is going to be in use. Currently we support Material Icons, Font Awesome and Glyphicons.         */        iconsLibrary: 'materialicons',
 
         icons: {
-            /** DropDown icon definition.             */            dropdown: '<i class="gj-icon arrow-dropdown" />'
+            /** DropDown icon definition.             */            dropdown: '<i class="gj-icon arrow-dropdown" />',
+
+            dropup: '<i class="gj-icon arrow-dropup" />'
         },
 
         style: {
@@ -50,8 +54,7 @@ gj.dropdown.config = {
             item: 'list-group-item',
             active: 'active'
         },
-        iconsLibrary: 'glyphicons',
-        optionsDisplay: 'standard'
+        iconsLibrary: 'glyphicons'
     },
 
     bootstrap4: {
@@ -61,8 +64,7 @@ gj.dropdown.config = {
             list: 'gj-list gj-list-bootstrap gj-dropdown-list-bootstrap list-group',
             item: 'list-group-item',
             active: 'active'
-        },
-        optionsDisplay: 'standard'
+        }
     },
 
     materialicons: {
@@ -73,7 +75,8 @@ gj.dropdown.config = {
 
     fontawesome: {
         icons: {
-            dropdown: '<i class="fa fa-caret-down" aria-hidden="true"></i>'
+            dropdown: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+            dropup: '<i class="fa fa-caret-up" aria-hidden="true"></i>'
         },
         style: {
             expander: 'gj-dropdown-expander-fa'
@@ -82,7 +85,8 @@ gj.dropdown.config = {
 
     glyphicons: {
         icons: {
-            dropdown: '<span class="caret"></span>'
+            dropdown: '<span class="caret"></span>',
+            dropup: '<span class="dropup"><span class="caret" ></span></span>'
         },
         style: {
             expander: 'gj-dropdown-expander-glyphicons'
@@ -96,6 +100,15 @@ gj.dropdown.methods = {
         this.attr('data-dropdown', 'true');
         gj.dropdown.methods.initialize(this);
         return this;
+    },
+
+    getHTMLConfig: function () {
+        var result = gj.widget.prototype.getHTMLConfig.call(this),
+            attrs = this[0].attributes;
+        if (attrs['placeholder']) {
+            result.placeholder = attrs['placeholder'].value;
+        }
+        return result;
     },
 
     initialize: function ($dropdown) {
@@ -120,16 +133,14 @@ gj.dropdown.methods = {
 
         $presenter.on('click', function (e) {
             if ($list.is(':visible')) {
-                $list.hide();
+                gj.dropdown.methods.close($dropdown, $list);
             } else {
-                gj.dropdown.methods.setListPosition($presenter, $list, data);
-                $list.show();
-                gj.dropdown.methods.setListPosition($presenter, $list, data);
+                gj.dropdown.methods.open($dropdown, $list);
             }
         });
         $presenter.on('blur', function (e) {
             setTimeout(function () {
-                $list.hide();
+                gj.dropdown.methods.close($dropdown, $list);
             }, 500);
         });
         $presenter.append($display).append($expander);
@@ -142,25 +153,54 @@ gj.dropdown.methods = {
         $dropdown.reload();
     },
 
-    setListPosition: function ($presenter, $list, data) {
-        var offset = $presenter.offset();
-        $list.css('left', offset.left).css('width', $presenter.outerWidth(true));
-        if (data.optionsDisplay === 'standard') {
-            $list.css('top', offset.top + $presenter.outerHeight(true) + 2);
-        } else {
-            $list.css('top', offset.top);
+    setListPosition: function (presenter, list, data) {
+        var top, listHeight, presenterHeight, newHeight, listElRect,
+            mainElRect = presenter.getBoundingClientRect(),
+            scrollY = window.scrollY || window.pageYOffset || 0,
+            scrollX = window.scrollX || window.pageXOffset || 0;
+
+        // Reset list size
+        list.style.overflow = '';
+        list.style.overflowX = '';
+        list.style.height = '';
+
+        gj.core.setChildPosition(presenter, list);
+
+        listHeight = gj.core.height(list, true);
+        listElRect = list.getBoundingClientRect();
+        presenterHeight = gj.core.height(presenter, true);
+        if (data.maxHeight === 'auto') {
+            if (mainElRect.top < listElRect.top) { // The list is located below the main element
+                if (mainElRect.top + listHeight + presenterHeight > window.innerHeight) {
+                    newHeight = window.innerHeight - mainElRect.top - presenterHeight - 3;
+                }
+            } else { // The list is located above the main element                
+                if (mainElRect.top - listHeight - 3 > 0) {
+                    list.style.top = Math.round(mainElRect.top + scrollY - listHeight - 3) + 'px';
+                } else {
+                    list.style.top = scrollY + 'px';
+                    newHeight = mainElRect.top - 3;
+                }
+            }
+        } else if (!isNaN(data.maxHeight) && data.maxHeight < listHeight) {
+            newHeight = data.maxHeight;
+        }
+
+        if (newHeight) {
+            list.style.overflow = 'scroll';
+            list.style.overflowX = 'hidden';
+            list.style.height = newHeight + 'px';
         }
     },
 
     useHtmlDataSource: function ($dropdown, data) {
-        var dataSource = [], i, $option, record,
+        var dataSource = [], i, record,
             $options = $dropdown.find('option');
         for (i = 0; i < $options.length; i++) {
-            $option = $($options[i]);
             record = {};
-            record[data.valueField] = $option.val();
-            record[data.textField] = $option.html();
-            record[data.selectedField] = $option.prop('selected');
+            record[data.valueField] = $options[i].value;
+            record[data.textField] = $options[i].innerHTML;
+            record[data.selectedField] = $dropdown[0].value === $options[i].value;
             dataSource.push(record);
         }
         data.dataSource = dataSource;
@@ -183,7 +223,7 @@ gj.dropdown.methods = {
     },
 
     render: function ($dropdown, response) {
-        var selectedInd = false,
+        var selections = [],
             data = $dropdown.data(),
             $parent = $dropdown.parent(),
             $list = $('body').children('[role="list"][guid="' + $dropdown.attr('data-guid') + '"]'),
@@ -200,34 +240,36 @@ gj.dropdown.methods = {
                 var value = this[data.valueField],
                     text = this[data.textField],
                     selected = this[data.selectedField] && this[data.selectedField].toString().toLowerCase() === 'true',
-                    $item, $option;
+                    $item, i;
 
                 $item = $('<li value="' + value + '"><div data-role="wrapper"><span data-role="display">' + text + '</span></div></li>');
                 $item.addClass(data.style.item);
                 $item.on('click', function (e) {
                     gj.dropdown.methods.select($dropdown, value);
-                    gj.dropdown.events.change($dropdown);
                 });
                 $list.append($item);
-
-                $option = $('<option value="' + value + '">' + text + '</option>');
-                $dropdown.append($option);
+                
+                $dropdown.append('<option value="' + value + '">' + text + '</option>');
 
                 if (selected) {
-                    gj.dropdown.methods.select($dropdown, value);
-                    selectedInd = true;
+                    selections.push(value);
                 }
             });
-            if (selectedInd === false) {
-                gj.dropdown.methods.select($dropdown, response[0][data.valueField]);
+            if (selections.length === 0) {
+                $dropdown.prepend('<option value=""></option>');
+                if (data.placeholder) {
+                    $display[0].innerHTML = '<span class="placeholder">' + data.placeholder + '</span>';
+                }
+            } else {
+                for (i = 0; i < selections.length; i++) {
+                    gj.dropdown.methods.select($dropdown, selections[i]);
+                }
             }
         }
 
         if (data.width) {
             $parent.css('width', data.width);
-            $list.css('width', data.width);
             $presenter.css('width', data.width);
-            //$display.css('width', $presenter.outerWidth(true) - $expander.outerWidth(true));
         }
 
         if (data.fontSize) {
@@ -239,6 +281,23 @@ gj.dropdown.methods = {
         return $dropdown;
     },
 
+    open: function ($dropdown, $list) {
+        var data = $dropdown.data(),
+            $expander = $dropdown.parent().find('[role="expander"]'),
+            $presenter = $dropdown.parent().find('[role="presenter"]');
+        $list.css('width', gj.core.width($presenter[0]));
+        $list.show();
+        gj.dropdown.methods.setListPosition($presenter[0], $list[0], data);
+        $expander.html(data.icons.dropup);
+    },
+
+    close: function ($dropdown, $list) {
+        var data = $dropdown.data(),
+            $expander = $dropdown.parent().find('[role="expander"]');
+        $expander.html(data.icons.dropdown);
+        $list.hide();
+    },
+
     select: function ($dropdown, value) {
         var data = $dropdown.data(),
             $list = $('body').children('[role="list"][guid="' + $dropdown.attr('data-guid') + '"]'),
@@ -247,10 +306,11 @@ gj.dropdown.methods = {
         if (record) {
             $list.children('li').removeClass(data.style.active);
             $item.addClass(data.style.active);
-            $dropdown.val(value);
+            $dropdown[0].value = value;
             $dropdown.next('[role="presenter"]').find('[role="display"]').html(record[data.textField]);
+            gj.dropdown.events.change($dropdown);
         }
-        $list.hide();
+        gj.dropdown.methods.close($dropdown, $list);
         return $dropdown;
     },
 
@@ -273,7 +333,6 @@ gj.dropdown.methods = {
             return $dropdown.val();
         } else {
             gj.dropdown.methods.select($dropdown, value);
-            gj.dropdown.events.change($dropdown);
             return $dropdown;
         }
     },
@@ -341,6 +400,8 @@ gj.dropdown.widget = function ($element, jsConfig) {
 
 gj.dropdown.widget.prototype = new gj.widget();
 gj.dropdown.widget.constructor = gj.dropdown.widget;
+
+gj.dropdown.widget.prototype.getHTMLConfig = gj.dropdown.methods.getHTMLConfig;
 
 (function ($) {
     $.fn.dropdown = function (method) {

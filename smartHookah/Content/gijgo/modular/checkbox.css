@@ -104,8 +104,8 @@
     border: 2px solid #616161; /* Gray 700 */
 }
 
-.gj-checkbox-md input[type="checkbox"]:indeterminate + span:after {
-    color: rgba(0, 0, 0, 1);
+.gj-checkbox-md input[type="checkbox"]:indeterminate + span:after {    
+    color: #616161;/*color: rgba(0, 0, 0, 1);*/
     position: absolute;
     left: 1px;
     top: -15px;
@@ -125,14 +125,14 @@
 
 /* Material Icons */
 .gj-checkbox-material-icons input[type="checkbox"]:checked + span:after {
-    content: "\E908";
+    content: "\e91f";
     font-size: 14px;
     font-weight: bold;
     white-space: pre;
 }
 
 .gj-checkbox-material-icons input[type="checkbox"]:indeterminate + span:after {
-    content: "\E905";
+    content: "\e921";
     font-size: 14px;
     font-weight: bold;
     white-space: pre;
