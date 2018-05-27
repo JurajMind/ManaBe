@@ -1754,6 +1754,7 @@
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="Vue\index.js" />
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />
     <Content Include="ClientApp\components\nav-bottom.vue" />
@@ -1833,8 +1834,6 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\ww.jquery.js" />
     <Content Include="Scripts\ww.jquery.min.js" />
-    <Content Include="Vue\bundle.js" />
-    <Content Include="Vue\index.js" />
     <None Include="bundleconfig.json" />
     <Content Include="package.json" />
     <Content Include="nuget.config" />
@@ -2161,7 +2160,6 @@
     <Content Include="Views\Reservation\Place.cshtml" />
     <Content Include="Views\Reservation\Details.cshtml" />
     <Content Include="Views\SmokeSession\_ActiveSession.cshtml" />
-    <Content Include="Vue\App.vue" />
     <Content Include="Views\Places\Media.cshtml" />
     <Content Include="Views\Places\AddMedia.cshtml" />
     <Content Include="Views\Shared\_VueLayout.cshtml" />
@@ -2173,7 +2171,7 @@
     <Content Include="Views\Places\Statistics.cshtml" />
     <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
     <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
-    <Content Include="Vue\Reservations\Place.vue" />
+    <Content Include="Vue\Reservations\ReservationPlace.vue" />
     <Content Include="Vue\Reservations\ReservationRow.vue" />
     <Content Include="Vue\Reservations\ReservationColunm.vue" />
   </ItemGroup>
