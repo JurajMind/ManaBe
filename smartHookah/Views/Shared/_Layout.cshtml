@@ -1,118 +1,121 @@
-﻿@using System.Configuration
+@using System.Configuration
 @using Newtonsoft.Json
 @using smartHookah.Helpers
 @using Westwind.Globalization
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="manifest" href="~/Content/manifest.json">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=latin-ext">
-    <link href="~/Content/images/icons/icon-128x128.png" rel="apple-touch-icon" sizes="128x128" />
-    <link rel="apple-touch-startup-image" href="~/Content/splash.png">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <meta property="og:title" content="Manapipes" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://app.manapipes.com/Content/images/icons/icon-96x96.png" />
-    <meta property="fb:app_id" content="@ConfigurationManager.AppSettings["fbAppId"]" />
-    <!-- Chrome, Firefox OS and Opera -->
-    <meta name="theme-color" content="#3f51b5">
-    <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#3f51b5">
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#3f51b5">
+  <link rel="manifest" href="~/Content/manifest.json">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=latin-ext">
+  <link href="~/Content/images/icons/icon-128x128.png" rel="apple-touch-icon" sizes="128x128" />
+  <link rel="apple-touch-startup-image" href="~/Content/splash.png">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta property="og:title" content="Manapipes" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://app.manapipes.com/Content/images/icons/icon-96x96.png" />
+  <meta property="fb:app_id" content="@ConfigurationManager.AppSettings["fbAppId"]" />
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#3f51b5">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3f51b5">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#3f51b5">
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <title>@ViewBag.Title - ManaPipes</title>
-    @*@Styles.Render("~/Content/cssAll")*@
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <title>@ViewBag.Title - ManaPipes</title>
+  @*@Styles.Render("~/Content/cssAll")*@
 
-    @Styles.Render("~/Content/font-awesome")
-    @*@Html.InlineStyles("~/Content/critical")*@
-    @*@Styles.Render("~/Content/season")*@
-    @Styles.Render("~/Content/material")
-    @*@Styles.RenderFormat(" <link rel=\"preload\" href=\"{0}\" as=\"style\" onload=\"this.rel='stylesheet'\">", "~/Content/material")*@
-    @Styles.Render("~/Content/css")
-
-
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @*Scripts.Render("~/bundles/select2")
-        @Styles.Render("~/Content/select2")
-    *@
-
-    @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/jqueryval")
+  @Styles.Render("~/Content/font-awesome")
+  @*@Html.InlineStyles("~/Content/critical")*@
+  @*@Styles.Render("~/Content/season")*@
+  @Styles.Render("~/Content/material")
+  @*@Styles.RenderFormat(" <link rel=\"preload\" href=\"{0}\" as=\"style\" onload=\"this.rel='stylesheet'\">", "~/Content/material")*@
+  @Styles.Render("~/Content/css")
 
 
-    @*@Scripts.Render("~/bundles/jquery-rating")*@
-    @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/chart")
-    @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/main")
+  @Scripts.Render("~/bundles/modernizr")
+  @Scripts.Render("~/bundles/jquery")
+  @*Scripts.Render("~/bundles/select2")
+    @Styles.Render("~/Content/select2")
+  *@
 
-    @if (User.IsInRole("Admin"))
-    {
-        <script type="text/javascript" async src="~/LocalizationAdmin/scripts/ww.resourceEditor.js"></script>
-    }
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js" async></script>
-
-    <script src="~/Vue/bundle.js"></script>
-    @Scripts.Render("~/bundles/vue")
+  @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/jqueryval")
 
 
-    <script type='text/javascript'>
-        $(document).ready(function () {
-            $('select').not('.oldSelect').select2({
-                theme: "material"
-            });
+  @*@Scripts.Render("~/bundles/jquery-rating")*@
+  @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/chart")
+  @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\"></script>", "~/bundles/main")
 
-            $(".select2-selection__arrow")
-                .addClass("material-icons")
-                .html("arrow_drop_down");
-        });
+  @if (User.IsInRole("Admin"))
+  {
+    <script type="text/javascript" async src="~/LocalizationAdmin/scripts/ww.resourceEditor.js"></script>
+  }
 
-        $(document).on('focus', '.select2', function (e) {
-            if (e.originalEvent) {
-                $(this).parent().addClass('is-focused');
-            }
-        });
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js" async></script>
+  <script src="/dist/commons.js" defer></script>
+  <script src="/dist/index.js" defer></script>
+  
+  <script src="@JavaScriptResourceHandler.GetJavaScriptResourcesUrl("resReservation","Reservation")"></script>
 
-        $(document).on('blur', '.select2', function (e) {
-            if (e.originalEvent && !($(this).hasClass('select2-container--open') > 0)) {
-                $(this).parent().removeClass('is-focused');
-            }
-        });
+  <script type='text/javascript'>
+    $(document).ready(function () {
 
-        var appInsights = window.appInsights ||
-            function (config) {
-                function r(config) {
-                    t[config] = function () {
-                        var i = arguments;
-                        t.queue.push(function () { t[config].apply(t, i) })
-                    }
-                }
 
-                var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f;
-                for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0]
-                    .parentNode.appendChild(s), t.cookie = u
-                        .cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax'];
-                    i.length;
-                ) r('track' + i.pop());
-                return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'),
-                    config.disableExceptionTracking ||
-                    (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) {
-                        var s = f && f(config, r, u, e, o);
-                        return s !== !0 && t['_' + i](config, r, u, e, o), s
-                    }), t
-            }({
-                instrumentationKey: '***REMOVED***'
-            });
 
-        window.appInsights = appInsights;
-        appInsights.trackPageView();
-    </script>
+      $('select').not('.oldSelect').select2({
+        theme: "material"
+      });
+
+      $(".select2-selection__arrow")
+        .addClass("material-icons")
+        .html("arrow_drop_down");
+    });
+
+    $(document).on('focus', '.select2', function (e) {
+      if (e.originalEvent) {
+        $(this).parent().addClass('is-focused');
+      }
+    });
+
+    $(document).on('blur', '.select2', function (e) {
+      if (e.originalEvent && !($(this).hasClass('select2-container--open') > 0)) {
+        $(this).parent().removeClass('is-focused');
+      }
+    });
+
+    var appInsights = window.appInsights ||
+      function (config) {
+        function r(config) {
+          t[config] = function () {
+            var i = arguments;
+            t.queue.push(function () { t[config].apply(t, i) })
+          }
+        }
+
+        var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f;
+        for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0]
+          .parentNode.appendChild(s), t.cookie = u
+            .cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax'];
+          i.length;
+        ) r('track' + i.pop());
+        return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'),
+          config.disableExceptionTracking ||
+          (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) {
+            var s = f && f(config, r, u, e, o);
+            return s !== !0 && t['_' + i](config, r, u, e, o), s
+          }), t
+      }({
+        instrumentationKey: '***REMOVED***'
+      });
+
+    window.appInsights = appInsights;
+    appInsights.trackPageView();
+  </script>
 </head>
 <body>
 

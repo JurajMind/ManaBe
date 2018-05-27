@@ -115,17 +115,18 @@
 </style>
 
 <div id="app">
-  <Reservation/>
+  <reservation_place place-id="@Model.place.Id"/>
 </div>
 
 @Scripts.Render("~/bundles/gij")
-@Scripts.Render("~/bundles/vue")
 @Scripts.Render("~/bundles/babel")
-<script src="/dist/build.js"></script>
+
+
 @section scripts
 {
+
     <script type="text/javascript">
-    var hub = $.connection.reservationHub;
+   
     Timer:null,
         $(function() {
             $('#datepicker').datepicker({
@@ -139,18 +140,16 @@
                     v.dateChanged();
                 }
             });
-        })
+    })
 
-    var placeId = @Model.place.Id;
+
+    var v = new Mana.default({ el: '#app' });
+    
 
     function changeDate(offset) {
         $('#datepicker').datepicker().value(moment($('#datepicker').datepicker().value(),'DD.MM.YYYY').add(offset, 'days').format('DD.MM.YYYY'));
     }
-
-        var v = new Vue({
-            el: '#app',
-        });
-
-        hub.client.reload = v.loadReservations;
+      
+     
     </script>
 }

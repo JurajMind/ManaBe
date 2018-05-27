@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -36,6 +36,8 @@ namespace smartHookah.Controllers
 
             db.Persons.AddOrUpdate(user.Person);
             await db.SaveChangesAsync();
+
+          return null;
         }
     
         // GET: Person

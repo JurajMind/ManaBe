@@ -1,0 +1,128 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<root>
+   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+      <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+      <xsd:element name="root" msdata:IsDataSet="true">
+         <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+               <xsd:element name="metadata">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" use="required" type="xsd:string" />
+                     <xsd:attribute name="type" type="xsd:string" />
+                     <xsd:attribute name="mimetype" type="xsd:string" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="assembly">
+                  <xsd:complexType>
+                     <xsd:attribute name="alias" type="xsd:string" />
+                     <xsd:attribute name="name" type="xsd:string" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="data">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                     <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                     <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="resheader">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" />
+                  </xsd:complexType>
+               </xsd:element>
+            </xsd:choice>
+         </xsd:complexType>
+      </xsd:element>
+   </xsd:schema>
+   <resheader name="resmimetype">
+      <value>text/microsoft-resx</value>
+   </resheader>
+   <resheader name="version">
+      <value>2.0</value>
+   </resheader>
+   <resheader name="reader">
+      <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <resheader name="writer">
+      <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <data name="addTable" xml:space="preserve">
+      <value>Add a table</value>
+   </data>
+   <data name="cancel" xml:space="preserve">
+      <value>Cancel</value>
+   </data>
+   <data name="canceledReservation" xml:space="preserve">
+      <value>Canceled reservations</value>
+   </data>
+   <data name="change" xml:space="preserve">
+      <value>Change</value>
+   </data>
+   <data name="confirm" xml:space="preserve">
+      <value>Confirm</value>
+   </data>
+   <data name="confirmCancel" xml:space="preserve">
+      <value>Are you sure you want to cancel this reservation?</value>
+   </data>
+   <data name="create" xml:space="preserve">
+      <value>Create</value>
+   </data>
+   <data name="createReservation" xml:space="preserve">
+      <value>Make a reservation</value>
+   </data>
+   <data name="date" xml:space="preserve">
+      <value>Date</value>
+   </data>
+   <data name="message" xml:space="preserve">
+      <value>Message</value>
+   </data>
+   <data name="name" xml:space="preserve">
+      <value>Name</value>
+   </data>
+   <data name="noVisit" xml:space="preserve">
+      <value>No show</value>
+   </data>
+   <data name="persons" xml:space="preserve">
+      <value>Number of people</value>
+   </data>
+   <data name="place" xml:space="preserve">
+      <value>Table</value>
+      <comment>Jaky je rozdil mezi table a place?</comment>
+   </data>
+   <data name="reservationOverview" xml:space="preserve">
+      <value>Reservations overview</value>
+   </data>
+   <data name="reserve" xml:space="preserve">
+      <value>Book a table</value>
+   </data>
+   <data name="selectSeat" xml:space="preserve">
+      <value>Choose a table</value>
+   </data>
+   <data name="table" xml:space="preserve">
+      <value>Table</value>
+   </data>
+   <data name="time" xml:space="preserve">
+      <value>Time</value>
+   </data>
+   <data name="today" xml:space="preserve">
+      <value>Today</value>
+   </data>
+   <data name="visit" xml:space="preserve">
+      <value>Guests have arrived</value>
+   </data>
+   <data name="visitDuration" xml:space="preserve">
+      <value>I want to stay for</value>
+   </data>
+</root>

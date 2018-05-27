@@ -1,0 +1,272 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<root>
+   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+      <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+      <xsd:element name="root" msdata:IsDataSet="true">
+         <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+               <xsd:element name="metadata">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" use="required" type="xsd:string" />
+                     <xsd:attribute name="type" type="xsd:string" />
+                     <xsd:attribute name="mimetype" type="xsd:string" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="assembly">
+                  <xsd:complexType>
+                     <xsd:attribute name="alias" type="xsd:string" />
+                     <xsd:attribute name="name" type="xsd:string" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="data">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                     <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                     <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="resheader">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" />
+                  </xsd:complexType>
+               </xsd:element>
+            </xsd:choice>
+         </xsd:complexType>
+      </xsd:element>
+   </xsd:schema>
+   <resheader name="resmimetype">
+      <value>text/microsoft-resx</value>
+   </resheader>
+   <resheader name="version">
+      <value>2.0</value>
+   </resheader>
+   <resheader name="reader">
+      <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <resheader name="writer">
+      <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <data name="_MDEditBowl" xml:space="preserve">
+      <value>Korunka</value>
+   </data>
+   <data name="_MDEditCoalCount" xml:space="preserve">
+      <value>Počet uhlíků</value>
+   </data>
+   <data name="_MDEditCoalType" xml:space="preserve">
+      <value>Typ uhlíků</value>
+   </data>
+   <data name="_MDEditHMS" xml:space="preserve">
+      <value>HMS</value>
+   </data>
+   <data name="_MDEditHookah" xml:space="preserve">
+      <value>Vodní dýmka</value>
+   </data>
+   <data name="_MDEditMyGear" xml:space="preserve">
+      <value>Moje vybavení</value>
+   </data>
+   <data name="_MDEditPackCoals" xml:space="preserve">
+      <value>Způsob nabití &amp; uhlíky</value>
+      <comment>Proc jsou uhliky i tady kdyz uz jsou samostatne?</comment>
+   </data>
+   <data name="_MDEditPersons" xml:space="preserve">
+      <value>Počet kouřících</value>
+   </data>
+   <data name="_TobaccoEditEmpty" xml:space="preserve">
+      <value>Prázdný</value>
+   </data>
+   <data name="_TobaccoEditMyTob" xml:space="preserve">
+      <value>Můj tabák</value>
+   </data>
+   <data name="_TobaccoEditTitle" xml:space="preserve">
+      <value>Tabák</value>
+   </data>
+   <data name="_TobaccoRevOverallRating" xml:space="preserve">
+      <value>Celkové hodnocení</value>
+   </data>
+   <data name="_TobaccoRevSmokeQ" xml:space="preserve">
+      <value>Kvalita kouření</value>
+   </data>
+   <data name="_TobaccoRevTextPlaceholder" xml:space="preserve">
+      <value>Napište prosím recenzi</value>
+   </data>
+   <data name="_TobaccoRevTextReview" xml:space="preserve">
+      <value>Recenze</value>
+   </data>
+   <data name="_TobaccoRevTobaccoQ" xml:space="preserve">
+      <value>Kvalita tabáku</value>
+   </data>
+   <data name="_TobaccoRevTobTaste" xml:space="preserve">
+      <value>Chuť</value>
+   </data>
+   <data name="CardFrom" xml:space="preserve">
+      <value>z</value>
+   </data>
+   <data name="CardGridHide" xml:space="preserve">
+      <value>Skrýt</value>
+   </data>
+   <data name="CardGridShowAll" xml:space="preserve">
+      <value>Zobrazit vše</value>
+   </data>
+   <data name="CardMixOf" xml:space="preserve">
+      <value>Mix</value>
+   </data>
+   <data name="CardPuffs" xml:space="preserve">
+      <value>potahů</value>
+   </data>
+   <data name="GetDevSettingsSetDefault" xml:space="preserve">
+      <value>Nastavit výchozí</value>
+   </data>
+   <data name="GetDevSettingsUseDefault" xml:space="preserve">
+      <value>Použít výchozí</value>
+   </data>
+   <data name="GetLiveSSLastPuff" xml:space="preserve">
+      <value>Poslední potah</value>
+   </data>
+   <data name="GetLiveSSLongestPuff" xml:space="preserve">
+      <value>Nejdelší potah</value>
+   </data>
+   <data name="GetLiveSSNumOfPuffs" xml:space="preserve">
+      <value>počet potahů</value>
+   </data>
+   <data name="GetLiveSSSessionDuration" xml:space="preserve">
+      <value>Celkový čas</value>
+   </data>
+   <data name="GetLiveSSSmokeTime" xml:space="preserve">
+      <value>Doba kouření</value>
+   </data>
+   <data name="GetLiveSSStarted" xml:space="preserve">
+      <value>začátek v</value>
+   </data>
+   <data name="GetLiveSSTobStamina" xml:space="preserve">
+      <value>Předpokládaná výdrž tabáku</value>
+   </data>
+   <data name="GetStatisticsAvgPuffDuration" xml:space="preserve">
+      <value>Průměrná délka potahu</value>
+   </data>
+   <data name="GetStatisticsBlows" xml:space="preserve">
+      <value>Profouknutí</value>
+   </data>
+   <data name="GetStatisticsClusters" xml:space="preserve">
+      <value>Skupiny</value>
+   </data>
+   <data name="GetStatisticsCount" xml:space="preserve">
+      <value>Počet</value>
+   </data>
+   <data name="GetStatisticsDeleteSS" xml:space="preserve">
+      <value>Smazat tuto statistiku</value>
+   </data>
+   <data name="GetStatisticsDownloadStats" xml:space="preserve">
+      <value>Stáhnout statistická data</value>
+   </data>
+   <data name="GetStatisticsDuration" xml:space="preserve">
+      <value>Celková doba kouření</value>
+   </data>
+   <data name="GetStatisticsEditMetadata" xml:space="preserve">
+      <value>Upravit údaje o kouření</value>
+   </data>
+   <data name="GetStatisticsIdle" xml:space="preserve">
+      <value>Klid</value>
+   </data>
+   <data name="GetStatisticsLongest" xml:space="preserve">
+      <value>Nejdelší</value>
+   </data>
+   <data name="GetStatisticsMedPuffDuration" xml:space="preserve">
+      <value>Střední doba potahu</value>
+   </data>
+   <data name="GetStatisticsPersons" xml:space="preserve">
+      <value>Počet kouřících</value>
+   </data>
+   <data name="GetStatisticsPuffs" xml:space="preserve">
+      <value>Potáhnutí</value>
+   </data>
+   <data name="GetStatisticsRecalculateSS" xml:space="preserve">
+      <value>Přepočítat statistiku tohoto kouření</value>
+   </data>
+   <data name="GetStatisticsSessionMetadata" xml:space="preserve">
+      <value>Údaje o kouření</value>
+   </data>
+   <data name="GetStatisticsSmokeOverView" xml:space="preserve">
+      <value>Přehled kouření</value>
+   </data>
+   <data name="GetStatisticsSmokeReview" xml:space="preserve">
+      <value>Hodnocení</value>
+   </data>
+   <data name="GetStatisticsSSStart" xml:space="preserve">
+      <value>Kouření začalo v</value>
+   </data>
+   <data name="GetStatisticsTime" xml:space="preserve">
+      <value>Čas</value>
+   </data>
+   <data name="GetStatisticsWriteTobReview" xml:space="preserve">
+      <value>Napsat recenzi na tabák</value>
+   </data>
+   <data name="GoToSessionCode" xml:space="preserve">
+      <value>Kód podložky</value>
+   </data>
+   <data name="GoToSessionConnect" xml:space="preserve">
+      <value>Připojit</value>
+   </data>
+   <data name="GoToSessionEnterCode" xml:space="preserve">
+      <value>Zadejte prosím kód podložky (na displeji podložky)</value>
+   </data>
+   <data name="IndexSmokeHistory" xml:space="preserve">
+      <value>Historie kouření</value>
+   </data>
+   <data name="MDSelectorTobaccoBrand" xml:space="preserve">
+      <value>Značka tabáku</value>
+   </data>
+   <data name="MDSelectorTobaccoFlavor" xml:space="preserve">
+      <value>Příchuť tabáku</value>
+   </data>
+   <data name="NoLiveStatsNoSData" xml:space="preserve">
+      <value>Žádné údaje o kouření</value>
+   </data>
+   <data name="NoLiveStatsStartS" xml:space="preserve">
+      <value>Začněte kouřit pro zobrazení dat</value>
+   </data>
+   <data name="smokeMDModalTitle" xml:space="preserve">
+      <value>Informace</value>
+   </data>
+   <data name="sSMetaDataBowl" xml:space="preserve">
+      <value>Korunka</value>
+   </data>
+   <data name="sSMetaDataCoal" xml:space="preserve">
+      <value>Uhlíky</value>
+   </data>
+   <data name="sSMetaDataCoalOfType" xml:space="preserve">
+      <value>uhlíků typu</value>
+   </data>
+   <data name="sSMetaDataHMS" xml:space="preserve">
+      <value>HMS</value>
+   </data>
+   <data name="sSMetaDataHookah" xml:space="preserve">
+      <value>Vodní dýmka</value>
+   </data>
+   <data name="sSMetaDataNone" xml:space="preserve">
+      <value>Žádné údaje o kouření</value>
+   </data>
+   <data name="sSMetaDataPackStyle" xml:space="preserve">
+      <value>Způsob nabití</value>
+   </data>
+   <data name="sSMetaDataTobBrand" xml:space="preserve">
+      <value>Značka tabáku</value>
+   </data>
+   <data name="sSMetaDataTobFlavor" xml:space="preserve">
+      <value>Příchuť tabáku</value>
+   </data>
+   <data name="TooltipAssign" xml:space="preserve">
+      <value>Přiřadit</value>
+   </data>
+</root>

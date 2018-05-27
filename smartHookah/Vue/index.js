@@ -1,7 +1,11 @@
-﻿import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue'
+import moment  from 'moment'
 
-new Vue({
-    el: '#app',
-    render: h => h(App)
-})
+import reservation_place from './Reservations/ReservationPlace.vue'
+
+Vue.component('reservation_place', reservation_place);
+
+
+var v = Vue;
+
+export default v;
