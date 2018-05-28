@@ -76,7 +76,19 @@ namespace smartHookah.Models
 
         public virtual ICollection<ApplicationUser> User { get; set; }
 
+        public bool Gdpr { get; set; }
+
         public int PersonRating { get; set; }
+
+        public virtual ICollection<PipeAccesory> FavoritePipeAccesories { get; set; }
+
+        [NotMapped]
+        public  virtual ICollection<TobaccoMix> FavoriteTobaccoMixs {
+            get
+            {
+                return (ICollection<TobaccoMix>)this.FavoritePipeAccesories.Where(a => a is TobaccoMix);
+            }
+        }
 
         [NotMapped]
         public virtual List<Pipe> Pipes
@@ -128,6 +140,8 @@ namespace smartHookah.Models
                 return displayName;
             }
         }
+
+ 
 
 
     }
