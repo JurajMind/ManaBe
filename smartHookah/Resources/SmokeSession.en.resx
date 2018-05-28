@@ -1,0 +1,271 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<root>
+   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+      <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+      <xsd:element name="root" msdata:IsDataSet="true">
+         <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+               <xsd:element name="metadata">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" use="required" type="xsd:string" />
+                     <xsd:attribute name="type" type="xsd:string" />
+                     <xsd:attribute name="mimetype" type="xsd:string" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="assembly">
+                  <xsd:complexType>
+                     <xsd:attribute name="alias" type="xsd:string" />
+                     <xsd:attribute name="name" type="xsd:string" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="data">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                     <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                     <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="resheader">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" />
+                  </xsd:complexType>
+               </xsd:element>
+            </xsd:choice>
+         </xsd:complexType>
+      </xsd:element>
+   </xsd:schema>
+   <resheader name="resmimetype">
+      <value>text/microsoft-resx</value>
+   </resheader>
+   <resheader name="version">
+      <value>2.0</value>
+   </resheader>
+   <resheader name="reader">
+      <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <resheader name="writer">
+      <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <data name="_MDEditBowl" xml:space="preserve">
+      <value>Bowl</value>
+   </data>
+   <data name="_MDEditCoalCount" xml:space="preserve">
+      <value>Coal count</value>
+   </data>
+   <data name="_MDEditCoalType" xml:space="preserve">
+      <value>Coal type</value>
+   </data>
+   <data name="_MDEditHMS" xml:space="preserve">
+      <value>HMD</value>
+   </data>
+   <data name="_MDEditHookah" xml:space="preserve">
+      <value>Hookah</value>
+   </data>
+   <data name="_MDEditMyGear" xml:space="preserve">
+      <value>My gear</value>
+   </data>
+   <data name="_MDEditPackCoals" xml:space="preserve">
+      <value>Pack method &amp; Coals</value>
+   </data>
+   <data name="_MDEditPersons" xml:space="preserve">
+      <value>Smokers count</value>
+   </data>
+   <data name="_TobaccoEditEmpty" xml:space="preserve">
+      <value>Empty</value>
+   </data>
+   <data name="_TobaccoEditMyTob" xml:space="preserve">
+      <value>My tobacco</value>
+   </data>
+   <data name="_TobaccoEditTitle" xml:space="preserve">
+      <value>Tobacco</value>
+   </data>
+   <data name="_TobaccoRevOverallRating" xml:space="preserve">
+      <value>Overall Rating</value>
+   </data>
+   <data name="_TobaccoRevSmokeQ" xml:space="preserve">
+      <value>Session Quality</value>
+   </data>
+   <data name="_TobaccoRevTextPlaceholder" xml:space="preserve">
+      <value>Leave a review please</value>
+   </data>
+   <data name="_TobaccoRevTextReview" xml:space="preserve">
+      <value>Review</value>
+   </data>
+   <data name="_TobaccoRevTobaccoQ" xml:space="preserve">
+      <value>Tobacco Quality</value>
+   </data>
+   <data name="_TobaccoRevTobTaste" xml:space="preserve">
+      <value>Taste</value>
+   </data>
+   <data name="CardFrom" xml:space="preserve">
+      <value>from</value>
+   </data>
+   <data name="CardGridHide" xml:space="preserve">
+      <value>Hide</value>
+   </data>
+   <data name="CardGridShowAll" xml:space="preserve">
+      <value>Show all</value>
+   </data>
+   <data name="CardMixOf" xml:space="preserve">
+      <value>Mix of</value>
+   </data>
+   <data name="CardPuffs" xml:space="preserve">
+      <value>puffs</value>
+   </data>
+   <data name="GetDevSettingsSetDefault" xml:space="preserve">
+      <value>Set default</value>
+   </data>
+   <data name="GetDevSettingsUseDefault" xml:space="preserve">
+      <value>Use default</value>
+   </data>
+   <data name="GetLiveSSLastPuff" xml:space="preserve">
+      <value>Last puff</value>
+   </data>
+   <data name="GetLiveSSLongestPuff" xml:space="preserve">
+      <value>Longest puff</value>
+   </data>
+   <data name="GetLiveSSNumOfPuffs" xml:space="preserve">
+      <value># of puffs</value>
+   </data>
+   <data name="GetLiveSSSessionDuration" xml:space="preserve">
+      <value>Session duration</value>
+   </data>
+   <data name="GetLiveSSSmokeTime" xml:space="preserve">
+      <value>Smoking duration</value>
+   </data>
+   <data name="GetLiveSSStarted" xml:space="preserve">
+      <value>started at</value>
+   </data>
+   <data name="GetLiveSSTobStamina" xml:space="preserve">
+      <value>Estimated tobacco stamina</value>
+   </data>
+   <data name="GetStatisticsAvgPuffDuration" xml:space="preserve">
+      <value>Average puff duration</value>
+   </data>
+   <data name="GetStatisticsBlows" xml:space="preserve">
+      <value>Purges</value>
+   </data>
+   <data name="GetStatisticsClusters" xml:space="preserve">
+      <value>Groups</value>
+   </data>
+   <data name="GetStatisticsCount" xml:space="preserve">
+      <value>Count</value>
+   </data>
+   <data name="GetStatisticsDeleteSS" xml:space="preserve">
+      <value>Delete this statistic</value>
+   </data>
+   <data name="GetStatisticsDownloadStats" xml:space="preserve">
+      <value>Download statistics data</value>
+   </data>
+   <data name="GetStatisticsDuration" xml:space="preserve">
+      <value>Total session duration</value>
+   </data>
+   <data name="GetStatisticsEditMetadata" xml:space="preserve">
+      <value>Edit session metadata</value>
+   </data>
+   <data name="GetStatisticsIdle" xml:space="preserve">
+      <value>Idle</value>
+   </data>
+   <data name="GetStatisticsLongest" xml:space="preserve">
+      <value>Longest</value>
+   </data>
+   <data name="GetStatisticsMedPuffDuration" xml:space="preserve">
+      <value>Median puff duration</value>
+   </data>
+   <data name="GetStatisticsPersons" xml:space="preserve">
+      <value>Smokers count</value>
+   </data>
+   <data name="GetStatisticsPuffs" xml:space="preserve">
+      <value>Puffs</value>
+   </data>
+   <data name="GetStatisticsRecalculateSS" xml:space="preserve">
+      <value>Recalculate this session's statistics</value>
+   </data>
+   <data name="GetStatisticsSessionMetadata" xml:space="preserve">
+      <value>Session metadata</value>
+   </data>
+   <data name="GetStatisticsSmokeOverView" xml:space="preserve">
+      <value>Smoking overview</value>
+   </data>
+   <data name="GetStatisticsSmokeReview" xml:space="preserve">
+      <value>Session rating</value>
+   </data>
+   <data name="GetStatisticsSSStart" xml:space="preserve">
+      <value>Session started at</value>
+   </data>
+   <data name="GetStatisticsTime" xml:space="preserve">
+      <value>Time</value>
+   </data>
+   <data name="GetStatisticsWriteTobReview" xml:space="preserve">
+      <value>Leave a tobacco review</value>
+   </data>
+   <data name="GoToSessionCode" xml:space="preserve">
+      <value>Device code</value>
+   </data>
+   <data name="GoToSessionConnect" xml:space="preserve">
+      <value>Connect</value>
+   </data>
+   <data name="GoToSessionEnterCode" xml:space="preserve">
+      <value>Please enter device code (on the display)</value>
+   </data>
+   <data name="IndexSmokeHistory" xml:space="preserve">
+      <value>Sessions history</value>
+   </data>
+   <data name="MDSelectorTobaccoBrand" xml:space="preserve">
+      <value>Tobacco brand</value>
+   </data>
+   <data name="MDSelectorTobaccoFlavor" xml:space="preserve">
+      <value>Tobacco flavor</value>
+   </data>
+   <data name="NoLiveStatsNoSData" xml:space="preserve">
+      <value>No session data</value>
+   </data>
+   <data name="NoLiveStatsStartS" xml:space="preserve">
+      <value>Start smoking to see more</value>
+   </data>
+   <data name="smokeMDModalTitle" xml:space="preserve">
+      <value>Info</value>
+   </data>
+   <data name="sSMetaDataBowl" xml:space="preserve">
+      <value>Bowl</value>
+   </data>
+   <data name="sSMetaDataCoal" xml:space="preserve">
+      <value>Coals</value>
+   </data>
+   <data name="sSMetaDataCoalOfType" xml:space="preserve">
+      <value>coals of type</value>
+   </data>
+   <data name="sSMetaDataHMS" xml:space="preserve">
+      <value>HMD</value>
+   </data>
+   <data name="sSMetaDataHookah" xml:space="preserve">
+      <value>Hookah</value>
+   </data>
+   <data name="sSMetaDataNone" xml:space="preserve">
+      <value>No session metadata</value>
+   </data>
+   <data name="sSMetaDataPackStyle" xml:space="preserve">
+      <value>Pack style</value>
+   </data>
+   <data name="sSMetaDataTobBrand" xml:space="preserve">
+      <value>Tobacco brand</value>
+   </data>
+   <data name="sSMetaDataTobFlavor" xml:space="preserve">
+      <value>Tobacco flavor</value>
+   </data>
+   <data name="TooltipAssign" xml:space="preserve">
+      <value>Assign</value>
+   </data>
+</root>

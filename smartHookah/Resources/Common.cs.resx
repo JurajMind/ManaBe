@@ -1,0 +1,100 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<root>
+   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+      <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+      <xsd:element name="root" msdata:IsDataSet="true">
+         <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+               <xsd:element name="metadata">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" use="required" type="xsd:string" />
+                     <xsd:attribute name="type" type="xsd:string" />
+                     <xsd:attribute name="mimetype" type="xsd:string" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="assembly">
+                  <xsd:complexType>
+                     <xsd:attribute name="alias" type="xsd:string" />
+                     <xsd:attribute name="name" type="xsd:string" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="data">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                     <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                     <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                     <xsd:attribute ref="xml:space" />
+                  </xsd:complexType>
+               </xsd:element>
+               <xsd:element name="resheader">
+                  <xsd:complexType>
+                     <xsd:sequence>
+                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                     </xsd:sequence>
+                     <xsd:attribute name="name" type="xsd:string" use="required" />
+                  </xsd:complexType>
+               </xsd:element>
+            </xsd:choice>
+         </xsd:complexType>
+      </xsd:element>
+   </xsd:schema>
+   <resheader name="resmimetype">
+      <value>text/microsoft-resx</value>
+   </resheader>
+   <resheader name="version">
+      <value>2.0</value>
+   </resheader>
+   <resheader name="reader">
+      <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <resheader name="writer">
+      <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+   </resheader>
+   <data name="Cancel" xml:space="preserve">
+      <value>Zrušit</value>
+   </data>
+   <data name="Close" xml:space="preserve">
+      <value>Zavřít</value>
+   </data>
+   <data name="Cookies" xml:space="preserve">
+      <value>Aplikace Manapipes využívá cookies pro personalizaci obsahu a reklamy, k propojení se sociálními sítěmi a k analyzování návštěvnosti.</value>
+   </data>
+   <data name="CookiesLearnMore" xml:space="preserve">
+      <value>Chci se dozvědět více</value>
+   </data>
+   <data name="CookiesOk" xml:space="preserve">
+      <value>Nemám s tím problém</value>
+   </data>
+   <data name="Edit" xml:space="preserve">
+      <value>Upravit</value>
+   </data>
+   <data name="GoToSession" xml:space="preserve">
+      <value>Připojit</value>
+   </data>
+   <data name="MoreInfo" xml:space="preserve">
+      <value>Více informací</value>
+   </data>
+   <data name="None" xml:space="preserve">
+      <value>Nevybraný</value>
+   </data>
+   <data name="ReportBug" xml:space="preserve">
+      <value>Nahlásit chybu</value>
+   </data>
+   <data name="SaveChanges" xml:space="preserve">
+      <value>Uložit změny</value>
+   </data>
+   <data name="Stands" xml:space="preserve">
+      <value>Podložky</value>
+   </data>
+   <data name="Unknown" xml:space="preserve">
+      <value>Neznamý</value>
+   </data>
+</root>
