@@ -2174,6 +2174,8 @@
     <Content Include="Vue\Reservations\ReservationPlace.vue" />
     <Content Include="Vue\Reservations\ReservationRow.vue" />
     <Content Include="Vue\Reservations\ReservationColunm.vue" />
+    <Content Include="Vue\TobaccoReviews\TobaccoReview.vue" />
+    <Content Include="Vue\TobaccoReviews\ReviewChart.vue" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
