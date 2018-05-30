@@ -137,6 +137,9 @@
       },
       confirmVisit: function () {
         this.$root.changeReservationStatus(4);
+      },
+      selectReservation: function (selected) {
+        $emit('selectReservation', { select: this.reservation, tableId: this.table.Id })
       }
     }
   }

@@ -8,7 +8,9 @@
                         v-bind:timeSlot="time"
                         v-bind:index="index"
                         v-bind:reservation="reservations[time.Id]"
-                        v-bind:selected="selected" v-bind:selection="selection">
+                        v-bind:selected="selected"
+                        v-bind:selection="selection"                      
+                        >
     </reservation_colunm>
 
   </tr>
