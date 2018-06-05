@@ -6,8 +6,10 @@
 
 <script>
   export default {
-    name: 'review-chart',
-    props: '[Smoke, Taste, Quality, Overall]',
+    name: 'review_chart',
+    props: {
+      reviewData: Object
+    },
     data: () => {
       return {
         radarChart: '',

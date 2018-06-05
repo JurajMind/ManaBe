@@ -1,5 +1,5 @@
 <template>
-  <div v-show="tobaccoFilled" id="tobaccoReview" class="form-horizontal" style="margin-left: auto; margin-right: auto; max-width: 40em">
+  <div id="tobaccoReview" class="form-horizontal" style="margin-left: auto; margin-right: auto; max-width: 40em">
 
     <review-chart />
 
@@ -53,9 +53,14 @@
 
 
 <script>
+    import review_chart from './ReviewChart.vue';
+
     export default {
-    name: 'tobacco-review',
+    name: 'tobacco_review',
     props: '[sessionId]',
+    components: {
+      'review-chart' : review_chart
+    },
     data: () => {
       return {
         review: {
@@ -76,7 +81,7 @@
 
       $.getJSON('/TobaccoReviews/GetReviewVue/',
         {
-          sessionId: this.getSessionId()
+          sessionId = this.sessionId
         },
         function(data) {
           if (data != null) {
@@ -97,12 +102,11 @@
       cancelReview: function() {
         $.getJSON('/TobaccoReviews/GetReviewVue/',
           {
-            sessionId: this.getSessionId()
+            sessionId: this.sessionId
           },
           function(data) {
             if (data != null) {
               vm.$data.review = data;
-              vm.$data.reviewOld = data;
               vm.$data.edit = true;
               if (getTextLines() < 11) {
                 $("#Text").animate({ rows: getTextLines() }, 'fast');
@@ -114,7 +118,7 @@
       },
 
       saveReview: function() {
-        this.review.SmokeSessionId = this.getSessionId();
+        this.review.SmokeSessionId = this.sessionId;
 
         var jqxhr = $.ajax({
           type: "POST",
@@ -156,9 +160,15 @@
         });
       },
 
-      getSessionId: function() {
-        return $("input[name='smokeSessionId']").val();
+      textAreaFocusBlur: function (el, event) {
+        switch (event){
+          case 'focus':
+            console.log('review focus');
+            break;
+          case 'blur':
+            console.log('review blur');
+            break;
+        };
       }
-    }
-  };
+  }
 </script>

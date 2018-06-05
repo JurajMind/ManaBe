@@ -60,6 +60,8 @@
   <script src="/dist/commons.js" defer></script>
   <script src="/dist/index.js" defer></script>
 
+  <script type="text/javascript" src="~/Vue/index.js"></script>
+
   <script type='text/javascript'>
     $(document).ready(function () {
 
@@ -290,7 +292,6 @@
     </div>
     @RenderSection("modals",false)</div>    
 
-@*<script type="text/javascript" src="~/Vue/bundle.js"></script>*@
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}\" async></script>", "~/bundles/controll")
 @Scripts.Render("~/bundles/signalr")
