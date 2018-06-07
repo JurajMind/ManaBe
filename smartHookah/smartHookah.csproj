@@ -827,10 +827,12 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
       <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
