@@ -51,12 +51,13 @@ namespace smartHookah.Controllers.Api
                     var h = new OpeningDay()
                     {
                         Day = item.Day,
-                        OpenTime = item.OpenTine,
-                        CloseTime = item.CloseTime
+                        OpenTime = $"{new DateTime(item.OpenTine.Ticks):HH:mm}",
+                        CloseTime = $"{new DateTime(item.CloseTime.Ticks):HH:mm}"
                     };
                     p.BusinessHours.Add(h);
                 }
 
+                p.Address.Location = null;
                 result.NearbyPlaces.Add(p);
             }
 
@@ -69,8 +70,7 @@ namespace smartHookah.Controllers.Api
 
         private bool ValidateCoordinates(float lng, float lat)
         {
-            bool result = (lng > -180 && lng <= 180 && lat >= -90 && lat <= 90);
-            return result;
+            return (lng > -180 && lng <= 180 && lat >= -90 && lat <= 90);
         }
     }
 }
