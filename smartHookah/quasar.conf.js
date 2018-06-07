@@ -11,10 +11,10 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons' // optional, you are not bound to it
+      'material-icons',
+      'fontawesome' // optional, you are not bound to it
       // 'ionicons',
-      // 'mdi',
-      // 'fontawesome'
+      // 'mdi',     
     ],
     supportIE: true,
     build: {
@@ -59,7 +59,10 @@ module.exports = function (ctx) {
         'QTab',
         'QTabPane',
         'QRouteTab',
-        'QLayoutFooter'
+        'QLayoutFooter',
+        'QCarousel',
+        'QCarouselSlide',
+        'QCarouselControl'       
       ],
       directives: [
         'Ripple'
@@ -71,9 +74,7 @@ module.exports = function (ctx) {
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // i18n: 'de' // Quasar language
     },
-    // animations: 'all' --- includes all animations
-    animations: [
-    ],
+    animations: 'all',
     pwa: {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},

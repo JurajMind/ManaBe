@@ -35,8 +35,12 @@
         <q-list-header>Essential Links</q-list-header>
       </q-list>
     </q-layout-drawer>
- <q-page-container>
-      <router-view />
+ <q-page-container class="mainBody">
+  <transition
+  name="fade"
+>
+      <router-view></router-view>
+            </transition>
  </q-page-container>
 <q-layout-footer v-if="$q.platform.is.mobile">
 <bottom-navigation/>
@@ -63,8 +67,28 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus">
+@import '~variables'
+
 div.q-tab:hover{
 color:red;
 }
+
+.mainBody{
+ background-color: $background;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: .15s;
+}
+
+.fade-enter-active {
+  transition-delay: .15s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
 </style>
