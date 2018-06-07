@@ -1,5 +1,6 @@
 <template>
- <q-tabs>
+ <q-tabs slot="footer"
+   position="bottom" >
       <q-route-tab
         icon="mail"
         to="/mails"
@@ -21,17 +22,24 @@
         glossy="true"
       />
             <q-route-tab
-        icon="alarm"
-        to="/alarms"
+         to="/"
         exact
         slot="title"
-      />
+      >
+      <div class="circle">
+           <img
+        src="~assets/manaMBlack.svg"
+        style="width:8vw;max-width:150px;"
+      >
+          </div>
+
+      </q-route-tab>
             <q-route-tab
-        icon="alarm"
-        to="/alarms"
+           replace  to="/enter"
         exact
         slot="title"
-                label="Gear"
+        icon="alarm"
+        label="Gear"
         two-lines="true"
         glossy="true"
       />
@@ -65,5 +73,11 @@ color:red;
 
 .q-tab-label{
     font-size: 8px
+}
+
+.circle{
+    border-radius: 100%;
+    background-color: white;
+    padding: 1rem;
 }
 </style>
