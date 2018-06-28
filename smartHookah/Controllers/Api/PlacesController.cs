@@ -1,4 +1,7 @@
-﻿namespace smartHookah.Controllers.Api
+﻿using ClosedXML.Excel;
+using smartHookah.Models.Db;
+
+namespace smartHookah.Controllers.Api
 {
     using System.Collections.Generic;
     using System.Data.Entity.Spatial;
@@ -18,14 +21,17 @@
         {
             this._db = db;
         }
+        
+
+        #region Search nearby places
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDTO> SearchNearby(float? lng = null, float? lat=null, int page = 10)
+        public async Task<NearbyPlacesDTO> SearchNearby(float? lng = null, float? lat = null, int page = 10)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
-                return new NearbyPlacesDTO { Message = "Cannot find your location." };
+                return new NearbyPlacesDTO {Message = "Cannot find your location."};
             if (page < 0) page = 10;
 
             var result = new NearbyPlacesDTO();
@@ -47,17 +53,22 @@
             foreach (var place in closestPlaces)
             {
                 var p = new PlaceResult
-                            {
-                                Id = place.Id,
-                                Address = place.Address,
-                                FriendlyUrl = place.FriendlyUrl,
-                                LogoPath = place.LogoPath,
-                                Name = place.Name,
-                                Rating = 0
-                            };
-                foreach (var item in place.BusinessHours)
                 {
-                    var h = new OpeningDay { Day = item.Day, OpenTime = item.OpenTine, CloseTime = item.CloseTime };
+                    Id = place.Id,
+                    Address = place.Address,
+                    FriendlyUrl = place.FriendlyUrl,
+                    LogoPath = place.LogoPath,
+                    Name = place.Name,
+                    Rating = 0
+                };
+                foreach (var item in place.PlaceDays)
+                {
+                    var h = new OpeningDay
+                    {
+                        Day = (int) item.Day.DayOfWeek,
+                        OpenTime = item.OpenHour,
+                        CloseTime = item.CloseHour
+                    };
                     p.BusinessHours.Add(h);
                 }
 
@@ -65,8 +76,8 @@
             }
 
             result.Message = result.NearbyPlaces.Count > 0
-                                 ? $"{result.NearbyPlaces.Count} places found nearby."
-                                 : "No places nearby.";
+                ? $"{result.NearbyPlaces.Count} places found nearby."
+                : "No places nearby.";
 
             return result;
         }
@@ -78,5 +89,8 @@
             var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
             return result;
         }
+
+        #endregion
+
     }
 }
