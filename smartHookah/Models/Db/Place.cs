@@ -34,7 +34,6 @@ namespace smartHookah.Models
 
         public virtual Address Address { get; set; }
 
-        [NotMapped]
         public ICollection<BusinessHours> BusinessHours { get; set; }
 
         public virtual ICollection<PlaceDay> PlaceDays { get; set; }
