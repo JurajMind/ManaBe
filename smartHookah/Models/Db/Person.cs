@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using ClosedXML.Attributes;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {
@@ -22,6 +23,7 @@ namespace smartHookah.Models
 
         public virtual ICollection<OwnPipeAccesories> OwnedPipeAccesories { get; set; }
         public virtual ICollection<Hookah> Hookahs { get; set; }
+        public virtual ICollection<PlaceEvent> PlaceEvents { get; set; }
 
         [DefaultValue("True")]
         public bool AutoAssign { get; set; }
