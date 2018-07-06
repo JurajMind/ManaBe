@@ -13,6 +13,7 @@
     "webpack": "^2.2.0"
   },
   "dependencies": {
-    "vue": "^2.2.1"
+    "vue": "^2.2.1",
+    "vuetify": "^1.0.19"
   }
 }

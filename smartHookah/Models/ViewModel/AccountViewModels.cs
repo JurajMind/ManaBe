@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace smartHookah.Models
 {
+    using smartHookah.Support;
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -87,6 +89,7 @@ namespace smartHookah.Models
         [DataType(DataType.Text)]
         [Display(Name = "User name")]
         public string DisplayName { get; set; }
+
     }
 
     public class ResetPasswordViewModel
