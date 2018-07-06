@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Dto;
 
 namespace smartHookah.Controllers
 {
@@ -79,7 +80,7 @@ namespace smartHookah.Controllers
                     tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
                 else
                 {
-                    return Json(new {success = false , msg = "Please fill tobaco information first"});
+                    return Json(new {success = false , msg = "Please fill tobacco information first"});
                 }
 
                 if (UserHelper.GetCurentPerson() == null)
@@ -185,7 +186,99 @@ namespace smartHookah.Controllers
             }
             base.Dispose(disposing);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetReviewVue(int sessionId)
+        {
+            var review = (sessionId < 0) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SmokeSession.Id == sessionId);
+
+            return (review != null) ? Json(new TobaccoReviewDTO()
+            {
+                Id = review.Id,
+                Overall = review.Overall,
+                Quality = review.Quality,
+                Smoke = review.Smoke,
+                SmokeSessionId = review.SmokeSession.Id,
+                Taste = review.Taste,
+                Text = review.Text
+            }, JsonRequestBehavior.AllowGet) : null;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> SaveVueReview([Bind(Include = "Id,Quality,Taste,Smoke,Overall,Text,SmokeSessionId")] TobaccoReviewDTO tobaccoReviewDto)
+        {
+            if (tobaccoReviewDto != null)
+            {
+                var tobaccoReview = new TobaccoReview()
+                {
+                    Id = tobaccoReviewDto.Id,
+                    Overall = tobaccoReviewDto.Overall,
+                    Quality = tobaccoReviewDto.Quality,
+                    Smoke = tobaccoReviewDto.Smoke,
+                    SmokeSessionId = tobaccoReviewDto.SmokeSessionId,
+                    Taste = tobaccoReviewDto.Taste,
+                    Text = tobaccoReviewDto.Text
+                };
+                var smokeSession = await db.SmokeSessions.FindAsync(tobaccoReview.SmokeSessionId);
+                tobaccoReview.PublishDate = DateTime.Now;
+                if (smokeSession.MetaData.TobaccoId.HasValue)
+                    tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
+                else
+                {
+                    return Json(new { success = false, msg = "Please fill tobacco information first" });
+                }
+
+                if (UserHelper.GetCurentPerson() == null)
+                {
+                    return Json(new { success = false, msg = "Please log in first" });
+                }
+
+                tobaccoReview.AuthorId = UserHelper.GetCurentPerson().Id;
+                
+                var rev = db.TobaccoReviews.Find(tobaccoReview.Id);
+
+                if (rev != null)
+                {
+                    rev.PublishDate = tobaccoReview.PublishDate;
+                    rev.Quality = tobaccoReview.Quality;
+                    rev.Smoke = tobaccoReview.Smoke;
+                    rev.Overall = tobaccoReview.Overall;
+                    rev.Text = tobaccoReview.Text;
+                    rev.Taste = tobaccoReview.Taste;
+                    db.Entry(rev).State = EntityState.Modified;
+                    smokeSession.Review = rev;
+                    db.SmokeSessions.AddOrUpdate(smokeSession);
+
+                    await db.SaveChangesAsync();
+                    return Json(new TobaccoReviewDTO()
+                    {
+                        Id = rev.Id,
+                        Overall = rev.Overall,
+                        Quality = rev.Quality,
+                        Smoke = rev.Smoke,
+                        SmokeSessionId = rev.SmokeSession.Id,
+                        Taste = rev.Taste,
+                        Text = rev.Text
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                db.TobaccoReviews.AddOrUpdate(tobaccoReview);
+                smokeSession.Review = tobaccoReview;
+                db.SmokeSessions.AddOrUpdate(smokeSession);
+
+                await db.SaveChangesAsync();
+                return Json(new TobaccoReviewDTO()
+                {
+                    Id = tobaccoReview.Id,
+                    Overall = tobaccoReview.Overall,
+                    Quality = tobaccoReview.Quality,
+                    Smoke = tobaccoReview.Smoke,
+                    SmokeSessionId = tobaccoReview.SmokeSession.Id,
+                    Taste = tobaccoReview.Taste,
+                    Text = tobaccoReview.Text
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return null;
+        }
     }
-
-
 }

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {
@@ -81,6 +82,10 @@ namespace smartHookah.Models
         public DbSet<PriceGroupPrice> PriceGroupPrice { get; set; }
 
         public DbSet<PriceGroup> PriceGroup { get; set; }
+
+        public DbSet<PlaceDay> PlaceDays { get; set; }
+
+        public DbSet<PlaceEvent> PlaceEvents { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -190,6 +195,11 @@ namespace smartHookah.Models
 
             modelBuilder.Entity<PipeAccesory>().HasMany<SimilarAccesories>(s => s.SimilarAccesories).WithRequired(h => h.Original).WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Place>().HasMany(p => p.PlaceDays);
+
+            modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
+
+            modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
 
         }
 

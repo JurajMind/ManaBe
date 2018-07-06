@@ -140,8 +140,14 @@
     <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
+    </Reference>
+    <Reference Include="Fleck, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fleck.1.0.3\lib\net45\Fleck.dll</HintPath>
     </Reference>
     <Reference Include="GuigleAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Easyforce.GuigleAPI.1.0.6\lib\GuigleAPI.dll</HintPath>
@@ -166,6 +172,9 @@
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MailChimp.Net.V3, Version=1.8.0.0, Culture=neutral, PublicKeyToken=37d26d538413c581, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailChimp.Net.V3.1.8.0.0\lib\net45\MailChimp.Net.V3.dll</HintPath>
     </Reference>
     <Reference Include="Mailzory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Mailzory.1.2.0\lib\net461\Mailzory.dll</HintPath>
@@ -605,6 +614,7 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
@@ -824,6 +834,30 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
+    <Compile Include="Controllers\Api\PlacesController.cs" />
+    <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Helpers\FacebookHelper.cs" />
+    <Compile Include="Migrations\201805231838494_gdpr.cs" />
+    <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
+      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806120945125_PlaceCalendar.cs" />
+    <Compile Include="Migrations\201806120945125_PlaceCalendar.Designer.cs">
+      <DependentUpon>201806120945125_PlaceCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806281021144_business_hours_not_mapped_fix.cs" />
+    <Compile Include="Migrations\201806281021144_business_hours_not_mapped_fix.Designer.cs">
+      <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807061525281_cleanBh.cs" />
+    <Compile Include="Migrations\201807061525281_cleanBh.Designer.cs">
+      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\Place.cs" />
+    <Compile Include="Models\Db\PlaceCalendar.cs" />
+    <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
+    <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -831,6 +865,7 @@
     <Compile Include="Controllers\Api\AnimationController.cs" />
     <Compile Include="Controllers\Api\CleanAllController.cs" />
     <Compile Include="Controllers\Api\EndSessionController.cs" />
+    <Compile Include="Controllers\Api\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\Api\WearablesController.cs" />
     <Compile Include="Controllers\Api\MsBandController.cs" />
     <Compile Include="Controllers\Api\Ping.cs" />
@@ -922,6 +957,8 @@
     <Compile Include="Migrations\201803252005595_locations.Designer.cs">
       <DependentUpon>201803252005595_locations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\DTO.cs" />
+    <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
     <Compile Include="Models\ViewModel\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />
     <Compile Include="Models\Db\SmokeEvent.cs" />
@@ -1357,7 +1394,6 @@
     <Compile Include="Models\Db\Hookah.cs" />
     <Compile Include="Models\Db\HookahSetting.cs" />
     <Compile Include="Models\Db\IdentityModels.cs" />
-    <Compile Include="Models\Db\Lounge.cs" />
     <Compile Include="Models\ViewModel\ManageViewModels.cs" />
     <Compile Include="Models\Db\Person.cs" />
     <Compile Include="Models\Db\PipeAccesory.cs" />
@@ -1452,6 +1488,7 @@
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Support\DataAnotation.cs" />
     <Compile Include="Support\DTO.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\FixedSizeQueue.cs" />
@@ -1677,6 +1714,18 @@
     <Content Include="ClientApp\components\nav-menu.vue" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
+      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806120945125_PlaceCalendar.resx">
+      <DependentUpon>201806120945125_PlaceCalendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806281021144_business_hours_not_mapped_fix.resx">
+      <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
+      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
@@ -2046,7 +2095,6 @@
     <Content Include="Views\TobaccoReviews\Details.cshtml" />
     <Content Include="Views\TobaccoReviews\Edit.cshtml" />
     <Content Include="Views\TobaccoReviews\Index.cshtml" />
-    <Content Include="Views\TobaccoReviews\TobaccoReviewModal.cshtml" />
     <Content Include="Views\QrCodeReader\Index.cshtml" />
     <Content Include="Views\Shared\_MetadataAndReview.cshtml" />
     <Content Include="Views\Person\ShowGear.cshtml" />
@@ -2099,10 +2147,13 @@
     <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Assets\_PrivacyPolicy.cshtml" />
+    <Content Include="Views\Assets\_TermOfUssage.cshtml" />
+    <Content Include="Views\Assets\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Assets\TermOfUssage.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
-    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
     <Content Include="Views\SmokeSession\_SmokeSessionListItem.cshtml" />
     <Content Include="Views\Tobacco\_SortedTobacco.cshtml" />
     <Content Include="Views\Tobacco\Index.cshtml" />
@@ -2157,6 +2208,8 @@
     <Content Include="Views\SmokeSession\_SmokeSessionsCardsGrid.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Places\Statistics.cshtml" />
+    <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
+    <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />
@@ -2164,7 +2217,6 @@
     <Folder Include="Content\BrandPicture\" />
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
-    <Folder Include="Models\Dto\" />
     <Folder Include="Resources\NewFolder1\" />
     <Folder Include="Views\Share\" />
     <Folder Include="Views\Test\" />

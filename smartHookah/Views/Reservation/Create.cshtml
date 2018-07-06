@@ -19,8 +19,13 @@
     .place-table.taken {
         fill: red;
     }
-
 </style>
+
+
+<link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
 <div id="app">
     <div class="card">
         <h4 class="card-header">@LocalizationHelper.Translate("createReservation", "Reservation")</h4>
@@ -29,7 +34,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label><i class="fa fa-calendar"></i>&nbsp;@LocalizationHelper.Translate("date", "Reservation")</label>
-                        <input id="datepicker" class="form-control"/>
+                        <input id="datepicker" class="form-control" />
                     </div>
 
                 </div>
@@ -47,12 +52,12 @@
                     <div class="form-group">
                         <label><i class="fa fa-users">@LocalizationHelper.Translate("persons", "Reservation")</i></label>
                         <select v-model="Selected.Persons" name="persons" class="form-control oldSelect" v-cloak>
-                            <option v-for="n in 8" :value="n" >{{n}}</option>
+                            <option v-for="n in 8" :value="n">{{n}}</option>
                             <option value="100">100</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <label><i class="fa fa-clock-o"></i>@LocalizationHelper.Translate("visitDuration", "Reservation")</label>
@@ -66,26 +71,28 @@
 
 
 
-            <hr/>
+            <hr />
 
             <div v-cloak>
-                <div style="text-align: center" v-if="available">  
+                <div style="text-align: center" v-if="available">
                     <h5 class="card-title">V tomto čase je v podniku <strong style="color:#4caf50">volno</strong></h5>
                 </div>
                 <div v-else>
-                    <h5 class="card-title">Ospravedlnujeme sa , ale nieje mozne spravit rezervaciu pre dovod:
-                        <strong class="" v-cloak>{{DeniedReason}}</strong></h5>
+                    <h5 class="card-title">
+                        Ospravedlnujeme sa , ale nieje mozne spravit rezervaciu pre dovod:
+                        <strong class="" v-cloak>{{DeniedReason}}</strong>
+                    </h5>
                 </div>
             </div>
-            
+
             <hr />
             <div id="tables">
-                
+
                 <div class="form-group">
                     <label for="exampleTextarea" class="bmd-label-floating">@LocalizationHelper.Translate("message", "Reservation")</label>
                     <textarea class="form-control" v-model="Selected.Text" id="exampleTextarea" rows="3"></textarea>
                 </div>
-                <hr/>
+                <hr />
                 <h4 style="text-align: center">@LocalizationHelper.Translate("selectSeat", "Reservation")</h4>
                 @Html.Raw(Model.place.Map)
                 <h4 v-if="canReserved">{{this.Specification}}</h4>
@@ -105,7 +112,6 @@
 {
     <script type="text/javascript">
 
-        
         $(function() {
             $('#datepicker').datepicker({
                 showOtherMonths: true,
@@ -149,7 +155,7 @@
 
             data: {
                 DeniedReason: null,
-                Specification : null,               
+                Specification : null,
                 PlaceId: placeId,
                 Selected: {
                     Table: null,
@@ -203,7 +209,7 @@
                             }
                         }
 
-                        
+
                     }
                     return result;
                 },
@@ -213,7 +219,7 @@
                         $("#tables").hide(10);
                         this.DeniedReason = "Lutujeme, ale v pozadovanom case nieje ziadne miesto volne";
                         return false;
-                     
+
                     }
                     var sum = 0;
                     for (let i = 0; i < this.freeTable.length; ++i) {
@@ -221,7 +227,7 @@
                     }
 
 
-                    
+
 
                     if (sum >= this.Selected.Persons) {
 
@@ -229,7 +235,7 @@
                             $("#tables").show(100);
                             return true;
                         }
-                        
+
                         var _this = this;
                         var selectedTable = this.Reservations.Tables.filter(function(obj) {
                             return obj.Id === _this.Selected.Table;
@@ -251,7 +257,7 @@
                         $("#tables").show(100);
                         return true;
                     }
-                   
+
                 },
                 canReserved: function() {
                     if (this.Selected.Table == null)

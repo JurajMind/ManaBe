@@ -127,11 +127,19 @@ namespace smartHookah.Helpers
         }
 
 
-        internal static Person GetCurentPerson(SmartHookahContext db, int? personId)
+        internal static Person GetCurentPerson(SmartHookahContext db, int? personId, bool manage = false)
         {
-            var admin = System.Web.HttpContext.Current.User.IsInRole("Admin");
+            var canAccess = System.Web.HttpContext.Current.User.IsInRole("Admin");
+            if (manage)
+            {
+                var curentPerson = GetCurentPerson(db);
+                if (curentPerson.Manage.Any(a => a.PersonId == personId))
+                {
+                    canAccess = true;
+                }
+            }
 
-            if (personId.HasValue && admin)
+            if (personId.HasValue && canAccess)
             {
                 var person = db.Persons.Where(a => a.Id == personId.Value).Include(a => a.OwnedPipeAccesories).Include(a => a.Orders).FirstOrDefault();
                 return person;

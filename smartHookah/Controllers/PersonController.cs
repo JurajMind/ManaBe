@@ -74,7 +74,7 @@ namespace smartHookah.Controllers
         public ActionResult ManageColors(int? id, int? personId)
         {
 
-            var person = UserHelper.GetCurentPerson(db, personId);
+            var person = UserHelper.GetCurentPerson(db, personId,true);
             if (person == null)
                 return RedirectToAction("Index");
 

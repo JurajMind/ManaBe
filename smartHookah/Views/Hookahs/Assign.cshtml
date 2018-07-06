@@ -4,9 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="well">
-    <h2>Assign</h2>
-    
+<div class="card">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -30,8 +28,8 @@
             </div>
         }
         <div class="form-actions no-color">
-            <input type="submit" value="Assign" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Assign" class="btn success btn-raised" /> |
+            @Html.ActionLink("Back to my gear", "MyGear",new {controller = "Person"})
         </div>
     }
 </div>
