@@ -291,7 +291,6 @@
             return this.View(lounge);
         }
 
-        // GET Places/EditOpenHours/1
         [System.Web.Mvc.Authorize]
         public async Task<ActionResult> EditOpenHours(int? id)
         {
