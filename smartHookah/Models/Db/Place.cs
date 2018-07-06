@@ -34,7 +34,7 @@ namespace smartHookah.Models
 
         public virtual Address Address { get; set; }
 
-        public ICollection<BusinessHours> BusinessHours { get; set; }
+        public virtual ICollection<BusinessHours> BusinessHours { get; set; }
 
         public virtual ICollection<PlaceDay> PlaceDays { get; set; }
 
@@ -80,6 +80,7 @@ namespace smartHookah.Models
         public bool IsOpen(DateTime Open)
         {
             var todayInt = (int)Open.DayOfWeek;
+            if (this.BusinessHours == null) return false;
             var todayOpenHours =this.BusinessHours.FirstOrDefault(a => a.Day == todayInt);
 
             if (todayOpenHours == null)
@@ -262,8 +263,7 @@ namespace smartHookah.Models
     public class BusinessHours
     {
         public int Id { get; set; }
-        public int LoungeId { get; set; }
-
+        
         public int PlaceId { get; set; }
         public virtual Place Place { get; set; }
 

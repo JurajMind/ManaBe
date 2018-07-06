@@ -48,7 +48,7 @@
                 <label class="col-md-6 control-label bmd-label-static">Spracovanie osobnych udajov</label>
                 <div class="checkbox" style="padding-left: 1rem; padding-top: 1rem">
                     <label>
-                        <input data-val="true" name="termsConditions" data-val-mustbetrue="The field Terms Are Accepted is invalid." type="checkbox" id="personalData"> Suhlasim so spracovanim osobnych udajov <a data-toggle="modal" href="#personData">klik</a>
+                        <input data-val="true" name="termsConditions" data-val-mustbetrue="The field Terms Are Accepted is invalid." type="checkbox" id="personalData"> Suhlasim so spracovanim osobnych udajov <a data-toggle="modal" href="#personData">prezrieť</a>
                     </label>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="form-group">
                 <label class="col-md-6 control-label bmd-label-static">Podmienky sluzby</label>
                 <div class="checkbox" style="padding-left: 1rem; padding-top: 1rem">
-                    <label> <input name="termsConditions" data-val="true" data-val-mustbetrue="The field Terms Are Accepted is invalid." type="checkbox" id="TermOfUssage" value="false"> Suhlasim s podmienkami pre pouzivanie sluzby manapipes <a data-toggle="modal" href="#termOfussage">klik</a>
+                    <label> <input name="termsConditions" data-val="true" data-val-mustbetrue="The field Terms Are Accepted is invalid." type="checkbox" id="TermOfUssage" value="false"> Suhlasim s podmienkami pre pouzivanie sluzby manapipes <a data-toggle="modal" href="#termOfussage">prezrieť</a>
                     </label>
 
                 </div>
@@ -83,7 +83,7 @@
                     <h4 class="modal-title">Ochrana osobnych udajov</h4>
                 </div>
                 <div class="modal-body">
-                    @Html.Partial("_PersonData")
+                    @Html.Partial("~/Views/Assets/_PrivacyPolicy.cshtml")
 
 
                 </div>
@@ -109,7 +109,7 @@
                     <h4 class="modal-title">Podmienky pouzivania</h4>
                 </div>
                 <div class="modal-body">
-                    @Html.Partial("_TermOfUssage")
+                    @Html.Partial("~/Views/Assets/_TermOfUssage.cshtml")
 
 
                 </div>
