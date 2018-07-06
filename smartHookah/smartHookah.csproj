@@ -143,6 +143,9 @@
     <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
     </Reference>
+    <Reference Include="Fleck, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fleck.1.0.3\lib\net45\Fleck.dll</HintPath>
+    </Reference>
     <Reference Include="GuigleAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Easyforce.GuigleAPI.1.0.6\lib\GuigleAPI.dll</HintPath>
     </Reference>

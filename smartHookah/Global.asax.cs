@@ -28,6 +28,8 @@ using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
 
 namespace smartHookah
 {
+    using Fleck;
+
     public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
@@ -39,14 +41,14 @@ namespace smartHookah
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-          
-            //IotProcessor.Start();
 
-#if DEBUG
-
-#else
- 
-#endif
+            var server = new WebSocketServer("ws://0.0.0.0:8181");
+            server.Start(socket =>
+                {
+                    socket.OnOpen = () => Console.WriteLine("Open!");
+                    socket.OnClose = () => Console.WriteLine("Close!");
+                    socket.OnMessage = message => socket.Send(message);
+                });
 
 
         }
