@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Results;
-using smartHookah.Models;
-using smartHookah.Models.Dto;
+﻿using ClosedXML.Excel;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
+    using System.Collections.Generic;
+    using System.Data.Entity.Spatial;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+
+    using smartHookah.Models;
+    using smartHookah.Models.Dto;
+
     [RoutePrefix("api/Places")]
     public class PlacesController : ApiController
     {
@@ -18,26 +19,40 @@ namespace smartHookah.Controllers.Api
 
         public PlacesController(SmartHookahContext db)
         {
-            _db = db;
+            this._db = db;
         }
+        
+
+        #region Search nearby places
 
         [HttpGet]
         [Route("SearchNearby")]
-        [AcceptVerbs("GET", "POST")]
-    public async Task<NearbyPlacesDTO> SearchNearby(float lng, float lat, int page = 10)
+        public async Task<NearbyPlacesDTO> SearchNearby(float? lng = null, float? lat = null, int page = 10)
         {
-            if (!ValidateCoordinates(lng, lat)) return new NearbyPlacesDTO() {Message = "Cannot find your location."};
+            var validate = this.ValidateCoordinates(lng, lat);
+            if (validate.HasValue && !validate.Value)
+                return new NearbyPlacesDTO {Message = "Cannot find your location."};
             if (page < 0) page = 10;
 
-            NearbyPlacesDTO result = new NearbyPlacesDTO();
+            var result = new NearbyPlacesDTO();
             result.NearbyPlaces = new List<PlaceResult>();
-            var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
-            var closestPlaces =
-                (from u in _db.Places orderby u.Address.Location.Distance(myLocation) select u).Take(page);
+
+            IQueryable<Place> closestPlaces;
+            var places = this._db.Places.Include("BusinessHours");
+            if (validate.HasValue)
+            {
+                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
+
+                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Take(page);
+            }
+            else
+            {
+                closestPlaces = places.OrderBy(a => a.Id).Take(page);
+            }
 
             foreach (var place in closestPlaces)
             {
-                PlaceResult p = new PlaceResult()
+                var p = new PlaceResult
                 {
                     Id = place.Id,
                     Address = place.Address,
@@ -46,13 +61,13 @@ namespace smartHookah.Controllers.Api
                     Name = place.Name,
                     Rating = 0
                 };
-                foreach (var item in place.BusinessHours)
+                foreach (var item in place.PlaceDays)
                 {
-                    var h = new OpeningDay()
+                    var h = new OpeningDay
                     {
-                        Day = item.Day,
-                        OpenTime = item.OpenTine,
-                        CloseTime = item.CloseTime
+                        Day = (int) item.Day.DayOfWeek,
+                        OpenTime = item.OpenHour,
+                        CloseTime = item.CloseHour
                     };
                     p.BusinessHours.Add(h);
                 }
@@ -67,10 +82,15 @@ namespace smartHookah.Controllers.Api
             return result;
         }
 
-        private bool ValidateCoordinates(float lng, float lat)
+        private bool? ValidateCoordinates(float? lng, float? lat)
         {
-            bool result = (lng > -180 && lng <= 180 && lat >= -90 && lat <= 90);
+            if (!lat.HasValue && !lng.HasValue) return null;
+
+            var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
             return result;
         }
+
+        #endregion
+
     }
 }
