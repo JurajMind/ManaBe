@@ -42,7 +42,7 @@ namespace smartHookah
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var server = new WebSocketServer("ws://0.0.0.0:8181");
+            var server = new WebSocketServer("ws://0.0.0.0:8989");
             server.Start(socket =>
                 {
                     socket.OnOpen = () => Console.WriteLine("Open!");
