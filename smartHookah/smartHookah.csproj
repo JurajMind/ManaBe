@@ -836,6 +836,7 @@
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
+    <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
@@ -848,6 +849,10 @@
     <Compile Include="Migrations\201806281021144_business_hours_not_mapped_fix.cs" />
     <Compile Include="Migrations\201806281021144_business_hours_not_mapped_fix.Designer.cs">
       <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807061525281_cleanBh.cs" />
+    <Compile Include="Migrations\201807061525281_cleanBh.Designer.cs">
+      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Db\Place.cs" />
     <Compile Include="Models\Db\PlaceCalendar.cs" />
@@ -1718,6 +1723,9 @@
     <EmbeddedResource Include="Migrations\201806281021144_business_hours_not_mapped_fix.resx">
       <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
+      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
@@ -2139,8 +2147,10 @@
     <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-    <Content Include="Views\Account\_PersonData.cshtml" />
-    <Content Include="Views\Account\_TermOfUssage.cshtml" />
+    <Content Include="Views\Assets\_PrivacyPolicy.cshtml" />
+    <Content Include="Views\Assets\_TermOfUssage.cshtml" />
+    <Content Include="Views\Assets\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Assets\TermOfUssage.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
