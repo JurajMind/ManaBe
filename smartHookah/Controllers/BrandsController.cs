@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using smartHookah.Migrations;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
