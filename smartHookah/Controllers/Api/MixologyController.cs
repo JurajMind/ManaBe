@@ -1,4 +1,5 @@
-﻿using smartHookah.Models;
+﻿using smartHookah.Helpers;
+using smartHookah.Models;
 using smartHookah.Models.Dto;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,88 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("GetMixes")]
+        public async Task<MixListDTO> GetMixes(int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
+        {
+            var query = from a in _db.TobaccoMixs select a;
+            if (_db.Brands.Where(a => a.TobaccoMixBrand == true && a.Name == author).Count() > 0)
+            {
+                query = from m in query where m.Brand.Name == author select m;
+            } else if (author == "me")
+            {
+                var userId = UserHelper.GetCurentPerson(_db).Id;
+                query = from m in query where m.Author.Id == userId select m;
+            }
+            
+            query = pageSize > 0 ? query.Take(pageSize) : query.Take(50);
+
+            switch (orderBy.ToLower())
+            {
+                case "name":
+                    query = order == "asc"
+                        ? from a in query orderby a.AccName ascending select a
+                        : from a in query orderby a.AccName descending select a;
+                    break;
+                case "used":
+                    query = order == "asc"
+                        ? from a in query orderby a.Statistics.Used ascending select a
+                        : from a in query orderby a.Statistics.Used descending select a;
+                    break;
+                case "rating":
+                    query = order == "asc"
+                        ? from a in query orderby a.Statistics.Overall ascending select a
+                        : from a in query orderby a.Statistics.Overall descending select a;
+                    break;
+                case "time":
+                    query = order == "asc"
+                        ? from a in query orderby a.Statistics.SmokeDurationTick ascending select a
+                        : from a in query orderby a.Statistics.SmokeDurationTick descending select a;
+                    break;
+                default:
+                    return new MixListDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\", \"used\", \"rating\" or \"time\"." };
+            }
+            var res = query.ToList();
+
+            if(res.Count > 0)
+            {
+                var result = new MixListDTO() { Success = true, Message = $"{res.Count} mixes found." };
+                foreach(var r in res)
+                {
+                    var m = new Mix()
+                    {
+                        Id = r.Id,
+                        AccName = r.AccName,
+                        Overall = r.Statistics != null ? r.Statistics.Overall : -1,
+                        Used = r.Statistics != null ? r.Statistics.Used : -1
+                    };
+                    foreach (var x in r.Tobaccos)
+                    {
+                        var t = new Models.Dto.Tobacco()
+                        {
+                            Id = x.TobaccoId,
+                            AccName = x.Tobacco.AccName,
+                            BrandName = x.Tobacco.BrandName,
+                            Fraction = x.Fraction
+                        };
+
+                        m.Tobaccos.Add(t);
+                    }
+                    result.Mixes.Add(m);
+                }
+                return result;
+            }
+            return new MixListDTO() { Success = false, Message = "No mixes found." };
+        }
+
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixCreators")]
         public async Task<MixCreatorsDTO> GetFeaturedMixCreators(int pageSize = 50, string orderBy = "name", string order = "asc")
         {
             var query = from b in _db.Brands
                         where b.TobaccoMixBrand
                         select b;
-            if (pageSize > 0)
-                query = query.Take(pageSize);
+            
+            query = pageSize > 0 ? query.Take(pageSize) : query.Take(50);
 
             switch (orderBy.ToLower())
             {
