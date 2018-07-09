@@ -15,6 +15,7 @@ using Microsoft.AspNet.Identity.Owin;
 using PagedList;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 
 namespace smartHookah.Controllers

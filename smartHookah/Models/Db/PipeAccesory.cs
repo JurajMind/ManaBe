@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.Azure.Mobile.Server.Tables;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 
 namespace smartHookah.Models
@@ -196,30 +197,7 @@ namespace smartHookah.Models
         public virtual Tobacco Tobacco { get; set; }
 
     }
-
-    public class Brand
-    {
-        [Key]
-        public string Name { get; set; }
-
-        public string Url { get; set; }
-
-        public string Picture { get; set; }
-
-        public bool Tobacco { get; set; }
-
-        public bool Bowl { get; set; }
-
-        public bool Hookah { get; set; }
-
-        public bool TobaccoMixBrand { get; set; }
-
-        public virtual ICollection<PipeAccesory> PipeAccesories { get; set; }
-
-        public string DisplayName { get; set; }
-
-    }
-
+    
     public class Pipe : PipeAccesory
     {
         public Pipe()
