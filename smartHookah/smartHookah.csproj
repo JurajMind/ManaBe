@@ -834,6 +834,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Controllers\Api\MixologyController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
@@ -854,8 +855,10 @@
     <Compile Include="Migrations\201807061525281_cleanBh.Designer.cs">
       <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Db\Brand.cs" />
     <Compile Include="Models\Db\Place.cs" />
     <Compile Include="Models\Db\PlaceCalendar.cs" />
+    <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
