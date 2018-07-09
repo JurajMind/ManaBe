@@ -15,6 +15,38 @@ namespace smartHookah.Models.Dto
         }
     }
 
+    public class MixListDTO : DTO
+    {
+        public ICollection<Mix> Mixes { get; set; }
+
+        public MixListDTO()
+        {
+            this.Mixes = new List<Mix>();
+        }
+    }
+
+    public class Mix
+    {
+        public int Id { get; set; }
+        public string AccName { get; set; }
+        public ICollection<Tobacco> Tobaccos { get; set; }
+        public int Used { get; set; }
+        public double Overall { get; set; }
+
+        public Mix()
+        {
+            this.Tobaccos = new List<Tobacco>();
+        }
+    }
+
+    public class Tobacco
+    {
+        public int Id { get; set; }
+        public string AccName { get; set; }
+        public string BrandName { get; set; }
+        public int Fraction { get; set; }
+    }
+
     public class MixCreator
     {
         public string Name { get; set; }
