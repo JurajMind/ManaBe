@@ -27,12 +27,12 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDTO> SearchNearby(float? lng = null, float? lat = null, int page = 10)
+        public async Task<NearbyPlacesDTO> SearchNearby(int page = 0, int pageSize = 10, float? lng = null, float? lat = null)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
-                return new NearbyPlacesDTO {Message = "Cannot find your location."};
-            if (page < 0) page = 10;
+                return new NearbyPlacesDTO {Success = false, Message = "Cannot find your location."};
+            if (pageSize < 0) pageSize = 10;
 
             var result = new NearbyPlacesDTO();
             result.NearbyPlaces = new List<PlaceResult>();
@@ -43,11 +43,11 @@ namespace smartHookah.Controllers.Api
             {
                 var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
 
-                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Take(page);
+                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
             }
             else
             {
-                closestPlaces = places.OrderBy(a => a.Id).Take(page);
+                closestPlaces = places.OrderBy(a => a.Id).Skip(pageSize * page).Take(pageSize);
             }
 
             foreach (var place in closestPlaces)
