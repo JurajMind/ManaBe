@@ -24,19 +24,17 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixes")]
-        public async Task<MixListDTO> GetMixes(int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
+        public async Task<MixListDTO> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
         {
             var query = from a in _db.TobaccoMixs select a;
-            if (_db.Brands.Where(a => a.TobaccoMixBrand == true && a.Name == author).Count() > 0)
+            if (_db.Brands.Where(a => a.TobaccoMixBrand == true && a.Name.ToLower() == author.ToLower()).Count() > 0)
             {
-                query = from m in query where m.Brand.Name == author select m;
+                query = from m in query where m.Brand.Name.ToLower() == author.ToLower() select m;
             } else if (author == "me")
             {
                 var userId = UserHelper.GetCurentPerson(_db).Id;
                 query = from m in query where m.Author.Id == userId select m;
             }
-            
-            query = pageSize > 0 ? query.Take(pageSize) : query.Take(50);
 
             switch (orderBy.ToLower())
             {
@@ -63,6 +61,8 @@ namespace smartHookah.Controllers.Api
                 default:
                     return new MixListDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\", \"used\", \"rating\" or \"time\"." };
             }
+            query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
+
             var res = query.ToList();
 
             if(res.Count > 0)
@@ -98,14 +98,12 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixCreators")]
-        public async Task<MixCreatorsDTO> GetFeaturedMixCreators(int pageSize = 50, string orderBy = "name", string order = "asc")
+        public async Task<MixCreatorsDTO> GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
             var query = from b in _db.Brands
                         where b.TobaccoMixBrand
                         select b;
             
-            query = pageSize > 0 ? query.Take(pageSize) : query.Take(50);
-
             switch (orderBy.ToLower())
             {
                 case "name":
@@ -117,6 +115,8 @@ namespace smartHookah.Controllers.Api
                 default:
                     return new MixCreatorsDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\" or \"count\"." };
             }
+            query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
+
             var res = query.ToList();
 
             if (res.Count() > 0)
