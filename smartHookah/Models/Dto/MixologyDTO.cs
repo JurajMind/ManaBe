@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
+using DocumentFormat.OpenXml.Math;
 
 namespace smartHookah.Models.Dto
 {
@@ -23,6 +25,26 @@ namespace smartHookah.Models.Dto
         {
             this.Mixes = new List<Mix>();
         }
+    }
+
+    public class TobaccoMixDTO : DTO
+    {
+        public int Id { get; set; }
+        public string AccName { get; set; }
+        public ICollection<Tobacco> Tobaccos { get; set; }
+
+        public TobaccoMixDTO()
+        {
+            this.Tobaccos = new List<Tobacco>();
+        }
+    }
+
+    public class MixPartDTO
+    {
+        public int Id { get; set; }
+        public int Fraction { get; set; }
+        public int MixId { get; set; }
+        public string AccName { get; set; }
     }
 
     public class Mix
