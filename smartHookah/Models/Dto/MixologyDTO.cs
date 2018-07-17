@@ -39,14 +39,6 @@ namespace smartHookah.Models.Dto
         }
     }
 
-    public class MixPartDTO
-    {
-        public int Id { get; set; }
-        public int Fraction { get; set; }
-        public int MixId { get; set; }
-        public string AccName { get; set; }
-    }
-
     public class Mix
     {
         public int Id { get; set; }

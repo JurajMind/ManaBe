@@ -148,66 +148,30 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("AddToMix")]
-        public async Task<TobaccoMixDTO> AddToMix([Bind(Include = "Id,Fraction,MixId,AccName")] MixPartDTO mixPart)
+        public async Task<TobaccoMixDTO> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] Mix newMix)
         {
-            var tobacco = _db.Tobaccos.Find(mixPart.Id);
-
-            if (mixPart.Fraction < 1 || mixPart.Fraction > 40 || tobacco == null)
-            {
-                return new TobaccoMixDTO(){Success = false, Message = "Tobacco not fount or fraction not within acceptable range."};
-            }
-
-            var mix = _db.TobaccoMixs.Find(mixPart.MixId);
-            if (mix != null)
-            {
-                var t = new TobacoMixPart()
-                {
-                    TobaccoId = mixPart.Id,
-                    Fraction = mixPart.Fraction
-                };
-                if (mix.Tobaccos.Any(a => a.TobaccoId == mixPart.Id)) return new TobaccoMixDTO(){Success = false, Message = "This tobacco was already added to mix. "};
-                try
-                {
-                    mix.Tobaccos.Add(t);
-                    _db.TobaccoMixs.AddOrUpdate(mix);
-                    _db.SaveChanges();
-                    var response = new TobaccoMixDTO()
-                    {
-                        Success = true,
-                        Message = $"Tobacco with id {mixPart.Id} added to mix.",
-                        Id = mix.Id,
-                        AccName = mix.AccName
-                    };
-                    foreach (var m in mix.Tobaccos)
-                    {
-                        var x = new Tobacco()
-                        {
-                            Id = m.Tobacco.Id,
-                            Fraction = m.Fraction,
-                            AccName = m.Tobacco.AccName,
-                            BrandName = m.Tobacco.BrandName
-                        };
-                        response.Tobaccos.Add(x);
-                    }
-                    return response;
-                }
-                catch(Exception e)
-                {
-                    return new TobaccoMixDTO(){Success = false, Message = e.Message};
-                }
-            }
+            if (newMix == null) return new TobaccoMixDTO() { Success = false, Message = "Mix is null." };
 
             var author = UserHelper.GetCurentPerson(_db);
-            mix = new TobaccoMix()
+            var mix = new TobaccoMix()
             {
-                AccName = mixPart.AccName,
+                AccName = newMix.AccName,
                 Author = author,
                 CreatedAt = DateTimeOffset.UtcNow,
                 BrandName = author.AssignedBrandId ?? "OwnBrand"
             };
-            if (mix.Tobaccos.Any(a => a.TobaccoId == mixPart.Id)) return new TobaccoMixDTO() { Success = false, Message = "This tobacco was already added to mix. " };
-            mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = mixPart.Id, Fraction = mixPart.Fraction});
 
+            foreach (var tobacco in newMix.Tobaccos)
+            {
+                var t = _db.Tobaccos.Find(tobacco.Id);
+                if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
+                    return new TobaccoMixDTO() { Success = false, Message = "Tobacco not fount or fraction not within acceptable range." };
+                
+                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Id))
+                    return new TobaccoMixDTO() { Success = false, Message = $"Tobacco {tobacco.BrandName} {tobacco.AccName} was already added to mix." };
+
+                mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = tobacco.Id, Fraction = tobacco.Fraction});
+            }
             try
             {
                 _db.TobaccoMixs.AddOrUpdate(mix);
@@ -215,7 +179,7 @@ namespace smartHookah.Controllers.Api
                 var response = new TobaccoMixDTO()
                 {
                     Success = true,
-                    Message = $"Tobacco with id {mixPart.Id} added to new mix.",
+                    Message = "Tobacco mix was saved.",
                     Id = mix.Id,
                     AccName = mix.AccName
                 };
