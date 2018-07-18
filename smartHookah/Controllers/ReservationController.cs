@@ -476,7 +476,9 @@ namespace smartHookah.Controllers
                 var changedSeat = reservation.Seats.FirstOrDefault(a => a.Id == tableId);
                 reservation.Seats.Remove(changedSeat);
 
-                var tableReservation = table.Reservations.Where(a => a.Time.Date == reservation.Time.Date && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied);
+                var tableReservation = table.Reservations.Where(a =>
+                    a.Time.Date == reservation.Time.Date && a.Status != ReservationState.Canceled &&
+                    a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit);
 
                 foreach (var res in tableReservation)
                     if (Colide(reservation, res))
