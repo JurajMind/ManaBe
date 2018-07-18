@@ -203,5 +203,34 @@ namespace smartHookah.Controllers.Api
         }
 
         #endregion
+
+        #region Deleters
+
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("RemoveMix")]
+        public async Task<DTO> RemoveMix(int mixId)
+        {
+            var mix = _db.TobaccoMixs.Find(mixId);
+            if(mix == null) return new DTO(){ Success = false, Message = $"Mix with id {mixId} not found." };
+            try
+            {
+                if (mix.Statistics != null && mix.Statistics.Used > 0)
+                {
+                    mix.Author = null;
+                    _db.TobaccoMixs.AddOrUpdate(mix);
+                    _db.SaveChanges();
+                    return new DTO(){ Success = true, Message = $"Author of mix {mix.Id} removed." };
+                }
+                _db.TobaccoMixs.Remove(mix);
+                _db.SaveChanges();
+                return new DTO() { Success = true, Message = $"Mix {mix.Id} removed." };
+            }
+            catch (Exception e)
+            {
+                return new DTO(){Success = false, Message = e.Message};
+            }
+        }
+
+        #endregion
     }
 }
