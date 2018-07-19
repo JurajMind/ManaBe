@@ -11,8 +11,6 @@ using Autofac.Integration.WebApi;
 using smartHookah.Controllers;
 using smartHookah.Models;
 
-using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
-
 namespace smartHookah
 {
     using System.Collections.Generic;
@@ -20,28 +18,28 @@ namespace smartHookah
 
     using Fleck;
 
+    using Hangfire;
+
     using Microsoft.Extensions.Logging;
 
     using Ninja.WebSockets;
 
+    using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
+
     public class MvcApplication : HttpApplication
     {
-        static IWebSocketServerFactory webSocketServerFactory;
-        static ILogger logger;
-        static ILoggerFactory loggerFactory;
+
         protected void Application_Start()
         {
 
             SetupInjection();
             AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            System.Web.Http.GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            StartWebServer();
-
-
+          
         }
 
 
@@ -70,24 +68,6 @@ namespace smartHookah
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
 
-        static async Task StartWebServer()
-        {
-            try
-            {
-                webSocketServerFactory = new WebSocketServerFactory();
-                int port = 80;
-                IList<string> supportedSubProtocols = new[] { "chatV1", "chatV2", "chatV3" };
-                using (WebSocketServer socketServer = new WebSocketServer(webSocketServerFactory, loggerFactory, supportedSubProtocols))
-                {
-                    await socketServer.Listen(port);
-                    logger.LogInformation($"Listening on port {port}");
-                    
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.ToString());
-            }
-        }
+     
     }
 }

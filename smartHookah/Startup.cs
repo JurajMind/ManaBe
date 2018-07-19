@@ -26,8 +26,18 @@ using GlobalConfiguration = Hangfire.GlobalConfiguration;
 [assembly: OwinStartupAttribute(typeof(smartHookah.Startup))]
 namespace smartHookah
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Microsoft.Extensions.Logging;
+
+    using Ninja.WebSockets;
+
     public partial class Startup
     {
+        static IWebSocketServerFactory webSocketServerFactory;
+        static ILogger logger;
+        static ILoggerFactory loggerFactory;
         public void Configuration(IAppBuilder app)
         {
            
@@ -60,8 +70,9 @@ namespace smartHookah
             {
                 manager.RemoveIfExists("AutoEnd");
             }
-         
-            
+            var jobId = BackgroundJob.Enqueue(
+                () => StartWebServer());
+
             app.MapSignalR();
             ConfigureOAuth(app);
         }
@@ -83,7 +94,27 @@ namespace smartHookah
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
         }
-        
+
+        public static async Task StartWebServer()
+        {
+            try
+            {
+                webSocketServerFactory = new WebSocketServerFactory();
+                int port = 80;
+                IList<string> supportedSubProtocols = new[] { "chatV1", "chatV2", "chatV3" };
+                using (WebSocketServer socketServer = new WebSocketServer(webSocketServerFactory, loggerFactory, supportedSubProtocols))
+                {
+                    await socketServer.Listen(port);
+                    logger.LogInformation($"Listening on port {port}");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+            }
+        }
+
     }
 
   
