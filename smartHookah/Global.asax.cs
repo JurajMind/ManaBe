@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -16,22 +7,28 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Hangfire;
-using Hangfire.Common;
-using ProcessDeviceToCloudMessages;
+
 using smartHookah.Controllers;
-using smartHookah.Hubs;
-using smartHookah.Jobs;
 using smartHookah.Models;
-using Westwind.Globalization;
+
 using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
 
 namespace smartHookah
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     using Fleck;
+
+    using Microsoft.Extensions.Logging;
+
+    using Ninja.WebSockets;
 
     public class MvcApplication : HttpApplication
     {
+        static IWebSocketServerFactory webSocketServerFactory;
+        static ILogger logger;
+        static ILoggerFactory loggerFactory;
         protected void Application_Start()
         {
 
@@ -42,16 +39,12 @@ namespace smartHookah
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var server = new WebSocketServer("ws://0.0.0.0:8181");
-            server.Start(socket =>
-                {
-                    socket.OnOpen = () => Console.WriteLine("Open!");
-                    socket.OnClose = () => Console.WriteLine("Close!");
-                    socket.OnMessage = message => socket.Send(message);
-                });
+            StartWebServer();
 
 
         }
+
+
 
         protected void Application_End()
         {
@@ -77,6 +70,26 @@ namespace smartHookah
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+        }
+
+        static async Task StartWebServer()
+        {
+            try
+            {
+                webSocketServerFactory = new WebSocketServerFactory();
+                int port = 80;
+                IList<string> supportedSubProtocols = new[] { "chatV1", "chatV2", "chatV3" };
+                using (WebSocketServer socketServer = new WebSocketServer(webSocketServerFactory, loggerFactory, supportedSubProtocols))
+                {
+                    await socketServer.Listen(port);
+                    logger.LogInformation($"Listening on port {port}");
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+            }
         }
     }
 }
