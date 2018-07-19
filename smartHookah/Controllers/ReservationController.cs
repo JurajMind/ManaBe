@@ -111,13 +111,13 @@ namespace smartHookah.Controllers
                     var parseDate = DateTime.ParseExact(model.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
                     var duration = _slotDuration.Multiply(model.Duration);
                     var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
-                    var reservation = table.Reservations.Where(a => a.Time.Date == parseDate &&
-                    a.Status != ReservationState.Canceled 
-                    && a.Status != ReservationState.Denied 
-                    && a.Status != ReservationState.NonVisit ).ToList();
+                    var reservation = table?.Reservations.Where(a => a.Time.Date == parseDate &&
+                                                                     a.Status != ReservationState.Canceled 
+                                                                     && a.Status != ReservationState.Denied 
+                                                                     && a.Status != ReservationState.NonVisit ).ToList();
 
                     var place = await db.Places.FindAsync(id);
-                    if(place == null)
+                    if(place == null || reservation == null)
                          return Json(new { success = false});
 
                     var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4,'0'), "HHmm", CultureInfo.InvariantCulture);
@@ -476,7 +476,9 @@ namespace smartHookah.Controllers
                 var changedSeat = reservation.Seats.FirstOrDefault(a => a.Id == tableId);
                 reservation.Seats.Remove(changedSeat);
 
-                var tableReservation = table.Reservations.Where(a => a.Time.Date == reservation.Time.Date && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied);
+                var tableReservation = table.Reservations.Where(a =>
+                    a.Time.Date == reservation.Time.Date && a.Status != ReservationState.Canceled &&
+                    a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit);
 
                 foreach (var res in tableReservation)
                     if (Colide(reservation, res))
