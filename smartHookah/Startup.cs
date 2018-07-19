@@ -112,6 +112,8 @@ namespace smartHookah
             catch (Exception ex)
             {
                 logger.LogError(ex.ToString());
+                Console.WriteLine(ex);
+                throw ex;
             }
         }
 
