@@ -58,9 +58,7 @@ namespace smartHookah
 
 
 #if DEBUG
-
 #else
-    IotProcessor.End();
 #endif
 
         }
