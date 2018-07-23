@@ -841,6 +841,7 @@
     <Compile Include="Controllers\Api\MixologyController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
+    <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
@@ -866,6 +867,7 @@
     <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
+    <Compile Include="Models\Dto\SmokeSessionDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
