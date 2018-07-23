@@ -32,7 +32,7 @@ namespace smartHookah.Controllers.Api
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
             id = id.ToUpper();
             var redisSessionId = RedisHelper.GetHookahId(id);
-            var dbSession = _db.SmokeSessions.Find(id);
+            var dbSession = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
             if (dbSession == null)
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
