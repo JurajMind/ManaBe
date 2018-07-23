@@ -26,15 +26,13 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("Validate")]
-        public async Task<ValidationDTO> Validate(string smokeSessionId)
-        {
-            smokeSessionId = smokeSessionId.ToUpper();
-            
-            if (smokeSessionId.Length != 5)
+        public async Task<ValidationDTO> Validate(string id)
+        {   
+            if (id == null || id.Length != 5)
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
-
-            var redisSessionId = RedisHelper.GetHookahId(smokeSessionId);
-            var dbSession = _db.SmokeSessions.Find(smokeSessionId);
+            id = id.ToUpper();
+            var redisSessionId = RedisHelper.GetHookahId(id);
+            var dbSession = _db.SmokeSessions.Find(id);
 
             if (dbSession == null)
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
@@ -43,8 +41,8 @@ namespace smartHookah.Controllers.Api
                 return new ValidationDTO()
                 {
                     Success = true,
-                    Message = $"Session with id {smokeSessionId} is not live.",
-                    Id = smokeSessionId,
+                    Message = $"Session with id {id} is not live.",
+                    Id = id,
                     Flag = SessionState.Completed
                 };
 

@@ -888,7 +888,6 @@
     <Compile Include="Controllers\Mobile\AccountController.cs" />
     <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\Mobile\PlaceController.cs" />
-    <Compile Include="Controllers\Mobile\SmokeSessionController.cs" />
     <Compile Include="Models\ViewModel\OrderSpecificModel.cs" />
     <Compile Include="Models\ViewModel\PriceGroupDto.cs" />
     <Compile Include="Controllers\ReportController.cs" />
