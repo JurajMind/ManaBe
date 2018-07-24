@@ -23,18 +23,26 @@ using static System.Threading.Tasks.Task;
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Services.Person;
+
     [System.Web.Mvc.Authorize]
     
     public class SmokeSessionController : Controller
     {
         private readonly SmartHookahContext _db;
-
         private readonly IHubContext hubContext;
+
+        private readonly IPersonService personService;
+
         private TelemetryClient telemetry = new TelemetryClient();
 
-        public SmokeSessionController(SmartHookahContext db)
+        private IRedisService redisService;
+
+        public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService)
         {
             _db = db;
+            this.redisService = redisService;
+            this.personService = personService;
         }
 
         public SmokeSessionController()
@@ -390,7 +398,7 @@ namespace smartHookah.Controllers
             if (session == null)
                 return false;
 
-            var person = UserHelper.GetCurentPerson(_db);
+            var person = this.personService.GetCurentPerson();
 
             if (person == null)
                 return false;

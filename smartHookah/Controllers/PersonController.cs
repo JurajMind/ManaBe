@@ -17,21 +17,26 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Services.Person;
+
     [Authorize]
     public class PersonController : Controller
     {
         private readonly SmartHookahContext db;
-        
-        public PersonController(SmartHookahContext db)
+
+        private readonly IPersonService personService;
+
+        public PersonController(SmartHookahContext db, IPersonService personService)
         {
             this.db = db;
+            this.personService = personService;
         }
 
     
         // GET: Person
         public async Task<ActionResult> Index(int? id)
         {
-            var persons = UserHelper.GetCurentPersonIQuerable(db);
+            var persons = this.personService.GetCurentPersonIQuerable();
 
             var person = persons.Include(a => a.SmokeSessions.Select(b => b.MetaData))
                                .Include(a => a.SmokeSessions.Select(b => b.Statistics)).FirstOrDefault();
