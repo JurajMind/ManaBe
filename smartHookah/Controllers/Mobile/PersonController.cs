@@ -1,48 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
-using smartHookah.Helpers;
-using smartHookah.Models;
-//using smartHookah.Models.Dto;
-using smartHookahCommon;
 
+using smartHookah.Models;
 
 namespace smartHookah.Controllers.Mobile
 {
+    using smartHookah.Services.Person;
+
     [Authorize]
     public class PersonController : ApiController
     {
-        private SmartHookahContext _db;
-        public PersonController(SmartHookahContext db)
+        private readonly SmartHookahContext db;
+
+        private readonly IPersonService personService;
+
+        public PersonController(SmartHookahContext db, IPersonService personService)
         {
-            _db = db;
+            this.db = db;
+            this.personService = personService;
         }
 
         [HttpGet]
         [ActionName("DefaultAction")]
-        public async Task<string> GetHome()
+        public string GetHome()
         {
-            var persons = UserHelper.GetCurentPersonIQuerable(_db);
+            var persons = this.personService.GetCurentPersonIQuerable();
 
             var person = persons.Include(a => a.SmokeSessions.Select(b => b.MetaData))
                 .Include(a => a.SmokeSessions.Select(b => b.Statistics)).FirstOrDefault();
 
             var session = person.SmokeSessions.Where(a => a.StatisticsId == null);
-            //model.Hookahs = person.Hookahs.Select(a => new HookahDTO(a)).ToList();
-
-
-            //var dynamic = session.Select(a => RedisHelper.GetSmokeStatistic(sessionId: a.SessionId));
-
-            //foreach (var dynamicSmokeStatistic in dynamic)
-            //{
-                
-            //}
 
             return session.ToString();
         }

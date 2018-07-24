@@ -843,8 +843,19 @@
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalTobacoMix.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalViewModel.cs" />
+    <Compile Include="Controllers\SmokeStatisticViewModel.cs" />
+    <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <Compile Include="Services\Person\IOwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Person\IPersonService.cs" />
+    <Compile Include="Services\Person\OwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Person\PersonService.cs" />
+    <Compile Include="Services\Redis\IRedisService.cs" />
+    <Compile Include="Services\Redis\RedisService.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
       <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
@@ -888,8 +899,8 @@
     <Compile Include="Controllers\Mobile\AccountController.cs" />
     <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\Mobile\PlaceController.cs" />
-    <Compile Include="Models\ViewModel\OrderSpecificModel.cs" />
-    <Compile Include="Models\ViewModel\PriceGroupDto.cs" />
+    <Compile Include="Models\ViewModel\Places\OrderSpecificModel.cs" />
+    <Compile Include="Models\ViewModel\Places\PriceGroupDto.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -968,23 +979,23 @@
     </Compile>
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
-    <Compile Include="Models\ViewModel\ActiveSessionListItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />
     <Compile Include="Models\Db\SmokeEvent.cs" />
     <Compile Include="Models\Db\SmokeEventType.cs" />
     <Compile Include="Models\Db\StandUsage.cs" />
     <Compile Include="Models\Db\Tag.cs" />
-    <Compile Include="Models\ViewModel\EditOpenHoursPostModel.cs" />
-    <Compile Include="Models\ViewModel\EditOpenHoursViewModel.cs" />
+    <Compile Include="Models\ViewModel\Places\EditOpenHoursPostModel.cs" />
+    <Compile Include="Models\ViewModel\Places\EditOpenHoursViewModel.cs" />
     <Compile Include="Controllers\GamificationController.cs" />
-    <Compile Include="Controllers\GetPlaceMenuModel.cs" />
-    <Compile Include="Models\ViewModel\Hours.cs" />
+    <Compile Include="Models\ViewModel\Places\GetPlaceMenuModel.cs" />
+    <Compile Include="Models\ViewModel\Places\Hours.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Models\ViewModel\OrderHookahViewModel.cs" />
     <Compile Include="Models\ViewModel\PlaceDetailsViewModel.cs" />
-    <Compile Include="Models\ViewModel\PlaceModels.cs" />
-    <Compile Include="Models\ViewModel\PostOrderModel.cs" />
+    <Compile Include="Models\ViewModel\Places\PlaceModels.cs" />
+    <Compile Include="Models\ViewModel\Places\PostOrderModel.cs" />
     <Compile Include="Filters\HangfireFilter.cs" />
     <Compile Include="Filters\LocalizationAttribute.cs" />
     <Compile Include="Helpers\ImageActionLinkHelper.cs" />
@@ -1176,8 +1187,8 @@
     <Compile Include="Controllers\QrCodeReaderController.cs" />
     <Compile Include="Controllers\ResourcesController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
-    <Compile Include="Models\ViewModel\SeatManagerModel.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionGetStaticsticsModel.cs" />
+    <Compile Include="Models\ViewModel\Places\SeatManagerModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionGetStaticsticsModel.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
     <Compile Include="Helpers\ExpandPropertyAttribute.cs" />
@@ -1288,15 +1299,15 @@
       <DependentUpon>201706280859540_layerMethod.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\GameProfile.cs" />
-    <Compile Include="Models\ViewModel\Notificatiom.cs" />
+    <Compile Include="Models\Db\Notificatiom.cs" />
     <Compile Include="Models\ViewModel\PersonModel.cs" />
     <Compile Include="Models\Db\Puf.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionListItemViewModel.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionViewModel.cs" />
-    <Compile Include="Models\ViewModel\SaveSmokeMetadataModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionListItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SaveSmokeMetadataModel.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="Controllers\SmokeSessionController.cs" />
-    <Compile Include="Models\ViewModel\SmokeViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeViewModel.cs" />
     <Compile Include="Controllers\TobaccoController.cs" />
     <Compile Include="Controllers\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -1416,7 +1427,7 @@
     <Compile Include="Models\Db\SmokeSessionStatistics.cs" />
     <Compile Include="Models\Db\StandPicture.cs" />
     <Compile Include="Models\Db\Update.cs" />
-    <Compile Include="Models\ViewModel\TobaccoListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\TobaccoListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Account\Account.sk.Designer.cs">
       <DependentUpon>Account.sk.resx</DependentUpon>
@@ -2008,8 +2019,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Old.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -2039,7 +2048,6 @@
     <Content Include="Views\Home\hookah.cshtml" />
     <Content Include="Views\Shared\Smoke.cshtml" />
     <Content Include="Views\SmokeSession\GetLiveSmokeStatics.cshtml" />
-    <Content Include="Views\Home\_TypeStats.cshtml" />
     <Content Include="Views\Places\Create.cshtml" />
     <Content Include="Views\Places\Delete.cshtml" />
     <Content Include="Views\Places\Details.cshtml" />

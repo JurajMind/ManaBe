@@ -117,13 +117,9 @@ namespace smartHookahCommon
                 }
                 SmokeSessionController.InitSmokeSession(db, hookahId, sessionId);
             }
-           
-
 
             redis.Set("hookah:" + hookahId, sessionId);
             redis.Set("session:" + sessionId, hookahId);
-
-          
 
             return sessionId;
         }
