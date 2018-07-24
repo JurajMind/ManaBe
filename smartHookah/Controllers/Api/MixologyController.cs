@@ -1,26 +1,32 @@
-﻿using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Dto;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+
+using smartHookah.Models;
+using smartHookah.Models.Dto;
+
 using Tobacco = smartHookah.Models.Dto.Tobacco;
 
 namespace smartHookah.Controllers.Api
 {
+    using System.Data.Entity;
+
+    using smartHookah.Services.Person;
+
     [System.Web.Http.RoutePrefix("api/Mixology")]
     public class MixologyController : ApiController
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
 
-        public MixologyController(SmartHookahContext db)
+        private readonly IPersonService personService;
+
+        public MixologyController(SmartHookahContext db,IPersonService personService)
         {
-            this._db = db;
+            this.db = db;
+            this.personService = personService;
         }
         
         #region Getters
@@ -29,13 +35,14 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("GetMixes")]
         public async Task<MixListDTO> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
         {
-            var query = from a in _db.TobaccoMixs select a;
-            if (_db.Brands.Any(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
+            var query = from a in this.db.TobaccoMixs select a;
+            if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
             {
                 query = from m in query where m.Brand.Name.ToLower() == author.ToLower() select m;
-            } else if (author == "me")
+            }
+            else if (author == "me")
             {
-                var userId = UserHelper.GetCurentPerson(_db).Id;
+                var userId = this.personService.GetCurentPerson().Id;
                 query = from m in query where m.Author.Id == userId select m;
             }
 
@@ -43,52 +50,57 @@ namespace smartHookah.Controllers.Api
             {
                 case "name":
                     query = order == "asc"
-                        ? from a in query orderby a.AccName ascending select a
-                        : from a in query orderby a.AccName descending select a;
+                                ? from a in query orderby a.AccName ascending select a
+                                : from a in query orderby a.AccName descending select a;
                     break;
                 case "used":
                     query = order == "asc"
-                        ? from a in query orderby a.Statistics.Used ascending select a
-                        : from a in query orderby a.Statistics.Used descending select a;
+                                ? from a in query orderby a.Statistics.Used ascending select a
+                                : from a in query orderby a.Statistics.Used descending select a;
                     break;
                 case "rating":
                     query = order == "asc"
-                        ? from a in query orderby a.Statistics.Overall ascending select a
-                        : from a in query orderby a.Statistics.Overall descending select a;
+                                ? from a in query orderby a.Statistics.Overall ascending select a
+                                : from a in query orderby a.Statistics.Overall descending select a;
                     break;
                 case "time":
                     query = order == "asc"
-                        ? from a in query orderby a.Statistics.SmokeDurationTick ascending select a
-                        : from a in query orderby a.Statistics.SmokeDurationTick descending select a;
+                                ? from a in query orderby a.Statistics.SmokeDurationTick ascending select a
+                                : from a in query orderby a.Statistics.SmokeDurationTick descending select a;
                     break;
                 default:
-                    return new MixListDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\", \"used\", \"rating\" or \"time\"." };
+                    return new MixListDTO()
+                               {
+                                   Success = false,
+                                   Message =
+                                       "Invalid OrderBy value, select \"name\", \"used\", \"rating\" or \"time\"."
+                               };
             }
             query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
 
             var res = query.ToList();
 
-            if(res.Count > 0)
+            if (res.Count > 0)
             {
                 var result = new MixListDTO() { Success = true, Message = $"{res.Count} mixes found." };
-                foreach(var r in res)
+                foreach (var r in res)
                 {
                     var m = new Mix()
-                    {
-                        Id = r.Id,
-                        AccName = r.AccName,
-                        Overall = r.Statistics?.Overall ?? -1,
-                        Used = r.Statistics?.Used ?? -1
-                    };
+                                {
+                                    Id = r.Id,
+                                    AccName = r.AccName,
+                                    Overall = r.Statistics?.Overall ?? -1,
+                                    Used = r.Statistics?.Used ?? -1
+                                };
                     foreach (var x in r.Tobaccos)
                     {
                         var t = new Models.Dto.Tobacco()
-                        {
-                            Id = x.TobaccoId,
-                            AccName = x.Tobacco.AccName,
-                            BrandName = x.Tobacco.BrandName,
-                            Fraction = x.Fraction
-                        };
+                                    {
+                                        Id = x.TobaccoId,
+                                        AccName = x.Tobacco.AccName,
+                                        BrandName = x.Tobacco.BrandName,
+                                        Fraction = x.Fraction
+                                    };
 
                         m.Tobaccos.Add(t);
                     }
@@ -101,9 +113,9 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixCreators")]
-        public async Task<MixCreatorsDTO> GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
+        public MixCreatorsDTO GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
-            var query = from b in _db.Brands
+            var query = from b in this.db.Brands
                         where b.TobaccoMixBrand
                         select b;
             
@@ -118,11 +130,12 @@ namespace smartHookah.Controllers.Api
                 default:
                     return new MixCreatorsDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\" or \"count\"." };
             }
+
             query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
 
             var res = query.ToList();
 
-            if (res.Count() > 0)
+            if (res.Any())
             {
                 var result = new MixCreatorsDTO() { Success = true, Message = $"{res.Count()} mix creators found." };
                 foreach (var m in res)
@@ -152,7 +165,7 @@ namespace smartHookah.Controllers.Api
         {
             if (newMix == null) return new TobaccoMixDTO() { Success = false, Message = "Mix is null." };
 
-            var author = UserHelper.GetCurentPerson(_db);
+            var author = this.personService.GetCurentPerson();
             var mix = new TobaccoMix()
             {
                 AccName = newMix.AccName,
@@ -163,7 +176,7 @@ namespace smartHookah.Controllers.Api
 
             foreach (var tobacco in newMix.Tobaccos)
             {
-                var t = _db.Tobaccos.Find(tobacco.Id);
+                var t = this.db.Tobaccos.Find(tobacco.Id);
                 if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
                     return new TobaccoMixDTO() { Success = false, Message = "Tobacco not fount or fraction not within acceptable range." };
                 
@@ -174,8 +187,8 @@ namespace smartHookah.Controllers.Api
             }
             try
             {
-                _db.TobaccoMixs.AddOrUpdate(mix);
-                _db.SaveChanges();
+                this.db.TobaccoMixs.AddOrUpdate(mix);
+                await this.db.SaveChangesAsync();
                 var response = new TobaccoMixDTO()
                 {
                     Success = true,
@@ -210,19 +223,19 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("RemoveMix")]
         public async Task<DTO> RemoveMix(int mixId)
         {
-            var mix = _db.TobaccoMixs.Find(mixId);
+            var mix = this.db.TobaccoMixs.Find(mixId);
             if(mix == null) return new DTO(){ Success = false, Message = $"Mix with id {mixId} not found." };
             try
             {
                 if (mix.Statistics != null && mix.Statistics.Used > 0)
                 {
                     mix.Author = null;
-                    _db.TobaccoMixs.AddOrUpdate(mix);
-                    _db.SaveChanges();
+                    this.db.TobaccoMixs.AddOrUpdate(mix);
+                    this.db.SaveChanges();
                     return new DTO(){ Success = true, Message = $"Author of mix {mix.Id} removed." };
                 }
-                _db.TobaccoMixs.Remove(mix);
-                _db.SaveChanges();
+                this.db.TobaccoMixs.Remove(mix);
+                this.db.SaveChanges();
                 return new DTO() { Success = true, Message = $"Mix {mix.Id} removed." };
             }
             catch (Exception e)
