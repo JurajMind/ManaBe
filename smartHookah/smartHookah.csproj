@@ -850,9 +850,9 @@
     <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
-    <Compile Include="Services\Person\IOwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
-    <Compile Include="Services\Person\OwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\PersonService.cs" />
     <Compile Include="Services\Redis\IRedisService.cs" />
     <Compile Include="Services\Redis\RedisService.cs" />
@@ -1509,11 +1509,8 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Support\DataAnotation.cs" />
-    <Compile Include="Support\DTO.cs" />
     <Compile Include="Support\Extensions.cs" />
-    <Compile Include="Support\FixedSizeQueue.cs" />
     <Compile Include="Support\Helper.cs" />
-    <Compile Include="Support\Infrastructure\MapperBase.cs" />
     <Compile Include="Support\QrCodeHelper.cs" />
     <Compile Include="Support\Support.cs" />
     <Compile Include="SwaggerExtensions\SwaggerAccesMessegeHandler.cs" />
