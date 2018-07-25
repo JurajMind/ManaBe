@@ -850,6 +850,10 @@
     <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <Compile Include="Services\Device\DeviceService.cs" />
+    <Compile Include="Services\Device\IDeviceService.cs" />
+    <Compile Include="Services\Device\IIotService.cs" />
+    <Compile Include="Services\Device\IotService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
