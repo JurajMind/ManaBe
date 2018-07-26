@@ -9,7 +9,7 @@
     {
         Task<IEnumerable<Device>> GetDevices(IEnumerable<string> deviceIds);
 
-        Task<Device> GetDevidce(string deviceId);
+        Task<Device> GetDevice(string deviceId);
 
         Task<bool> GetOnlineState(string deviceId);
 

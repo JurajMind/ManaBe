@@ -879,6 +879,7 @@
     <Compile Include="Models\Db\Brand.cs" />
     <Compile Include="Models\Db\Place.cs" />
     <Compile Include="Models\Db\PlaceCalendar.cs" />
+    <Compile Include="Models\Dto\AnimationsDTO.cs" />
     <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />

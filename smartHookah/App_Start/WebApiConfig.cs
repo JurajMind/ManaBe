@@ -41,6 +41,12 @@ namespace smartHookah
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional,action  = "DefaultAction" }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "AnimControllerRoute",
+                routeTemplate: "api/Anim",
+                defaults: new { controller = "Animation", action = "DeafultAction", id = RouteParameter.Optional }
+            );
         }
     }
 }
