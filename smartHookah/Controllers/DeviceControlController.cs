@@ -21,6 +21,7 @@ namespace smartHookah.Controllers
 
     using smartHookah.Helpers;
     using smartHookah.Models;
+    using smartHookah.Services.Device;
 
     using smartHookahCommon;
 
@@ -28,9 +29,12 @@ namespace smartHookah.Controllers
     {
         private readonly SmartHookahContext db;
 
-        public DeviceControlController(SmartHookahContext db)
+        private readonly IDeviceService deviceService;
+
+        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService)
         {
             this.db = db;
+            this.deviceService = deviceService;
         }
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
