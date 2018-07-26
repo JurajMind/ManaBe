@@ -116,54 +116,6 @@ namespace smartHookah.Models.Redis
 
         }
 
-        public DynamicSmokeStatistic Update(Puf puf,string session,string deviceId)
-        {
-            if (puf.Type == PufType.In)
-            {
-                PufCount++;
-            }
 
-            if (puf.Type == PufType.Out)
-            {
-                AlertBlowCount++;
-            }
-            if (LastPuf == null)
-            {
-                LastPuf = puf;
-                FakeEnque(puf);
-                return this;
-            }
-            var t = TimeSpan.FromTicks((long)((puf.Milis - LastPuf.Milis) * 10000));
-            if (puf.Type == PufType.Idle)
-            {
-                if (LastPuf.Type == PufType.In)
-                {
-                    LastPufDuration = t;
-                    TotalSmokeTime = TotalSmokeTime + t;
-                    LastPufTime = puf.DateTime;
-                    if (t > LongestPuf)
-                    {
-                        LongestPuf = t;
-                    }
-
-                }
-
-            }
-
-            LastPuf = puf;
-            FakeEnque(puf);
-
-            AllertHub.ProcessAllerts(this, session, deviceId);
-
-
-            return this;
-        }
-
-        private void FakeEnque(Puf puf)
-        {
-            LastPufs.Add(puf);
-            if (LastPufs.Count > 8)
-                LastPufs.RemoveAt(0);
-        }
     }
 }

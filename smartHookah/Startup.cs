@@ -46,7 +46,6 @@ namespace smartHookah
                     Job.FromExpression(() => AutoEnd.EndSmokeSessions(null, isDebug)),
                     Cron.MinuteInterval(15));
             else manager.RemoveIfExists("AutoEnd");
-
             app.MapSignalR();
             this.ConfigureOAuth(app);
         }

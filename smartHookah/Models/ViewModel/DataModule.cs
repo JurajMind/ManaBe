@@ -8,8 +8,12 @@ namespace smartHookah.Models
     using System.Web;
     using System.Web.Compilation;
 
+    using Autofac.Integration.SignalR;
+
+    using Microsoft.AspNet.SignalR;
     using Microsoft.Owin;
 
+    using smartHookah.Hubs;
     using smartHookah.Services.Person;
 
     using smartHookahCommon;
@@ -25,11 +29,12 @@ namespace smartHookah.Models
             builder.Register(s => HttpContext.Current.GetOwinContext()).As<IOwinContext>();
             builder.Register(s => HttpContext.Current.User).As<IPrincipal>();
             builder.RegisterType<OwinContextExtensionsWrapper>().As<IOwinContextExtensionsWrapper>();
-
+            builder.RegisterType<SmokeSessionHub>().ExternallyOwned();
             var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>();
 
             foreach (var assembly in assemblies)
             {
+               
                 builder.RegisterAssemblyTypes(assembly)
                     .Except<SmartHookahContext>()
                     .Except<RedisService>()

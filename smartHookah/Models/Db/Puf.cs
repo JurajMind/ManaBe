@@ -4,7 +4,7 @@ namespace smartHookah.Models
 {
     public class Puf
     {
-        public Puf(string smokeSessionId,PufType s) : this(smokeSessionId,s,DateTime.Now.ToLocalTime())
+        public Puf(string smokeSessionId,PufType s) : this(smokeSessionId, s ,DateTime.UtcNow.ToLocalTime())
         {
           
         }

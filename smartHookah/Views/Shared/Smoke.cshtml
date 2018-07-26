@@ -466,13 +466,13 @@
                     return true;
                 }
                 //.add(-1,'h')
-                $('#lastPufTime').data('time',moment(stats.LastPufDuration,"").add(-2,'h').format('DD-MM-YYYY HH:mm:ss'));
+                $('#lastPufTime').data('time', moment(stats.LastPufTime,"").add(-2,'h').format('DD-MM-YYYY HH:mm:ss'));
                 $('#pufCount').text(stats.PufCount);
-                $('#lastDuration').text(stats.lastPuf+' sec.');
-                $('#curentTime').text(stats.lastPuf+' sec.');
-                $('#longestPufsec').text(stats.longestPuf+' sec.');
-                $('#longestPuf').val(stats.longestPufMilis);
-                $('#smokeDuration').text(stats.smokeDuration);
+                $('#lastDuration').text(stats.LastPuf+' sec.');
+                $('#curentTime').text(stats.LastPuf+' sec.');
+                $('#longestPufsec').text(stats.LongestPuf+' sec.');
+                $('#longestPuf').val(stats.LongestPufMilis);
+                $('#smokeDuration').text(stats.SmokeDuration);
                 OnSmokeStaticsSuccess();
             }
 

@@ -13,16 +13,7 @@ namespace smartHookah.Hubs
 {
     public class AllertHub
     {
-        static List<IAllertTriger> Rules = new List<IAllertTriger>() {new ServiceTrigger()};
-
-       public static void ProcessAllerts(DynamicSmokeStatistic stats, string sesionId, string hookahId)
-       {
-               foreach (var allertTriger in Rules)
-               {
-                   allertTriger.Trigger(stats, sesionId, hookahId);
-               }
-
-       }
+      
     }
 
 
@@ -56,5 +47,23 @@ namespace smartHookah.Hubs
             }
        
         }
+    }
+
+    public class NotificationService : INotificationService
+    {
+        static List<IAllertTriger> Rules = new List<IAllertTriger>() { new ServiceTrigger() };
+
+        public void ProcessSmokeStatisticAllert(DynamicSmokeStatistic stats, string sessionId, string hookahId)
+        {
+            foreach (var allertTriger in Rules)
+            {
+                allertTriger.Trigger(stats, sessionId, hookahId);
+            }
+        }
+    }
+
+    public interface INotificationService
+    {
+        void ProcessSmokeStatisticAllert(DynamicSmokeStatistic stats, string sessionId, string hookahId);
     }
 }
