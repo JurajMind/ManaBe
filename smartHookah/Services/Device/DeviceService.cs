@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Device
+﻿using System.Collections.Generic;
+
+namespace smartHookah.Services.Device
 {
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -36,6 +38,17 @@
             this.SetAnimation(hookah.Setting, (int)state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
+        }
+
+        public List<Animation> GetAnimations()
+        {
+            return AnimationHelper.Animations;
+        }
+
+        public int GetDeviceVersion(string id)
+        {
+            var hookah = db.Hookahs.FirstOrDefault(a => a.Code == id);
+            return hookah?.Version ?? -1;
         }
 
         private void SetAnimation(HookahSetting setting, int state, int value)
