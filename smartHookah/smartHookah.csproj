@@ -839,10 +839,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\Api\MixologyController.cs" />
+    <Compile Include="Controllers\Api\PersonController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Models\Dto\PersonDTO.cs" />
     <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalTobacoMix.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalViewModel.cs" />
@@ -901,7 +903,6 @@
     <Compile Include="Controllers\BowlsController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\Mobile\AccountController.cs" />
-    <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\Mobile\PlaceController.cs" />
     <Compile Include="Models\ViewModel\Places\OrderSpecificModel.cs" />
     <Compile Include="Models\ViewModel\Places\PriceGroupDto.cs" />

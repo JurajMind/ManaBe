@@ -19,5 +19,14 @@
 
         IEnumerable<Hookah> GetUserStands();
 
+        ICollection<Hookah> GetUserActiveStands(int? personId);
+
+        ICollection<SmokeSession> GetUserActiveSessions(int? personId);
+
+        ICollection<Reservation> GetUserActiveReservations(int? personId);
+
+        ICollection<HookahOrder> GetUserHookahOrders(int? personId);
+
+        GameProfile GetUserGameProfile(int? personId);
     }
 }

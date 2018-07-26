@@ -66,6 +66,61 @@
             return new List<Hookah>();
         }
 
+        public ICollection<Hookah> GetUserActiveStands(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+            return db.Hookahs
+                .Where(a => a.Owners.Any(x => x.Id == personId))
+                .Where(a => a.SmokeSessions.Any(x => x.Statistics == null)).ToList();
+        }
+
+        public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+            return db.SmokeSessions.Where(a => a.Statistics == null).ToList();
+        }
+
+        public ICollection<Reservation> GetUserActiveReservations(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+
+            return db.Reservations.Where(a => a.Person.Id == personId).Where(a => a.Status == ReservationState.Confirmed).ToList();
+        }
+
+        public ICollection<HookahOrder> GetUserHookahOrders(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+
+            return db.HookahOrders.Where(a => a.Person.Id == personId).ToList();
+        }
+
+        public GameProfile GetUserGameProfile(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+
+            return db.GameProfiles.FirstOrDefault(a => a.Person.Id == personId);
+        }
+
         private string UserId()
         {
             var userIdentity = this.user.Identity.GetUserId();
