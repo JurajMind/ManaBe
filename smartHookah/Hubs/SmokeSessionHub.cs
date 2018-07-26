@@ -10,8 +10,36 @@ using smartHookah.Models;
 
 namespace smartHookah.Hubs
 {
+    using Autofac;
+
+    using log4net.Core;
+
     public class SmokeSessionHub : Hub
     {
+        private readonly ILifetimeScope hubLifetimeScope;
+        private readonly ILogger _logger;
+
+        public SmokeSessionHub(ILifetimeScope hubLifetimeScope)
+        {
+            this.hubLifetimeScope = hubLifetimeScope;
+        }
+
+        public SmokeSessionHub()
+        {
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            // Dipose the hub lifetime scope when the hub is disposed.
+            if (disposing && this.hubLifetimeScope != null)
+            {
+                this.hubLifetimeScope.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
         public void Puf(string hookahCode , int direction)
         {
 

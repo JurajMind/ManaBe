@@ -13,36 +13,39 @@ namespace smartHookah.Services.SmokeSession
 {
     public class InitDataService : IInitDataService
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
 
-        public InitDataService(SmartHookahContext db)
+        private readonly IRedisService redisService;
+
+        public InitDataService(SmartHookahContext db, IRedisService redisService)
         {
-            this._db = db;
+            this.db = db;
+            this.redisService = redisService;
         }
 
         public DynamicSmokeStatistic GetRedisData(string id)
         {
-            var result = RedisHelper.GetSmokeStatistic(null, id);
+            var result = this.redisService.GetSessionStatistic(id);
             return result;
         }
 
         public SmokeSessionStatistics GetStatistics(string id)
         {
-            var session = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
+            var session = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
             var result = session?.Statistics;
             return result;
         }
 
         public SmokeSessionMetaData GetMetaData(string id)
         {
-            var session = _db.SmokeSessions.Include(a => a.MetaData).FirstOrDefault(s => s.SessionId == id);
+            var session = this.db.SmokeSessions.Include(a => a.MetaData).FirstOrDefault(s => s.SessionId == id);
             var result = session?.MetaData;
             return result;
         }
 
         public HookahSetting GetStandSettings(string id)
         {
-            var session = _db.SmokeSessions.Include(a => a.Hookah).Include(a => a.Hookah.Setting).FirstOrDefault(s => s.SessionId == id);
+            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.Hookah.Setting).FirstOrDefault(s => s.SessionId == id);
             var result = session?.Hookah.Setting;
             return result;
         }

@@ -24,6 +24,7 @@ using static System.Threading.Tasks.Task;
 namespace smartHookah.Controllers
 {
     using smartHookah.Services.Person;
+    using smartHookah.Services.SmokeSession;
 
     [System.Web.Mvc.Authorize]
     
@@ -38,15 +39,19 @@ namespace smartHookah.Controllers
 
         private IRedisService redisService;
 
-        public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService)
+        private ILiveSmokeSessionService liveSmokeSessionService;
+
+        public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService, ILiveSmokeSessionService liveSmokeSessionService)
         {
             _db = db;
             this.redisService = redisService;
             this.personService = personService;
+            this.liveSmokeSessionService = liveSmokeSessionService;
         }
 
-        public SmokeSessionController()
+        public SmokeSessionController(ILiveSmokeSessionService liveSmokeSessionService)
         {
+            this.liveSmokeSessionService = liveSmokeSessionService;
             hubContext = GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
         }
 
@@ -254,7 +259,7 @@ namespace smartHookah.Controllers
             {
                 var model = new SmokeStatisticViewModel();
 
-                var dynamic = DynamicSmokeStatistic.GetStatistic(sessionId);
+                var dynamic = liveSmokeSessionService.GetSmokeSessionStatistic(sessionId);
 
                 if (dynamic.LastPuf == null)
                     return PartialView("NoLiveStatistic");

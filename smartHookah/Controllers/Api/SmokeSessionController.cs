@@ -16,11 +16,13 @@ namespace smartHookah.Controllers.Api
     [System.Web.Http.RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
+        private readonly InitDataService service;
 
-        public SmokeSessionController(SmartHookahContext db)
+        public SmokeSessionController(SmartHookahContext db,InitDataService service)
         {
-            this._db = db;
+            this.db = db;
+            this.service = service;
         }
 
         #region Getters and Validators
@@ -33,7 +35,7 @@ namespace smartHookah.Controllers.Api
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
             id = id.ToUpper();
             var redisSessionId = RedisHelper.GetHookahId(id);
-            var dbSession = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
+            var dbSession = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
             if (dbSession == null)
                 return new ValidationDTO() { Success = false, Message = "Session not found." };
@@ -71,7 +73,7 @@ namespace smartHookah.Controllers.Api
                     HttpResponseCode = 404
                 };
 
-            var service = new InitDataService(_db);
+           
 
             var redis = service.GetRedisData(id);
             var stats = service.GetStatistics(id);

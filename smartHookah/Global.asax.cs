@@ -14,6 +14,8 @@
     using smartHookah.Controllers;
     using smartHookah.Models;
 
+    using RegistrationExtensions = Autofac.Integration.SignalR.RegistrationExtensions;
+
     public class MvcApplication : HttpApplication
     {
         protected void Application_End()
@@ -39,6 +41,7 @@
             var config = GlobalConfiguration.Configuration;
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder.RegisterModule<ControllerModule>();
+            builder.RegisterModule<SignalRModule>();
             builder.RegisterModule<DataModule>();
 
             var container = builder.Build();
