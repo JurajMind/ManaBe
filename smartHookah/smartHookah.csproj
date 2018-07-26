@@ -1508,6 +1508,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tobacco.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\SmokeSession\IInitDataService.cs" />
+    <Compile Include="Services\SmokeSession\InitDataService.cs" />
     <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
