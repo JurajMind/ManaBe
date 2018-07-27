@@ -16,17 +16,6 @@ namespace smartHookah
     {
         public static void Register(HttpConfiguration config)
         {
-            var jsonFormatter = new JsonMediaTypeFormatter
-            {
-                SerializerSettings =
-                {
-                    Formatting = (Formatting) System.Xml.Formatting.Indented,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }
-            };
-            config.Formatters.Clear();
-            config.Formatters.Insert(0, jsonFormatter);
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 

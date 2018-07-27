@@ -85,7 +85,7 @@
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            return db.SmokeSessions.Where(a => a.Statistics == null).ToList();
+            return db.SmokeSessions.Where(a => a.Statistics == null).Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
         }
 
         public ICollection<Reservation> GetUserActiveReservations(int? personId)

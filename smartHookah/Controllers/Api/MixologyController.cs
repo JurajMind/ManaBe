@@ -8,8 +8,6 @@ using System.Web.Mvc;
 using smartHookah.Models;
 using smartHookah.Models.Dto;
 
-using Tobacco = smartHookah.Models.Dto.Tobacco;
-
 namespace smartHookah.Controllers.Api
 {
     using System.Data.Entity;
@@ -94,7 +92,7 @@ namespace smartHookah.Controllers.Api
                                 };
                     foreach (var x in r.Tobaccos)
                     {
-                        var t = new Models.Dto.Tobacco()
+                        var t = new Models.Dto.TobaccoInMix()
                                     {
                                         Id = x.TobaccoId,
                                         AccName = x.Tobacco.AccName,
@@ -178,10 +176,10 @@ namespace smartHookah.Controllers.Api
             {
                 var t = this.db.Tobaccos.Find(tobacco.Id);
                 if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
-                    return new TobaccoMixDTO() { Success = false, Message = "Tobacco not fount or fraction not within acceptable range." };
+                    return new TobaccoMixDTO() { Success = false, Message = "TobaccoInMix not fount or fraction not within acceptable range." };
                 
                 if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Id))
-                    return new TobaccoMixDTO() { Success = false, Message = $"Tobacco {tobacco.BrandName} {tobacco.AccName} was already added to mix." };
+                    return new TobaccoMixDTO() { Success = false, Message = $"TobaccoInMix {tobacco.BrandName} {tobacco.AccName} was already added to mix." };
 
                 mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = tobacco.Id, Fraction = tobacco.Fraction});
             }
@@ -192,13 +190,13 @@ namespace smartHookah.Controllers.Api
                 var response = new TobaccoMixDTO()
                 {
                     Success = true,
-                    Message = "Tobacco mix was saved.",
+                    Message = "TobaccoInMix mix was saved.",
                     Id = mix.Id,
                     AccName = mix.AccName
                 };
                 foreach (var m in mix.Tobaccos)
                 {
-                    var x = new Tobacco()
+                    var x = new TobaccoInMix()
                     {
                         Id = m.Tobacco.Id,
                         Fraction = m.Fraction,
