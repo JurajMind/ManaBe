@@ -31,11 +31,11 @@ namespace smartHookah.Models.Dto
     {
         public int Id { get; set; }
         public string AccName { get; set; }
-        public ICollection<Tobacco> Tobaccos { get; set; }
+        public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
         public TobaccoMixDTO()
         {
-            this.Tobaccos = new List<Tobacco>();
+            this.Tobaccos = new List<TobaccoInMix>();
         }
     }
 
@@ -43,17 +43,17 @@ namespace smartHookah.Models.Dto
     {
         public int Id { get; set; }
         public string AccName { get; set; }
-        public ICollection<Tobacco> Tobaccos { get; set; }
+        public ICollection<TobaccoInMix> Tobaccos { get; set; }
         public int Used { get; set; }
         public double Overall { get; set; }
 
         public Mix()
         {
-            this.Tobaccos = new List<Tobacco>();
+            this.Tobaccos = new List<TobaccoInMix>();
         }
     }
 
-    public class Tobacco
+    public class TobaccoInMix
     {
         public int Id { get; set; }
         public string AccName { get; set; }
