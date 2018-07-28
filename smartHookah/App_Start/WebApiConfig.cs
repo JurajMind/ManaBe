@@ -16,6 +16,17 @@ namespace smartHookah
     {
         public static void Register(HttpConfiguration config)
         {
+            var jsonFormatter = new JsonMediaTypeFormatter
+            {
+                SerializerSettings =
+                {
+                    Formatting = (Formatting) System.Xml.Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }
+            };
+            config.Formatters.Clear();
+            config.Formatters.Insert(0, jsonFormatter);
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -29,6 +40,12 @@ namespace smartHookah
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional,action  = "DefaultAction" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "AnimControllerRoute",
+                routeTemplate: "api/Anim",
+                defaults: new { controller = "Animation", action = "DeafultAction", id = RouteParameter.Optional }
             );
         }
     }
