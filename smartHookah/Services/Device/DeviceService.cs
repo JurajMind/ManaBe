@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Device
+﻿using System.Collections.Generic;
+
+namespace smartHookah.Services.Device
 {
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
@@ -42,6 +44,17 @@
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
         {
             return this.iotService.GetOnlineStates(deviceIds);
+        }
+
+        public List<Animation> GetAnimations()
+        {
+            return AnimationHelper.Animations;
+        }
+
+        public int GetDeviceVersion(string id)
+        {
+            var hookah = db.Hookahs.FirstOrDefault(a => a.Code == id);
+            return hookah?.Version ?? -1;
         }
 
         private void SetAnimation(HookahSetting setting, int state, int value)

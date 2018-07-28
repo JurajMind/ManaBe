@@ -28,14 +28,14 @@
             return devices.Where(d => deviceIds.Contains(d.Id));
         }
 
-        public async Task<Device> GetDevidce(string deviceId)
+        public async Task<Device> GetDevice(string deviceId)
         {
             return await this.registryManager.GetDeviceAsync(deviceId);
         }
 
         public async Task<bool> GetOnlineState(string deviceId)
         {
-            var devices = await this.GetDevidce(deviceId);
+            var devices = await this.GetDevice(deviceId);
             return devices?.ConnectionState == DeviceConnectionState.Connected;
         }
 

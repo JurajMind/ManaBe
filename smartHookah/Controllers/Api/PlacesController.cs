@@ -21,7 +21,7 @@ namespace smartHookah.Controllers.Api
         {
             this._db = db;
         }
-        
+
 
         #region Search nearby places
 

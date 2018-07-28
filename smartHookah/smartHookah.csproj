@@ -888,6 +888,7 @@
     <Compile Include="Models\Db\Brand.cs" />
     <Compile Include="Models\Db\Place.cs" />
     <Compile Include="Models\Db\PlaceCalendar.cs" />
+    <Compile Include="Models\Dto\AnimationsDTO.cs" />
     <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
@@ -1515,6 +1516,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tobacco.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\SmokeSession\IInitDataService.cs" />
+    <Compile Include="Services\SmokeSession\InitDataService.cs" />
     <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
