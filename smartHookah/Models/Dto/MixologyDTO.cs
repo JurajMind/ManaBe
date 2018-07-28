@@ -27,15 +27,13 @@ namespace smartHookah.Models.Dto
         }
     }
 
-    public class TobaccoMixDTO : DTO
+    public class TobaccoMixSimpleDto : TobaccoSimpleSimpleDto
     {
-        public int Id { get; set; }
-        public string AccName { get; set; }
-        public ICollection<Tobacco> Tobaccos { get; set; }
+        public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
-        public TobaccoMixDTO()
+        public TobaccoMixSimpleDto()
         {
-            this.Tobaccos = new List<Tobacco>();
+            this.Tobaccos = new List<TobaccoInMix>();
         }
     }
 
@@ -43,21 +41,23 @@ namespace smartHookah.Models.Dto
     {
         public int Id { get; set; }
         public string AccName { get; set; }
-        public ICollection<Tobacco> Tobaccos { get; set; }
+        public ICollection<TobaccoInMix> Tobaccos { get; set; }
         public int Used { get; set; }
         public double Overall { get; set; }
 
         public Mix()
         {
-            this.Tobaccos = new List<Tobacco>();
+            this.Tobaccos = new List<TobaccoInMix>();
         }
     }
 
-    public class Tobacco
+    public class TobaccoInMix
     {
-        public int Id { get; set; }
-        public string AccName { get; set; }
-        public string BrandName { get; set; }
+        public TobaccoInMix()
+        {
+            Tobacco = new TobaccoSimpleSimpleDto();
+        }
+        public TobaccoSimpleSimpleDto Tobacco { get; set; }
         public int Fraction { get; set; }
     }
 

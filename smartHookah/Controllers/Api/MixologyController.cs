@@ -8,12 +8,17 @@ using System.Web.Mvc;
 using smartHookah.Models;
 using smartHookah.Models.Dto;
 
-using Tobacco = smartHookah.Models.Dto.Tobacco;
-
 namespace smartHookah.Controllers.Api
 {
     using System.Data.Entity;
+    using System.Net;
+    using System.Net.Http;
 
+    using DocumentFormat.OpenXml.Office2010.Excel;
+
+    using log4net;
+
+    using smartHookah.Migrations;
     using smartHookah.Services.Person;
 
     [System.Web.Http.RoutePrefix("api/Mixology")]
@@ -22,6 +27,8 @@ namespace smartHookah.Controllers.Api
         private readonly SmartHookahContext db;
 
         private readonly IPersonService personService;
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(MixologyController));
 
         public MixologyController(SmartHookahContext db,IPersonService personService)
         {
@@ -94,11 +101,17 @@ namespace smartHookah.Controllers.Api
                                 };
                     foreach (var x in r.Tobaccos)
                     {
-                        var t = new Models.Dto.Tobacco()
+                        var t = new Models.Dto.TobaccoInMix()
                                     {
-                                        Id = x.TobaccoId,
-                                        AccName = x.Tobacco.AccName,
-                                        BrandName = x.Tobacco.BrandName,
+                                        Tobacco = new TobaccoSimpleSimpleDto()
+                                                      {
+                                                          Id = x.TobaccoId,
+                                                          Name = x.Tobacco.AccName,
+                                                          BrandName = x.Tobacco.Brand.DisplayName,
+                                                          Type = "Tobbaco",
+                                                          SubCategory = x.Tobacco.SubCategory
+                                                          
+                                                      },
                                         Fraction = x.Fraction
                                     };
 
@@ -161,9 +174,13 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("AddToMix")]
-        public async Task<TobaccoMixDTO> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] Mix newMix)
+        public async Task<TobaccoMixSimpleDto> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] Mix newMix)
         {
-            if (newMix == null) return new TobaccoMixDTO() { Success = false, Message = "Mix is null." };
+            if (newMix == null)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    "Mix is null"));
+            }
 
             var author = this.personService.GetCurentPerson();
             var mix = new TobaccoMix()
@@ -176,34 +193,38 @@ namespace smartHookah.Controllers.Api
 
             foreach (var tobacco in newMix.Tobaccos)
             {
-                var t = this.db.Tobaccos.Find(tobacco.Id);
+                var t = this.db.Tobaccos.Find(tobacco.Tobacco.Id);
                 if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
-                    return new TobaccoMixDTO() { Success = false, Message = "Tobacco not fount or fraction not within acceptable range." };
-                
-                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Id))
-                    return new TobaccoMixDTO() { Success = false, Message = $"Tobacco {tobacco.BrandName} {tobacco.AccName} was already added to mix." };
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                        "TobaccoInMix not fount or fraction not within acceptable range."));
 
-                mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = tobacco.Id, Fraction = tobacco.Fraction});
+                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Tobacco.Id))
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                        $"TobaccoInMix {tobacco.Tobacco.BrandName} {tobacco.Tobacco.Name} was already added to mix."));
+
+                mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = tobacco.Tobacco.Id, Fraction = tobacco.Fraction});
             }
             try
             {
                 this.db.TobaccoMixs.AddOrUpdate(mix);
                 await this.db.SaveChangesAsync();
-                var response = new TobaccoMixDTO()
+                var response = new TobaccoMixSimpleDto()
                 {
-                    Success = true,
-                    Message = "Tobacco mix was saved.",
                     Id = mix.Id,
-                    AccName = mix.AccName
+                    Name = mix.AccName
                 };
                 foreach (var m in mix.Tobaccos)
                 {
-                    var x = new Tobacco()
+                    var x = new TobaccoInMix()
                     {
-                        Id = m.Tobacco.Id,
-                        Fraction = m.Fraction,
-                        AccName = m.Tobacco.AccName,
-                        BrandName = m.Tobacco.BrandName
+                        Tobacco =  new TobaccoSimpleSimpleDto()
+                                       {
+                                           Id = m.Tobacco.Id,
+                                           Name = m.Tobacco.AccName,
+                                           BrandId = m.Tobacco.BrandName,
+                                           BrandName = m.Tobacco.Brand.Name
+                                       },
+                        Fraction = m.Fraction
                     };
                     response.Tobaccos.Add(x);
                 }
@@ -211,7 +232,9 @@ namespace smartHookah.Controllers.Api
             }
             catch (Exception e)
             {
-                return new TobaccoMixDTO(){Success = false, Message = e.Message};
+                this.logger.Error(e);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError,
+                    $"Server error"));
             }
         }
 

@@ -95,5 +95,9 @@ namespace smartHookah.Models
             get { return RedisHelper.GetSmokeSessionId(this.Code); }
         }
 
+        [NotMapped]
+        public bool OnlineState { get; set; }
+
+
     }
 }

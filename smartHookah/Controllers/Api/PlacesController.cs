@@ -35,7 +35,7 @@ namespace smartHookah.Controllers.Api
             if (pageSize < 0) pageSize = 10;
 
             var result = new NearbyPlacesDTO();
-            result.NearbyPlaces = new List<PlaceResult>();
+            result.NearbyPlaces = new List<PlaceSimpleDTO>();
 
             IQueryable<Place> closestPlaces;
             var places = this._db.Places.Include("BusinessHours");
@@ -52,7 +52,7 @@ namespace smartHookah.Controllers.Api
 
             foreach (var place in closestPlaces)
             {
-                var p = new PlaceResult
+                var p = new PlaceSimpleDTO
                 {
                     Id = place.Id,
                     Address = place.Address,

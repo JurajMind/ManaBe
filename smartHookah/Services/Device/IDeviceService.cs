@@ -2,6 +2,7 @@
 
 namespace smartHookah.Services.Device
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using smartHookah.Helpers;
@@ -12,5 +13,7 @@ namespace smartHookah.Services.Device
         Task SetAnimation(string deviceId, Animation animation, PufType state);
         List<Animation> GetAnimations();
         int GetDeviceVersion(string id);
+
+        Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds);
     }
 }
