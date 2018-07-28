@@ -1,5 +1,6 @@
 ﻿namespace smartHookah.Services.Device
 {
+    using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System.Linq;
     using System.Threading.Tasks;
@@ -36,6 +37,11 @@
             this.SetAnimation(hookah.Setting, (int)state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
+        }
+
+        public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
+        {
+            return this.iotService.GetOnlineStates(deviceIds);
         }
 
         private void SetAnimation(HookahSetting setting, int state, int value)

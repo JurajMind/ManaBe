@@ -844,7 +844,14 @@
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
+    <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
+    <Compile Include="Models\Dto\TobaccoSimpleSimpleDto.cs" />
+    <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
+    <Compile Include="Models\Dto\HookahDto.cs" />
+    <Compile Include="Models\Dto\HookahSettingDto.cs" />
     <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\ValidationDTO.cs" />
     <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalTobacoMix.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalViewModel.cs" />
@@ -884,7 +891,6 @@
     <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
-    <Compile Include="Models\Dto\SmokeSessionDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />

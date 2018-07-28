@@ -7,7 +7,7 @@ namespace smartHookah.Models.Dto
 {
     public class NearbyPlacesDTO : DTO
     {
-        public ICollection<PlaceResult> NearbyPlaces { get; set; }
+        public ICollection<PlaceSimpleDTO> NearbyPlaces { get; set; }
     }
 
     public class OpeningDay
@@ -17,7 +17,7 @@ namespace smartHookah.Models.Dto
         public TimeSpan CloseTime { get; set; }
     }
 
-    public class PlaceResult
+    public class PlaceSimpleDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -27,10 +27,24 @@ namespace smartHookah.Models.Dto
         public ICollection<OpeningDay> BusinessHours { get; set; }
         public int Rating { get; set; }
 
-        public PlaceResult()
+        public PlaceSimpleDTO()
         {
             Address = new Address();
             BusinessHours = new List<OpeningDay>();
+        }
+
+        public static PlaceSimpleDTO FromModel(Place model)
+        {
+            return new PlaceSimpleDTO
+                       {
+                           Id = model.Id,
+                           Name = model.Name,
+                           FriendlyUrl = model.FriendlyUrl,
+                           LogoPath = model.LogoPath,
+                           Address = model.Address,
+                           //BusinessHours = model.BusinessHours.ToList(),
+                           //Rating = model.
+                       };
         }
     }
 }

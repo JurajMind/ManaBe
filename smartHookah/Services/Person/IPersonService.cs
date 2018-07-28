@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web;
 
     using Microsoft.AspNet.Identity;
@@ -17,9 +18,9 @@
 
         IQueryable<Person> GetCurentPersonIQuerable();
 
-        IEnumerable<Hookah> GetUserStands();
+        Task<IEnumerable<Hookah>> GetUserStands();
 
-        ICollection<Hookah> GetUserActiveStands(int? personId);
+        Task<ICollection<Hookah>> GetUserActiveStands(int? personId);
 
         ICollection<SmokeSession> GetUserActiveSessions(int? personId);
 

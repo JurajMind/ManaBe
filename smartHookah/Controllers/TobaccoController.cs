@@ -32,7 +32,7 @@ namespace smartHookah.Controllers
             this.personService = personService;
         }
 
-        // GET: Tobacco
+        // GET: TobaccoSimple
         public async Task<ActionResult> Brand()
         {
             return View(await db.Brands.Where(a => a.Tobacco).ToListAsync());
@@ -125,7 +125,7 @@ namespace smartHookah.Controllers
             return View(filterTobacco);
         }
 
-        // GET: Tobacco/Details/5
+        // GET: TobaccoSimple/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -380,8 +380,8 @@ namespace smartHookah.Controllers
                         //case "person":
                         //    tobacco =
                         //        db.Persons.FirstOrDefault(a => a.Id == int.Parse(filterPart[1]))
-                        //            .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.Tobacco != null)
-                        //            .Select(a => a.MetaData.Tobacco).ToList();
+                        //            .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.TobaccoSimple != null)
+                        //            .Select(a => a.MetaData.TobaccoSimple).ToList();
                     }
                 }
             }
@@ -401,7 +401,7 @@ namespace smartHookah.Controllers
             return View("_FilterTobaccoGrid", model);
         }
 
-        // GET: Tobacco/Create
+        // GET: TobaccoSimple/Create
         [Authorize]
         public ActionResult Create()
         {
@@ -409,7 +409,7 @@ namespace smartHookah.Controllers
             return View();
         }
 
-        // POST: Tobacco/Create
+        // POST: TobaccoSimple/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -428,7 +428,7 @@ namespace smartHookah.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        // GET: Tobacco/Edit/5
+        // GET: TobaccoSimple/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -439,7 +439,7 @@ namespace smartHookah.Controllers
             return View(tobacco);
         }
 
-        // POST: Tobacco/Edit/5
+        // POST: TobaccoSimple/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -456,7 +456,7 @@ namespace smartHookah.Controllers
             return View(tobacco);
         }
 
-        // GET: Tobacco/Delete/5
+        // GET: TobaccoSimple/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
@@ -468,7 +468,7 @@ namespace smartHookah.Controllers
             return View(tobacco);
         }
 
-        // POST: Tobacco/Delete/5
+        // POST: TobaccoSimple/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]

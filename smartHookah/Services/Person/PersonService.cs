@@ -4,6 +4,7 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Security.Principal;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.Owin;
@@ -11,6 +12,7 @@
 
     using smartHookah.Helpers;
     using smartHookah.Models;
+    using smartHookah.Services.Device;
 
     public class PersonService : IPersonService
     {
@@ -20,12 +22,15 @@
 
         private readonly IOwinContext owinContext;
 
-        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user)
+        private readonly IDeviceService deviceService;
+
+        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user, IDeviceService deviceService)
         {
             this.db = db;
             this.owinContext = owinContext;
 
             this.user = user;
+            this.deviceService = deviceService;
         }
 
         public Person GetCurentPerson()
@@ -53,29 +58,47 @@
             return this.db.Persons.Where(a => a.Id == user.PersonId.Value);
         }
 
-        public IEnumerable<Hookah> GetUserStands()
+        public async Task<IEnumerable<Hookah>> GetUserStands()
         {
             var user =this.owinContext.GetUserManager<ApplicationUserManager>()
                 .FindById(this.user.Identity.GetUserId());
             if (user == null) return new List<Hookah>();
 
-            if (this.user.IsInRole("Admin")) return this.db.Hookahs.ToList();
+//            if (this.user.IsInRole("Admin")) return await this.SetOnlineState(this.db.Hookahs);
 
-            if (user.Person != null) return user.Person.Hookahs.ToList();
+            if (user.Person != null) return await this.SetOnlineState(user.Person.Hookahs);
 
             return new List<Hookah>();
         }
 
-        public ICollection<Hookah> GetUserActiveStands(int? personId)
+
+        private async Task<IEnumerable<Hookah>> SetOnlineState(IEnumerable<Hookah> hookahs)
+        {
+            var onlineState = hookahs as Hookah[] ?? hookahs.ToArray();
+            var hookahIds = onlineState.Select(a => a.Code);
+            var deviceState = await this.deviceService.GetOnlineStates(hookahIds);
+            foreach (var hookah in onlineState)
+            {
+                bool state;
+                if (deviceState.TryGetValue(hookah.Code, out state))
+                {
+                    hookah.OnlineState = state;
+                }
+            }
+
+            return onlineState;
+        }
+
+        public async Task<ICollection<Hookah>> GetUserActiveStands(int? personId)
         {
             if (personId == null)
             {
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            return db.Hookahs
+            return await db.Hookahs
                 .Where(a => a.Owners.Any(x => x.Id == personId))
-                .Where(a => a.SmokeSessions.Any(x => x.Statistics == null)).ToList();
+                .Where(a => a.SmokeSessions.Any(x => x.Statistics == null)).ToListAsync();
         }
 
         public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
