@@ -46,7 +46,8 @@ namespace smartHookah.Controllers
         [Authorize]
         public async Task<ActionResult> Old()
         {
-            var model = new IndexMyViewModel { Hookah = this.personService.GetUserStands().ToList() };
+            var activeStands = await this.personService.GetUserStands();
+            var model = new IndexMyViewModel { Hookah = activeStands.ToList() };
 
             // model.Hookah = db.Hookahs.ToList();
             model.Online = await IotDeviceHelper.GetState(model.Hookah.Select(a => a.Code).ToList());
