@@ -14,6 +14,7 @@
 
     using smartHookah;
     using smartHookah.Models;
+    using smartHookah.Services.Device;
     using smartHookah.Services.Person;
 
     [TestFixture]
@@ -34,6 +35,8 @@
             mockSet.As<IQueryable<Person>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockSet.As<IQueryable<Person>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
+            var deviceServiceMock = new Mock<IDeviceService>(MockBehavior.Strict);
+
             var owinMock = new Mock<IOwinContext>(MockBehavior.Strict);
             var principal = new Mock<IPrincipal>(MockBehavior.Strict);
             var identityMock = new Mock<IIdentity>(MockBehavior.Strict);
@@ -50,7 +53,8 @@
             var service = new PersonService(
                 db.Object,
                 owinMock.Object,
-                principal.Object);
+                principal.Object,
+                deviceServiceMock.Object);
 
             var result = service.GetCurentPerson();
 

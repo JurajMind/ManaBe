@@ -147,7 +147,7 @@ namespace smartHookah.Controllers
                         $"{dbSmokeSession.MetaData.Bowl.Brand.Name} {dbSmokeSession.MetaData.Bowl.AccName}";
 
 
-                metaData.Cell("A3").Value = "Tobacco";
+                metaData.Cell("A3").Value = "TobaccoSimple";
                 if (dbSmokeSession.MetaData.Tobacco != null)
                     metaData.Cell("B3").Value =
                         $"{dbSmokeSession.MetaData.Tobacco.Brand.Name} {dbSmokeSession.MetaData.Tobacco.AccName}";

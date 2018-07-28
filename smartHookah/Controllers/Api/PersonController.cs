@@ -1,46 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+
 using smartHookah.Models;
 using smartHookah.Models.Dto;
 
 namespace smartHookah.Controllers.Api
 {
+    using System.Threading.Tasks;
+
     using smartHookah.Services.Person;
 
-    [System.Web.Http.RoutePrefix("api/Person")]
+    [RoutePrefix("api/Person")]
     public class PersonController : ApiController
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
 
-        private readonly IPersonService _personService;
+        private readonly IPersonService personService;
 
         public PersonController(SmartHookahContext db, IPersonService personService)
         {
-            this._db = db;
-            this._personService = personService;
+            this.db = db;
+            this.personService = personService;
         }
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("GetPersonActiveData")]
-        public PersonActiveDataDTO GetPersonActiveData(int? personId)
+        [HttpGet]
+        [Route("GetPersonActiveData")]
+        public async Task<PersonActiveDataDTO> GetPersonActiveData()
         {
-            var stands = _personService.GetUserActiveStands(personId);
-            var sessions = _personService.GetUserActiveSessions(personId);
-            var reservations = _personService.GetUserActiveReservations(personId);
-            var orders = _personService.GetUserHookahOrders(personId);
-            var gaming = _personService.GetUserGameProfile(personId);
-            return new PersonActiveDataDTO()
+            var person = this.personService.GetCurentPerson();
+
+            if (person == null)
             {
-                GameProfile = gaming,
-                ActiveHookahOrders = orders,
-                ActiveReservations = reservations,
-                ActiveSmokeSessions = sessions,
-                ActiveStands = stands
-            };
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Person not logged"));
+            }
+
+            var personId = person.Id;
+            var standTask = await this.personService.GetUserActiveStands(personId);
+            var stands = standTask.Select(HookahSimpleDto.FromModel).ToList();
+            var sessions = this.personService.GetUserActiveSessions(personId).Select(SmokeSessionSimpleDto.FromModel)
+                .ToList();
+            return new PersonActiveDataDTO() { ActiveSmokeSessions = sessions, Stands = stands };
         }
     }
 }
