@@ -14,6 +14,8 @@
     using smartHookah.Models;
     using smartHookah.Services.Device;
 
+    using smartHookahCommon;
+
     public class PersonService : IPersonService
     {
         private readonly SmartHookahContext db;
@@ -24,13 +26,16 @@
 
         private readonly IDeviceService deviceService;
 
-        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user, IDeviceService deviceService)
+        private readonly IRedisService redisService;
+
+        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user, IDeviceService deviceService, IRedisService redisService)
         {
             this.db = db;
             this.owinContext = owinContext;
 
             this.user = user;
             this.deviceService = deviceService;
+            this.redisService = redisService;
         }
 
         public Person GetCurentPerson()
@@ -108,7 +113,16 @@
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            return db.SmokeSessions.Where(a => a.Statistics == null).Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
+
+            var sessions = db.SmokeSessions.Where(a => a.Statistics == null).Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
+
+            foreach (var session in sessions)
+            {
+               var ds =  this.redisService.GetDynamicSmokeStatistic(session.SessionId);
+                session.DynamicSmokeStatistic = ds;
+            }
+
+            return sessions;
         }
 
         public ICollection<Reservation> GetUserActiveReservations(int? personId)

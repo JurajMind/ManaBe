@@ -17,6 +17,8 @@
     using smartHookah.Services.Device;
     using smartHookah.Services.Person;
 
+    using smartHookahCommon;
+
     [TestFixture]
     public class PersonServicesTests
     {
@@ -40,6 +42,7 @@
             var owinMock = new Mock<IOwinContext>(MockBehavior.Strict);
             var principal = new Mock<IPrincipal>(MockBehavior.Strict);
             var identityMock = new Mock<IIdentity>(MockBehavior.Strict);
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             identityMock.Setup(s => s.GetUserId()).Returns(userId);
             principal.SetupGet(a => a.Identity).Returns(identityMock.Object);
 
@@ -54,7 +57,8 @@
                 db.Object,
                 owinMock.Object,
                 principal.Object,
-                deviceServiceMock.Object);
+                deviceServiceMock.Object,
+                redisMock.Object);
 
             var result = service.GetCurentPerson();
 

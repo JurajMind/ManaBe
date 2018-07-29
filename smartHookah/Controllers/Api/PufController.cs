@@ -91,7 +91,7 @@ namespace smartHookah.Controllers.Api
                     longestPufMilis = ds.LongestPuf.TotalMilliseconds
                 };
 
-                var ownDs = new ClientDynamicSmokeStatistic(ds);
+                var ownDs = new DynamicSmokeStatisticDto(ds);
 
                 ClientContext.Clients.Group(session).updateStats(oldDs);
                 ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);

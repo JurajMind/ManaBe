@@ -10,6 +10,7 @@ namespace smartHookah.Controllers.Api
 {
     using System.Threading.Tasks;
 
+    using smartHookah.Models.Redis;
     using smartHookah.Services.Person;
 
     [RoutePrefix("api/Person")]

@@ -27,7 +27,7 @@ namespace smartHookah.Models.Dto
         }
     }
 
-    public class TobaccoMixSimpleDto : TobaccoSimpleSimpleDto
+    public class TobaccoMixSimpleDto : TobaccoSimpleDto
     {
         public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
@@ -55,9 +55,9 @@ namespace smartHookah.Models.Dto
     {
         public TobaccoInMix()
         {
-            Tobacco = new TobaccoSimpleSimpleDto();
+            Tobacco = new TobaccoSimpleDto();
         }
-        public TobaccoSimpleSimpleDto Tobacco { get; set; }
+        public TobaccoSimpleDto Tobacco { get; set; }
         public int Fraction { get; set; }
     }
 

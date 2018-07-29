@@ -847,7 +847,7 @@
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
-    <Compile Include="Models\Dto\TobaccoSimpleSimpleDto.cs" />
+    <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
     <Compile Include="Models\Dto\HookahDto.cs" />
     <Compile Include="Models\Dto\HookahSettingDto.cs" />

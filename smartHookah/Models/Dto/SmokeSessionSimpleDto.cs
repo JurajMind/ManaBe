@@ -3,11 +3,15 @@ using System.Linq;
 
 namespace smartHookah.Models.Dto
 {
+    using smartHookah.Models.Redis;
+
     public class SmokeSessionSimpleDto
     {
         public string SessionId { get; set; }
 
         public HookahSimpleDto Hookah { get; set; }
+
+        public DynamicSmokeStatisticDto Statistic { get; set; }
 
         public SmokeSessionMetaDataDto MetaData { get; set; }
 
@@ -21,6 +25,7 @@ namespace smartHookah.Models.Dto
                 Hookah = HookahSimpleDto.FromModel(model.Hookah), 
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData), 
                 Place = PlaceSimpleDTO.FromModel(model.Place), 
+                Statistic = new DynamicSmokeStatisticDto(model.DynamicSmokeStatistic)
 
             }; 
         }
