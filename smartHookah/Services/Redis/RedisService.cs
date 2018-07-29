@@ -4,6 +4,8 @@
 
     using ServiceStack.Redis;
 
+    using smartHookah.Models.Redis;
+
     public class RedisService : IRedisService
     {
         private readonly PooledRedisClientManager redisManager;
@@ -16,7 +18,16 @@
         {
             using (var redis = this.redisManager.GetClient())
             {
-                return redis.Get<string>("session:" + sessionId);
+                return redis.Get<string>($"session:{sessionId}");
+            }
+        }
+
+        public DynamicSmokeStatistic GetDynamicSmokeStatistic(string sessionId)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                return redis.Get<DynamicSmokeStatistic>($"DS:{sessionId}");
+                
             }
         }
     }

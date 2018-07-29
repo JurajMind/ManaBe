@@ -124,8 +124,8 @@ namespace smartHookah.Models
 
         public string Name { get; set; }
 
-        public ClientDynamicSmokeStatistic DynamicSmokeStatistic { get; set; } =
-            new ClientDynamicSmokeStatistic(new DynamicSmokeStatistic());
+        public DynamicSmokeStatisticDto DynamicSmokeStatisticDto { get; set; } =
+            new DynamicSmokeStatisticDto(new DynamicSmokeStatistic());
 
         public double EstPufCount { get; set; }
 
