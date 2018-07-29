@@ -8,7 +8,7 @@ namespace smartHookah.Models.Dto
 
         public int? TobaccoId { get; set; }
 
-        public TobaccoSimpleSimpleDto TobaccoSimpleSimple { get; set; }
+        public TobaccoSimpleDto TobaccoSimple { get; set; }
 
         public double TobaccoWeight { get; set; }
 
@@ -36,7 +36,7 @@ namespace smartHookah.Models.Dto
             {
                 Id = model.Id, 
                 TobaccoId = model.TobaccoId, 
-                TobaccoSimpleSimple = TobaccoSimpleSimpleDto.FromModel(model.Tobacco), 
+                TobaccoSimple = TobaccoSimpleDto.FromModel(model.Tobacco), 
                 TobaccoWeight = model.TobaccoWeight, 
                 AnonymPeopleCount = model.AnonymPeopleCount, 
                 BowlId = model.BowlId, 

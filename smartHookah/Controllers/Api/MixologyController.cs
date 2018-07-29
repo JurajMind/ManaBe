@@ -103,7 +103,7 @@ namespace smartHookah.Controllers.Api
                     {
                         var t = new Models.Dto.TobaccoInMix()
                                     {
-                                        Tobacco = new TobaccoSimpleSimpleDto()
+                                        Tobacco = new TobaccoSimpleDto()
                                                       {
                                                           Id = x.TobaccoId,
                                                           Name = x.Tobacco.AccName,
@@ -217,7 +217,7 @@ namespace smartHookah.Controllers.Api
                 {
                     var x = new TobaccoInMix()
                     {
-                        Tobacco =  new TobaccoSimpleSimpleDto()
+                        Tobacco =  new TobaccoSimpleDto()
                                        {
                                            Id = m.Tobacco.Id,
                                            Name = m.Tobacco.AccName,
