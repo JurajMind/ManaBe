@@ -8,6 +8,8 @@ using Microsoft.Azure.Mobile.Server.Tables;
 
 namespace smartHookah.Models
 {
+    using smartHookah.Models.Redis;
+
     public  class 
         SmokeSession
     {
@@ -65,6 +67,9 @@ namespace smartHookah.Models
         public int? PlaceId { get; set; }
         
         public virtual ICollection<HookahOrder> HookahOrder { get; set; }
+
+        [NotMapped]
+        public virtual DynamicSmokeStatistic DynamicSmokeStatistic { get; set; }
 
     }
 }
