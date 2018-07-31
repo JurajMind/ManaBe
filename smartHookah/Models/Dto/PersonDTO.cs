@@ -9,16 +9,16 @@ namespace smartHookah.Models.Dto
     {
         public ICollection<HookahSimpleDto> Stands { get; set; }
         public ICollection<SmokeSessionSimpleDto> ActiveSmokeSessions { get; set; }
-        // public ICollection<Reservation> ActiveReservations { get; set; }
-        // public ICollection<HookahOrder> ActiveHookahOrders { get; set; }
-        // public GameProfile GameProfile { get; set; }
+        public ICollection<ReservationDto> ActiveReservations { get; set; }
+        public ICollection<HookahOrderDto> ActiveHookahOrders { get; set; }
+         public GameProfileSimpleDto GameProfile { get; set; }
 
         public PersonActiveDataDTO()
         {
             Stands = new List<HookahSimpleDto>();
             ActiveSmokeSessions = new List<SmokeSessionSimpleDto>();
-            //ActiveReservations = new List<Reservation>();
-            //ActiveHookahOrders = new List<HookahOrder>();
+            ActiveReservations = new List<ReservationDto>();
+            ActiveHookahOrders = new List<HookahOrderDto>();
             //GameProfile = new GameProfile();
         }
     }

@@ -119,7 +119,7 @@
             foreach (var session in sessions)
             {
                var ds =  this.redisService.GetDynamicSmokeStatistic(session.SessionId);
-                session.DynamicSmokeStatistic = ds;
+               session.DynamicSmokeStatistic = ds;
             }
 
             return sessions;

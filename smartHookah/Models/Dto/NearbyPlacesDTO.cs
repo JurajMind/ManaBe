@@ -33,18 +33,15 @@ namespace smartHookah.Models.Dto
             BusinessHours = new List<OpeningDay>();
         }
 
-        public static PlaceSimpleDTO FromModel(Place model)
+        public static PlaceSimpleDTO FromModel(Place model) => model == null ? null : new PlaceSimpleDTO
         {
-            return new PlaceSimpleDTO
-                       {
-                           Id = model.Id,
-                           Name = model.Name,
-                           FriendlyUrl = model.FriendlyUrl,
-                           LogoPath = model.LogoPath,
-                           Address = model.Address,
-                           //BusinessHours = model.BusinessHours.ToList(),
-                           //Rating = model.
-                       };
-        }
+            Id = model.Id,
+            Name = model.Name,
+            FriendlyUrl = model.FriendlyUrl,
+            LogoPath = model.LogoPath,
+            Address = model.Address,
+            //BusinessHours = model.BusinessHours.ToList(),
+            //Rating = model.
+        };
     }
 }
