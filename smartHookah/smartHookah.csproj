@@ -844,8 +844,10 @@
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
+    <Compile Include="Models\Dto\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
