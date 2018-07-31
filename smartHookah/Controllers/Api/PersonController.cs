@@ -41,9 +41,22 @@ namespace smartHookah.Controllers.Api
             var personId = person.Id;
             var standTask = await this.personService.GetUserActiveStands(personId);
             var stands = standTask.Select(HookahSimpleDto.FromModel).ToList();
-            var sessions = this.personService.GetUserActiveSessions(personId).Select(SmokeSessionSimpleDto.FromModel)
+            var sessions = this.personService.GetUserActiveSessions(personId)
+                .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
-            return new PersonActiveDataDTO() { ActiveSmokeSessions = sessions, Stands = stands };
+            var reservations = this.personService.GetUserActiveReservations(personId)
+                .Select(Models.Dto.ReservationDto.FromModel).ToList();
+            var orders = this.personService.GetUserHookahOrders(personId).Select(HookahOrderDto.FromModel).ToList();
+            var gameProfile = GameProfileSimpleDto.FromModel(this.personService.GetUserGameProfile(personId));
+
+            return new PersonActiveDataDTO()
+            {
+                ActiveSmokeSessions = sessions,
+                Stands = stands,
+                ActiveReservations = reservations,
+                ActiveHookahOrders = orders,
+                GameProfile = gameProfile
+            };
         }
     }
 }
