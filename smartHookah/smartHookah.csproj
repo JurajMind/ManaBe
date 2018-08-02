@@ -838,6 +838,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Controllers\Api\DeviceController.cs" />
     <Compile Include="Controllers\Api\MixologyController.cs" />
     <Compile Include="Controllers\Api\PersonController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
@@ -855,6 +856,7 @@
     <Compile Include="Models\Dto\HookahSettingDto.cs" />
     <Compile Include="Models\Dto\PersonDTO.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
+    <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />
     <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalTobacoMix.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalViewModel.cs" />
