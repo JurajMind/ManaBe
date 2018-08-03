@@ -31,7 +31,7 @@ namespace smartHookah.Controllers.Api
                 var stats = RedisHelper.GetSmokeStatistic(hookahId: id);
 
                 if (stats != null && stats.PufCount > 0)
-                    await SmokeSessionController.EndSmokeSession(reddisSession, db);
+                    await Controllers.SmokeSessionController.EndSmokeSession(reddisSession, db);
             }
             catch (Exception e)
             {

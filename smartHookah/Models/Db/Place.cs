@@ -80,8 +80,7 @@ namespace smartHookah.Models
         public bool IsOpen(DateTime Open)
         {
             var todayInt = (int)Open.DayOfWeek;
-            if (this.BusinessHours == null) return false;
-            var todayOpenHours =this.BusinessHours.FirstOrDefault(a => a.Day == todayInt);
+            var todayOpenHours =BusinessHours?.FirstOrDefault(a => a.Day == todayInt);
 
             if (todayOpenHours == null)
                 return false;
@@ -217,10 +216,7 @@ namespace smartHookah.Models
             {
                 if (!string.IsNullOrEmpty(Name))
                     return Name;
-                if (Person == null)
-                    return Name;
-
-                return Person.User.First().Email;
+                return Person == null ? Name : Person.User.First().Email;
             } }
 
         public virtual ICollection<Person> Customers { get; set; }
@@ -228,12 +224,7 @@ namespace smartHookah.Models
         public string getEmail()
         {
             //Check if reservation is not created by manager
-            if(this.Place.Managers.Any(a => a.Id == this.PersonId))
-            {
-              //  return this.Person.User.First().Email;
-                return null;
-            }
-           return this.Person.User.First().Email;
+            return this.Place.Managers.Any(a => a.Id == this.PersonId) ? null : this.Person.User.First().Email;
         }
     }
 
@@ -303,35 +294,23 @@ namespace smartHookah.Models
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public string Path { get; set; }
-
         public MediaType Type { get; set; }
+        public bool IsDefault { get; set; }
         
         [NotMapped]
-        public string Extension {
-            get
-            {
-              return System.IO.Path.GetExtension(Path);
-             
-            } }
+        public string Extension => System.IO.Path.GetExtension(Path);
 
         [NotMapped]
-        public string FileName
-        {
-            get { return System.IO.Path.GetFileNameWithoutExtension(Path); }
-        }
+        public string FileName => System.IO.Path.GetFileNameWithoutExtension(Path);
 
         [NotMapped]
-        public string GetDirectory
-        {
-            get { return System.IO.Path.GetDirectoryName(Path); }
-        }
-
-
+        public string GetDirectory => System.IO.Path.GetDirectoryName(Path);
+        
         public string GetSize(int i)
         {
             var a = Path.ToString();
-            var LastDot = a.LastIndexOf(".");
-            return a.Insert(LastDot,"."+ i.ToString());
+            var lastDot = a.LastIndexOf(".", StringComparison.Ordinal);
+            return a.Insert(lastDot,"."+ i.ToString());
         }
     }
 

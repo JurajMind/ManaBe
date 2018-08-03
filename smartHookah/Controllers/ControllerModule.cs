@@ -9,6 +9,7 @@ namespace smartHookah.Controllers
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterControllers(typeof(HomeController).Assembly);
+
          }
     }
 

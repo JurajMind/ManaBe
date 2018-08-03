@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+using ServiceStack.Redis;
+
 using smartHookah.Hubs;
 using smartHookah.Support;
+
 using smartHookahCommon;
-using ServiceStack.Redis;
 
 namespace smartHookah.Models.Redis
 {
 
-    public class ClientDynamicSmokeStatistic
+    public class DynamicSmokeStatisticDto
     {
         public int PufCount { get; private set; }
         public string LastPuf { get; private set; }
@@ -21,8 +24,11 @@ namespace smartHookah.Models.Redis
         public string Duration { get; private set; }
         public double LongestPufMilis { get; private set; }
 
-        public ClientDynamicSmokeStatistic(DynamicSmokeStatistic ds)
+        public DynamicSmokeStatisticDto(DynamicSmokeStatistic ds)
        {
+            if(ds == null)
+                return;
+
            this.PufCount = ds.PufCount;
            this.LastPuf = ds.LastPufDuration.ToString(@"s\.fff");
 

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagesProcessor", "Messag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyEmulator", "KeyEmulator\KeyEmulator.csproj", "{E120F5F7-7281-4181-9F9F-AB2D35E6F078}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smartHookahTests", "smartHookahTests\smartHookahTests.csproj", "{363D9378-9D76-4888-A827-E2CA4D4684D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,34 +107,29 @@ Global
 		{E120F5F7-7281-4181-9F9F-AB2D35E6F078}.Release|x64.Build.0 = Release|Any CPU
 		{E120F5F7-7281-4181-9F9F-AB2D35E6F078}.Release|x86.ActiveCfg = Release|Any CPU
 		{E120F5F7-7281-4181-9F9F-AB2D35E6F078}.Release|x86.Build.0 = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|ARM.Build.0 = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|x64.Build.0 = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|ARM.ActiveCfg = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|ARM.Build.0 = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|x64.ActiveCfg = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|x64.Build.0 = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{363D9378-9D76-4888-A827-E2CA4D4684D4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {371EEE4C-9C7D-48F6-B6D0-FDEEA5575B41}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://hamornik.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = smartHookah\\smartHookah.csproj
-		SccProjectName1 = smartHookah
-		SccLocalPath1 = smartHookah
-		SccProjectUniqueName2 = smartHookahCommon\\smartHookahCommon.csproj
-		SccProjectName2 = smartHookahCommon
-		SccLocalPath2 = smartHookahCommon
-		SccProjectUniqueName3 = DeviceEmulator\\DeviceEmulator.csproj
-		SccProjectName3 = DeviceEmulator
-		SccLocalPath3 = DeviceEmulator
-		SccProjectUniqueName4 = MessagesProcessor\\MessagesProcessor.csproj
-		SccProjectName4 = MessagesProcessor
-		SccLocalPath4 = MessagesProcessor
-		SccProjectUniqueName5 = KeyEmulator\\KeyEmulator.csproj
-		SccProjectName5 = KeyEmulator
-		SccLocalPath5 = KeyEmulator
+		SolutionGuid = {371EEE4C-9C7D-48F6-B6D0-FDEEA5575B41}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
