@@ -12,6 +12,10 @@ using smartHookah.Models;
 
 namespace smartHookah.Helpers
 {
+    using System.Net;
+    using System.ServiceModel.Web;
+    using System.Web.Http;
+
     public static class IdentityHelpers
     {
         public static string GetUserIdUni(this IIdentity identity, SmartHookahContext db)
@@ -29,7 +33,7 @@ namespace smartHookah.Helpers
                 return db.Users.FirstOrDefault(x => x.Email == email)?.Id;
             }
 
-            return null;
+            throw new HttpResponseException(HttpStatusCode.Forbidden);
         }
 
         public static string GetUserNameUni(this IIdentity identity)

@@ -21,21 +21,21 @@ namespace smartHookah.Controllers.Api
         {
             this._db = db;
         }
-        
+
 
         #region Search nearby places
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDTO> SearchNearby(float? lng = null, float? lat = null, int page = 10)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lng = null, float? lat = null)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
-                return new NearbyPlacesDTO {Message = "Cannot find your location."};
-            if (page < 0) page = 10;
+                return new NearbyPlacesDto {Success = false, Message = "Cannot find your location."};
+            if (pageSize < 0) pageSize = 10;
 
-            var result = new NearbyPlacesDTO();
-            result.NearbyPlaces = new List<PlaceResult>();
+            var result = new NearbyPlacesDto();
+            result.NearbyPlaces = new List<PlaceSimpleDto>();
 
             IQueryable<Place> closestPlaces;
             var places = this._db.Places.Include("BusinessHours");
@@ -43,23 +43,22 @@ namespace smartHookah.Controllers.Api
             {
                 var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
 
-                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Take(page);
+                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
             }
             else
             {
-                closestPlaces = places.OrderBy(a => a.Id).Take(page);
+                closestPlaces = places.OrderBy(a => a.Id).Skip(pageSize * page).Take(pageSize);
             }
 
             foreach (var place in closestPlaces)
             {
-                var p = new PlaceResult
+                var p = new PlaceSimpleDto
                 {
                     Id = place.Id,
                     Address = place.Address,
                     FriendlyUrl = place.FriendlyUrl,
                     LogoPath = place.LogoPath,
-                    Name = place.Name,
-                    Rating = 0
+                    Name = place.Name
                 };
                 foreach (var item in place.PlaceDays)
                 {
@@ -72,6 +71,10 @@ namespace smartHookah.Controllers.Api
                     p.BusinessHours.Add(h);
                 }
 
+                foreach (var media in place.Medias)
+                {
+                    p.Medias.Add(MediaDto.FromModel(media));
+                }
                 result.NearbyPlaces.Add(p);
             }
 

@@ -179,8 +179,8 @@
                         {
                             Key = hookah.Code,
                             Name = hookah.Name,
-                            DynamicSmokeStatistic =
-                                new ClientDynamicSmokeStatistic(dynamicOut),
+                            DynamicSmokeStatisticDto =
+                                new DynamicSmokeStatisticDto(dynamicOut),
                             Online = onlineHookah.Contains(hookah.Code),
                             EstPufCount = (int)estTobaco,
                             HookahPicture = hookahPicture,

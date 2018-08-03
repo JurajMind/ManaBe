@@ -536,6 +536,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ninja.WebSockets, Version=1.0.1.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninja.WebSockets.1.1.2\lib\net45\Ninja.WebSockets.dll</HintPath>
+    </Reference>
     <Reference Include="NodaTime, Version=2.0.3.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.0.3\lib\net45\NodaTime.dll</HintPath>
     </Reference>
@@ -686,6 +689,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.8.1\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
@@ -834,10 +838,46 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
+    <Compile Include="Controllers\Api\DeviceController.cs" />
+    <Compile Include="Controllers\Api\MixologyController.cs" />
+    <Compile Include="Controllers\Api\PersonController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
+    <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
+    <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.Designer.cs">
+      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dto\GameProfileDto.cs" />
+    <Compile Include="Models\Dto\InitDataDTO.cs" />
+    <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
+    <Compile Include="Models\Dto\PlaceDto.cs" />
+    <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
+    <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
+    <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
+    <Compile Include="Models\Dto\HookahDto.cs" />
+    <Compile Include="Models\Dto\HookahSettingDto.cs" />
+    <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\ValidationDTO.cs" />
+    <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />
+    <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalTobacoMix.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeMetadataModalViewModel.cs" />
+    <Compile Include="Controllers\SmokeStatisticViewModel.cs" />
+    <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
+    <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <Compile Include="Services\Device\DeviceService.cs" />
+    <Compile Include="Services\Device\IDeviceService.cs" />
+    <Compile Include="Services\Device\IIotService.cs" />
+    <Compile Include="Services\Device\IotService.cs" />
+    <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Person\IPersonService.cs" />
+    <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
+    <Compile Include="Services\Person\PersonService.cs" />
+    <Compile Include="Services\Redis\IRedisService.cs" />
+    <Compile Include="Services\Redis\RedisService.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.cs" />
     <Compile Include="Migrations\201805231838494_gdpr.Designer.cs">
       <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
@@ -854,9 +894,12 @@
     <Compile Include="Migrations\201807061525281_cleanBh.Designer.cs">
       <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Db\Brand.cs" />
     <Compile Include="Models\Db\Place.cs" />
     <Compile Include="Models\Db\PlaceCalendar.cs" />
-    <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
+    <Compile Include="Models\Dto\AnimationsDTO.cs" />
+    <Compile Include="Models\Dto\MixologyDTO.cs" />
+    <Compile Include="Models\Dto\NearbyPlacesDto.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -876,11 +919,9 @@
     <Compile Include="Controllers\BowlsController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\Mobile\AccountController.cs" />
-    <Compile Include="Controllers\Mobile\PersonController.cs" />
     <Compile Include="Controllers\Mobile\PlaceController.cs" />
-    <Compile Include="Controllers\Mobile\SmokeSessionController.cs" />
-    <Compile Include="Models\ViewModel\OrderSpecificModel.cs" />
-    <Compile Include="Models\ViewModel\PriceGroupDto.cs" />
+    <Compile Include="Models\ViewModel\Places\OrderSpecificModel.cs" />
+    <Compile Include="Models\ViewModel\Places\PriceGroupDto.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -959,23 +1000,23 @@
     </Compile>
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
-    <Compile Include="Models\ViewModel\ActiveSessionListItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />
     <Compile Include="Models\Db\SmokeEvent.cs" />
     <Compile Include="Models\Db\SmokeEventType.cs" />
     <Compile Include="Models\Db\StandUsage.cs" />
     <Compile Include="Models\Db\Tag.cs" />
-    <Compile Include="Models\ViewModel\EditOpenHoursPostModel.cs" />
-    <Compile Include="Models\ViewModel\EditOpenHoursViewModel.cs" />
+    <Compile Include="Models\ViewModel\Places\EditOpenHoursPostModel.cs" />
+    <Compile Include="Models\ViewModel\Places\EditOpenHoursViewModel.cs" />
     <Compile Include="Controllers\GamificationController.cs" />
-    <Compile Include="Controllers\GetPlaceMenuModel.cs" />
-    <Compile Include="Models\ViewModel\Hours.cs" />
+    <Compile Include="Models\ViewModel\Places\GetPlaceMenuModel.cs" />
+    <Compile Include="Models\ViewModel\Places\Hours.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Models\ViewModel\OrderHookahViewModel.cs" />
     <Compile Include="Models\ViewModel\PlaceDetailsViewModel.cs" />
-    <Compile Include="Models\ViewModel\PlaceModels.cs" />
-    <Compile Include="Models\ViewModel\PostOrderModel.cs" />
+    <Compile Include="Models\ViewModel\Places\PlaceModels.cs" />
+    <Compile Include="Models\ViewModel\Places\PostOrderModel.cs" />
     <Compile Include="Filters\HangfireFilter.cs" />
     <Compile Include="Filters\LocalizationAttribute.cs" />
     <Compile Include="Helpers\ImageActionLinkHelper.cs" />
@@ -1167,8 +1208,8 @@
     <Compile Include="Controllers\QrCodeReaderController.cs" />
     <Compile Include="Controllers\ResourcesController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
-    <Compile Include="Models\ViewModel\SeatManagerModel.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionGetStaticsticsModel.cs" />
+    <Compile Include="Models\ViewModel\Places\SeatManagerModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionGetStaticsticsModel.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
     <Compile Include="Helpers\ExpandPropertyAttribute.cs" />
@@ -1279,15 +1320,15 @@
       <DependentUpon>201706280859540_layerMethod.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\GameProfile.cs" />
-    <Compile Include="Models\ViewModel\Notificatiom.cs" />
+    <Compile Include="Models\Db\Notificatiom.cs" />
     <Compile Include="Models\ViewModel\PersonModel.cs" />
     <Compile Include="Models\Db\Puf.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionListItemViewModel.cs" />
-    <Compile Include="Models\ViewModel\SmokeSessionViewModel.cs" />
-    <Compile Include="Models\ViewModel\SaveSmokeMetadataModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionListItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SaveSmokeMetadataModel.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="Controllers\SmokeSessionController.cs" />
-    <Compile Include="Models\ViewModel\SmokeViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\SmokeViewModel.cs" />
     <Compile Include="Controllers\TobaccoController.cs" />
     <Compile Include="Controllers\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -1407,7 +1448,7 @@
     <Compile Include="Models\Db\SmokeSessionStatistics.cs" />
     <Compile Include="Models\Db\StandPicture.cs" />
     <Compile Include="Models\Db\Update.cs" />
-    <Compile Include="Models\ViewModel\TobaccoListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SmokeSession\TobaccoListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Account\Account.sk.Designer.cs">
       <DependentUpon>Account.sk.resx</DependentUpon>
@@ -1484,20 +1525,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tobacco.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\SmokeSession\IInitDataService.cs" />
+    <Compile Include="Services\SmokeSession\InitDataService.cs" />
     <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Support\DataAnotation.cs" />
-    <Compile Include="Support\DTO.cs" />
     <Compile Include="Support\Extensions.cs" />
-    <Compile Include="Support\FixedSizeQueue.cs" />
     <Compile Include="Support\Helper.cs" />
-    <Compile Include="Support\Infrastructure\MapperBase.cs" />
     <Compile Include="Support\QrCodeHelper.cs" />
     <Compile Include="Support\Support.cs" />
     <Compile Include="SwaggerExtensions\SwaggerAccesMessegeHandler.cs" />
     <Compile Include="TagHelpers\ScriptTagHelper.cs" />
+    <Compile Include="WebSocketServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\app.js" />
@@ -1725,6 +1766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
       <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.resx">
+      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
@@ -1998,8 +2042,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Old.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -2029,7 +2071,6 @@
     <Content Include="Views\Home\hookah.cshtml" />
     <Content Include="Views\Shared\Smoke.cshtml" />
     <Content Include="Views\SmokeSession\GetLiveSmokeStatics.cshtml" />
-    <Content Include="Views\Home\_TypeStats.cshtml" />
     <Content Include="Views\Places\Create.cshtml" />
     <Content Include="Views\Places\Delete.cshtml" />
     <Content Include="Views\Places\Details.cshtml" />
