@@ -845,6 +845,10 @@
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
+    <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.Designer.cs">
+      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
@@ -895,7 +899,7 @@
     <Compile Include="Models\Db\PlaceCalendar.cs" />
     <Compile Include="Models\Dto\AnimationsDTO.cs" />
     <Compile Include="Models\Dto\MixologyDTO.cs" />
-    <Compile Include="Models\Dto\NearbyPlacesDTO.cs" />
+    <Compile Include="Models\Dto\NearbyPlacesDto.cs" />
     <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -1762,6 +1766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
       <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.resx">
+      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />

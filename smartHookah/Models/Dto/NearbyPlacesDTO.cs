@@ -5,9 +5,14 @@ using System.Web;
 
 namespace smartHookah.Models.Dto
 {
-    public class NearbyPlacesDTO : DTO
+    public class NearbyPlacesDto : DTO
     {
-        public ICollection<PlaceSimpleDTO> NearbyPlaces { get; set; }
+        public ICollection<PlaceSimpleDto> NearbyPlaces { get; set; }
+
+        public NearbyPlacesDto()
+        {
+            NearbyPlaces = new List<PlaceSimpleDto>();
+        }
     }
 
     public class OpeningDay
@@ -17,7 +22,7 @@ namespace smartHookah.Models.Dto
         public TimeSpan CloseTime { get; set; }
     }
 
-    public class PlaceSimpleDTO
+    public class PlaceSimpleDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -26,14 +31,16 @@ namespace smartHookah.Models.Dto
         public Address Address { get; set; }
         public ICollection<OpeningDay> BusinessHours { get; set; }
         public int Rating { get; set; }
+        public ICollection<MediaDto> Medias { get; set; }
 
-        public PlaceSimpleDTO()
+        public PlaceSimpleDto()
         {
             Address = new Address();
             BusinessHours = new List<OpeningDay>();
+            Medias = new List<MediaDto>();
         }
 
-        public static PlaceSimpleDTO FromModel(Place model) => model == null ? null : new PlaceSimpleDTO
+        public static PlaceSimpleDto FromModel(Place model) => model == null ? null : new PlaceSimpleDto
         {
             Id = model.Id,
             Name = model.Name,
@@ -42,6 +49,24 @@ namespace smartHookah.Models.Dto
             Address = model.Address,
             //BusinessHours = model.BusinessHours.ToList(),
             //Rating = model.
+        };
+    }
+
+    public class MediaDto
+    {
+        public int Id { get; set; }
+        public DateTime Created { get; set; }
+        public string Path { get; set; }
+        public MediaType Type { get; set; }
+        public bool IsDefault { get; set; }
+
+        public static MediaDto FromModel(Media model) => model == null ? null : new MediaDto
+        {
+            Id = model.Id,
+            Created = model.Created,
+            Path = model.Path,
+            Type = model.Type,
+            IsDefault = model.IsDefault
         };
     }
 }
