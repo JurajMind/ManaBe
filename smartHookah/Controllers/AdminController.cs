@@ -37,7 +37,7 @@ namespace smartHookah.Controllers
         {
             var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
 
-            var smokeSessionToDelete = smokeSession.Where(a => a.Hookah.SessionCode != a.SessionId);
+            var smokeSessionToDelete = smokeSession.Where(a => a.Hookah.SessionCode != a.SessionId && a.Review == null);
 
             var sessionToDelete = smokeSessionToDelete as SmokeSession[] ?? smokeSessionToDelete.ToArray();
             db.SmokeSessions.RemoveRange(sessionToDelete);
