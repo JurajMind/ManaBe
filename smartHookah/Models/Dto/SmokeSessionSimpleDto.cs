@@ -15,7 +15,7 @@ namespace smartHookah.Models.Dto
 
         public SmokeSessionMetaDataDto MetaData { get; set; }
 
-        public PlaceSimpleDTO Place { get; set; }
+        public PlaceSimpleDto Place { get; set; }
 
         public static SmokeSessionSimpleDto FromModel(SmokeSession model)
         {
@@ -24,7 +24,7 @@ namespace smartHookah.Models.Dto
                 SessionId = model.SessionId, 
                 Hookah = HookahSimpleDto.FromModel(model.Hookah), 
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData), 
-                Place = PlaceSimpleDTO.FromModel(model.Place), 
+                Place = PlaceSimpleDto.FromModel(model.Place), 
                 Statistic = new DynamicSmokeStatisticDto(model.DynamicSmokeStatistic)
 
             }; 
