@@ -7,6 +7,8 @@ using DocumentFormat.OpenXml.Math;
 
 namespace smartHookah.Models.Dto
 {
+    using Accord.Statistics;
+
     public class MixCreatorsDTO : DTO
     {
         public ICollection<MixCreator> MixCreatorsList { get; set; }
@@ -35,6 +37,27 @@ namespace smartHookah.Models.Dto
         {
             this.Tobaccos = new List<TobaccoInMix>();
         }
+
+        public TobaccoMixSimpleDto FromModel(TobaccoMix model)
+        {
+            var result = new TobaccoMixSimpleDto()
+                             {
+                                 Name = model.AccName,
+                                 Id = model.Id,
+                                 BrandName = model.Brand.Name,
+                                 BrandId = model.BrandName,
+                                 Type = "TobaccoMix",
+                                 Tobaccos = model.Tobaccos.Select(
+                                     a => new TobaccoInMix()
+                                              {
+                                                  Fraction = a.Fraction,
+                                                  Tobacco = TobaccoSimpleDto
+                                                      .FromModel(a.Tobacco)
+                                              }).ToList()
+                             };
+
+            return result;
+        }
     }
 
     public class Mix
@@ -49,6 +72,22 @@ namespace smartHookah.Models.Dto
         {
             this.Tobaccos = new List<TobaccoInMix>();
         }
+
+        public static Mix FromModel(TobaccoMix model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+            var result = new Mix()
+                             {
+                                 Id = model.Id,
+                                 AccName = model.AccName,
+                                 Tobaccos = model.Tobaccos.Select(TobaccoInMix.FromModel).ToList()
+                             };
+
+            return result;
+        }
     }
 
     public class TobaccoInMix
@@ -59,6 +98,15 @@ namespace smartHookah.Models.Dto
         }
         public TobaccoSimpleDto Tobacco { get; set; }
         public int Fraction { get; set; }
+
+        public static TobaccoInMix FromModel(TobacoMixPart tobacoMixPart)
+        {
+            return new TobaccoInMix()
+                       {
+                           Fraction = tobacoMixPart.Fraction,
+                           Tobacco = TobaccoSimpleDto.FromModel(tobacoMixPart.Tobacco)
+                       };
+        }
     }
 
     public class MixCreator

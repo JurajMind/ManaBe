@@ -8,11 +8,15 @@ using smartHookah.Models.Redis;
 
 namespace smartHookah.Services.SmokeSession
 {
-    interface IInitDataService
+    using SmokeSession = smartHookah.Models.SmokeSession;
+
+    public interface ISmokeSessionService
     {
         DynamicSmokeStatistic GetRedisData(string id);
         SmokeSessionStatistics GetStatistics(string id);
         SmokeSessionMetaData GetMetaData(string id);
         HookahSetting GetStandSettings(string id);
+        SmokeSession GetLiveSmokeSession(string id);
+       
     }
 }

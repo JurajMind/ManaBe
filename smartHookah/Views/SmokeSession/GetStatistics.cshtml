@@ -111,8 +111,18 @@
     
      <div class="card mb-2">
          <h4 class="card-header"><i class="fa fa-pencil-square-o"></i>@LocalizationHelper.Translate("GetStatisticsSmokeReview", "SmokeSession")</h4>
+        
+   
          <div class="card-block" id="reviewTable">
-             @Html.Partial("~/Views/TobaccoReviews/smokeSessionReview.cshtml", Model.SessionReview)
+             @if (Model.Share)
+             {
+                 @Html.Partial("~/Views/TobaccoReviews/smokeSessionReview.cshtml", Model.SessionReview)
+             }
+             else
+             {
+                 @Html.Partial("~/Views/TobaccoReviews/_TobaccoReview.cshtml")
+             }
+          
          </div>
      </div>
     
@@ -210,9 +220,7 @@
 {
     <div>   @Html.Partial("smokeMetaDataModal", Model.SmokeMetadataModalViewModel)</div>
 
-    <div>
-        @Html.Partial("~/Views/TobaccoReviews/TobaccoReviewModal.cshtml", Model.SessionReview)
-    </div>
+
 }
 @section scripts
 {
