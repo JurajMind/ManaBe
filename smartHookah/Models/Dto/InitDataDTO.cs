@@ -7,10 +7,9 @@ namespace smartHookah.Models.Dto
 {
     using smartHookah.Models.Redis;
 
-    public class InitDataDTO 
+    public class InitDataDto 
     {
-        public DynamicSmokeStatistic RedisStatistics { get; set; }
-        public SmokeSessionMetaDataDto SessionMetaData { get; set; }
+        public SmokeSessionSimpleDto SmokeSession { get; set; }
         public StandSettings StandSettings { get; set; }
     }
 
@@ -20,31 +19,37 @@ namespace smartHookah.Models.Dto
         public ActionSettings BlowSettings { get; set; }
         public ActionSettings IdleSettings { get; set; }
 
-        public StandSettings(HookahSetting settings)
+        public static StandSettings FromModel(HookahSetting settings)
         {
-            PuffSettings = new ActionSettings()
-                               {
-                                   Color = settings.Color,
-                                   AnimationId = settings.PufAnimation,
-                                   Brightness = settings.PufBrightness,
-                                   Speed = settings.PufSpeed
-                               };
-            BlowSettings = new ActionSettings()
-                               {
-                                   Color = settings.Color,
-                                   AnimationId = settings.BlowAnimation,
-                                   Brightness = settings.PufBrightness,
-                                   Speed = settings.PufSpeed
-                               };
-            IdleSettings = new ActionSettings()
-                               {
-                                   Color = settings.Color,
-                                   AnimationId = settings.IdleAnimation,
-                                   Brightness = settings.IdleBrightness,
-                                   Speed = settings.IdleSpeed
-                               };
+            return new StandSettings()
+                       {
+                           PuffSettings =
+                               new ActionSettings()
+                                   {
+                                       Color = settings.Color,
+                                       AnimationId = settings.PufAnimation,
+                                       Brightness = settings.PufBrightness,
+                                       Speed = settings.PufSpeed
+                                   },
+                           BlowSettings =
+                               new ActionSettings()
+                                   {
+                                       Color = settings.Color,
+                                       AnimationId = settings.BlowAnimation,
+                                       Brightness = settings.PufBrightness,
+                                       Speed = settings.PufSpeed
+                                   },
+                           IdleSettings =
+                               new ActionSettings()
+                                   {
+                                       Color = settings.Color,
+                                       AnimationId = settings.IdleAnimation,
+                                       Brightness = settings.IdleBrightness,
+                                       Speed = settings.IdleSpeed
+                                   }
+                       };
         }
-    }
+}
 
     public class ActionSettings
     {

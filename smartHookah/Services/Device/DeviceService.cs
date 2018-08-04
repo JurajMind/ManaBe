@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace smartHookah.Services.Device
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
     using System.Threading.Tasks;
@@ -140,6 +141,12 @@ namespace smartHookah.Services.Device
         {
             var hookah = db.Hookahs.FirstOrDefault(a => a.Code == id);
             return hookah?.Version ?? -1;
+        }
+
+        public HookahSetting GetStandSettings(string id)
+        {
+            var hookah = db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Code == id);
+            return hookah?.Setting;
         }
 
         private void SetAnimation(HookahSetting setting, int state, int value)
