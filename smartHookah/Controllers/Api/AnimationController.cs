@@ -54,17 +54,6 @@ namespace smartHookah.Controllers
             };
         }
 
-        [System.Web.Http.ActionName("DefaultAction")]
-        public HttpResponseMessage GetAnimation(string id)
-        {
-            var result = string.Join(" ", Enumerable.Repeat(id, 10));
-            result += '\r';
-            string yourJson = result;
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(yourJson, Encoding.UTF8, "application/json");
-            return response;
-        }
-
         #endregion
     }
 }

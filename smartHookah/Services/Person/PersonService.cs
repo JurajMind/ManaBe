@@ -65,17 +65,33 @@
 
         public async Task<IEnumerable<Hookah>> GetUserStands()
         {
-            var user =this.owinContext.GetUserManager<ApplicationUserManager>()
-                .FindById(this.user.Identity.GetUserId());
-            if (user == null) return new List<Hookah>();
+            ApplicationUser curentUser = GetCurentUser();
+            if (curentUser == null) return new List<Hookah>();
 
-//            if (this.user.IsInRole("Admin")) return await this.SetOnlineState(this.db.Hookahs);
+           
 
-            if (user.Person != null) return await this.SetOnlineState(user.Person.Hookahs);
+            if (curentUser.Person != null) return await this.SetOnlineState(curentUser.Person.Hookahs);
 
             return new List<Hookah>();
         }
 
+
+
+        public async Task<IEnumerable<Hookah>> GetAllStands()
+        {
+
+            if (this.user.IsInRole("Admin"))
+            {
+                return await this.SetOnlineState(this.db.Hookahs);
+            }
+            return null;
+
+        }
+        private ApplicationUser GetCurentUser()
+        {
+            return this.owinContext.GetUserManager<ApplicationUserManager>()
+                .FindById(this.user.Identity.GetUserId());
+        }
 
         private async Task<IEnumerable<Hookah>> SetOnlineState(IEnumerable<Hookah> hookahs)
         {
