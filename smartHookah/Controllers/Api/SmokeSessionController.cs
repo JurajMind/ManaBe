@@ -16,9 +16,12 @@ namespace smartHookah.Controllers.Api
     {
         private readonly SmartHookahContext db;
 
-        public SmokeSessionController(SmartHookahContext db)
+        private readonly ISmokeSessionService sessionService;
+
+        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService)
         {
             this.db = db;
+            this.sessionService = sessionService;
         }
 
         #region Getters and Validators
@@ -58,7 +61,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("InitData")]
-        public InitDataDTO InitData(string id)
+        public InitDataDto InitData(string id)
         {
             if (id == null || id.Length != 5)
             {
@@ -66,25 +69,18 @@ namespace smartHookah.Controllers.Api
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Id \'{id}\' not valid."));
             }
 
-            var service = new InitDataService(this.db);
+            var session = this.sessionService.GetLiveSmokeSession(id);
 
-            var redis = service.GetRedisData(id);
-            var stats = service.GetStatistics(id);
-            var metadata = service.GetMetaData(id);
-            var settings = service.GetStandSettings(id);
-
-            if (redis == null && stats == null && settings == null && metadata == null)
+            if (session == null)
             {
                 throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"No data found for id \'{id}\'."));
+                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Id \'{id}\' was not found."));
             }
+            
+            var smokeSession =  SmokeSessionSimpleDto.FromModel(session);
 
-            return new InitDataDTO()
-                       {
-                           RedisStatistics = redis,
-                           SessionMetaData = SmokeSessionMetaDataDto.FromModel(metadata),
-                           StandSettings = settings == null ? null : new StandSettings(settings)
-                       };
+            var standSetting = StandSettings.FromModel(session.Hookah.Setting);
+            return new InitDataDto() { SmokeSession = smokeSession, StandSettings = standSetting };
         }
 
         #endregion
