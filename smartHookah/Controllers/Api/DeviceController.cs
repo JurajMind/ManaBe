@@ -13,6 +13,10 @@ using smartHookah.Services.Device;
 
 namespace smartHookah.Controllers.Api
 {
+    using MaxMind.GeoIP2.Exceptions;
+
+    using smartHookah.Models.Dto;
+
     [RoutePrefix("api/Device")]
     public class DeviceController : ApiController
     {
@@ -166,6 +170,24 @@ namespace smartHookah.Controllers.Api
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+        [HttpGet, Route("{id}/StandSetting")]
+        public StandSettings GetStandSetting(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new HttpException($"Stand with id {id} not found",HttpStatusCode.NotFound,this.Request.RequestUri);
+            }
+
+            var setting = this._deviceService.GetStandSettings(id);
+
+            if (setting == null)
+            {
+                throw new HttpException($"Stand with id {id} not found", HttpStatusCode.NotFound, this.Request.RequestUri);
+            }
+
+            return StandSettings.FromModel(setting);
+
         }
     }
 }
