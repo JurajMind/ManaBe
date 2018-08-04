@@ -18,6 +18,8 @@ namespace smartHookah.Controllers.Api
 
     using log4net;
 
+    using MaxMind.GeoIP2.Exceptions;
+
     using smartHookah.Migrations;
     using smartHookah.Services.Person;
 
@@ -49,7 +51,13 @@ namespace smartHookah.Controllers.Api
             }
             else if (author == "me")
             {
-                var userId = this.personService.GetCurentPerson().Id;
+                var user = this.personService.GetCurentPerson();
+                if (user == null)
+                {
+                    throw new HttpException("User not found",HttpStatusCode.Unauthorized,Request.RequestUri);
+                }
+                ;
+                var userId = user.Id;
                 query = from m in query where m.Author.Id == userId select m;
             }
 

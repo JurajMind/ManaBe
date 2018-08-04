@@ -10,6 +10,8 @@ namespace smartHookah.Models.Dto
 
         public TobaccoSimpleDto TobaccoSimple { get; set; }
 
+        public Mix TobaccoMix { get; set; }
+
         public double TobaccoWeight { get; set; }
 
         public int AnonymPeopleCount { get; set; }
@@ -32,11 +34,14 @@ namespace smartHookah.Models.Dto
 
         public static SmokeSessionMetaDataDto FromModel(SmokeSessionMetaData model)
         {
+
+          
             return new SmokeSessionMetaDataDto()
             {
                 Id = model.Id, 
                 TobaccoId = model.TobaccoId, 
-                TobaccoSimple = TobaccoSimpleDto.FromModel(model.Tobacco), 
+                TobaccoSimple = TobaccoSimpleDto.FromModel(model.Tobacco),
+                TobaccoMix = Mix.FromModel(model.Tobacco as TobaccoMix),
                 TobaccoWeight = model.TobaccoWeight, 
                 AnonymPeopleCount = model.AnonymPeopleCount, 
                 BowlId = model.BowlId, 
