@@ -32,7 +32,12 @@ namespace smartHookah.Models
 
         public virtual ICollection<Media> Mediae { get; set; }
 
-        public virtual ICollection<Person> FavoritdBy { get; set; }
+        public virtual ICollection<PipeAccesoryLike> Likes { get; set; }
+
+        public int LikeCount { get; set; }
+
+        public int DisLikeCount { get; set; }
+
 
         [MaxLength(128)]
         public string Picture { get; set; }
@@ -50,12 +55,16 @@ namespace smartHookah.Models
             if (this is Pipe)
                 return "Hookah";
 
+            if (this is Coal)
+                return "Coal";
+
+
+            if (this is HeatManagment)
+                return "HeatManagment";
+
             return "";
         }
 
-     
-
-        
 
         public PipeAccesory(PipeAccesory accesory)
         {
@@ -68,6 +77,20 @@ namespace smartHookah.Models
             this.BrandName = accesory.BrandName;
         }
 
+    }
+
+    public class PipeAccesoryLike
+    {
+        public int Id { get; set; }
+
+        public int PersonId { get; set; }
+
+        public virtual Person Person { get; set; }
+        
+        public int PipeAccesoryId { get; set; }
+
+        public virtual PipeAccesory PipeAccesory { get; set; }
+        public int Value { get; set; }
     }
 
     public class SimilarAccesories
@@ -219,6 +242,32 @@ namespace smartHookah.Models
         public Bowl(PipeAccesory bowl) : base(bowl)
         {
             
+        }
+    }
+
+    public class Coal : PipeAccesory
+    {
+        public Coal()
+        {
+
+        }
+
+        public Coal(PipeAccesory bowl) : base(bowl)
+        {
+
+        }
+    }
+
+    public class HeatManagment : PipeAccesory
+    {
+        public HeatManagment()
+        {
+
+        }
+
+        public HeatManagment(PipeAccesory bowl) : base(bowl)
+        {
+
         }
     }
 }

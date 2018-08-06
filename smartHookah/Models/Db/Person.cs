@@ -82,13 +82,13 @@ namespace smartHookah.Models
 
         public int PersonRating { get; set; }
 
-        public virtual ICollection<PipeAccesory> FavoritePipeAccesories { get; set; }
+        public virtual ICollection<PipeAccesoryLike> Likes { get; set; }
 
         [NotMapped]
         public  virtual ICollection<TobaccoMix> FavoriteTobaccoMixs {
             get
             {
-                return (ICollection<TobaccoMix>)this.FavoritePipeAccesories.Where(a => a is TobaccoMix);
+                return (ICollection<TobaccoMix>)this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0);
             }
         }
 
@@ -130,6 +130,34 @@ namespace smartHookah.Models
                         .ToList();
             }
         }
+
+        [NotMapped]
+        public virtual List<HeatManagment> HeatManagments
+        {
+            get
+            {
+                return
+                    OwnedPipeAccesories.Where(a => a.PipeAccesory is HeatManagment && !a.DeleteDate.HasValue)
+                        .Select(a => a.PipeAccesory)
+                        .Cast<HeatManagment>()
+                        .ToList();
+            }
+        }
+
+        [NotMapped]
+        public virtual List<Coal> Coals
+        {
+            get
+            {
+                return
+                    OwnedPipeAccesories.Where(a => a.PipeAccesory is Coal && !a.DeleteDate.HasValue)
+                        .Select(a => a.PipeAccesory)
+                        .Cast<Coal>()
+                        .ToList();
+            }
+        }
+
+
 
         [NotMapped]
         public string DisplayName
