@@ -1,6 +1,6 @@
 ﻿@using smartHookah.Helpers
 @using smartHookah.Models
-@model smartHookah.Models.SmokeSessionMetaData
+@model SmokeSessionMetaData
 
 @{
     Layout = null;
@@ -19,13 +19,14 @@ else
         estimatedTobacco = (int)Model.Tobacco.Statistics.PufCount;
     }
 
-    <input type="hidden" id="tobaccoEstimated" value="@estimatedTobacco" />
+    <input type="hidden" id="tobaccoEstimated" value="@estimatedTobacco"/>
     if (Model.Tobacco is TobaccoMix)
     {
         <text>
             @Html.Partial("~/Views/Tobacco/_TobaccoMix.cshtml", Model.Tobacco as TobaccoMix)
         </text>
     }
+
     <table class="table table-striped">
         <tbody>
 
@@ -45,16 +46,14 @@ else
                     }
                     else
                     {
-                        
-                            <a href="@Url.Action("ByBrand","Tobacco",new {brand = @Model.Tobacco.BrandName})">@Model.Tobacco.Brand.DisplayName&nbsp;<i class="fa fa-info-circle"></i></a>
-                       
+                        <a href="@Url.Action("ByBrand", "Tobacco", new { brand = @Model.Tobacco.BrandName })">@Model.Tobacco.Brand.DisplayName&nbsp;<i class="fa fa-info-circle"></i></a>
                     }
 
                 </td>
             </tr>
             <tr>
                 <td>
-                    <img src="~/Content/icons/tobacco.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataTobFlavor", "SmokeSession")
+                    <img src="~/Content/icons/tobacco.svg" width="18px"/>&nbsp;@LocalizationHelper.Translate("sSMetaDataTobFlavor", "SmokeSession")
                 </td>
                 <td>
                     @if (Model.Tobacco == null)
@@ -63,9 +62,8 @@ else
                     }
                     else
                     {
-                       
-                            <a href="@Url.Action("Details","Tobacco",new { id  = Model.Tobacco.Id})">@Model.Tobacco.AccName&nbsp;<i class="fa fa-info-circle"></i></a>
-                   }
+                        <a href="@Url.Action("Details", "Tobacco", new { id = Model.Tobacco.Id })">@Model.Tobacco.AccName&nbsp;<i class="fa fa-info-circle"></i></a>
+                    }
 
                 </td>
             </tr>
@@ -73,30 +71,38 @@ else
 
         <tr>
             <td>
-                <img src="~/Content/icons/hookah.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataHookah", "SmokeSession")
+                <img src="~/Content/icons/hookah.svg" width="18px"/>&nbsp;@LocalizationHelper.Translate("sSMetaDataHookah", "SmokeSession")
             </td>
             <td>
                 @if (Model.Pipe != null)
                 {
-                    <span> @Model.Pipe.Brand.DisplayName&nbsp;@Model.Pipe.AccName&nbsp;<a href="@Url.Action("Details","PipeAccesorry",new {id = @Model.Pipe.Id})"><i class="fa fa-info-circle"></i></a></span>
+                    <span>
+                        @Model.Pipe.Brand.DisplayName&nbsp;@Model.Pipe.AccName&nbsp;<a href="@Url.Action("Details", "PipeAccesorry", new { id = @Model.Pipe.Id })">
+                            <i class="fa fa-info-circle"></i>
+                        </a>
+                    </span>
                 }
                 else
                 {
                     <span>@LocalizationHelper.Translate("Common", "Unknown")</span>
                 }
-             
+
 
             </td>
         </tr>
 
         <tr>
             <td>
-                <img src="~/Content/icons/bowl.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataBowl", "SmokeSession")
+                <img src="~/Content/icons/bowl.svg" width="18px"/>&nbsp;@LocalizationHelper.Translate("sSMetaDataBowl", "SmokeSession")
             </td>
             <td>
                 @if (Model.Bowl != null)
                 {
-                    <span> @Model.Bowl.Brand.DisplayName&nbsp;@Model.Bowl.AccName&nbsp;<a href="@Url.Action("Details","PipeAccesorry",new {id = @Model.Bowl.Id})"><i class="fa fa-info-circle"></i></a></span>
+                    <span>
+                        @Model.Bowl.Brand.DisplayName & nbsp; @Model.Bowl.AccName & nbsp;<a href="@Url.Action("Details", "PipeAccesorry", new { id = @Model.Bowl.Id })">
+                            <i class="fa fa-info-circle"></i>
+                        </a>
+                    </span>
                 }
                 else
                 {
@@ -105,16 +111,42 @@ else
             </td>
         </tr>
         <tr>
-            <td><img src="~/Content/icons/pack.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataPackStyle", "SmokeSession")</td>
+            <td><img src="~/Content/icons/pack.svg" width="18px"/>&nbsp;@LocalizationHelper.Translate("sSMetaDataPackStyle", "SmokeSession")</td>
             <td>@Model.PackType</td>
         </tr>
         <tr>
             <td><img src="~/Content/icons/lotus.svg" width="18px" />&nbsp;@LocalizationHelper.Translate("sSMetaDataHMS", "SmokeSession")</td>
-            <td>@Model.HeatKeeper.EnumDescription()</td>
-        </tr>
-        <tr>
-            <td><i class="fa fa-cubes"></i>&nbsp;@LocalizationHelper.Translate("sSMetaDataCoal", "SmokeSession")</td>
+            @if (Model.HeatManagementId == null)
+            {
+
+
+                <td>@Model.HeatKeeper.EnumDescription()</td>
+
+            }
+            else
+            {
+                <td>
+                    <span>
+                        @Model.HeatManagement.Brand.DisplayName&nbsp;@Model.HeatManagement.AccName&nbsp;<a href="@Url.Action("Details", "PipeAccesorry", new { id = @Model.HeatManagement.Id })">
+                            <i class="fa fa-info-circle"></i>
+                        </a>
+                    </span>
+                </td>
+
+
+            }
+
+<tr>
+    <td><i class="fa fa-cubes"></i>&nbsp;@LocalizationHelper.Translate("sSMetaDataCoal", "SmokeSession")</td>
+        @if (Model.CoalId == null)
+        {
             <td>@Model.CoalsCount @LocalizationHelper.Translate("sSMetaDataCoalOfType", "SmokeSession") @Model.CoalType </td>
+        }
+        else
+        {
+            <td>@Model.CoalsCount @LocalizationHelper.Translate("sSMetaDataCoalOfType", "SmokeSession") @Model.Coal.Brand.DisplayName @Model.Coal.AccName </td>
+        }
+           
         </tr>
         </tbody>
     </table>

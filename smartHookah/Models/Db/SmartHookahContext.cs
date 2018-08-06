@@ -55,9 +55,16 @@
 
         public DbSet<PipeAccesory> PipeAccesories { get; set; }
 
+        public DbSet<PipeAccesoryLike> PipeAccesoryLikes { get; set; }
+
         public DbSet<PipeAccesoryStatistics> PipeAccesoryStatistics { get; set; }
 
         public DbSet<Pipe> Pipes { get; set; }
+
+        public DbSet<HeatManagment> HeatManagments { get; set; }
+
+        public DbSet<Coal> Coals { get; set; }
+
 
         public DbSet<PlaceDay> PlaceDays { get; set; }
 
@@ -165,6 +172,7 @@
                         cs.MapRightKey("TasteRefId");
                         cs.ToTable("TobaccoTasteBinding");
                     });
+
 
             modelBuilder.Entity<Person>().HasOptional(a => a.GameProfile).WithRequired(a => a.Person);
 
