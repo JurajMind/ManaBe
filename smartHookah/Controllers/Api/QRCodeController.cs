@@ -19,6 +19,7 @@ namespace smartHookah.Controllers
     public class QRCodeController : ApiController
     {
         private static IHubContext ClientContext => GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
+        private readonly IRedisService _redisService;
         [HttpGet]
         [OptionalHttps(true)]
         [ActionName("DefaultAction")]
@@ -45,7 +46,7 @@ namespace smartHookah.Controllers
                     throw;
                 }
 
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
+            var sessionId = _redisService.GetSmokeSessionId(id);
             //var request = GetBaseUrl();
             var request = "http://app.manapipes.com/";
             var url = request + "smoke/"+ sessionId;
@@ -59,7 +60,7 @@ namespace smartHookah.Controllers
             else
             {
                  
-                var initString = DeviceControlController.GetDeviceInitString(id,hookah.Version, db);
+                var initString = DeviceControlController.GetDeviceInitString(id,hookah.Version, db, _redisService);
                 qrResult = $"{initString};{result}";
             }
 

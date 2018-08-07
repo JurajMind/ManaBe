@@ -2,11 +2,18 @@
 using System.Linq;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
     public class SmokeSessionGetStaticsticsModel
     {
+        private readonly IRedisService _redisService;
+
+        public SmokeSessionGetStaticsticsModel(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
 
         public SmokeSessionGetStaticsticsModel Create(SmartHookahContext db,int id)
         {
@@ -23,7 +30,7 @@ namespace smartHookah.Controllers
             SessionReview.SmokeSessionId = SmokeSession.Id;
             SmokeSessionMetaData outMetaData;
             this.SmokeMetadataModalViewModel = SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(db,this.SmokeSession.SessionId,
-               UserHelper.GetCurentPerson(db), out outMetaData);
+               UserHelper.GetCurentPerson(db), out outMetaData, _redisService);
             //var pufs = model.SmokeSession.Pufs.Select(a => (Puf) a).ToList();
             var pufs =
                 db.DbPufs.Where(p => p.SmokeSession_Id == this.SmokeSession.Id).ToList().Select(a => (Puf)a).OrderBy(a => a.DateTime).ToList();

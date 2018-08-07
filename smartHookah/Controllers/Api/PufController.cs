@@ -18,8 +18,14 @@ namespace smartHookah.Controllers.Api
 {
     public class PufController : ApiController
     {
+        private readonly IRedisService _redisService;
         private IHubContext ClientContext => GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
         private TelemetryClient telemetry = new TelemetryClient();
+
+        public PufController(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
 
         [HttpPost]
         [ActionName("DefaultAction")]
@@ -31,7 +37,7 @@ namespace smartHookah.Controllers.Api
                 string result = await Request.Content.ReadAsStringAsync();
                 if (result.StartsWith("puf"))
                 {
-                    var puf = SendPuf(id, result, DateTime.Now);
+                    var puf = SendPuf(id, result, DateTime.Now, _redisService);
                     OnPuf(id, puf);
                 }
                 return null;
@@ -55,52 +61,16 @@ namespace smartHookah.Controllers.Api
         {
             var pufType = puf.Type;
             ClientContext.Clients.Group(puf.SmokeSessionId).pufChange(pufType.ToWebStateString(), pufType.ToGraphData());
-            UpdateStistics(deviceId, puf);
+            UpdateStatistics(deviceId, puf);
         }
 
-        private void UpdateStistics(string deviceId, Puf puf)
+        private void UpdateStatistics(string deviceId, Puf puf)
         {
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var session = puf.SmokeSessionId;
-                var ds = redis.As<DynamicSmokeStatistic>()["DS:" + session];
-
-                if ((ds == null) || (ds.LastFullUpdate < DateTime.Now.AddMinutes(-5)))
-                {
-                    if (ds == null)
-                        ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(redis, session);
-                }
-                else
-                {
-                    if (puf != null)
-                        ds.Update(puf, session, deviceId);
-                }
-
-                redis.As<DynamicSmokeStatistic>()["DS:" + session] = ds;
-
-                var oldDs = new
-                {
-                    pufCount = ds.PufCount,
-                    lastPuf = ds.LastPufDuration.ToString(@"s\.fff"),
-                    lastPufTime = ds.LastPufTime.AddHours(-1).ToString("dd-MM-yyyy HH:mm:ss"),
-                    smokeDuration = ds.TotalSmokeTime.ToString(@"hh\:mm\:ss"),
-                    longestPuf = ds.LongestPuf.ToString(@"s\.fff"),
-                    start = ds.Start.ToString("dd-MM-yyyy HH:mm:ss"),
-                    duration = ((DateTime.UtcNow - ds.Start).ToString(@"hh\:mm\:ss")),
-                    longestPufMilis = ds.LongestPuf.TotalMilliseconds
-                };
-
-                var ownDs = new DynamicSmokeStatisticDto(ds);
-
-                ClientContext.Clients.Group(session).updateStats(oldDs);
-                ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);
-            }
+            _redisService.UpdateStatistics(deviceId, puf);
         }
 
-        private static Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime)
+        private static Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime, IRedisService redisService)
         {
-
             var direction = ToPufType(data);
             var dataChunk = data.Split(':');
             long milis = 0;
@@ -111,7 +81,7 @@ namespace smartHookah.Controllers.Api
             if (dataChunk.Length > 3)
                 presure = Convert.ToInt32(float.Parse(dataChunk[3], CultureInfo.InvariantCulture));
 
-            return RedisHelper.AddPuff(null, connectionDeviceId, direction, enqueuedTime, milis, presure);
+            return redisService.AddPuff(null, connectionDeviceId, direction, enqueuedTime, milis, presure);
         }
 
         private static PufType ToPufType(string data)

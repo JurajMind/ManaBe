@@ -25,9 +25,11 @@ namespace smartHookah.Controllers
         private TimeSpan _slotDuration = new TimeSpan(0, 30, 0);
         private readonly SmartHookahContext db;
         private EmailService emailService;
-        public ReservationController(SmartHookahContext db)
+        private readonly IRedisService _redisService;
+        public ReservationController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
             this.emailService = new EmailService();
         }
 
@@ -83,7 +85,7 @@ namespace smartHookah.Controllers
                     reservation.Orders.Where(a => a.State == OrderState.Open || a.State == OrderState.Processing);
 
                 model.DynamicSmokeSession = activeSessions.ToDictionary(a => a.SessionId,
-                    a => RedisHelper.GetSmokeStatistic(sessionId: a.SessionId));
+                    a => _redisService.GetDynamicSmokeStatistic(a.SessionId));
             }
             return View(model);
         }
@@ -405,7 +407,7 @@ namespace smartHookah.Controllers
 
                 if (state == ReservationState.Confirmed)
                 {
-                    RedisHelper.SetReservationToTable(reservation.PlaceId.ToString(), reservation.Id);
+                    _redisService.SetReservationToTable(reservation.PlaceId.ToString(), reservation.Id);
                     if(reservation.Status == ReservationState.ConfirmationRequired)
                     {
                         SendReservationConfirmMail(reservation);

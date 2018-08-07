@@ -1029,7 +1029,6 @@
     <Compile Include="Filters\LocalizationAttribute.cs" />
     <Compile Include="Helpers\ImageActionLinkHelper.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
-    <Compile Include="Helpers\RedisHelper.cs" />
     <Compile Include="Jobs\SessionAutoEnd.cs" />
     <Compile Include="Migrations\201707021251146_addDisplayName.cs" />
     <Compile Include="Migrations\201707021251146_addDisplayName.Designer.cs">

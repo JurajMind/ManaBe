@@ -11,14 +11,19 @@ namespace smartHookah.Models
 {
     public class Hookah
     {
+        private Hookah modelStand;
 
-        public Hookah()
-        {
-            
-        }
+        private readonly IRedisService _redisService;
 
-        public Hookah(Hookah modelHookah)
+//        public Hookah(Hookah modelStand, IRedisService redisService)
+//        {
+//            this.modelStand = modelStand;
+//            _redisService = redisService;
+//        }
+
+        public Hookah(Hookah modelHookah, IRedisService redisService)
         {
+            _redisService = redisService;
             Version = modelHookah.Version;
             Type = modelHookah.Type;
             Setting = new HookahSetting(modelHookah.Setting);
@@ -27,6 +32,11 @@ namespace smartHookah.Models
             UpdateType = modelHookah.UpdateType;
 
         }
+
+        public Hookah()
+        {
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -90,10 +100,7 @@ namespace smartHookah.Models
         public virtual SmokeSessionMetaData DefaultMetaData { get; set; }
 
         [NotMapped]
-        public string SessionCode
-        {
-            get { return RedisHelper.GetSmokeSessionId(this.Code); }
-        }
+        public string SessionCode => _redisService.GetSmokeSessionId(this.Code);
 
         [NotMapped]
         public bool OnlineState { get; set; }

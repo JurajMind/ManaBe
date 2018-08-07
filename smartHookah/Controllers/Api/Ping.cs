@@ -14,10 +14,11 @@ namespace smartHookah.Controllers.Api
     {
 
         private readonly SmartHookahContext db;
-
-        public PingController(SmartHookahContext db)
+        private readonly IRedisService _redisService;
+        public PingController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
         }
 
         [HttpGet]
@@ -47,7 +48,7 @@ namespace smartHookah.Controllers.Api
             try
             {
 
-                RedisHelper.SetConnectionTime(id);
+                _redisService.SetConnectionTime(id);
 
                 var versionInt = Helper.UpdateVersionToInt(version);
 
@@ -62,10 +63,6 @@ namespace smartHookah.Controllers.Api
             {
                 return true;
             }
-          
-
-
-
             return true;
         }
     }

@@ -13,11 +13,13 @@ namespace smartHookah.Controllers.Api
 {
     public class EndSessionController : ApiController
     {
+        private readonly IRedisService _redisService;
         private readonly SmartHookahContext db;
         private TelemetryClient telemetry = new TelemetryClient();
-        public EndSessionController(SmartHookahContext db)
+        public EndSessionController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
         }
 
         [HttpPost]
@@ -26,12 +28,12 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                var reddisSession = RedisHelper.GetSmokeSessionId(id);
+                var reddisSession = _redisService.GetSmokeSessionId(id);
 
-                var stats = RedisHelper.GetSmokeStatistic(hookahId: id);
+                var stats = _redisService.GetDynamicSmokeStatistic(id);
 
                 if (stats != null && stats.PufCount > 0)
-                    await Controllers.SmokeSessionController.EndSmokeSession(reddisSession, db);
+                    await Controllers.SmokeSessionController.EndSmokeSession(reddisSession, db, _redisService);
             }
             catch (Exception e)
             {

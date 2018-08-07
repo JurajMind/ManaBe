@@ -35,6 +35,7 @@
         ///     The db.
         /// </summary>
         private readonly SmartHookahContext db;
+        private readonly IRedisService _redisService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PlacesController" /> class.
@@ -42,9 +43,10 @@
         /// <param name="db">
         ///     The db.
         /// </param>
-        public PlacesController(SmartHookahContext db)
+        public PlacesController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
         }
 
         public ActionResult AddMedia(int id)
@@ -153,13 +155,13 @@
             var onlineHookah = await IotDeviceHelper.GetState(hookahs.Select(a => a.Code).ToList());
             model.Place = new Place();
             model.Place.Id = place.Id;
-            var DynamicStatistic = SmokeSessionController.GetDynamicSmokeStatistic(hookahs, a => a.Code);
+            var DynamicStatistic = SmokeSessionController.GetDynamicSmokeStatistic(hookahs, a => a.Code, _redisService);
 
             model.Hookah = new List<HookahDashboardViewModel>();
 
             foreach (var hookah in hookahs)
             {
-                var redisSessionId = RedisHelper.GetSmokeSessionId(hookah.Code);
+                var redisSessionId = _redisService.GetSmokeSessionId(hookah.Code);
                 var sessionMetadata = hookah.SmokeSessions.FirstOrDefault(a => a.SessionId == redisSessionId);
                 var estTobaco = 300d;
                 var hookahPicture = "/Content/icons/hookah.svg";
@@ -184,7 +186,7 @@
                             Online = onlineHookah.Contains(hookah.Code),
                             EstPufCount = (int)estTobaco,
                             HookahPicture = hookahPicture,
-                            Table = RedisHelper.GetHookahSeat(hookah.Code)
+                            Table = _redisService.GetHookahSeat(hookah.Code)
                         });
             }
 
@@ -693,7 +695,7 @@
                                 Tobacco = place.Person.Tobacco
                             };
 
-            if (!string.IsNullOrEmpty(seatId)) resId = RedisHelper.GetReservatopnFromTable(seatId);
+            if (!string.IsNullOrEmpty(seatId)) resId = _redisService.GetReservationFromTable(seatId);
 
             if (resId.HasValue)
             {
@@ -826,13 +828,13 @@
 
             var hookahs = person.Hookahs.ToList();
 
-            var hookahSessionId = RedisHelper.GetSmokeSessionIds(hookahs.Select(a => a.Code).ToList());
+            var hookahSessionId = _redisService.GetSmokeSessionIds(hookahs.Select(a => a.Code).ToList());
             model.Hookahs = new List<Hookah>();
             foreach (var sessionId in hookahSessionId)
             {
                 var session = this.db.SmokeSessions.Include(a => a.Pufs).FirstOrDefault(a => a.SessionId == sessionId);
 
-                var pufs = RedisHelper.GetPufs(sessionId);
+                var pufs = _redisService.GetPufs(sessionId);
 
                 if (session == null) continue;
 
@@ -851,7 +853,7 @@
 
             if (order == null || hookah == null) return null;
 
-            var sessionId = RedisHelper.GetSmokeSessionId(hookah.Code);
+            var sessionId = _redisService.GetSmokeSessionId(hookah.Code);
 
             var session = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == sessionId);
 

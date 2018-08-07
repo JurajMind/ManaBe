@@ -14,18 +14,23 @@ namespace smartHookah.Controllers.Api
 {
     public class WearablesController : ApiController
     {
+        private readonly IRedisService _redisService;
+
+        public WearablesController(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
+
         [System.Web.Mvc.ActionName("DefaultAction")]
         public DynamicSmokeStatistic GetData(string id)
         {
             try
             {
-                return RedisHelper.GetSmokeStatistic(id);
+                return _redisService.GetDynamicSmokeStatistic(id);
             }
             catch (Exception e)
             {
                 return new DynamicSmokeStatistic() {AlertBlowCount = -1};
-
-
             }
 
         }

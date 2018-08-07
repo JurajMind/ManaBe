@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using smartHookah.Models;
+using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
@@ -14,10 +15,11 @@ namespace smartHookah.Controllers
     {
 
         private readonly SmartHookahContext db;
-
-        public ShareController(SmartHookahContext db)
+        private readonly IRedisService _redisService;
+        public ShareController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
         }
         [AllowAnonymous]
         public async Task<ActionResult> Index(string id)
@@ -29,13 +31,13 @@ namespace smartHookah.Controllers
 
                 if (session.Pufs.Any())
                 {
-                    var statsModel = new SmokeSessionGetStaticsticsModel();
+                    var statsModel = new SmokeSessionGetStaticsticsModel(_redisService);
                     statsModel.Create(db, session.Id);
                     statsModel.Share = true;
                     return View("~/Views/SmokeSession/GetStatistics.cshtml", statsModel);
                 }
 
-                var model = new SmokeViewModel();
+                var model = new SmokeViewModel(_redisService);
                await model.CreateModel(db, session.Id);
                 model.Share = true;
                 return View("Smoke", model);;

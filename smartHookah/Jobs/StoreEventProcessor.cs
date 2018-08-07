@@ -36,8 +36,11 @@ namespace ProcessDeviceToCloudMessages
         private Stopwatch stopwatch;
         private MemoryStream toAppend = new MemoryStream(MAX_BLOCK_SIZE);
 
-        public StoreEventProcessor()
+        private readonly IRedisService _redisService;
+
+        public StoreEventProcessor(IRedisService redisService)
         {
+            _redisService = redisService;
             var storageAccount = CloudStorageAccount.Parse(StorageConnectionString);
             blobClient = storageAccount.CreateCloudBlobClient();
             blobContainer = blobClient.GetContainerReference("d2ctutorial");
@@ -80,7 +83,7 @@ namespace ProcessDeviceToCloudMessages
 
                 if (encodetData.StartsWith("puf"))
                 {
-                    var puf = SendPuf(connectionDeviceId, encodetData, enqueuedTime);
+                    var puf = SendPuf(connectionDeviceId, encodetData, enqueuedTime, _redisService);
                     OnPuf(connectionDeviceId, puf);
                 }
                 else
@@ -176,14 +179,11 @@ namespace ProcessDeviceToCloudMessages
 
                     //DeviceControlController.InitDevice(deviceId, version);
                     using (var db = new SmartHookahContext())
-
                     {
                         SmokeSessionController.InitSmokeSession(db, deviceId);
                     }
-                    using (var redis = RedisHelper.redisManager.GetClient())
-                    {
-                        redis.As<string>().Lists["Connect:" + deviceId].Add($"{DateTime.Now}");
-                    }
+
+                    _redisService.OnConnect(deviceId);
                 }
             }
             catch (Exception e)
@@ -195,40 +195,7 @@ namespace ProcessDeviceToCloudMessages
 
         private void UpdateStistics(string deviceId, Puf puf)
         {
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var session = puf.SmokeSessionId;
-                var ds = redis.As<DynamicSmokeStatistic>()["DS:" + session];
-
-                if ((ds == null) || (ds.LastFullUpdate < DateTime.Now.AddMinutes(-5)))
-                {
-                    if (ds == null)
-                        ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(redis, session);
-                }
-                else
-                {
-                    if (puf != null)
-                        ds.Update(puf, session, deviceId);
-                }
-
-                redis.As<DynamicSmokeStatistic>()["DS:" + session] = ds;
-
-                var ownDs = new
-                {
-                    pufCount = ds.PufCount,
-                    lastPuf = ds.LastPufDuration.ToString(@"s\.fff"),
-                    lastPufTime = ds.LastPufTime.AddHours(-1).ToString("dd-MM-yyyy HH:mm:ss"),
-                    smokeDuration = ds.TotalSmokeTime.ToString(@"hh\:mm\:ss"),
-                    longestPuf = ds.LongestPuf.ToString(@"s\.fff"),
-                    start = ds.Start.ToString("dd-MM-yyyy HH:mm:ss"),
-                    duration = ((DateTime.UtcNow - ds.Start).ToString(@"hh\:mm\:ss")),
-                    longestPufMilis = ds.LongestPuf.TotalMilliseconds
-                };
-
-                ClientContext.Clients.Group(session).updateStats(ownDs);
-                ClientContext.Clients.Group(deviceId).updateStats(deviceId,ownDs);
-            }
+            _redisService.UpdateStatistics(deviceId, puf);
         }
 
 
@@ -239,7 +206,7 @@ namespace ProcessDeviceToCloudMessages
             Console.ResetColor();
         }
 
-        private static Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime)
+        private static Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime, IRedisService redisService)
         {
             var direction = ToPufType(data);
             var dataChunk = data.Split(':');
@@ -251,7 +218,7 @@ namespace ProcessDeviceToCloudMessages
             if (dataChunk.Length > 3)
                 presure = Convert.ToInt32(float.Parse(dataChunk[3], CultureInfo.InvariantCulture));
 
-            return RedisHelper.AddPuff(null, connectionDeviceId, direction, enqueuedTime, milis, presure);
+            return redisService.AddPuff(null, connectionDeviceId, direction, enqueuedTime, milis, presure);
         }
 
         private static PufType ToPufType(string data)
