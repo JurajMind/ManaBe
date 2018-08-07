@@ -880,6 +880,8 @@
     <Compile Include="Services\Device\IDeviceService.cs" />
     <Compile Include="Services\Device\IIotService.cs" />
     <Compile Include="Services\Device\IotService.cs" />
+    <Compile Include="Services\Gear\GearService.cs" />
+    <Compile Include="Services\Gear\IGearService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />

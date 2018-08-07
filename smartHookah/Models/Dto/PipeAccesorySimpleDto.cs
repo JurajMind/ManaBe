@@ -30,22 +30,16 @@ namespace smartHookah.Models.Dto
         [JsonProperty("Type")]
         public string Type { get; set; }
 
-        public static PipeAccesorySimpleDto FromModel(PipeAccesory model)
+        public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null ? null : new PipeAccesorySimpleDto()
         {
-            if (model == null)
-            {
-                return null;
-            }
+            Id = model.Id,
+            BrandName = model.Brand.DisplayName,
+            BrandId = model.BrandName,
+            Picture = model.Picture,
+            Name = model.AccName,
+            Type = model.GetTypeName()
+        }; 
 
-            return new PipeAccesorySimpleDto()
-            {
-                Id = model.Id, 
-                BrandName = model.Brand.DisplayName, 
-                BrandId = model.BrandName,
-                Picture = model.Picture, 
-                Name = model.AccName
-            }; 
-        }
 
         public static PipeAccesorySimpleDto FromModel(Bowl model)
         {
