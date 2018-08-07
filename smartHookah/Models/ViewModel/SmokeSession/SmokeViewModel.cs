@@ -8,7 +8,7 @@ namespace smartHookah.Controllers
 {
     public class SmokeViewModel
     {
-
+        private readonly IRedisService _redisService;
         public async Task<SmokeViewModel> CreateModel(SmartHookahContext db,int? dbSmokeSessionId = null, string redisSessionId = null,string reddisHookahId = null)
         {
            
@@ -21,7 +21,7 @@ namespace smartHookah.Controllers
 
             if (!string.IsNullOrEmpty(reddisHookahId))
             {
-                var rs = RedisHelper.GetSmokeSessionId(reddisHookahId);
+                var rs = _redisService.GetSmokeSessionId(reddisHookahId);
                 redisSessionId = rs;
                 session = db.SmokeSessions.FirstOrDefault(a => a.SessionId == rs);
             }
@@ -42,7 +42,7 @@ namespace smartHookah.Controllers
             this.SessionId = session.SessionId;
             this.StandSetting.SessionId = SessionId;
             SmokeSessionMetaData outMetaData;
-            this.SmokeMetadataModalModal = SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(db,this.SessionId, UserHelper.GetCurentPerson(db),out outMetaData);
+            this.SmokeMetadataModalModal = SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(db,this.SessionId, UserHelper.GetCurentPerson(db),out outMetaData, _redisService);
             this.MetaData = outMetaData;
             this.ShareToken = session.Token;
             this.Session = session;
@@ -57,7 +57,7 @@ namespace smartHookah.Controllers
                 this.SessionReview.SmokeSessionId = session.Id;
             }
 
-            var lastState = RedisHelper.GetPufs(this.SessionId).LastOrDefault();
+            var lastState = _redisService.GetPufs(this.SessionId).LastOrDefault();
           
                this.CurentState = PufType.Idle;
 
@@ -65,7 +65,10 @@ namespace smartHookah.Controllers
             
         }
 
-        public SmokeViewModel() { }
+        public SmokeViewModel(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
         public Hookah Hookah { get; set; }
         public SmokeSession Session { get; set; }
         public string SessionId

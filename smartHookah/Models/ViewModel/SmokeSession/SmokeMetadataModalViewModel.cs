@@ -26,11 +26,11 @@
         }
 
         public static SmokeMetadataModalViewModel CreateSmokeMetadataModalViewModel(SmartHookahContext db,string sessionId,Person person,
-                                                                                    out SmokeSessionMetaData outMetaData)
+                                                                                    out SmokeSessionMetaData outMetaData, IRedisService redisService)
         {
             var result = new SmokeMetadataModalViewModel();
             result.TobacoMetadata = new TobacoMetadataModelViewModel();
-            var hookahId = RedisHelper.GetHookahId(sessionId);
+            var hookahId = redisService.GetHookahId(sessionId);
 
             if (hookahId == null)
             {

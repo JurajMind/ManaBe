@@ -36,12 +36,12 @@ namespace smartHookah.Controllers
 
         private TelemetryClient telemetry = new TelemetryClient();
 
-        private IRedisService redisService;
+        private readonly IRedisService _redisService;
 
         public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService)
         {
             _db = db;
-            this.redisService = redisService;
+            this._redisService = redisService;
             this.personService = personService;
         }
 
@@ -54,7 +54,7 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> EndSmokeSession(string id)
         {
-            var sessionId = await EndSmokeSession(id, _db);
+            var sessionId = await EndSmokeSession(id, _db, _redisService);
 
             if (sessionId == 0)
                 return RedirectToAction("Index", "Home");
@@ -63,11 +63,11 @@ namespace smartHookah.Controllers
         }
 
         // End smoke session
-        public static async Task<int> EndSmokeSession(string id, SmartHookahContext db, bool autoEnd = false)
+        public static async Task<int> EndSmokeSession(string id, SmartHookahContext db, IRedisService redisService,
+            bool autoEnd = false)
         {
-            // Get hookah code from session Id
-            var hookahId = RedisHelper.GetHookahId(id);
-            var rawPufs = RedisHelper.GetPufs(id);
+            var hookahId = redisService.GetHookahId(id);
+            var rawPufs = redisService.GetPufs(id);
 
             if (!rawPufs.Any())
                 return 0;
@@ -79,7 +79,7 @@ namespace smartHookah.Controllers
                 smokeSession = dbSmokeSession;
 
             smokeSession.SessionId = id;
-            var hookahCode = RedisHelper.GetHookahId(id);
+            var hookahCode = redisService.GetHookahId(id);
             smokeSession.Hookah = db.Hookahs.FirstOrDefault(a => a.Code == hookahCode);
             smokeSession.Statistics = new SmokeSessionStatistics(rawPufs);
 
@@ -107,7 +107,7 @@ namespace smartHookah.Controllers
 
 
             db.SaveChanges();
-            RedisHelper.EndSmokeSession(id);
+            redisService.EndSmokeSession(id);
             if (smokeSession.MetaData != null && smokeSession.MetaData.TobaccoId.HasValue)
                 TobaccoController.CalculateStatistic(smokeSession.MetaData.TobaccoId.Value, db);
 
@@ -205,7 +205,7 @@ namespace smartHookah.Controllers
 
             foreach (var smokeSession in ss)
             {
-                if (RedisHelper.GetHookahId(smokeSession.SessionId) != null)
+                if (_redisService.GetHookahId(smokeSession.SessionId) != null)
                     continue;
 
                 CreateSmokeStats(smokeSession.Id);
@@ -215,7 +215,7 @@ namespace smartHookah.Controllers
 
         public ActionResult EndSmokeSessionSilent(string id)
         {
-            RedisHelper.EndSmokeSession(id);
+            _redisService.EndSmokeSession(id);
             return RedirectToAction("Index", "Home");
         }
 
@@ -234,7 +234,7 @@ namespace smartHookah.Controllers
 
         public ActionResult GetStatistics(int id, int? PersonId = null)
         {
-            var model = new SmokeSessionGetStaticsticsModel();
+            var model = new SmokeSessionGetStaticsticsModel(_redisService);
 
 
             model.Create(_db, id);
@@ -254,7 +254,7 @@ namespace smartHookah.Controllers
             {
                 var model = new SmokeStatisticViewModel();
 
-                var dynamic = DynamicSmokeStatistic.GetStatistic(sessionId);
+                var dynamic = DynamicSmokeStatistic.GetStatistic(sessionId, _redisService);
 
                 if (dynamic.LastPuf == null)
                     return PartialView("NoLiveStatistic");
@@ -293,13 +293,11 @@ namespace smartHookah.Controllers
 
 
         public static SmokeSession InitSmokeSession(SmartHookahContext db, string deviceId = null,
-            string sessionId = null)
+            string sessionId = null, RedisService redisService = null)
         {
             var newSessionId = "";
-            if (string.IsNullOrEmpty(sessionId))
-                newSessionId = RedisHelper.GetSmokeSessionId(deviceId);
-            else
-                newSessionId = sessionId;
+            if (redisService != null)
+                newSessionId = string.IsNullOrEmpty(sessionId) ? redisService.GetSmokeSessionId(deviceId) : sessionId;
 
 
             var session = db.SmokeSessions.FirstOrDefault(s => s.SessionId == newSessionId);
@@ -307,11 +305,13 @@ namespace smartHookah.Controllers
 
             if (session != null) return session;
 
-            var dbSession = new SmokeSession();
-            dbSession.SessionId = newSessionId;
+            var dbSession = new SmokeSession
+            {
+                SessionId = newSessionId,
+                MetaData = new SmokeSessionMetaData(),
+                Token = Support.Support.RandomString(10)
+            };
 
-            dbSession.MetaData = new SmokeSessionMetaData();
-            dbSession.Token = Support.Support.RandomString(10);
             var hookah = db.Hookahs.Where(a => a.Code == deviceId).Include(a => a.Owners).FirstOrDefault();
 
             if (hookah != null)
@@ -362,7 +362,7 @@ namespace smartHookah.Controllers
         [System.Web.Mvc.Authorize]
         public async Task<ActionResult> Hookah(string id)
         {
-            var model = new SmokeViewModel();
+            var model = new SmokeViewModel(_redisService);
             await model.CreateModel(_db, reddisHookahId: id);
 
             await AssignToSmokeSession(model.Session, true);
@@ -373,7 +373,7 @@ namespace smartHookah.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SmokeSession(string id)
         {
-            var model = new SmokeViewModel();
+            var model = new SmokeViewModel(_redisService);
 
             var session = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
@@ -382,7 +382,7 @@ namespace smartHookah.Controllers
 
             if (session?.StatisticsId != null)
             {
-                var statmodel = new SmokeSessionGetStaticsticsModel();
+                var statmodel = new SmokeSessionGetStaticsticsModel(_redisService);
                 statmodel.Create(_db, session.Id);
                 await AssignToSmokeSession(session, true);
                 return View("GetStatistics", statmodel);
@@ -592,20 +592,17 @@ namespace smartHookah.Controllers
         }
 
 
-        public static Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistic(List<Hookah> hookah,
-            Func<Hookah, string> getCode)
+        public static Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistic(List<Hookah> hookahs,
+            Func<Hookah, string> getCode, IRedisService redisService)
         {
             var result = new Dictionary<string, DynamicSmokeStatistic>();
-            using (var redis = RedisHelper.redisManager.GetClient())
+            foreach (var hookah in hookahs)
             {
-                foreach (var hookah1 in hookah)
-                {
-                    var session = RedisHelper.GetSmokeSessionId(hookah1.Code, redis);
-                    var ds = redis.As<DynamicSmokeStatistic>()["DS:" + session];
+                var session = redisService.GetDynamicSmokeStatistic(hookah.Code);
+                var ds = new Dictionary<string, DynamicSmokeStatistic>()["DS:" + session];
 
-                    if (ds != null)
-                        result.Add(getCode(hookah1), ds);
-                }
+                if (ds != null)
+                    result.Add(getCode(hookah), ds);
             }
             return result;
         }

@@ -7,6 +7,7 @@ using System.Web;
 using smartHookah.Helpers;
 using smartHookah.Models;
 using smartHookah.Models.Redis;
+using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
@@ -22,6 +23,13 @@ namespace smartHookah.Controllers
         public List<Hookah> Hookah { get; set; }
         public List<SmokeSession> ActiveSession { get; set; }
         public Dictionary<string, DynamicSmokeStatistic> DynamicStatistic { get; set; }
+
+        private readonly IRedisService _redisService;
+
+        public PersonIndexViewModel(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
 
         public Person Person { get; set; }
 
@@ -44,7 +52,7 @@ namespace smartHookah.Controllers
 
             this.Person = person;
             var activeHookah = this.ActiveSession.Select(a => a.Hookah).Union(hookahs).ToList();
-            this.DynamicStatistic = SmokeSessionController.GetDynamicSmokeStatistic(activeHookah, a => a.SessionCode);
+            this.DynamicStatistic = SmokeSessionController.GetDynamicSmokeStatistic(activeHookah, a => a.SessionCode, _redisService);
         }
 
         public IEnumerable<Reservation> ActiveReservations { get; set; }

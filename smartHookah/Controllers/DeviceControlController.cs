@@ -30,11 +30,13 @@ namespace smartHookah.Controllers
         private readonly SmartHookahContext db;
 
         private readonly IDeviceService deviceService;
+        private readonly IRedisService _redisService;
 
-        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService)
+        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService, IRedisService redisService)
         {
             this.db = db;
             this.deviceService = deviceService;
+            _redisService = redisService;
         }
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
@@ -136,7 +138,7 @@ namespace smartHookah.Controllers
             }
             else
             {
-                deviceId = RedisHelper.GetHookahId(id);
+                deviceId = _redisService.GetHookahId(id);
             }
        
             switch (command)
@@ -403,9 +405,8 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> GetDeviceSetting(string id)
         {
-            var hookahId = RedisHelper.GetHookahId(id);
-
-
+            var hookahId = _redisService.GetHookahId(id);
+            
             var model = GetDeviceSettingViewModel(db, hookahId);
 
             return View(model);
@@ -455,11 +456,11 @@ namespace smartHookah.Controllers
 
 
 
-        public static async Task InitDevice(string id, string version)
+        public static async Task InitDevice(string id, string version, RedisService redisService)
         {
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
+            var sessionId = redisService.GetSmokeSessionId(id);
 
-            var pufs = RedisHelper.GetPufs(sessionId);
+            var pufs = redisService.GetPufs(sessionId);
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
 
@@ -492,11 +493,11 @@ namespace smartHookah.Controllers
             }
         }
 
-        public static string GetDeviceInitString(string id,int hookahVersion, SmartHookahContext context)
+        public static string GetDeviceInitString(string id,int hookahVersion, SmartHookahContext context, IRedisService redisService)
         {
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
+            var sessionId = redisService.GetSmokeSessionId(id);
 
-            var pufs = RedisHelper.GetPufs(sessionId);
+            var pufs = redisService.GetPufs(sessionId);
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
             var setting = new HookahSetting();

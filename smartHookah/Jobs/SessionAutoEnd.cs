@@ -15,8 +15,13 @@ namespace smartHookah.Jobs
     public class SessionAutoEnd
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(SessionAutoEnd));
-
+        private readonly IRedisService _redisService;
         private readonly int offlineMulti = 2;
+
+        public SessionAutoEnd()
+        {//TODO redisService jako parameter konstuktoru vyzadovan v Startup.cs
+            _redisService = new RedisService();
+        }
 
         private async Task CleanSleep(string hookahCode, bool online, bool autoSleep)
         {
@@ -27,7 +32,7 @@ namespace smartHookah.Jobs
                 return;
 
 
-            var connectionTime = RedisHelper.GetConnectionTime(hookahCode);
+            var connectionTime = _redisService.GetConnectionTime(hookahCode);
             if (connectionTime == null)
                 return;
 
@@ -49,14 +54,14 @@ namespace smartHookah.Jobs
                     try
                     {
                         var stand = hookah.Code;
-                        var redisSession = RedisHelper.GetSmokeSessionId(stand);
+                        var redisSession = _redisService.GetSmokeSessionId(stand);
                         var online = await IotDeviceHelper.GetState(stand);
                         // Hookah dont want auto session end
                         if (hookah.AutoSessionEndTime == -1)
                             continue;
 
                         // Get curent smoke statistic
-                        var ds = DynamicSmokeStatistic.GetStatistic(redisSession);
+                        var ds = DynamicSmokeStatistic.GetStatistic(redisSession, _redisService);
 
                         // No puf was made
                         if (ds?.LastPuf == null)
@@ -77,7 +82,7 @@ namespace smartHookah.Jobs
 
                         if (!debug)
                         {
-                            var sessionId = await SmokeSessionController.EndSmokeSession(redisSession, db, true);
+                            var sessionId = await SmokeSessionController.EndSmokeSession(redisSession, db, _redisService, true);
                             if (online)
                                 if (hookah.AutoSleep)
                                 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin;
 
 using smartHookah;
+using smartHookahCommon;
 
 [assembly: OwinStartup(typeof(Startup))]
 

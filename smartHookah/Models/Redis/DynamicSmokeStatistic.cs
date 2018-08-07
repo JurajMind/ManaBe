@@ -50,21 +50,9 @@ namespace smartHookah.Models.Redis
     }
     public class DynamicSmokeStatistic
     {
-        public static DynamicSmokeStatistic GetStatistic(string sessionId)
+        public static DynamicSmokeStatistic GetStatistic(string sessionId, IRedisService redisService)
         {
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var ds = redis.As<DynamicSmokeStatistic>()["DS:" + sessionId];
-                if (ds == null)
-                {
-                    ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(redis, sessionId);
-                    ds.LastPufs = new List<Puf>();
-                }
-              
-                return ds;
-            }
-
+            return redisService.GetDynamicSmokeStatistic(sessionId);
         }
 
         public int PufCount { get; set; }

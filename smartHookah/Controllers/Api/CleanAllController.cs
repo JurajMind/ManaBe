@@ -10,6 +10,12 @@ namespace smartHookah.Controllers.Api
 {
     public class CleanAllController : ApiController
     {
+        private readonly IRedisService _redisService;
+
+        public CleanAllController(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
 
         [System.Web.Http.AcceptVerbs("GET", "POST")]
         [System.Web.Http.HttpGet]
@@ -17,7 +23,7 @@ namespace smartHookah.Controllers.Api
         {
             if (id == "mimi")
             {
-                RedisHelper.CleanAll();
+                _redisService.CleanAll();
             }
         }
     }

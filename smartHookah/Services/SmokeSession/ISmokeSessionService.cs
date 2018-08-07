@@ -17,6 +17,8 @@ namespace smartHookah.Services.SmokeSession
         SmokeSessionMetaData GetMetaData(string id);
         HookahSetting GetStandSettings(string id);
         SmokeSession GetLiveSmokeSession(string id);
-       
+        SmokeSession InitSmokeSession(string deviceId = null, string sessionId = null);
+        bool FindDuplicate(string sessionId);
+        string CreateSmokeSession(string hookahId);
     }
 }

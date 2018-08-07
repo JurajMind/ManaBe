@@ -17,6 +17,13 @@ namespace smartHookah.Controllers
     {
         private SmartHookahContext db = new SmartHookahContext();
 
+        private readonly IRedisService _redisService;
+
+        public UpdateController(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
+
         // GET: Update
         public async Task<ActionResult> Index()
         {
@@ -143,31 +150,17 @@ namespace smartHookah.Controllers
         [OptionalHttps(true)]
         public FileResult Download(string id,string token)
         {
-            var path = "";
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var updateRedis = redis.As<UpdateRedis>()["Update:" + token];
-
-                if (updateRedis.HookahCode != id)
-                    throw new HttpException(404, "File not found");
-
-                path = updateRedis.FilePath;
-            }
-
-
+            var path = _redisService.GetUpdateFilePath(id, token);
             var filePath = Server.MapPath(path);
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-            string fileName = "update.bin";
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            const string fileName = "update.bin";
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
         [Authorize]
         public async Task<JsonResult> PromptUpdate(int hookahId, int updateId )
         {
             var user = UserHelper.GetCurentPerson(db);
-
-
             
-
             try
             {
 
@@ -190,12 +183,7 @@ namespace smartHookah.Controllers
                     HookahCode = hookah.Code
                 };
 
-                using (var redis = RedisHelper.redisManager.GetClient())
-                {
-                    redis.As<UpdateRedis>()["Update:" + updateToken] = updateRedis;
-                    redis.ExpireEntryAt("Update:" + updateToken, DateTime.Now.AddMinutes(20));
-
-                }
+                _redisService.Update(updateRedis, updateToken);
 
                 var msg = $"update:{updateToken}";
 

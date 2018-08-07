@@ -17,10 +17,12 @@ namespace smartHookah.Controllers
     public class HookahsController : Controller
     {
         private readonly SmartHookahContext db;
+        private readonly IRedisService _redisService;
 
-        public HookahsController(SmartHookahContext db)
+        public HookahsController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            _redisService = redisService;
         }
 
         // GET: Hookahs
@@ -120,7 +122,7 @@ namespace smartHookah.Controllers
             model.Updates = db.Updates.ToList()
                 .ToSelectedList(a => a.Id.ToString(), a => $"{a.ReleseDate:dd.MM.yyyy}\t{ @Helper.UpdateVersionToString(a.Version)}\t:RN:{a.ReleseNote}");
             model.DeviceSetting = DeviceControlController.GetDeviceSettingViewModel(hookah.Setting,hookah.Version);
-            model.DeviceSetting.SessionId = RedisHelper.GetSmokeSessionId(hookah.Code);
+            model.DeviceSetting.SessionId = _redisService.GetSmokeSessionId(hookah.Code);
             model.Pictures = new SelectList(db.StandPictures, "id", "id", model.Hookah.Setting.Picture);
             return View(model);
         }
@@ -169,7 +171,7 @@ namespace smartHookah.Controllers
 
             for (int i = model.StartIndex; i < model.EndIndex +1; i++)
             {
-                var hookah = new Hookah(modelStand);
+                var hookah = new Hookah(modelStand, _redisService);
                 hookah.Code = string.Format(model.CodePattern, i);
                 hookah.Name = string.Format(model.NamePattern, i);
                 hookah.Owners = new List<Person>();

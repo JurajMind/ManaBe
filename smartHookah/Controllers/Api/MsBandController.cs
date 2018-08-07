@@ -13,13 +13,20 @@ namespace smartHookah.Controllers.Api
 {
     public class MsBandController : ApiController
     {
+        private readonly IRedisService _redisService;
+
+        public MsBandController(IRedisService redisService)
+        {
+            _redisService = redisService;
+        }
+
         [System.Web.Mvc.ActionName("DefaultAction")]
         public BandData GetData(string id)
         {
             try
             {
-                var sessionId = RedisHelper.GetSmokeSessionId(id);
-                var Pufs = RedisHelper.GetPufs(sessionId);
+                var sessionId = _redisService.GetSmokeSessionId(id);
+                var Pufs = _redisService.GetPufs(sessionId);
 
                 var pufCount = Pufs.Count(a => a.Type == PufType.In);
                 var sessionStart = Pufs.OrderBy(a => a.DateTime).First().DateTime;
