@@ -57,10 +57,12 @@ namespace smartHookah.Models
 
             if (this is Coal)
                 return "Coal";
-
-
+            
             if (this is HeatManagment)
                 return "HeatManagment";
+
+            if (this is Tobacco)
+                return "Tobacco";
 
             return "";
         }
