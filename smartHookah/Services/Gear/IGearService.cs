@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using smartHookah.Models;
 
 namespace smartHookah.Services.Gear
@@ -7,5 +6,7 @@ namespace smartHookah.Services.Gear
     public interface IGearService
     {
         List<PipeAccesory> GetPersonAccessories(int personId);
+        PipeAccesory GetPipeAccessory(int id);
+        void Vote(int id, VoteValue value);
     }
 }
