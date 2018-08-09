@@ -65,14 +65,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Authorize, Route("MyGear")]
         public IEnumerable<PipeAccesorySimpleDto> MyGear(string type = "All")
         {
-            var person = this.personService.GetCurentPerson();
-
-            if (person == null)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Person not logged"));
-            }
-            var accessories = gearService.GetPersonAccessories(person.Id, type);
+            var accessories = gearService.GetPersonAccessories(null, type);
             foreach (var acc in accessories)
             {
                 yield return PipeAccesorySimpleDto.FromModel(acc);

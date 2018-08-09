@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
+using PInvoke;
 using smartHookah.Models;
 using smartHookah.Services.Person;
 
@@ -21,15 +22,38 @@ namespace smartHookah.Services.Gear
             this.personService = personService;
         }
 
-        public List<PipeAccesory> GetPersonAccessories(int personId, string type)
+        public List<PipeAccesory> GetPersonAccessories(int? personId, string type)
         {
-            var person = db.Persons.FirstOrDefault(a => a.Id == personId);
+            var person = personId == null 
+                ? personService.GetCurentPerson()
+                : db.Persons.Find(personId);
+            
             if (person == null) throw new AccountNotFoundException();
-            var result = type == "All"
-                ? person.OwnedPipeAccesories.Select(a => a.PipeAccesory).ToList()
-                : person.OwnedPipeAccesories.Select(a => a.PipeAccesory).Where(a => a.GetTypeName() == type).ToList();
-            if(result == null) throw new ItemNotFoundException($"Accessories of type \'{type}\' not found.");
-            return result;
+            var query = person.OwnedPipeAccesories.Select(a => a.PipeAccesory);
+            switch (type.ToLower())
+            {
+                case "bowl":
+                    query = query.Where(a => a is Bowl);
+                    break;
+                case "tobacco":
+                    query = query.Where(a => a is Tobacco);
+                    break;
+                case "heatmanagement":
+                    query = query.Where(a => a is HeatManagment);
+                    break;
+                case "hookah":
+                    query = query.Where(a => a is Pipe);
+                    break;
+                case "coal":
+                    query = query.Where(a => a is Coal);
+                    break;
+                case "all":
+                    break;
+                default:
+                    throw new ItemNotFoundException($"Accessories of type \'{type}\' not found.");
+            }
+
+            return query.ToList();
         }
 
         public PipeAccesory GetPipeAccessory(int id)
