@@ -272,4 +272,6 @@ namespace smartHookah.Models
 
         }
     }
+
+    public enum VoteValue { Like = 1, Dislike = -1, Unlike = 0 }
 }

@@ -839,6 +839,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\Api\DeviceController.cs" />
+    <Compile Include="Controllers\Api\GearController.cs" />
     <Compile Include="Controllers\Api\MixologyController.cs" />
     <Compile Include="Controllers\Api\PersonController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
