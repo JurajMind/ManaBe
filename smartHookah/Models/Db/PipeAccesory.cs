@@ -59,7 +59,7 @@ namespace smartHookah.Models
                 return "Coal";
             
             if (this is HeatManagment)
-                return "HeatManagment";
+                return "HeatManagement";
 
             if (this is Tobacco)
                 return "Tobacco";
@@ -80,6 +80,8 @@ namespace smartHookah.Models
         }
 
     }
+    
+
 
     public class PipeAccesoryLike
     {
