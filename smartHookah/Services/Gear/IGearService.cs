@@ -5,7 +5,7 @@ namespace smartHookah.Services.Gear
 {
     public interface IGearService
     {
-        List<PipeAccesory> GetPersonAccessories(int personId);
+        List<PipeAccesory> GetPersonAccessories(int? personId, string type);
         PipeAccesory GetPipeAccessory(int id);
         void Vote(int id, VoteValue value);
     }
