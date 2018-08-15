@@ -44,18 +44,20 @@ namespace smartHookah.Models.Dto
         [JsonProperty("DisLikeCount")]
         public int DisLikeCount { get; set; }
 
-        public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null ? null : new PipeAccesorySimpleDto()
-        {
-            Id = model.Id,
-            BrandName = model.Brand.DisplayName,
-            BrandId = model.BrandName,
-            Picture = model.Picture,
-            Name = model.AccName,
-            Type = model.GetTypeName(),
-            Likes = GetLikesList(model.Likes),
-            LikeCount = model.LikeCount,
-            DisLikeCount = model.DisLikeCount
-        }; 
+        public static PipeAccesorySimpleDto FromModel(PipeAccesory model, bool includeVotes = false) => model == null
+            ? null
+            : new PipeAccesorySimpleDto()
+            {
+                Id = model.Id,
+                BrandName = model.Brand.DisplayName,
+                BrandId = model.BrandName,
+                Picture = model.Picture,
+                Name = model.AccName,
+                Type = model.GetTypeName(),
+                Likes = includeVotes ? GetLikesList(model.Likes) : null,
+                LikeCount = model.LikeCount,
+                DisLikeCount = model.DisLikeCount
+            }; 
 
 
         public static PipeAccesorySimpleDto FromModel(Bowl model)
