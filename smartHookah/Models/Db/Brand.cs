@@ -21,6 +21,10 @@ namespace smartHookah.Models.Db
 
         public bool Hookah { get; set; }
 
+        public bool Coal { get; set; }
+
+        public bool HeatManagment { get; set; }
+
         public bool TobaccoMixBrand { get; set; }
 
         public virtual ICollection<PipeAccesory> PipeAccesories { get; set; }

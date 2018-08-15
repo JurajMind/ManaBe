@@ -62,6 +62,18 @@ namespace smartHookah.Controllers
                             accesory = new Pipe(accesory); 
                             break;
                         }
+
+                    case "heatmanagement":
+                        {
+                            accesory = new HeatManagment(accesory);
+                            break;
+                        }
+
+                    case "coal":
+                        {
+                            accesory = new Coal(accesory);
+                            break;
+                        }
                 }
                 var brand = await db.Brands.FindAsync(accesory.BrandName);
 
@@ -169,6 +181,10 @@ namespace smartHookah.Controllers
                     return GetBrandFromQuery(brans.Where(a => a.Hookah));
                 case "tobacco":
                     return GetBrandFromQuery(brans.Where(a => a.Tobacco));
+                case "heatmanagement":
+                    return GetBrandFromQuery(brans.Where(a => a.HeatManagment));
+                case "coal":
+                    return GetBrandFromQuery(brans.Where(a => a.Coal));
             }
 
             return Json(new {brans = new List<string>() {"None"} },JsonRequestBehavior.AllowGet);
