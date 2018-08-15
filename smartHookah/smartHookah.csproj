@@ -846,6 +846,7 @@
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.Designer.cs">
       <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
@@ -2209,6 +2210,9 @@
     <Content Include="Views\Assets\_TermOfUssage.cshtml" />
     <Content Include="Views\Assets\PrivacyPolicy.cshtml" />
     <Content Include="Views\Assets\TermOfUssage.cshtml" />
+    <Content Include="Views\Error\Error403.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\Error\GenericHttpError.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
@@ -2276,6 +2280,7 @@
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
     <Folder Include="Resources\NewFolder1\" />
+    <Folder Include="Views\e\" />
     <Folder Include="Views\Share\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
