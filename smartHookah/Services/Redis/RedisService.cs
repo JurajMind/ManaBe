@@ -30,5 +30,13 @@
                 
             }
         }
+
+        public void StoreAdress(string adress, string hostName)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                redis.AddItemToList(adress,hostName);
+            }
+        }
     }
 }
