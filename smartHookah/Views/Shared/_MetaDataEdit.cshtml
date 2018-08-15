@@ -64,7 +64,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="basic-url">@LocalizationHelper.Translate("_MDEditHMS", "SmokeSession")</label>
-                                            @Html.EnumDropDownListFor(x => x.HeatKeeper, new {@class = "form-control", @name = "HeatKeeper", @id = "HeatKeeper"})
+                                            @Html.DropDownListPipe("heatmanagement", Model.Hmses, Model.SelectedHms, new { id = "heatmanagement", @name = "heatmanagement", @class = "form-control" })
                                         </div>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="bmd-label-floating">@LocalizationHelper.Translate("_MDEditCoalType", "SmokeSession")</label>
-                                            @Html.EnumDropDownListFor(x => x.CoalType, new {@class = "form-control", @name = "CoalType", @id = "CoalType"})
+                                                @Html.DropDownListPipe("coal", Model.Coals, Model.SelectedCoal, new { id = "coal", @name = "coal", @class = "form-control" })
                                         </div>
                                         </div>
                                         <div class="col-md-6">

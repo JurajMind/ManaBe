@@ -541,11 +541,17 @@ namespace smartHookah.Controllers
                 metadata.BowlId = int.Parse(model.Bowl);
 
 
-            metadata.HeatKeeper = (HeatKeeper) model.HeatKeeper;
+            if (!string.IsNullOrEmpty(model.HeatManagement))
+                metadata.HeatManagementId = int.Parse(model.HeatManagement);
+
+            if (!string.IsNullOrEmpty(model.Coal))
+                metadata.CoalId = int.Parse(model.Coal);
+
+            metadata.HeatKeeper = HeatKeeper.Unknown;
 
             metadata.PackType = (PackType) model.PackType;
 
-            metadata.CoalType = (CoalType) model.CoalType;
+            metadata.CoalType = CoalType.Unknown;
 
 
             metadata.CoalsCount = model.CoalsCount;

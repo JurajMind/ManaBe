@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
@@ -7,7 +9,7 @@ namespace smartHookah.Models.Dto
     public class PipeAccesorySimpleDto
     {
         [DataMember]
-        [JsonProperty("id")]
+        [JsonProperty("Id")]
         public int Id { get; set; }
          
         [DataMember]
@@ -30,22 +32,31 @@ namespace smartHookah.Models.Dto
         [JsonProperty("Type")]
         public string Type { get; set; }
 
-        public static PipeAccesorySimpleDto FromModel(PipeAccesory model)
-        {
-            if (model == null)
-            {
-                return null;
-            }
+        [DataMember]
+        [JsonProperty("Likes")]
+        public List<PipeAccesoryLikeDto> Likes;
 
-            return new PipeAccesorySimpleDto()
-            {
-                Id = model.Id, 
-                BrandName = model.Brand.DisplayName, 
-                BrandId = model.BrandName,
-                Picture = model.Picture, 
-                Name = model.AccName
-            }; 
-        }
+        [DataMember]
+        [JsonProperty("LikeCount")]
+        public int LikeCount { get; set; }
+
+        [DataMember]
+        [JsonProperty("DisLikeCount")]
+        public int DisLikeCount { get; set; }
+
+        public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null ? null : new PipeAccesorySimpleDto()
+        {
+            Id = model.Id,
+            BrandName = model.Brand.DisplayName,
+            BrandId = model.BrandName,
+            Picture = model.Picture,
+            Name = model.AccName,
+            Type = model.GetTypeName(),
+            Likes = GetLikesList(model.Likes),
+            LikeCount = model.LikeCount,
+            DisLikeCount = model.DisLikeCount
+        }; 
+
 
         public static PipeAccesorySimpleDto FromModel(Bowl model)
         {
@@ -71,5 +82,38 @@ namespace smartHookah.Models.Dto
             return result;
         }
 
+        private static List<PipeAccesoryLikeDto> GetLikesList(IEnumerable<PipeAccesoryLike> model)
+        {
+            return model.Select(PipeAccesoryLikeDto.FromModel).ToList();
+        }
+    }
+
+    public class PipeAccesoryLikeDto
+    {
+        [DataMember]
+        [JsonProperty("Id")]
+        public int Id { get; set; }
+
+        [DataMember]
+        [JsonProperty("PersonId")]
+        public int PersonId { get; set; }
+
+        [DataMember]
+        [JsonProperty("PipeAccessoryId")]
+        public int PipeAccesoryId { get; set; }
+
+        [DataMember]
+        [JsonProperty("Value")]
+        public int Value { get; set; }
+
+        public static PipeAccesoryLikeDto FromModel(PipeAccesoryLike model) => model == null
+            ? null
+            : new PipeAccesoryLikeDto()
+            {
+                Id = model.Id,
+                PersonId = model.PersonId,
+                PipeAccesoryId = model.PipeAccesoryId,
+                Value = model.Value
+            };
     }
 }

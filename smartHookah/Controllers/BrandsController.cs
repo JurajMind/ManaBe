@@ -56,7 +56,7 @@ namespace smartHookah.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "DisplayName,Url,Picture,TobaccoSimple,Bowl,Hookah,TobaccoMixBrand")] Brand brand, HttpPostedFileBase file, FormCollection collection)
+        public async Task<ActionResult> Create([Bind(Include = "DisplayName,Url,Picture,TobaccoSimple,Bowl,Hookah,Coal,HeatManagment,TobaccoMixBrand")] Brand brand, HttpPostedFileBase file, FormCollection collection)
         {
             if (ModelState.IsValid)
             {
@@ -120,7 +120,7 @@ namespace smartHookah.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "DisplayName,Url,Picture,TobaccoSimple,Bowl,Hookah,TobaccoMixBrand")] Brand brand)
+        public async Task<ActionResult> Edit([Bind(Include = "Name,DisplayName,Url,Picture,TobaccoSimple,Bowl,Hookah,Coal,HeatManagment,TobaccoMixBrand")] Brand brand)
         {
             if (ModelState.IsValid)
             {

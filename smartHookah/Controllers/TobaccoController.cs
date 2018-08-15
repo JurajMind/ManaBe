@@ -20,16 +20,21 @@ namespace smartHookah.Controllers
     using smartHookah.Helpers;
     using smartHookah.Services.Person;
 
+    using smartHookahCommon;
+
     public class TobaccoController : Controller
     {
         private readonly SmartHookahContext db;
 
         private readonly IPersonService personService;
 
-        public TobaccoController(SmartHookahContext db, IPersonService personService)
+        private readonly IRedisService redisService;
+
+        public TobaccoController(SmartHookahContext db, IPersonService personService, IRedisService redisService)
         {
             this.db = db;
             this.personService = personService;
+            this.redisService = redisService;
         }
 
         // GET: TobaccoSimple
@@ -118,6 +123,7 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> ByBrand(string brand, int? page, string sortOrder = null)
         {
+            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
             ViewBag.Brand = brand;
 
             var filterTobacco = FilterTobacco(sortOrder, page, ViewBag, filter: $"brand_{brand}");
@@ -128,6 +134,8 @@ namespace smartHookah.Controllers
         // GET: TobaccoSimple/Details/5
         public async Task<ActionResult> Details(int? id)
         {
+            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var tobacco = await db.Tobaccos.Include(a => a.Statistics).FirstOrDefaultAsync(a => a.Id == id);
@@ -396,6 +404,9 @@ namespace smartHookah.Controllers
         public async Task<ActionResult> FilterTobaccoAjax(string sortOrder, int? page, string filter,
             string previousSort = null)
         {
+
+            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
+            
             var model = FilterTobacco(sortOrder, page, filter: filter, previousSort: previousSort);
 
             return View("_FilterTobaccoGrid", model);

@@ -21,11 +21,11 @@ namespace smartHookah.Controllers
 
         public string Bowl { get; set; }
 
-        public int HeatKeeper { get; set; }
+        public string HeatManagement { get; set; }
 
         public int PackType { get; set; }
 
-        public int CoalType { get; set; }
+        public string Coal { get; set; }
 
         public double CoalsCount { get; set; }
 
