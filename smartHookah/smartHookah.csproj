@@ -839,15 +839,25 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\Api\DeviceController.cs" />
+    <Compile Include="Controllers\Api\GearController.cs" />
     <Compile Include="Controllers\Api\MixologyController.cs" />
     <Compile Include="Controllers\Api\PersonController.cs" />
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.Designer.cs">
       <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808061843246_coalHms.cs" />
+    <Compile Include="Migrations\201808061843246_coalHms.Designer.cs">
+      <DependentUpon>201808061843246_coalHms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808062037572_pipeAccesoryLikes.cs" />
+    <Compile Include="Migrations\201808062037572_pipeAccesoryLikes.Designer.cs">
+      <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
@@ -872,6 +882,8 @@
     <Compile Include="Services\Device\IDeviceService.cs" />
     <Compile Include="Services\Device\IIotService.cs" />
     <Compile Include="Services\Device\IotService.cs" />
+    <Compile Include="Services\Gear\GearService.cs" />
+    <Compile Include="Services\Gear\IGearService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
@@ -1770,6 +1782,12 @@
     <EmbeddedResource Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.resx">
       <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808061843246_coalHms.resx">
+      <DependentUpon>201808061843246_coalHms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808062037572_pipeAccesoryLikes.resx">
+      <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
@@ -2192,6 +2210,9 @@
     <Content Include="Views\Assets\_TermOfUssage.cshtml" />
     <Content Include="Views\Assets\PrivacyPolicy.cshtml" />
     <Content Include="Views\Assets\TermOfUssage.cshtml" />
+    <Content Include="Views\Error\Error403.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\Error\GenericHttpError.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
@@ -2259,6 +2280,7 @@
     <Folder Include="Content\noUiSlider\" />
     <Folder Include="Content\PlacePictures\" />
     <Folder Include="Resources\NewFolder1\" />
+    <Folder Include="Views\e\" />
     <Folder Include="Views\Share\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
@@ -2274,6 +2296,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610291636335_settings.resx">
       <DependentUpon>201610291636335_settings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610291720493_setting2.resx">
       <DependentUpon>201610291720493_setting2.cs</DependentUpon>

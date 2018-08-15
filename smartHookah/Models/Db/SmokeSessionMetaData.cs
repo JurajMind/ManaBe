@@ -22,6 +22,14 @@ namespace smartHookah.Models
         public int? PipeId { get; set; }
         public virtual Pipe Pipe { get; set; }
 
+        [ForeignKey("Coal")]
+        public int? CoalId { get; set; }
+        public virtual Coal Coal { get; set; }
+
+        [ForeignKey("HeatManagement")]
+        public int? HeatManagementId { get; set; }
+        public virtual HeatManagment HeatManagement { get; set; }
+
         public PackType PackType { get; set; }
 
         public HeatKeeper HeatKeeper { get; set; }

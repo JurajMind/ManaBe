@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 using smartHookah.Models;
 using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
 
 namespace smartHookah.Controllers.Api
 {
@@ -16,15 +18,16 @@ namespace smartHookah.Controllers.Api
     [RoutePrefix("api/Person")]
     public class PersonController : ApiController
     {
-        private readonly SmartHookahContext db;
-
         private readonly IPersonService personService;
+        private readonly IGearService gearService;
 
-        public PersonController(SmartHookahContext db, IPersonService personService)
+        public PersonController(IPersonService personService, IGearService gearService)
         {
-            this.db = db;
             this.personService = personService;
+            this.gearService = gearService;
         }
+
+        #region Getters
 
         [HttpGet]
         [Route("GetPersonActiveData")]
@@ -58,5 +61,17 @@ namespace smartHookah.Controllers.Api
                 GameProfile = gameProfile
             };
         }
+
+        [HttpGet, Authorize, Route("MyGear")]
+        public IEnumerable<PipeAccesorySimpleDto> MyGear(string type = "All")
+        {
+            var accessories = gearService.GetPersonAccessories(null, type);
+            foreach (var acc in accessories)
+            {
+                yield return PipeAccesorySimpleDto.FromModel(acc);
+            }
+        }
+
+        #endregion
     }
 }

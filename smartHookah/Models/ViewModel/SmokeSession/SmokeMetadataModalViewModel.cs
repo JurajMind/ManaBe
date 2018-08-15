@@ -120,6 +120,24 @@
                 }
             }
 
+            if (metadata.HeatManagementId != null)
+            {
+                result.SelectedHms = metadata.HeatManagement.Id;
+                if (result.Pipes.All(a => a.Id != result.SelectedPipe))
+                {
+                    result.Hmses.Add(db.HeatManagments.Find(result.SelectedHms));
+                }
+            }
+
+            if (metadata.CoalId != null)
+            {
+                result.SelectedCoal = metadata.Coal.Id;
+                if (result.Coals.All(a => a.Id != result.SelectedCoal))
+                {
+                    result.Coals.Add(db.Coals.Find(result.SelectedCoal));
+                }
+            }
+
 
             result.PackType = metadata.PackType;
             result.HeatKeeper = metadata.HeatKeeper;
@@ -141,13 +159,17 @@
                 result.MyGear = person.MyGear;
                 if (person.MyGear)
                 {
-                    result.Bowl = person.Bowls;
-                    result.Pipes = person.Pipes;
+                    result.Bowl = person.Bowls.Any() ? person.Bowls : db.Bowls.ToList();
+                    result.Pipes = person.Pipes.Any() ? person.Pipes : db.Pipes.ToList();
+                    result.Hmses = person.HeatManagments.Any() ? person.HeatManagments : db.HeatManagments.ToList();
+                    result.Coals = person.Coals.Any() ? person.Coals : db.Coals.ToList();
                 }
                 else
                 {
                     result.Bowl = db.Bowls.ToList();
                     result.Pipes = db.Pipes.ToList();
+                    result.Hmses = db.HeatManagments.ToList();
+                    result.Coals = db.Coals.ToList();
                 }
             }
             else
@@ -218,6 +240,10 @@
 
         public int SelectedBowl { get; set; }
 
+        public int SelectedHms { get; set; }
+
+        public int SelectedCoal { get; set; }
+
         public static void InitOldSmokeSession(int hookahId, string sessionId)
         {
             using (var db = new SmartHookahContext())
@@ -239,6 +265,9 @@
         }
         public List<Bowl> Bowl { get; set; }
         public List<Pipe> Pipes { get; set; }
+        public List<Coal> Coals { get; set; }
+
+        public List<HeatManagment> Hmses { get; set; }
 
         public int? DbSmokeSessionId { get; set; }
         
