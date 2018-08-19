@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Web;
+
 using smartHookah.Models;
-using ServiceStack.Common;
 using smartHookah.Models.Redis;
+
 using smartHookahCommon;
-using System.Threading.Tasks;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -21,6 +18,8 @@ namespace smartHookah.Services.SmokeSession
         {
             this.db = db;
         }
+
+        #region  Getterss
 
         public DynamicSmokeStatistic GetRedisData(string id)
         {
@@ -44,20 +43,24 @@ namespace smartHookah.Services.SmokeSession
 
         public HookahSetting GetStandSettings(string id)
         {
-            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.Hookah.Setting).FirstOrDefault(s => s.SessionId == id);
+            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.Hookah.Setting)
+                .FirstOrDefault(s => s.SessionId == id);
             var result = session?.Hookah.Setting;
             return result;
         }
 
         public SmokeSession GetLiveSmokeSession(string id)
         {
-            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == id);
+            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData)
+                .FirstOrDefault(a => a.SessionId == id);
             if (session != null)
             {
                 session.DynamicSmokeStatistic = this.GetRedisData(id);
-                
             }
+
             return session;
         }
+
+        #endregion
     }
 }
