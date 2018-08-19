@@ -11,6 +11,8 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
+    using smartHookah.ErrorHandler;
+
     [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController
     {
@@ -64,7 +66,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("GetSessionCode")]
-        [Authorize(Roles = "Admin")]
+        [ApiAuthorize(Roles = "Admin")]
         public string GetSessionCode(string id)
         {
            return this.redisService.GetSessionId(id);
