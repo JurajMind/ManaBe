@@ -22,6 +22,14 @@
             }
         }
 
+        public string GetSessionId(string hookahId)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                return redis.Get<string>($"hookah:{hookahId}");
+            }
+        }
+
         public DynamicSmokeStatistic GetDynamicSmokeStatistic(string sessionId)
         {
             using (var redis = this.redisManager.GetClient())
