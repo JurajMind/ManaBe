@@ -844,6 +844,7 @@
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="ErrorHandler\ApiAuthorize.cs" />
     <Compile Include="Helpers\EnumExtansions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
