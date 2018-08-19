@@ -68,6 +68,7 @@ namespace smartHookah.Models
         }
 
 
+
         public PipeAccesory(PipeAccesory accesory)
         {
             this.Id = accesory.Id;
@@ -276,4 +277,15 @@ namespace smartHookah.Models
     }
 
     public enum VoteValue { Like = 1, Dislike = -1, Unlike = 0 }
+
+    public enum AccesoryType
+    {
+        Bowl,
+        Tobacco,
+        TobaccoMix,
+        Heatmanagement,
+        Hookah,
+        Coal,
+
+    }
 }
