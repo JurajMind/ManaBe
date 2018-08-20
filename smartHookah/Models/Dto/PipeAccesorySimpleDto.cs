@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Microsoft.AspNet.SignalR;
+using System.Web.Http;
 using Newtonsoft.Json;
 
 namespace smartHookah.Models.Dto
