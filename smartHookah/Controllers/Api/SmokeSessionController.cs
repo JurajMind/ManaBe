@@ -67,9 +67,10 @@ namespace smartHookah.Controllers.Api
         [HttpGet]
         [Route("GetSessionCode")]
         [ApiAuthorize(Roles = "Admin")]
-        public string GetSessionCode(string id)
+        public object GetSessionCode(string id)
         {
-           return this.redisService.GetSessionId(id);
+            return new { sessionCode = this.redisService.GetSessionId(id)};
+
         }
 
         [HttpGet]

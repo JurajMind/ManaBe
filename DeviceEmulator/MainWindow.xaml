@@ -11,7 +11,7 @@
         <Button x:Name="pufButton" Content="PufButton" HorizontalAlignment="Left" Margin="37,49,0,0" VerticalAlignment="Top" Width="75" MouseRightButtonDown="pufButton_MouseLeftButtonDown" MouseRightButtonUp="pufButton_MouseLeftButtonUp" MouseLeftButtonDown="pufButton_MouseLeftButtonDown"  PreviewMouseLeftButtonUp="pufButton_MouseLeftButtonUp"/>
         <Button x:Name="blowButton" Content="BlowButton
                 " HorizontalAlignment="Left" Margin="338,49,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="0.569,-0.266" MouseRightButtonDown="blowButton_MouseLeftButtonDown" MouseRightButtonUp="blowButton_MouseLeftButtonUp"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="112,120,0,0" TextWrapping="Wrap" Text="http://localhost:36065/api/puf/emulator" VerticalAlignment="Top" Width="367" Name="Url"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="112,120,0,0" TextWrapping="Wrap" Text="http://devmana.azurewebsites.net/api/puf/emulator" VerticalAlignment="Top" Width="367" Name="Url"/>
         <TextBlock HorizontalAlignment="Left" Margin="123,99,0,0" TextWrapping="Wrap" Text="Url" VerticalAlignment="Top" RenderTransformOrigin="-1.624,0.57"/>
 
     </Grid>
