@@ -54,7 +54,7 @@ namespace smartHookah.Controllers.Api
                 var user = this.personService.GetCurentPerson();
                 if (user == null)
                 {
-                    throw new HttpException("User not found",HttpStatusCode.Unauthorized,Request.RequestUri);
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Forbidden,"User not found"));
                 }
                 ;
                 var userId = user.Id;

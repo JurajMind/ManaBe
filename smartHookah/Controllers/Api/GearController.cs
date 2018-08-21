@@ -47,8 +47,8 @@ namespace smartHookah.Controllers.Api
             {
                 return this.gearService.SearchAccesories(search, result,page,pageSize);
             }
-           throw new HttpException($"Type:{type} was not recognize",HttpStatusCode.BadRequest,Request.RequestUri);
-            
+            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Type:{type} was not recognize"));
+
         }
     }
 }
