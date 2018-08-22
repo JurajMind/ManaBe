@@ -22,6 +22,7 @@ namespace smartHookah
 
     public partial class Startup
     {
+        public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
         public void Configuration(IAppBuilder app)
         {
             GlobalConfiguration.Configuration.UseSqlServerStorage("SmartHookah").UseConsole();
@@ -53,6 +54,7 @@ namespace smartHookah
 
         public void ConfigureOAuth(IAppBuilder app)
         {
+            OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
             var OAuthServerOptions = new OAuthAuthorizationServerOptions
                                          {
                                              AllowInsecureHttp = true,
@@ -71,7 +73,7 @@ namespace smartHookah
 
             // Token Generation
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            app.UseOAuthBearerAuthentication(OAuthBearerOptions);
         }
     }
 }
