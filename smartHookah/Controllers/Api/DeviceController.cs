@@ -176,14 +176,14 @@ namespace smartHookah.Controllers.Api
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new HttpException($"Stand with id {id} not found",HttpStatusCode.NotFound,this.Request.RequestUri);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
             }
 
             var setting = this._deviceService.GetStandSettings(id);
 
             if (setting == null)
             {
-                throw new HttpException($"Stand with id {id} not found", HttpStatusCode.NotFound, this.Request.RequestUri);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
             }
 
             return StandSettings.FromModel(setting);

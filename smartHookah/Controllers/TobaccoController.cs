@@ -500,13 +500,13 @@ namespace smartHookah.Controllers
             var web = new HtmlWeb();
             var doc = web.Load(Url);
 
-            var brands = doc.DocumentNode.SelectNodes(@"//div[contains(@class,'td_module_wrap')]");
+            var brands = doc.DocumentNode.SelectNodes(@"//h3[@class='nott ls0 t600']/a");
             var addedTobaccos = new List<Tobacco>();
 
             foreach (var brand in brands)
             {
                 var name = brand.InnerText.Trim();
-                var url = brand.ChildNodes["h3"].ChildNodes["a"].Attributes["href"].Value;
+                var url = brand.Attributes["href"].Value;
                 var pictureSrc =
                     brand.ChildNodes["div"].ChildNodes["div"].ChildNodes["a"].ChildNodes["img"].Attributes["src"].Value;
 
@@ -792,7 +792,7 @@ namespace smartHookah.Controllers
             var web = new HtmlWeb();
             var doc = web.Load(baseUrl + url);
 
-            var tobacos = doc.DocumentNode.SelectNodes(@"//div[contains(@class,'tabak')]");
+            var tobacos = doc.DocumentNode.SelectNodes(@"//h3[@class='nott ls0 t600']/a");
 
            
 

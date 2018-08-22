@@ -11,7 +11,12 @@ using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
 {
-    public class GearService : IGearService
+    using System.Data.SqlClient;
+
+    using smartHookah.Helpers;
+    using smartHookah.Models.Dto;
+
+    public partial class GearService : IGearService
     {
         private readonly SmartHookahContext db;
         private readonly IPersonService personService;
@@ -62,7 +67,7 @@ namespace smartHookah.Services.Gear
             if(accessory == null) throw new ItemNotFoundException($"Accessory with id {id} not found.");
             return accessory;
         }
-
+        
         public void Vote(int id, VoteValue value)
         {
             var accessory = GetPipeAccessory(id);
@@ -109,5 +114,25 @@ namespace smartHookah.Services.Gear
             db.PipeAccesories.AddOrUpdate(accessory);
             db.SaveChanges();
         }
+
+        public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type,int page,int pageSize)
+        {
+            page = page + 1;
+            var query = ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql");
+            var userId = this.personService.GetCurentPerson().Id;
+            var result = this.db.Database.SqlQuery<Models.Dto.GearService.SearchPipeAccesory>(
+                query
+                , new SqlParameter("personId", userId)
+                , new SqlParameter("sp", search)
+                , new SqlParameter("type", type.GetName())
+                , new SqlParameter("PageNumber", page)
+                , new SqlParameter("RowspPage", pageSize)
+                ).ToList();
+
+            return result;
+        }
+
+        
     }
+
 }
