@@ -37,7 +37,7 @@ namespace smartHookah
             var manager = new RecurringJobManager();
             var AutoEnd = new SessionAutoEnd();
 
-            var isDebug = true;
+            var isDebug = false;
 
             // Debug.Assert(isDebug = true);
             var onDev = ConfigurationManager.AppSettings["idDevel"];
