@@ -14,9 +14,9 @@ namespace smartHookah.Services.SmokeSession
     {
         DynamicSmokeStatistic GetRedisData(string id);
         SmokeSessionStatistics GetStatistics(string id);
-        SmokeSessionMetaData GetMetaData(string id);
+        SmokeSessionMetaData GetMetaData(int id);
         HookahSetting GetStandSettings(string id);
         SmokeSession GetLiveSmokeSession(string id);
-       
+        Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model);
     }
 }
