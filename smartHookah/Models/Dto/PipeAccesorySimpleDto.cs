@@ -106,7 +106,6 @@ namespace smartHookah.Models.Dto
         }
     }
 
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< devel
     public class PipeAccesoryLikeDto
     {
         [DataMember]
@@ -134,11 +133,11 @@ namespace smartHookah.Models.Dto
                 PipeAccesoryId = model.PipeAccesoryId,
                 Value = model.Value
             };
-========================================================================
+
         public static PipeAccesorySimpleDto FromModel(HeatManagment model)
         {
             if (model == null) return null;
-            var result = FromModel(model as PipeAccesory);
+            var result = FromModel(model);
             result.Type = "HeatManagement";
             return result;
         }
@@ -146,11 +145,10 @@ namespace smartHookah.Models.Dto
         public static PipeAccesorySimpleDto FromModel(Coal model)
         {
             if (model == null) return null;
-            var result = FromModel(model as PipeAccesory);
+            var result = FromModel(model);
             result.Type = "Coal";
             return result;
         }
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> milos/104_saveMetadata
     }
 }

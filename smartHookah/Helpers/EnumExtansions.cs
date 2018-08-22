@@ -3,6 +3,7 @@
     using System;
 
     using smartHookah.Models;
+    using smartHookah.Models.Dto;
 
     public static class EnumExtansions
     {
