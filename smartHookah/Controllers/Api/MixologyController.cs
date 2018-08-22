@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 using smartHookah.Models;
 using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
 
 namespace smartHookah.Controllers.Api
 {
@@ -30,12 +31,15 @@ namespace smartHookah.Controllers.Api
 
         private readonly IPersonService personService;
 
+        private readonly IGearService gearService;
+
         private readonly ILog logger = LogManager.GetLogger(typeof(MixologyController));
 
-        public MixologyController(SmartHookahContext db,IPersonService personService)
+        public MixologyController(SmartHookahContext db,IPersonService personService, IGearService gearService)
         {
             this.db = db;
             this.personService = personService;
+            this.gearService = gearService;
         }
         
         #region Getters
@@ -244,6 +248,22 @@ namespace smartHookah.Controllers.Api
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError,
                     $"Server error"));
             }
+        }
+
+        [System.Web.Http.HttpPost, System.Web.Http.Authorize, System.Web.Http.Route("{id}/Vote")]
+        public HttpResponseMessage Vote(int id, [FromBody] int value)
+        {
+            value = value < 0 ? (int)VoteValue.Dislike : value > 0 ? (int)VoteValue.Like : (int)VoteValue.Unlike;
+            try
+            {
+                gearService.Vote(id, (VoteValue)value);
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+            }
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         #endregion

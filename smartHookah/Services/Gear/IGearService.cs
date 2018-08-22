@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using smartHookah.Models;
 
 namespace smartHookah.Services.Gear

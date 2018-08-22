@@ -66,7 +66,7 @@ namespace smartHookah.Services.Gear
             if(accessory == null) throw new ItemNotFoundException($"Accessory with id {id} not found.");
             return accessory;
         }
-
+        
         public void Vote(int id, VoteValue value)
         {
             var accessory = GetPipeAccessory(id);

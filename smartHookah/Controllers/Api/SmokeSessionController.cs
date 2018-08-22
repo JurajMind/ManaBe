@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 using smartHookah.Models;
@@ -95,6 +98,24 @@ namespace smartHookah.Controllers.Api
 
             var standSetting = StandSettings.FromModel(session.Hookah.Setting);
             return new InitDataDto() { SmokeSession = smokeSession, StandSettings = standSetting };
+        }
+
+        #endregion
+
+        #region Post methods
+
+        [HttpPost, Route("{id}/SaveMetaData")]
+        public async Task<SmokeSessionMetaDataDto> SaveMetaData(string id, SmokeSessionMetaDataDto model)
+        {
+            try
+            {
+                var result = await sessionService.SaveMetaData(id, model.ToModel());
+                return SmokeSessionMetaDataDto.FromModel(result);
+            }
+            catch (Exception e)
+            {
+                throw new HttpRequestException(e.Message);
+            }
         }
 
         #endregion
