@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 using smartHookah.Models;
@@ -11,6 +14,8 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
+    using smartHookah.ErrorHandler;
+
     [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController
     {
@@ -18,10 +23,13 @@ namespace smartHookah.Controllers.Api
 
         private readonly ISmokeSessionService sessionService;
 
-        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService)
+        private readonly IRedisService redisService;
+
+        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService)
         {
             this.db = db;
             this.sessionService = sessionService;
+            this.redisService = redisService;
         }
 
         #region Getters and Validators
@@ -60,6 +68,15 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet]
+        [Route("GetSessionCode")]
+        [ApiAuthorize(Roles = "Admin")]
+        public object GetSessionCode(string id)
+        {
+            return new { sessionCode = this.redisService.GetSessionId(id)};
+
+        }
+
+        [HttpGet]
         [Route("InitData")]
         public InitDataDto InitData(string id)
         {
@@ -81,6 +98,24 @@ namespace smartHookah.Controllers.Api
 
             var standSetting = StandSettings.FromModel(session.Hookah.Setting);
             return new InitDataDto() { SmokeSession = smokeSession, StandSettings = standSetting };
+        }
+
+        #endregion
+
+        #region Post methods
+
+        [HttpPost, Route("{id}/SaveMetaData")]
+        public async Task<SmokeSessionMetaDataDto> SaveMetaData(string id, SmokeSessionMetaDataDto model)
+        {
+            try
+            {
+                var result = await sessionService.SaveMetaData(id, model.ToModel());
+                return SmokeSessionMetaDataDto.FromModel(result);
+            }
+            catch (Exception e)
+            {
+                throw new HttpRequestException(e.Message);
+            }
         }
 
         #endregion

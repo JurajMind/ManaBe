@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Web.Http;
 using Newtonsoft.Json;
 
 namespace smartHookah.Models.Dto
@@ -44,19 +45,36 @@ namespace smartHookah.Models.Dto
         [JsonProperty("DisLikeCount")]
         public int DisLikeCount { get; set; }
 
-        public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null ? null : new PipeAccesorySimpleDto()
-        {
-            Id = model.Id,
-            BrandName = model.Brand.DisplayName,
-            BrandId = model.BrandName,
-            Picture = model.Picture,
-            Name = model.AccName,
-            Type = model.GetTypeName(),
-            Likes = GetLikesList(model.Likes),
-            LikeCount = model.LikeCount,
-            DisLikeCount = model.DisLikeCount
-        }; 
-
+        [Authorize(Roles = "Admin")]
+        public static PipeAccesorySimpleDto FromModel(PipeAccesory model, bool includeVotes) => model == null
+            ? null
+            : new PipeAccesorySimpleDto()
+            {
+                Id = model.Id,
+                BrandName = model.Brand.DisplayName,
+                BrandId = model.BrandName,
+                Picture = model.Picture,
+                Name = model.AccName,
+                Type = model.GetTypeName(),
+                Likes = includeVotes ? GetLikesList(model.Likes) : null,
+                LikeCount = model.LikeCount,
+                DisLikeCount = model.DisLikeCount
+            };
+        
+        public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null
+            ? null
+            : new PipeAccesorySimpleDto()
+            {
+                Id = model.Id,
+                BrandName = model.Brand.DisplayName,
+                BrandId = model.BrandName,
+                Picture = model.Picture,
+                Name = model.AccName,
+                Type = model.GetTypeName(),
+                Likes = null,
+                LikeCount = model.LikeCount,
+                DisLikeCount = model.DisLikeCount
+            };
 
         public static PipeAccesorySimpleDto FromModel(Bowl model)
         {
@@ -115,5 +133,22 @@ namespace smartHookah.Models.Dto
                 PipeAccesoryId = model.PipeAccesoryId,
                 Value = model.Value
             };
+
+        public static PipeAccesorySimpleDto FromModel(HeatManagment model)
+        {
+            if (model == null) return null;
+            var result = FromModel(model);
+            result.Type = "HeatManagement";
+            return result;
+        }
+
+        public static PipeAccesorySimpleDto FromModel(Coal model)
+        {
+            if (model == null) return null;
+            var result = FromModel(model);
+            result.Type = "Coal";
+            return result;
+        }
+
     }
 }
