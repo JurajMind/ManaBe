@@ -560,7 +560,7 @@ namespace smartHookah.Controllers
                 new JProperty("token_type", "bearer"),
                 new JProperty("expires_in", tokenExpiration.TotalSeconds.ToString()),
                 new JProperty(".issued", ticket.Properties.IssuedUtc.ToString()),
-                new JProperty(".expires", ticket.Properties.ExpiresUtc.ToString())
+                new JProperty("expires_in", ticket.Properties.ExpiresUtc.ToString())
             );
 
             return tokenResponse;
