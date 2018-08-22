@@ -4,6 +4,8 @@ using smartHookah.Models;
 
 namespace smartHookah.Services.Gear
 {
+    using smartHookah.Models.Dto;
+
     public interface IGearService
     {
         List<PipeAccesory> GetPersonAccessories(int? personId, string type);

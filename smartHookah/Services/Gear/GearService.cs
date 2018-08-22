@@ -14,6 +14,7 @@ namespace smartHookah.Services.Gear
     using System.Data.SqlClient;
 
     using smartHookah.Helpers;
+    using smartHookah.Models.Dto;
 
     public partial class GearService : IGearService
     {

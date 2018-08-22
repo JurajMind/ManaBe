@@ -860,6 +860,7 @@
     <Compile Include="Migrations\201808062037572_pipeAccesoryLikes.Designer.cs">
       <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\AccesoryType.cs" />
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
