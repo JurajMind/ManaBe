@@ -1,48 +1,59 @@
-﻿@model smartHookah.Models.Media
+﻿@model int
 
 @{
     ViewBag.Title = "Create new media";
+    string type = ViewBag.type;
+}
+@Styles.Render("~/Content/slim")
+
+@functions{
+    private static string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
 }
 
 
+<div class="card">
 
-@using (Html.BeginForm("Create","Media",FormMethod.Post, new { enctype = "multipart/form-data", id = "createForm" }))
-{
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("id", @Model)
+            @Html.Hidden("type", type)
+
+            <div class="form-group">
+                <div class="slim"
+                     data-meta-id="@Model"
+                     data-meta-type="@type"
+                     data-service-format="file"
+                     data-service="/Media/Create/@{@Model}?type=@type" ,
+                     data-push="false"
+                     data-size="1800,1200"
+                     data-did-upload="imageUpload"
+                     data-ratio="3:2"
+                     >
+                </div>
+            </div>
+        </div>
     
-    <div class="form-horizontal">
-        <h4>Media</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        
-        <div class="form-group">
-           
-            <div class="col-md-10">
-                <label class="btn btn-primary" >
-                    <input  name="file" type="file" style="display:none;" onchange="$('#pictureFileInfo').html(this.files[0].name);">
-                    Upload
-                </label>
-                <span class='label label-info' id="pictureFileInfo"></span>
-            </div>
-        </div>
 
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Type, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/slim")
+    <script language="javascript">
+        function imageUpload(error, data, response) {
+            window.history.back();
+        }
+    </script>
+
+}

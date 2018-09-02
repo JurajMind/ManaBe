@@ -1,9 +1,9 @@
 ﻿@model smartHookah.Models.Place
 
 @{
-    var picture =  @Model.Medias.FirstOrDefault();
+    var picture =  @Model.Medias.LastOrDefault();
     var src = "";
-    src = picture == null ? "https://lorempixel.com/320/180/nightlife/" : picture.GetSize(180);
+    src = picture == null ? "https://lorempixel.com/320/180/nightlife/" : picture.GetSize(160);
     var isOpen = Model.IsOpen(DateTime.Now);
 }
 

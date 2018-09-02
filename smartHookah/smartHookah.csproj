@@ -1651,6 +1651,7 @@
     <Content Include="Content\season.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\select2.min.css" />
+    <Content Include="Content\slim.min.css" />
     <Content Include="Content\tether\tether-theme-arrows-dark.css" />
     <Content Include="Content\tether\tether-theme-arrows-dark.min.css" />
     <Content Include="Content\tether\tether-theme-arrows.css" />
@@ -1854,6 +1855,7 @@
     <Content Include="Scripts\select2.full.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\slim\slim.kickstart.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />

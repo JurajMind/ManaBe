@@ -12,7 +12,7 @@
     {
         <div class="card">
             <div class="card-body">
-                <img src="@media.Path" alt="@media.Id" height="300px"/>
+                <img src="@media.Sized()" alt="@media.Id" height="300px"/>
             </div>
             <div class="footer">
                 <a class="btn btn-danger" href="@Url.Action("DeleteMedia",new {id = Model.Id, mediaId = media.Id})">Remove&nbsp;<i class="fa fa-trash"></i></a>
@@ -23,5 +23,5 @@
 
 @section dropmenu
 {
-    <a href="@Url.Action("AddMedia",new {id = @Model.Id})" class="btn btn-success">Add new</a>
+    <a href="@Url.Action("Create",new {controller="Media",id = @Model.Id,type="place"})" class="btn btn-success">Add new</a>
 }
