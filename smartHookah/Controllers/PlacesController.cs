@@ -224,8 +224,16 @@
                 var media = this.db.Media.Find(mediaId);
                 var serverPath = this.Server.MapPath(media.GetDirectory);
                 var dir = new DirectoryInfo(serverPath);
-
-                foreach (var file in dir.EnumerateFiles($"{media.FileName}*")) file.Delete();
+                try
+                {
+                    foreach (var file in dir.EnumerateFiles($"{media.FileName}*")) file.Delete();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    //throw;
+                }
+        
 
                 this.db.Media.Remove(media);
                 this.db.SaveChanges();
