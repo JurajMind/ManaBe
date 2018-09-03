@@ -192,10 +192,10 @@ namespace smartHookah.Controllers
             dynamic ViewBag = null, string filter = null, string previousSort = null, IQueryable<Person> person = null)
         {
 
-            if (person == null)
-            {
-                person = this.personService.GetCurentPersonIQuerable();
-            }
+//            if (person == null)
+//            {
+//                person = this.personService.GetCurentPersonIQuerable();
+//            }
             sortOrder = String.IsNullOrEmpty(sortOrder) ? "smokeduration_desc" : sortOrder;
             ;
             if (previousSort == sortOrder)
@@ -1027,7 +1027,7 @@ namespace smartHookah.Controllers
             var model = new MixViewModel();
             model.MixBrands = await db.Brands.Where(a => a.TobaccoMixBrand && a.Name !="OwnBrand").ToListAsync();
 
-            var person = UserHelper.GetCurentPerson(db);
+            var person = personService.GetCurentPerson();
             if (person != null)
             {
                 model.Mixes = db.TobaccoMixs.Where(a => a.AuthorId == person.Id).Take(5).ToList();
