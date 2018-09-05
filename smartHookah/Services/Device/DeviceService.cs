@@ -33,7 +33,7 @@ namespace smartHookah.Services.Device
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
             if (animation.VersionFrom != 0 && animation.VersionTo != 0)
-              if (animation.VersionFrom <= hookah.Version && animation.VersionTo >= hookah.Version)
+              if (animation.VersionFrom >= hookah.Version || animation.VersionTo <= hookah.Version)
                     throw new NotSupportedException($"Animation {animation.DisplayName} not supported by your Hookah OS version.");
 
             var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int)state}{animation.Id}");
