@@ -522,7 +522,7 @@ namespace smartHookah.Controllers
                 //   return BadRequest("Invalid Provider or External Access Token");
             }
 
-            IdentityUser user = await UserManager.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
+            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
 
             bool hasRegistered = user != null;
 
@@ -533,22 +533,19 @@ namespace smartHookah.Controllers
             }
 
             //generate access token response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName,user.Id);
+            var accessTokenResponse = GenerateLocalAccessTokenResponse(user);
 
             return await accessTokenResponse;
 
         }
 
-        private async Task<JObject> GenerateLocalAccessTokenResponse(string userName,string id)
+        private async Task<JObject> GenerateLocalAccessTokenResponse(ApplicationUser user)
         {
 
             var tokenExpiration = TimeSpan.FromDays(1);
 
-            ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
-
-            identity.AddClaim(new Claim(ClaimTypes.Name, userName));
-            identity.AddClaim(new Claim("role", "user"));
-
+            ClaimsIdentity identity = await UserManager.CreateIdentityAsync(user, OAuthDefaults.AuthenticationType);
+            
             var props = new AuthenticationProperties()
                             {
                                 IssuedUtc = DateTime.UtcNow,
@@ -566,7 +563,7 @@ namespace smartHookah.Controllers
                 var token = new RefreshToken()
                                 {
                                     Id = Helper.GetHash(refreshTokenId),
-                                    ClientId = id,
+                                    ClientId = "test",
                                     Subject = identity.Name,
                                     IssuedUtc = DateTime.UtcNow,
                                     ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(2000))
@@ -581,7 +578,7 @@ namespace smartHookah.Controllers
             }
 
             JObject tokenResponse = new JObject(
-                new JProperty("userName", userName),
+                new JProperty("userName", user.DisplayName),
                 new JProperty("access_token", accessToken),
                 new JProperty("refresh_token", refreshToken),
                 new JProperty("token_type", "bearer"),
