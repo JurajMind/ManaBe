@@ -48,7 +48,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("GetMixes")]
         public async Task<MixListDTO> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
         {
-            var query = from a in this.db.TobaccoMixs select a;
+           var query = from a in this.db.TobaccoMixs select a;
             if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
             {
                 query = from m in query where m.Brand.Name.ToLower() == author.ToLower() select m;
