@@ -41,9 +41,9 @@
 
         public DbSet<HookahOrder> HookahOrders { get; set; }
 
-        public DbSet<Hookah> Hookahs { get; set; }
+        public virtual DbSet<Hookah> Hookahs { get; set; }
 
-        public DbSet<HookahSetting> HookahSettings { get; set; }
+        public virtual DbSet<HookahSetting> HookahSettings { get; set; }
 
         public DbSet<Media> Media { get; set; }
 
