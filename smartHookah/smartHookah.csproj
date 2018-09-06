@@ -845,7 +845,7 @@
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="ErrorHandler\ApiAuthorize.cs" />
-    <Compile Include="Helpers\EnumExtansions.cs" />
+    <Compile Include="Helpers\EnumExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
