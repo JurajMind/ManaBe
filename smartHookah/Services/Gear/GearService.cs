@@ -124,7 +124,7 @@ namespace smartHookah.Services.Gear
                 query
                 , new SqlParameter("personId", userId)
                 , new SqlParameter("sp", search)
-                , new SqlParameter("type", type.GetName())
+                , new SqlParameter("type", type.GetSearchName())
                 , new SqlParameter("PageNumber", page)
                 , new SqlParameter("RowspPage", pageSize)
                 ).ToList();
