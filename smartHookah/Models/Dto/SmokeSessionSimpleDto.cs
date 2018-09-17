@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace smartHookah.Models.Dto
@@ -28,6 +29,14 @@ namespace smartHookah.Models.Dto
                 Statistic = new DynamicSmokeStatisticDto(model.DynamicSmokeStatistic)
 
             }; 
+        }
+
+        public static IEnumerable<SmokeSessionSimpleDto> FromModelList(IEnumerable<SmokeSession> model)
+        {
+            if (model == null) yield break;
+
+            foreach (var item in model)
+                yield return FromModel(item);
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using DocumentFormat.OpenXml.Math;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace smartHookah.Models.Dto
 {
@@ -18,7 +20,7 @@ namespace smartHookah.Models.Dto
             this.MixCreatorsList = new List<MixCreator>();
         }
     }
-
+    
     public class MixListDTO : DTO
     {
         public ICollection<Mix> Mixes { get; set; }
@@ -29,8 +31,10 @@ namespace smartHookah.Models.Dto
         }
     }
 
+    [DataContract]
     public class TobaccoMixSimpleDto : TobaccoSimpleDto
     {
+        [DataMember, JsonProperty("Tobaccos")]
         public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
         public TobaccoMixSimpleDto()
@@ -38,25 +42,24 @@ namespace smartHookah.Models.Dto
             this.Tobaccos = new List<TobaccoInMix>();
         }
 
-        public TobaccoMixSimpleDto FromModel(TobaccoMix model)
+        public static TobaccoMixSimpleDto FromModel(TobaccoMix model)
         {
-            var result = new TobaccoMixSimpleDto()
-                             {
-                                 Name = model.AccName,
-                                 Id = model.Id,
-                                 BrandName = model.Brand.Name,
-                                 BrandId = model.BrandName,
-                                 Type = "TobaccoMix",
-                                 Tobaccos = model.Tobaccos.Select(
-                                     a => new TobaccoInMix()
-                                              {
-                                                  Fraction = a.Fraction,
-                                                  Tobacco = TobaccoSimpleDto
-                                                      .FromModel(a.Tobacco)
-                                              }).ToList()
-                             };
-
-            return result;
+            return model == null
+                ? null
+                : new TobaccoMixSimpleDto
+                {
+                    Name = model.AccName,
+                    Id = model.Id,
+                    BrandName = model.Brand.Name,
+                    BrandId = model.BrandName,
+                    Type = "TobaccoMix",
+                    Tobaccos = model.Tobaccos.Select(
+                        a => new TobaccoInMix()
+                        {
+                            Fraction = a.Fraction,
+                            Tobacco = FromModel(a.Tobacco)
+                        }).ToList()
+                };
         }
     }
 
@@ -79,12 +82,13 @@ namespace smartHookah.Models.Dto
             {
                 return null;
             }
+
             var result = new Mix()
-                             {
-                                 Id = model.Id,
-                                 AccName = model.AccName,
-                                 Tobaccos = model.Tobaccos.Select(TobaccoInMix.FromModel).ToList()
-                             };
+            {
+                Id = model.Id,
+                AccName = model.AccName,
+                Tobaccos = model.Tobaccos.Select(TobaccoInMix.FromModel).ToList()
+            };
 
             return result;
         }
@@ -96,16 +100,17 @@ namespace smartHookah.Models.Dto
         {
             Tobacco = new TobaccoSimpleDto();
         }
+
         public TobaccoSimpleDto Tobacco { get; set; }
         public int Fraction { get; set; }
 
         public static TobaccoInMix FromModel(TobacoMixPart tobacoMixPart)
         {
             return new TobaccoInMix()
-                       {
-                           Fraction = tobacoMixPart.Fraction,
-                           Tobacco = TobaccoSimpleDto.FromModel(tobacoMixPart.Tobacco)
-                       };
+            {
+                Fraction = tobacoMixPart.Fraction,
+                Tobacco = TobaccoSimpleDto.FromModel(tobacoMixPart.Tobacco)
+            };
         }
     }
 
