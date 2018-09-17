@@ -842,6 +842,7 @@
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
+    <Compile Include="Controllers\Api\TobaccoController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="ErrorHandler\ApiAuthorize.cs" />
@@ -864,6 +865,7 @@
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
+    <Compile Include="Models\Dto\PipeAccessoryStatisticsDto.cs" />
     <Compile Include="Models\Dto\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
@@ -871,6 +873,7 @@
     <Compile Include="Models\Dto\HookahDto.cs" />
     <Compile Include="Models\Dto\HookahSettingDto.cs" />
     <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\TobaccoInformationDto.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
     <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />
     <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
@@ -888,6 +891,8 @@
     <Compile Include="Services\Gear\GearService.cs" />
     <Compile Include="Services\Gear\IGearService.cs" />
     <Compile Include="Models\Dto\SearchPipeAccesory.cs" />
+    <Compile Include="Services\Gear\ITobaccoService.cs" />
+    <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />

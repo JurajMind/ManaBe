@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,13 +34,16 @@ namespace smartHookah.Controllers.Api
 
         private readonly IGearService gearService;
 
+        private readonly ITobaccoService tobaccoService;
+
         private readonly ILog logger = LogManager.GetLogger(typeof(MixologyController));
 
-        public MixologyController(SmartHookahContext db,IPersonService personService, IGearService gearService)
+        public MixologyController(SmartHookahContext db,IPersonService personService, IGearService gearService, ITobaccoService tobaccoService)
         {
             this.db = db;
             this.personService = personService;
             this.gearService = gearService;
+            this.tobaccoService = tobaccoService;
         }
         
         #region Getters
@@ -180,6 +184,44 @@ namespace smartHookah.Controllers.Api
 
             return new MixCreatorsDTO() { Success = false, Message = "No mix creators found." };
         }
+
+        [System.Web.Http.HttpGet, System.Web.Http.Route("{id}/GetMix")]
+        public async Task<TobaccoMixSimpleDto> GetTobaccoMix(int id)
+        {
+            try
+            {
+                var mix = await tobaccoService.GetTobaccoMix(id);
+                return TobaccoMixSimpleDto.FromModel(mix);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
+            }
+        }
+
+        [System.Web.Http.HttpGet, System.Web.Http.Route("{id}/GetTastes")]
+        public async Task<Dictionary<int, IEnumerable<TobaccoTasteDto>>> GetTobaccoMixTastes(int id)
+        {
+            try
+            {
+                var mix = await tobaccoService.GetTobaccoMix(id);
+                var result = tobaccoService.GetTobaccoMixTastes(mix);
+                var resultDto = new Dictionary<int, IEnumerable<TobaccoTasteDto>>();
+                foreach (var item in result)
+                {
+                    resultDto.Add(item.Key, TobaccoTasteDto.FromModelList(item.Value));
+                }
+
+                return resultDto;
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
+            }
+        }
+
         #endregion
 
         #region Setters
