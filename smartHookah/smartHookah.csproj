@@ -861,6 +861,10 @@
     <Compile Include="Migrations\201808062037572_pipeAccesoryLikes.Designer.cs">
       <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809222317045_similar.cs" />
+    <Compile Include="Migrations\201809222317045_similar.Designer.cs">
+      <DependentUpon>201809222317045_similar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dto\AccesoryType.cs" />
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
@@ -883,6 +887,9 @@
     <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <EmbeddedResource Include="Migrations\201809222317045_similar.resx">
+      <DependentUpon>201809222317045_similar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />

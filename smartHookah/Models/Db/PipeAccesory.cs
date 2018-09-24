@@ -105,7 +105,7 @@ namespace smartHookah.Models
         public int SimilarId { get; set; }
         public virtual PipeAccesory Similar { get; set; }
 
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
         public virtual  Person Person { get; set; }
       
     }
