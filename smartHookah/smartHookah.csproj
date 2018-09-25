@@ -900,6 +900,8 @@
     <Compile Include="Models\Dto\SearchPipeAccesory.cs" />
     <Compile Include="Services\Gear\ITobaccoService.cs" />
     <Compile Include="Services\Gear\TobaccoService.cs" />
+    <Compile Include="Services\Place\IReservationService.cs" />
+    <Compile Include="Services\Place\ReservationService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />

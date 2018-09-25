@@ -3,23 +3,29 @@ using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity.Spatial;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
 
     using smartHookah.Models;
     using smartHookah.Models.Dto;
+    using smartHookah.Services.Place;
 
     [RoutePrefix("api/Places")]
     public class PlacesController : ApiController
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
 
-        public PlacesController(SmartHookahContext db)
+        private readonly IReservationService reservationService;
+
+        public PlacesController(SmartHookahContext db, IReservationService reservationService)
         {
-            this._db = db;
+            this.db = db;
+            this.reservationService = reservationService;
         }
 
 
@@ -38,7 +44,7 @@ namespace smartHookah.Controllers.Api
             result.NearbyPlaces = new List<PlaceSimpleDto>();
 
             IQueryable<Place> closestPlaces;
-            var places = this._db.Places.Include("BusinessHours");
+            var places = this.db.Places.Include("BusinessHours");
             if (validate.HasValue)
             {
                 var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
@@ -92,6 +98,20 @@ namespace smartHookah.Controllers.Api
             var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
             return result;
         }
+
+        #endregion
+
+        #region Reservations
+
+        [HttpGet]
+        [Route("{id}/Reservations")]
+        public ReservationInfo GetReservations(int id, string date)
+        {
+            var parseDate = DateTime.ParseExact(date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+            return this.reservationService.GetReservation(id, parseDate);
+        }
+            
+
 
         #endregion
 

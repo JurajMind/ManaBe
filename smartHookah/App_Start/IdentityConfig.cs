@@ -19,7 +19,7 @@ using smartHookah.Models;
 
 namespace smartHookah
 {
-    public class EmailService : IIdentityMessageService
+    public class EmailService : IEmailService, IIdentityMessageService
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(EmailService));
         public void SendTemplateAsync(string mailAdress,string subject,string template,object model)
@@ -89,6 +89,10 @@ namespace smartHookah
 
 
         }
+    }
+
+    public interface IEmailService
+    {
     }
 
     public class SmsService : IIdentityMessageService
