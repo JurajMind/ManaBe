@@ -17,6 +17,8 @@ namespace smartHookah.Controllers
     using System.Web.Http;
 
     using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.Owin;
+    using Microsoft.Owin.Security.Infrastructure;
     using Microsoft.Owin.Security.OAuth;
 
     using Newtonsoft.Json.Linq;
@@ -28,15 +30,18 @@ namespace smartHookah.Controllers
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IOwinContext owinContext;
 
-        public AccountController()
+        public AccountController(IOwinContext owinContext)
         {
+            this.owinContext = owinContext;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IOwinContext owinContext)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            this.owinContext = owinContext;
         }
 
 
@@ -517,7 +522,7 @@ namespace smartHookah.Controllers
                 //   return BadRequest("Invalid Provider or External Access Token");
             }
 
-            IdentityUser user = await UserManager.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
+            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(provider, verifiedAccessToken.user_id));
 
             bool hasRegistered = user != null;
 
@@ -528,22 +533,19 @@ namespace smartHookah.Controllers
             }
 
             //generate access token response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName);
+            var accessTokenResponse = GenerateLocalAccessTokenResponse(user);
 
-            return accessTokenResponse;
+            return await accessTokenResponse;
 
         }
 
-        private JObject GenerateLocalAccessTokenResponse(string userName)
+        private async Task<JObject> GenerateLocalAccessTokenResponse(ApplicationUser user)
         {
 
             var tokenExpiration = TimeSpan.FromDays(1);
 
-            ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
-
-            identity.AddClaim(new Claim(ClaimTypes.Name, userName));
-            identity.AddClaim(new Claim("role", "user"));
-
+            ClaimsIdentity identity = await UserManager.CreateIdentityAsync(user, OAuthDefaults.AuthenticationType);
+            
             var props = new AuthenticationProperties()
                             {
                                 IssuedUtc = DateTime.UtcNow,
@@ -553,10 +555,32 @@ namespace smartHookah.Controllers
             var ticket = new AuthenticationTicket(identity, props);
      
            var accessToken =  Startup.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
+            var refreshToken = "";
+            using (AuthRepository _repo = new AuthRepository())
+            {
+
+                var refreshTokenId = Guid.NewGuid().ToString("n");
+                var token = new RefreshToken()
+                                {
+                                    Id = Helper.GetHash(refreshTokenId),
+                                    ClientId = "test",
+                                    Subject = identity.Name,
+                                    IssuedUtc = DateTime.UtcNow,
+                                    ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(2000))
+                                };
+
+                token.ProtectedTicket = Startup.OAuthServerOptions.RefreshTokenFormat.Protect(ticket);
+                var result = await _repo.AddRefreshToken(token);
+                if (result)
+                {
+                    refreshToken = refreshTokenId;
+                }
+            }
 
             JObject tokenResponse = new JObject(
-                new JProperty("userName", userName),
+                new JProperty("userName", user.DisplayName),
                 new JProperty("access_token", accessToken),
+                new JProperty("refresh_token", refreshToken),
                 new JProperty("token_type", "bearer"),
                 new JProperty("expires_in", tokenExpiration.TotalSeconds.ToString()),
                 new JProperty(".issued", ticket.Properties.IssuedUtc.ToString()),

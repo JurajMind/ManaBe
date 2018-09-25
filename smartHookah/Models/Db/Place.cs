@@ -305,12 +305,17 @@ namespace smartHookah.Models
 
         [NotMapped]
         public string GetDirectory => System.IO.Path.GetDirectoryName(Path);
+
+        public string Sized(int i = 0)
+        {
+            if (i == 0) return Path + ".jpg";
+            else return Path + $".{i}.jpg";
+        }
         
         public string GetSize(int i)
         {
-            var a = Path.ToString();
-            var lastDot = a.LastIndexOf(".", StringComparison.Ordinal);
-            return a.Insert(lastDot,"."+ i.ToString());
+            if (i == 0) return Path + ".jpg";
+            else return Path + $".{i}.jpg";
         }
     }
 

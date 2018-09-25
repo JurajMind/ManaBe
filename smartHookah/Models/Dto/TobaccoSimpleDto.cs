@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace smartHookah.Models.Dto
 {
     public class TobaccoTasteDto
@@ -9,6 +12,25 @@ namespace smartHookah.Models.Dto
         public int Id { get; set; }
 
         public string OriginalName { get; set; }
+        
+        public static TobaccoTasteDto FromModel(TobaccoTaste model) => model == null
+            ? null
+            : new TobaccoTasteDto()
+            {
+                Id = model.Id,
+                CzName = model.CzName,
+                EngName = model.EngName,
+                OriginalName = model.OriginalName
+            };
+
+        public static IEnumerable<TobaccoTasteDto> FromModelList(IEnumerable<TobaccoTaste> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
     }
 
     public class TobaccoSimpleDto : PipeAccesorySimpleDto

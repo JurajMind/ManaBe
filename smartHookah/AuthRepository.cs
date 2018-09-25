@@ -5,6 +5,7 @@ namespace smartHookah
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity.Validation;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -65,8 +66,16 @@ namespace smartHookah
             }
 
             _ctx.RefreshTokens.Add(token);
-
-            return await _ctx.SaveChangesAsync() > 0;
+            try
+            {
+                return await _ctx.SaveChangesAsync() > 0;
+            }
+            catch (DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+          
         }
 
         public async Task<bool> RemoveRefreshToken(string refreshTokenId)

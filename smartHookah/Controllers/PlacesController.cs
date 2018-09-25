@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Controllers
+﻿using smartHookah.Services.Person;
+
+namespace smartHookah.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -36,15 +38,18 @@
         /// </summary>
         private readonly SmartHookahContext db;
 
+        private readonly IPersonService personService;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="PlacesController" /> class.
         /// </summary>
         /// <param name="db">
         ///     The db.
         /// </param>
-        public PlacesController(SmartHookahContext db)
+        public PlacesController(SmartHookahContext db, IPersonService personService)
         {
             this.db = db;
+            this.personService = personService;
         }
 
         public ActionResult AddMedia(int id)
@@ -224,8 +229,16 @@
                 var media = this.db.Media.Find(mediaId);
                 var serverPath = this.Server.MapPath(media.GetDirectory);
                 var dir = new DirectoryInfo(serverPath);
-
-                foreach (var file in dir.EnumerateFiles($"{media.FileName}*")) file.Delete();
+                try
+                {
+                    foreach (var file in dir.EnumerateFiles($"{media.FileName}*")) file.Delete();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    //throw;
+                }
+        
 
                 this.db.Media.Remove(media);
                 this.db.SaveChanges();
@@ -621,7 +634,7 @@
         {
             var model = new PlaceIndexViewModel();
 
-            var person = UserHelper.GetCurentPerson(this.db);
+            var person = personService.GetCurentPerson();
             model.Places = this.db.Places.ToList();
             if (person != null)
             {

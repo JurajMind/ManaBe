@@ -20,8 +20,8 @@ namespace smartHookah
              "~/Scripts/main.js"
               ));
 
-           
-
+            bundles.Add(new ScriptBundle("~/bundles/slim").Include(
+                "~/Scripts/slim/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/shake").Include(
                 "~/Scripts/shake.js"));
@@ -118,6 +118,10 @@ namespace smartHookah
 
             bundles.Add(new StyleBundle("~/Content/gij").Include(
                 "~/Content/gijgo/combined/gijgo.css"));
+
+
+            bundles.Add(new StyleBundle("~/Content/slim").Include(
+                "~/Content/slim.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/font-awesome")
                 .Include("~/Content/font-awesome.css", new CssRewriteUrlTransform()));
