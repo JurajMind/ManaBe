@@ -842,10 +842,11 @@
     <Compile Include="Controllers\Api\PlaceCalendarController.cs" />
     <Compile Include="Controllers\Api\PlacesController.cs" />
     <Compile Include="Controllers\Api\SmokeSessionController.cs" />
+    <Compile Include="Controllers\Api\TobaccoController.cs" />
     <Compile Include="Controllers\AssetsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="ErrorHandler\ApiAuthorize.cs" />
-    <Compile Include="Helpers\EnumExtansions.cs" />
+    <Compile Include="Helpers\EnumExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
@@ -860,10 +861,15 @@
     <Compile Include="Migrations\201808062037572_pipeAccesoryLikes.Designer.cs">
       <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809222317045_similar.cs" />
+    <Compile Include="Migrations\201809222317045_similar.Designer.cs">
+      <DependentUpon>201809222317045_similar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dto\AccesoryType.cs" />
     <Compile Include="Models\Dto\GameProfileDto.cs" />
     <Compile Include="Models\Dto\InitDataDTO.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
+    <Compile Include="Models\Dto\PipeAccessoryStatisticsDto.cs" />
     <Compile Include="Models\Dto\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
@@ -871,6 +877,7 @@
     <Compile Include="Models\Dto\HookahDto.cs" />
     <Compile Include="Models\Dto\HookahSettingDto.cs" />
     <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\TobaccoInformationDto.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
     <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />
     <Compile Include="Models\ViewModel\IndexMyViewModel.cs" />
@@ -880,6 +887,9 @@
     <Compile Include="Models\ViewModel\TobacoMetadataModelViewModel.cs" />
     <Compile Include="Filters\ExceptionFilter.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <EmbeddedResource Include="Migrations\201809222317045_similar.resx">
+      <DependentUpon>201809222317045_similar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -888,6 +898,8 @@
     <Compile Include="Services\Gear\GearService.cs" />
     <Compile Include="Services\Gear\IGearService.cs" />
     <Compile Include="Models\Dto\SearchPipeAccesory.cs" />
+    <Compile Include="Services\Gear\ITobaccoService.cs" />
+    <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
@@ -1651,6 +1663,7 @@
     <Content Include="Content\season.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\select2.min.css" />
+    <Content Include="Content\slim.min.css" />
     <Content Include="Content\tether\tether-theme-arrows-dark.css" />
     <Content Include="Content\tether\tether-theme-arrows-dark.min.css" />
     <Content Include="Content\tether\tether-theme-arrows.css" />
@@ -1854,6 +1867,7 @@
     <Content Include="Scripts\select2.full.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\slim\slim.kickstart.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />

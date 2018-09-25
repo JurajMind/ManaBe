@@ -7,9 +7,9 @@
 
     public static class EnumExtansions
     {
-        public static string GetName(this AccesoryType value)
+        public static string GetName(this Models.AccesoryType value)
         {
-            return Enum.GetName(typeof(AccesoryType), value);
+            return Enum.GetName(typeof(Models.AccesoryType), value);
         }
     }
 }

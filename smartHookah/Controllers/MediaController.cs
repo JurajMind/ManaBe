@@ -13,6 +13,8 @@ using smartHookah.Models;
 
 namespace smartHookah.Controllers
 {
+    using System.Web.Http;
+
     public class MediaController : Controller
     {
         private SmartHookahContext db = new SmartHookahContext();
@@ -39,39 +41,58 @@ namespace smartHookah.Controllers
         }
 
         // GET: Media/Create
-        public ActionResult Create()
+        public ActionResult Create(string type,int id)
         {
-            return View();
+            ViewBag.type = type;
+            return View(id);
         }
 
         // POST: Media/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Created,Path,Type")] Media media, HttpPostedFileBase file,
-            FormCollection collection)
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.Authorize]
+        public ActionResult Create(int id,string type)
         {
-            if (ModelState.IsValid)
-            {
+            var fileName = Request.Files.AllKeys.FirstOrDefault();
+            var file = Request.Files[fileName];
+            var media = new Media();
                 if (file != null)
                 {
                     var extension = System.IO.Path.GetExtension(file.FileName);
-                    var path = $"/Content/Media/{Guid.NewGuid()}/";
+                    var path = $"/Content/Media/{type}/{id}/{Guid.NewGuid()}/";
                     Directory.CreateDirectory(Server.MapPath(path));
+                    path = path + file.FileName;
                     System.Drawing.Image sourceimage =
                         System.Drawing.Image.FromStream(file.InputStream);
                     media.Created = DateTime.UtcNow;
-                    ScaleAndSave(sourceimage, 500, 50,path,Server);
-                    file.SaveAs(Server.MapPath(path+"original.jpg"));
+                    media.Type = MediaType.Picture;
+                    ScaleAndSave(sourceimage, 160, 90,path,Server);
+                    ScaleAndSave(sourceimage, 800, 450, path, Server);
+                    ScaleAndSave(sourceimage, 1600, 900, path, Server);
+                    path = path + "image";
+                    file.SaveAs(Server.MapPath(path+".jpg"));
                     media.Path = path;
                     db.Media.Add(media);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+
+                    if (type == "place")
+                    {
+                        var place = this.db.Places.Find(id);
+                        place?.Medias.Add(media);
+
+                    }
+                    if (type == "accesory")
+                    {
+                        var accesory = this.db.PipeAccesories.Find(id);
+                        accesory?.Mediae.Add(media);
+                      
                 }
 
-                return View(media);
+                db.SaveChanges();
             }
+
+            
+            
             return RedirectToAction("Index");
         }
 
@@ -105,7 +126,7 @@ namespace smartHookah.Controllers
             {
                 encParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)quality);
                 //quality should be in the range [0..100]
-                using (var fileStream = System.IO.File.Create(server.MapPath(path+"."+image.Height+".jpg")))
+                using (var fileStream = System.IO.File.Create(server.MapPath(path+"image."+image.Height+".jpg")))
                 {
                     image.Save(fileStream, jpgInfo, encParams);
                 }
@@ -135,7 +156,7 @@ namespace smartHookah.Controllers
         // POST: Media/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Created,Path,Type")] Media media)
         {
@@ -164,7 +185,7 @@ namespace smartHookah.Controllers
         }
 
         // POST: Media/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [System.Web.Mvc.HttpPost, System.Web.Mvc.ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

@@ -105,7 +105,7 @@ namespace smartHookah.Models
         public int SimilarId { get; set; }
         public virtual PipeAccesory Similar { get; set; }
 
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
         public virtual  Person Person { get; set; }
       
     }
@@ -274,5 +274,5 @@ namespace smartHookah.Models
     }
 
     public enum VoteValue { Like = 1, Dislike = -1, Unlike = 0 }
-    
+
 }
