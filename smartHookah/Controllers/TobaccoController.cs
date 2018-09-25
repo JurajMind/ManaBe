@@ -17,6 +17,9 @@ using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
+    using System.Web.UI;
+    using System.Web.UI.WebControls;
+
     using smartHookah.Helpers;
     using smartHookah.Services.Person;
 
@@ -85,7 +88,7 @@ namespace smartHookah.Controllers
             model.TobaccoMetadata = new TobacoMetadataModelViewModel();
             var person = personService.GetCurentPerson();
             model.TobaccoMetadata.TobacoBrands = person.GetPersonTobacoBrand(db);
-            if(person != null)
+            if (person != null)
                 model.TobaccoMetadata.MyTobacco = person.MyTobacco;
             return View(model);
         }
@@ -95,15 +98,15 @@ namespace smartHookah.Controllers
         [Authorize]
         public async Task<ActionResult> SaveCreateMix(SaveSmokeMetadataModel model)
         {
-            var tobacco  = GetTobacoFromMetadata(model,db);
+            var tobacco = GetTobacoFromMetadata(model, db);
 
             if (tobacco is TobaccoMix)
             {
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Details", "Tobacco", new {id = tobacco.Id});
+                return RedirectToAction("Details", "Tobacco", new { id = tobacco.Id });
             }
-              
+
 
             return null;
         }
@@ -113,7 +116,7 @@ namespace smartHookah.Controllers
             var model = new MyMixesViewModel();
             var person = this.personService.GetCurentPerson(id);
 
-            var tobacco = db.TobaccoMixs.Where(t =>  t.AuthorId == person.Id).ToList();
+            var tobacco = db.TobaccoMixs.Where(t => t.AuthorId == person.Id).ToList();
             model.Tobacco = tobacco;
             var user = db.Users.First(a => a.PersonId == person.Id);
 
@@ -192,10 +195,10 @@ namespace smartHookah.Controllers
             dynamic ViewBag = null, string filter = null, string previousSort = null, IQueryable<Person> person = null)
         {
 
-            if (person == null)
-            {
-                person = this.personService.GetCurentPersonIQuerable();
-            }
+            //            if (person == null)
+            //            {
+            //                person = this.personService.GetCurentPersonIQuerable();
+            //            }
             sortOrder = String.IsNullOrEmpty(sortOrder) ? "smokeduration_desc" : sortOrder;
             ;
             if (previousSort == sortOrder)
@@ -335,61 +338,61 @@ namespace smartHookah.Controllers
                 var filterPart = filter.Split('_');
                 if (filterPart.Length < 1)
                 {
-                    return db.Tobaccos.Where(a => a.AccName != null );
+                    return db.Tobaccos.Where(a => a.AccName != null);
                 }
                 else
                 {
                     switch (filterPart[0])
                     {
                         case "brand":
-                        {
-                            if (filterPart.Length < 2)
-                                return db.Tobaccos;
-                            else
                             {
-                                var brandName = filterPart[1];
-                                return db.Tobaccos.Where(a => a.BrandName == brandName);
+                                if (filterPart.Length < 2)
+                                    return db.Tobaccos;
+                                else
+                                {
+                                    var brandName = filterPart[1];
+                                    return db.Tobaccos.Where(a => a.BrandName == brandName);
+                                }
+
+                                break;
                             }
 
-                            break;
-                        }
-
                         case "myMixes":
-                        {
-                            var curentPerson = this.personService.GetCurentPerson();
-                            return db.TobaccoMixs.Where(a => a.AuthorId == curentPerson.Id);
-                        }
+                            {
+                                var curentPerson = this.personService.GetCurentPerson();
+                                return db.TobaccoMixs.Where(a => a.AuthorId == curentPerson.Id);
+                            }
 
 
                         case "stats":
                             return db.Tobaccos.Where(a => a.Statistics != null && a.AccName != null);
 
                         case "owned":
-                        {
-                            var ownedTobacco =
-                                person.Include(a => a.OwnedPipeAccesories).First().Tobacco.Select(a => a.Id).ToList();
-                            return db.Tobaccos.Where(a => ownedTobacco.Contains(a.Id));
-                        }
+                            {
+                                var ownedTobacco =
+                                    person.Include(a => a.OwnedPipeAccesories).First().Tobacco.Select(a => a.Id).ToList();
+                                return db.Tobaccos.Where(a => ownedTobacco.Contains(a.Id));
+                            }
 
 
                         case "smoked":
-                        {
-                            var smoked =
-                                person.Include(a => a.SmokeSessions)
-                                    .First()
-                                    .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.Tobacco != null)
-                                    .Select(b => b.MetaData.Tobacco)
-                                    .Select(a => a.Id).ToList();
-                            return db.Tobaccos.Where(a => smoked.Contains(a.Id));
-                        }
+                            {
+                                var smoked =
+                                    person.Include(a => a.SmokeSessions)
+                                        .First()
+                                        .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.Tobacco != null)
+                                        .Select(b => b.MetaData.Tobacco)
+                                        .Select(a => a.Id).ToList();
+                                return db.Tobaccos.Where(a => smoked.Contains(a.Id));
+                            }
 
 
 
-                        //case "person":
-                        //    tobacco =
-                        //        db.Persons.FirstOrDefault(a => a.Id == int.Parse(filterPart[1]))
-                        //            .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.TobaccoSimple != null)
-                        //            .Select(a => a.MetaData.TobaccoSimple).ToList();
+                            //case "person":
+                            //    tobacco =
+                            //        db.Persons.FirstOrDefault(a => a.Id == int.Parse(filterPart[1]))
+                            //            .SmokeSessions.Where(a => a.MetaData != null && a.MetaData.TobaccoSimple != null)
+                            //            .Select(a => a.MetaData.TobaccoSimple).ToList();
                     }
                 }
             }
@@ -406,7 +409,7 @@ namespace smartHookah.Controllers
         {
 
             this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
-            
+
             var model = FilterTobacco(sortOrder, page, filter: filter, previousSort: previousSort);
 
             return View("_FilterTobaccoGrid", model);
@@ -500,17 +503,19 @@ namespace smartHookah.Controllers
             var web = new HtmlWeb();
             var doc = web.Load(Url);
 
-            var brands = doc.DocumentNode.SelectNodes(@"//h3[@class='nott ls0 t600']/a");
+            var brands = doc.DocumentNode.SelectNodes(@"//*[@class='feature-box media-box fbox-bg']");
             var addedTobaccos = new List<Tobacco>();
 
             foreach (var brand in brands)
             {
                 var name = brand.InnerText.Trim();
-                var url = brand.Attributes["href"].Value;
-                var pictureSrc =
-                    brand.ChildNodes["div"].ChildNodes["div"].ChildNodes["a"].ChildNodes["img"].Attributes["src"].Value;
-
-                var newBrand = db.Brands.Find(name);
+             if(name.ToLower().First() < 's' )
+                    continue;;
+               var url = brand.SelectSingleNode(@".//a[@rel='bookmark']").Attributes["href"].Value;
+                var pictureSrc = brand.SelectSingleNode(".//div[@class='lazy bildnachgeladen']").Attributes["data-src"].Value;
+                var displayArray = name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+                var keyName = new string(displayArray);
+                var newBrand = db.Brands.FirstOrDefault(a => a.Name ==name || a.Name == keyName);
 
                 if (newBrand == null)
                 {
@@ -519,7 +524,7 @@ namespace smartHookah.Controllers
                     {
                         Url = BaseUril + url,
                         Picture = pictureSrc,
-                        Name = name,
+                        Name = keyName,
                         DisplayName = name,
 
 
@@ -529,37 +534,75 @@ namespace smartHookah.Controllers
 
                     db.Brands.AddOrUpdate(newBrand);
                 }
-                var Tobacco = GetTobaco(BaseUril, url, newBrand, null).ToList();
+                var similar = new Dictionary<string,List<string>>();
+                var Tobacco = GetTobaco(BaseUril, url, newBrand, null,similar).ToList();
 
                 foreach (var tobacco in Tobacco)
                 {
+                    
+
                     tobacco.BrandName = newBrand.Name;
                     var oldTobaco =
                         db.Tobaccos.FirstOrDefault(a => a.BrandName == tobacco.BrandName && a.AccName == tobacco.AccName);
+                  
 
                     if (oldTobaco != null)
                     {
-                        if(oldTobaco.Tastes.Any())
-                           continue;
+                        if (oldTobaco.Tastes.Any())
+                            continue;
 
+                        if(oldTobaco.Tastes.Count == tobacco.Tastes.Count)
+                            continue;
+
+                        MatchTobacco(similar, oldTobaco);
+                        
                         oldTobaco.Tastes = tobacco.Tastes;
 
+                        
                         db.Tobaccos.AddOrUpdate(oldTobaco);
                     }
                     else
                     {
+                        MatchTobacco(similar, tobacco);
                         db.Tobaccos.AddOrUpdate(tobacco);
                     }
                     addedTobaccos.Add(tobacco);
-                   
+
                 }
 
-                db.SaveChanges();
+             db.SaveChanges();
 
             }
 
             return View(addedTobaccos);
         }
+
+        private void MatchTobacco(Dictionary<string,List<string>> similar, Tobacco tobacco)
+        {
+            if (!similar.Keys.Any()) return;
+            Tobacco matchTobacco = null;
+            List<string> similarTobacco;
+            var haveSimilar = similar.TryGetValue(tobacco.AccName, out similarTobacco);
+            if(!haveSimilar)
+                return;
+
+            foreach (var s in similarTobacco)
+            {
+                if (similar.TryGetValue(tobacco.AccName, out similarTobacco))
+                {
+                    matchTobacco = this.db.Tobaccos.FirstOrDefault(a => a.BrandName == tobacco.BrandName && a.AccName == s && a.SubCategory == tobacco.SubCategory);
+                }
+                if (matchTobacco != null
+                    && !tobacco.SimilarAccesories.Any(a => a.OriginalId == matchTobacco.Id || a.SimilarId == matchTobacco.Id))
+                {
+                    tobacco.SimilarAccesories.Add(
+                        new SimilarAccesories() { OriginalId = tobacco.Id, SimilarId = matchTobacco.Id, });
+                }
+            }
+
+          
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DownloadPictures()
         {
@@ -579,8 +622,8 @@ namespace smartHookah.Controllers
                         {
                             client.DownloadFile(uri, Server.MapPath(path + filename));
                             brand.Picture = path + filename;
-                         
-                      
+
+
                         }
                     }
                     catch (Exception e)
@@ -594,7 +637,7 @@ namespace smartHookah.Controllers
             return null;
         }
 
-        public async Task<JsonResult> GetTobaccoFlavor(string id,bool ownGear= false)
+        public async Task<JsonResult> GetTobaccoFlavor(string id, bool ownGear = false)
         {
             var tobacos = new List<Tobacco>();
             if (ownGear)
@@ -615,7 +658,7 @@ namespace smartHookah.Controllers
                         tobacos = person.Tobacco.Where(a => a.BrandName == id).ToList();
                     }
 
-                 
+
                 }
             }
             else
@@ -624,11 +667,11 @@ namespace smartHookah.Controllers
             }
 
 
-            if(tobacos.Any(a => !(a is TobaccoMix)))
+            if (tobacos.Any(a => !(a is TobaccoMix)))
                 return Json(tobacos.OrderBy(a => a.AccName).Select(a => new { name = a.AccName, id = a.Id }), JsonRequestBehavior.AllowGet);
 
             var tobacoMix = tobacos.Where(a => !String.IsNullOrEmpty(a.AccName)).Select(t => t as TobaccoMix);
-            
+
             return Json(tobacoMix.OrderBy(a => a.AccName).Select(x => new
             {
                 name = x.AccName,
@@ -747,14 +790,14 @@ namespace smartHookah.Controllers
         {
             var tobacoMix = await db.TobaccoMixs.FindAsync(id);
 
-         
+
             if (tobacoMix == null)
                 return RedirectToAction("Mix", "Tobacco");
 
 
             var person = UserHelper.GetCurentPerson(db, tobacoMix.AuthorId);
 
-            if(person == null)
+            if (person == null)
                 return RedirectToAction("Mix", "Tobacco");
 
             var usedInSessions = db.SessionMetaDatas.Where(a => a.TobaccoId == id);
@@ -762,7 +805,7 @@ namespace smartHookah.Controllers
             if (!usedInSessions.Any())
             {
                 db.TobaccoMixs.Remove(tobacoMix);
-               
+
             }
             else
             {
@@ -774,39 +817,61 @@ namespace smartHookah.Controllers
             return RedirectToAction("Mix", "Tobacco");
         }
 
-        public  List<TobaccoTaste> ParseTaste(List<string> taste)
+        public List<TobaccoTaste> ParseTaste(List<string> taste)
         {
             var result = new List<TobaccoTaste>();
             foreach (var t in taste)
             {
                 var dbTaste = db.TobaccoTastes.FirstOrDefault(a => a.OriginalName.ToLower() == t.ToLower());
 
-                if(dbTaste != null)
-                   result.Add(dbTaste);
+                if (dbTaste == null)
+                {
+                    dbTaste = new TobaccoTaste() { OriginalName = t };
+                }
+
+                if (dbTaste != null)
+                    result.Add(dbTaste);
             }
             return result;
         }
 
-        private IEnumerable<Tobacco> GetTobaco(string baseUrl, string url, Brand brand, string subName)
+        private List<Tobacco> GetTobaco(string baseUrl, string url, Brand brand, string subName, Dictionary<string, List<string>> similar)
         {
+            var result = new List<Tobacco>();
             var web = new HtmlWeb();
             var doc = web.Load(baseUrl + url);
 
-            var tobacos = doc.DocumentNode.SelectNodes(@"//h3[@class='nott ls0 t600']/a");
+            var tobacos = doc.DocumentNode.SelectNodes(@".//div[contains(@class,'padding10px')]");
 
-           
 
-            if (tobacos !=null)
+
+            if (tobacos != null)
             {
-              
+
                 foreach (var tobaco in tobacos)
                 {
-                    var tobaccoName = tobaco.Descendants().Where(a => a.Name == "h3").FirstOrDefault().InnerText;
-                    var taste = tobaco.Descendants()
-                        .Where(a => a.Attributes["class"] != null && a.Attributes["class"].Value == "tags")
-                        .FirstOrDefault().Descendants().Where(a => a.Name == "a").Select(a => a.InnerText).ToList();
+                    var tobaccoName = tobaco.SelectSingleNode(".//h3").InnerText.Trim();
 
-                    
+                    var chunk = tobaccoName.Split(new[] { '\t' },StringSplitOptions.RemoveEmptyEntries).Where(a => a != "\n").ToArray();
+
+                    if (chunk.Length > 1)
+                    {
+                        tobaccoName = chunk[0].Trim();
+                        if (similar.ContainsKey(chunk[0]))
+                        {
+                            similar[chunk[0].Trim()].Add(chunk[1].Trim());
+                        }
+                        else
+                        {
+                            similar.Add(chunk[0].Trim(), new List<string>(){ chunk[1].Trim() });
+                        }
+                      
+                    }
+
+                    if(tobaccoName == "HookahFloW")
+                        continue;
+                    var tasteNodes = tobaco.SelectNodes(@".//a[@class='blackfont']");
+                    var taste = tasteNodes?.Select(a => a.InnerText).ToList() ?? new List<string>();
 
                     var newTobacco = new Tobacco
                     {
@@ -814,38 +879,39 @@ namespace smartHookah.Controllers
                         Brand = brand,
                         SubCategory = subName,
                         Tastes = ParseTaste(taste),
+                       CreatedAt = DateTime.Now,
+                       SimilarAccesories =  new List<SimilarAccesories>()
+                       
                     };
 
-                    yield return newTobacco;
+                    result.Add(newTobacco);
                 }
             }
 
             else
             {
 
-                var subTobaco = doc.DocumentNode.SelectNodes(@"//div[contains(@class,'td_module_wrap')]");
-                if ( subTobaco != null)
-                foreach (var subNode in subTobaco)
-                {
-                    var sName = subNode.InnerText.Trim();
-                    var subUrl = subNode.ChildNodes["a"].Attributes["href"].Value;
-                  
-                    var sub = GetTobaco(baseUrl, subUrl, brand, sName);
-
-                    foreach (Tobacco tobacco in sub)
+                var subTobaco = doc.DocumentNode.SelectNodes(@"//h3/a");
+                if (subTobaco != null)
+                    foreach (var subNode in subTobaco)
                     {
-                        yield return tobacco;
+                        var sName = subNode.InnerText.Trim().Replace(brand.Name,"");
+                        var subUrl = subNode.Attributes["href"].Value;
+
+                        var sub = GetTobaco(baseUrl, subUrl, brand, sName, similar);
+                        result.AddRange(sub);
                     }
-                }
-          
+
             }
+
+            return result;
         }
         [Authorize(Roles = "Admin")]
         public ActionResult CleanMix()
         {
             var mix = db.Tobaccos.OfType<TobaccoMix>().Where(a => a.Tobaccos.Any()).ToList();
             mix = mix.Where(a => a.Tobaccos.Any()).ToList();
-           // db.Tobaccos.RemoveRange(mix);
+            // db.Tobaccos.RemoveRange(mix);
             db.SaveChanges();
 
             return null;
@@ -890,19 +956,20 @@ namespace smartHookah.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CalculateStatistic(int id)
         {
-                
-                CalculateStatistic(id, db);
-               var allTobacoReview = db.PipeAccesoryStatistics.Select(a => new SessionTicks(){
-                   Session =  a.SessionDurationTick,
-                   Smoke = a.SmokeDurationTick
-               }).ToList();
-              var percentilStat =  CalculatePercentil(id,allTobacoReview,db);
-            if(percentilStat !=null)
+
+            CalculateStatistic(id, db);
+            var allTobacoReview = db.PipeAccesoryStatistics.Select(a => new SessionTicks()
+            {
+                Session = a.SessionDurationTick,
+                Smoke = a.SmokeDurationTick
+            }).ToList();
+            var percentilStat = CalculatePercentil(id, allTobacoReview, db);
+            if (percentilStat != null)
                 db.PipeAccesoryStatistics.AddOrUpdate(percentilStat);
             db.SaveChanges();
             return RedirectToAction("Details", new { id = id });
         }
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult CalculateAllPercentil()
         {
             var allStats = db.PipeAccesoryStatistics.Select(a => a.PipeAccesoryId);
@@ -913,10 +980,10 @@ namespace smartHookah.Controllers
             }).ToList();
             foreach (var statId in allStats)
             {
-               var stat = CalculatePercentil(statId, allTobacoReview,db);
-                if(stat != null)
-                db.PipeAccesoryStatistics.AddOrUpdate(stat);
-             
+                var stat = CalculatePercentil(statId, allTobacoReview, db);
+                if (stat != null)
+                    db.PipeAccesoryStatistics.AddOrUpdate(stat);
+
             }
             db.SaveChanges();
             return null;
@@ -928,10 +995,10 @@ namespace smartHookah.Controllers
             public long Smoke { get; set; }
 
             public long Session { get; set; }
-            
+
         }
 
-        public static PipeAccesoryStatistics CalculatePercentil(int id,List<SessionTicks> allTobaccoReview,SmartHookahContext db)
+        public static PipeAccesoryStatistics CalculatePercentil(int id, List<SessionTicks> allTobaccoReview, SmartHookahContext db)
         {
             var thisStat = db.PipeAccesoryStatistics.Find(id);
 
@@ -942,11 +1009,11 @@ namespace smartHookah.Controllers
             thisStat.SessionTimePercentil = Percentile(allTobaccoReview.Select(a => a.Session).ToArray(), thisStat.SessionDurationTick);
 
             return thisStat;
-            
+
 
         }
 
-        private static  double Percentile(long[] sequence, long excelPercentile)
+        private static double Percentile(long[] sequence, long excelPercentile)
         {
             int less = 0;
             int equal = 0;
@@ -960,7 +1027,7 @@ namespace smartHookah.Controllers
             return (double)(200 * less + 100 * equal) / (double)(sequence.Length * 2);
         }
 
-        public static void CalculateStatistic(int id,SmartHookahContext db)
+        public static void CalculateStatistic(int id, SmartHookahContext db)
         {
             var Session =
                 db.SmokeSessions.Where(a => a.MetaData.Tobacco != null)
@@ -989,7 +1056,7 @@ namespace smartHookah.Controllers
             return;
         }
 
-        private static  PipeAccesoryStatistics Calculate(IEnumerable<SmokeSession> session)
+        private static PipeAccesoryStatistics Calculate(IEnumerable<SmokeSession> session)
         {
             var result = new PipeAccesoryStatistics();
 
@@ -1025,9 +1092,9 @@ namespace smartHookah.Controllers
         public async Task<ActionResult> Mix()
         {
             var model = new MixViewModel();
-            model.MixBrands = await db.Brands.Where(a => a.TobaccoMixBrand && a.Name !="OwnBrand").ToListAsync();
+            model.MixBrands = await db.Brands.Where(a => a.TobaccoMixBrand && a.Name != "OwnBrand").ToListAsync();
 
-            var person = UserHelper.GetCurentPerson(db);
+            var person = personService.GetCurentPerson();
             if (person != null)
             {
                 model.Mixes = db.TobaccoMixs.Where(a => a.AuthorId == person.Id).Take(5).ToList();
@@ -1036,7 +1103,7 @@ namespace smartHookah.Controllers
             {
                 model.Mixes = new List<TobaccoMix>();
             }
-            
+
 
             return View(model);
         }
@@ -1050,7 +1117,7 @@ namespace smartHookah.Controllers
 
             var model = new MixBrandModel();
             model.Brand = await db.Brands.FindAsync(id);
-            model.Tobacco = db.TobaccoMixs.Where( a => a.BrandName == id && !String.IsNullOrEmpty(a.AccName)).ToList();
+            model.Tobacco = db.TobaccoMixs.Where(a => a.BrandName == id && !String.IsNullOrEmpty(a.AccName)).ToList();
 
             return View(model);
 
@@ -1084,7 +1151,8 @@ namespace smartHookah.Controllers
         public bool CanDeleteMix { get; set; }
     }
 
-    public class MixBrandModel{
+    public class MixBrandModel
+    {
         public List<TobaccoMix> Tobacco { get; set; }
         public Brand Brand { get; set; }
     }

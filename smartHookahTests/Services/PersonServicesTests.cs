@@ -20,7 +20,7 @@
     using smartHookahCommon;
 
     [TestFixture]
-    public class PersonServicesTests
+    internal class PersonServicesTests
     {
         [Test]
         [Ignore("Extensions")]

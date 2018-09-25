@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Models;
@@ -13,18 +10,16 @@ using smartHookah.Services.Device;
 
 namespace smartHookah.Controllers.Api
 {
-    using MaxMind.GeoIP2.Exceptions;
-
     using smartHookah.Models.Dto;
 
     [RoutePrefix("api/Device")]
     public class DeviceController : ApiController
     {
-        private readonly IDeviceService _deviceService;
+        private readonly IDeviceService deviceService;
 
         public DeviceController(IDeviceService deviceService)
         {
-            _deviceService = deviceService;
+            this.deviceService = deviceService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -34,13 +29,13 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                var animation = _deviceService.GetAnimation(model.AnimationId);
-                await _deviceService.SetAnimation(id, animation, model.Type);
+                var animation = this.deviceService.GetAnimation(model.AnimationId);
+                await this.deviceService.SetAnimation(id, animation, model.Type);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -53,12 +48,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.SetBrightness(id, model.Brightness, model.Type);
+                await this.deviceService.SetBrightness(id, model.Brightness, model.Type);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -71,12 +66,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.SetColor(id, model.Color, model.Type);
+                await this.deviceService.SetColor(id, model.Color, model.Type);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -89,12 +84,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.SetSpeed(id, model.Speed, model.Type);
+                await this.deviceService.SetSpeed(id, model.Speed, model.Type);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -107,12 +102,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.Sleep(id);
+                await this.deviceService.Sleep(id);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -125,12 +120,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.Restart(id);
+                await this.deviceService.Restart(id);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -143,12 +138,12 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.SetMode(id, mode);
+                await this.deviceService.SetMode(id, mode);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -161,33 +156,33 @@ namespace smartHookah.Controllers.Api
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
-                await _deviceService.ShowQrCode(id);
+                await this.deviceService.ShowQrCode(id);
             }
             catch (ItemNotFoundException e)
             {
                 var err = new HttpError(e.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, err);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
         [HttpGet, Route("{id}/StandSetting")]
         public StandSettings GetStandSetting(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
             }
 
-            var setting = this._deviceService.GetStandSettings(id);
+            var setting = this.deviceService.GetStandSettings(id);
 
             if (setting == null)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
             }
 
             return StandSettings.FromModel(setting);
-
         }
     }
 }

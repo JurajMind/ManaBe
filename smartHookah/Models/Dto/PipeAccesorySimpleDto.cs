@@ -100,12 +100,28 @@ namespace smartHookah.Models.Dto
             return result;
         }
 
+        public static PipeAccesorySimpleDto FromModel(HeatManagment model)
+        {
+            if (model == null) return null;
+            var result = FromModel(model as PipeAccesory);
+            result.Type = "HeatManagement";
+            return result;
+        }
+
+        public static PipeAccesorySimpleDto FromModel(Coal model)
+        {
+            if (model == null) return null;
+            var result = FromModel(model as PipeAccesory);
+            result.Type = "Coal";
+            return result;
+        }
+
         private static List<PipeAccesoryLikeDto> GetLikesList(IEnumerable<PipeAccesoryLike> model)
         {
             return model.Select(PipeAccesoryLikeDto.FromModel).ToList();
         }
     }
-
+    
     public class PipeAccesoryLikeDto
     {
         [DataMember]
