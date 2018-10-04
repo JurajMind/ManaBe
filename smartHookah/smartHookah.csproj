@@ -2218,10 +2218,13 @@
     <Content Include="Views\Home\VueTest.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
-    <None Include="Views\Emails\_EmailLayout.cshtml" />
-    <None Include="Views\Emails\test.cshtml">
+    <Content Include="Views\Emails\_EmailLayout.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\test.cshtml">
       <SubType>Designer</SubType>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Emails\reservationDenied.cshtml" />
     <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
     <Content Include="Views\Emails\reservationConfirm.cshtml" />
