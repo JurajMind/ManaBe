@@ -19,7 +19,7 @@ using smartHookah.Models;
 
 namespace smartHookah
 {
-    public class EmailService : IIdentityMessageService
+    public class EmailService : IEmailService, IIdentityMessageService
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(EmailService));
         public void SendTemplateAsync(string mailAdress,string subject,string template,object model)
@@ -33,7 +33,7 @@ namespace smartHookah
             var viewPath = Path.Combine("~/Views/Emails", template);
             viewPath = HostingEnvironment.MapPath(viewPath);
             // read the content of template and pass it to the Email constructor
-            var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.cshtml");
+            var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.cshtmlTemplate");
             var layout = File.ReadAllLines(layoutPath);
 
             var index = Array.FindIndex(layout,a => a.Contains("#BODY#"));
@@ -62,7 +62,6 @@ namespace smartHookah
 
           
         }
-
 
         public Task SendAsync(IdentityMessage message)
         {
