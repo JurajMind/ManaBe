@@ -19,7 +19,7 @@ namespace smartHookah.Controllers
         // GET: Test
         public async Task Send()
         {
-            this.EmailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtmlTemplate", null);
+            this.EmailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtml", null);
            
         }
     }
