@@ -10,11 +10,16 @@ namespace smartHookah.Controllers
     [Authorize(Roles ="Admin")]
     public class TestController : Controller
     {
+        private readonly IEmailService EmailService;
+
+        public TestController(IEmailService emailService)
+        {
+            this.EmailService = emailService;
+        }
         // GET: Test
         public async Task Send()
         {
-            var emailService = new EmailService();
-            emailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtml", null);
+            this.EmailService.SendTemplateAsync("jurko@bdi.sk", "Test", "test.cshtmlTemplate", null);
            
         }
     }
