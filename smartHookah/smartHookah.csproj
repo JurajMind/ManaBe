@@ -827,9 +827,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <MvcRazorFilesToCompile Include="**\*.cshtml" Exclude="Emails\*.cshtml;" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
