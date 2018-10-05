@@ -48,7 +48,22 @@ namespace smartHookah
 
         public async Task<IdentityResult> RegisterUser(UserModel userModel)
         {
-            var user = new ApplicationUser { UserName = userModel.UserName };
+            var matchUser = await this._userManager.FindByEmailAsync(userModel.Email);
+            var person = new Person();
+            if (matchUser != null)
+            {
+                person = matchUser.Person;
+            }
+            else
+            {
+                person = new Person();
+            }
+            var user = new ApplicationUser
+                           {
+                               UserName = userModel.UserName,
+                               Email =  userModel.Email,
+                          
+                           };
 
             var result = await this._userManager.CreateAsync(user, userModel.Password);
 
@@ -160,8 +175,11 @@ namespace smartHookah
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+    
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         [Required]
         [Display(Name = "User name")]
-        public string UserName { get; set; }
+        public string Email { get; set; }
     }

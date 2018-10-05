@@ -639,7 +639,7 @@ namespace smartHookah.Controllers
     /// </summary>
     public class ReservationDto
     {
-        /// <summary>
+        /// <summary> 
         /// Initializes a new instance of the <see cref="ReservationDto"/> class.
         /// </summary>
         /// <param name="res">
@@ -721,4 +721,10 @@ namespace smartHookah.Controllers
 
         public int MinimumReservationTime { get; set; }
     }
-}
+
+    public class PlaceReservationInfo : ReservationInfo
+    {
+        
+    }
+
+    }

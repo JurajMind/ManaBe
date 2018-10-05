@@ -1,21 +1,38 @@
 ﻿namespace smartHookah.Controllers.Mobile
 {
     using System;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading.Tasks;
+    using System.Web;
     using System.Web.Http;
 
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.AspNet.Identity.Owin;
+
+    using Newtonsoft.Json;
 
     using smartHookah.Models;
+    using smartHookah.Services.Person;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
+        private readonly IAccountService accountService;
+
+        public ApplicationUserManager UserManager
+        {
+            get => this._userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+            private set => this._userManager = value;
+        }
+        private ApplicationUserManager _userManager;
         private readonly AuthRepository _repo;
 
-        public AccountController()
+        public AccountController(IAccountService accountService)
         {
+            this.accountService = accountService;
             this._repo = new AuthRepository();
         }
 
@@ -26,13 +43,24 @@
         {
             if (!this.ModelState.IsValid) return this.BadRequest(this.ModelState);
 
-            var result = await this._repo.RegisterUser(userModel);
+            var user = new ApplicationUser
+                           {
+                               UserName = userModel.Email,
+                               Email = userModel.Email,
+                               DisplayName = userModel.UserName
+                           };
+            var result = await this.UserManager.CreateAsync(user,userModel.Password);
 
             var errorResult = this.GetErrorResult(result);
 
             if (errorResult != null) return errorResult;
 
-            return this.Ok();
+            var newUser = await this.UserManager.FindByEmailAsync(userModel.Email);
+            var tokenResponse = this.accountService.GenerateLocalAccessTokenResponse(newUser, this.UserManager);
+      
+            var response = this.Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(JsonConvert.SerializeObject(await tokenResponse));
+            return this.ResponseMessage(response);
         }
 
         protected override void Dispose(bool disposing)
