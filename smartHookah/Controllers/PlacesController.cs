@@ -638,7 +638,7 @@ namespace smartHookah.Controllers
             model.Places = this.db.Places.ToList();
             if (person != null)
             {
-                var ownPlace = model.Places.FirstOrDefault(a => a.Managers.Contains(person));
+                var ownPlace = model.Places.FirstOrDefault(a => a.Managers.Count(b => b.Id == person.Id) > 0);
 
                 if (ownPlace != null) model.ownPlaceId = ownPlace.Id;
             }

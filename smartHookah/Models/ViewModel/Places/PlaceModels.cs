@@ -114,7 +114,7 @@ namespace smartHookah.Models
 
     public class PlaceIndexViewModel
     {
-        public int? ownPlaceId;
+        public int? ownPlaceId { get; set; }
         public List<Place> Places { get; set; }
     }
 
