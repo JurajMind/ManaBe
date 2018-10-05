@@ -171,6 +171,12 @@ namespace smartHookah.Models
             }
         }
 
+        public static Person CreateDefault()
+        {
+            var person = new Person();
+            person.GameProfile = new GameProfile();
+            return person;
+        }
  
 
 

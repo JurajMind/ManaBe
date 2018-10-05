@@ -102,7 +102,7 @@ namespace smartHookah.Controllers
 
                 if (add)
                 {
-                    var person = new Person();
+                    Person person;
                     PersonController.AddGear(accesory.Id,0,db,out person,UserHelper.GetCurentPerson(db).Id);
                     return RedirectToAction("MyGear", "Person");
                 }
