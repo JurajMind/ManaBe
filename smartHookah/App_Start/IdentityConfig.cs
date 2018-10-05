@@ -12,11 +12,6 @@ using smartHookah.Models;
 
 namespace smartHookah
 {
-
-    public interface IEmailService
-    {
-    }
-
     public class SmsService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
