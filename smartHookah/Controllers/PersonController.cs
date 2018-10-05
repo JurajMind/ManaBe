@@ -399,8 +399,7 @@ namespace smartHookah.Controllers
         [Authorize]
         public async Task<ActionResult> AddGear(int id, int? amount, int? personId = null)
         {
-            var person = new Person();
-            AddGear(id, amount, db, out person,personId);
+            AddGear(id, amount, db, out var person,personId);
 
             var model = ShowGearViewModel(person);
             return View("_MyGear", model);
@@ -442,7 +441,7 @@ namespace smartHookah.Controllers
         [HttpPost]
         public async Task<ActionResult> RemoveGear(int id, int? personId = null)
         {
-            Person person = new Person();
+            Person person;
             if (!personId.HasValue)
                 person = UserHelper.GetCurentPerson();
             else

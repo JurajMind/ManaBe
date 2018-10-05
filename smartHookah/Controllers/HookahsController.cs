@@ -261,7 +261,7 @@ namespace smartHookah.Controllers
             if(ModelState.IsValid)
             { 
             Hookah hookah = db.Hookahs.FirstOrDefault(a => a.Code==model.HookahCode);
-            Person person = new Person();
+                Person person;
 
             if (!string.IsNullOrEmpty(model.personId))
             {
