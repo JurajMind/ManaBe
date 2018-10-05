@@ -828,8 +828,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="Services\Messages\IEmailService.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -2218,8 +2220,13 @@
     <Content Include="Views\Home\VueTest.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
-    <Content Include="Views\Emails\_EmailLayout.cshtml" />
-    <Content Include="Views\Emails\test.cshtml" />
+    <Content Include="Views\Emails\_EmailLayout.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\test.cshtml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Emails\reservationDenied.cshtml" />
     <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
     <Content Include="Views\Emails\reservationConfirm.cshtml" />
