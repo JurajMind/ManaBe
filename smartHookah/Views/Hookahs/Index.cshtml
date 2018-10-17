@@ -34,6 +34,8 @@
                     @if (User.IsInRole("Admin"))
                     { 
                         @Html.ActionLink("Delete", "Delete", new {id = item.Id})
+                        <span>|</span>
+                        @Html.ActionLink("Location", "GetAdress", new {id = item.Id})
                     }
                 </td>
             </tr>
