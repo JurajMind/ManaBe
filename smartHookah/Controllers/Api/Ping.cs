@@ -10,14 +10,18 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
+    using System.Web;
+
     public class PingController : ApiController
     {
 
         private readonly SmartHookahContext db;
 
-        public PingController(SmartHookahContext db)
+        private readonly IRedisService redisService;
+        public PingController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            this.redisService = redisService;
         }
 
         [HttpGet]
@@ -46,6 +50,15 @@ namespace smartHookah.Controllers.Api
 
             try
             {
+                try
+                {
+                    var adress = ((HttpContextWrapper)this.Request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+                    this.redisService.StoreAdress(hookah.Code + "_acces", adress);
+                }
+                catch (Exception e)
+                {
+            
+                }
 
                 RedisHelper.SetConnectionTime(id);
 

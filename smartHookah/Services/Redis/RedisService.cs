@@ -1,5 +1,6 @@
 ﻿namespace smartHookahCommon
 {
+    using System.Collections.Generic;
     using System.Configuration;
 
     using ServiceStack.Redis;
@@ -44,6 +45,14 @@
             using (var redis = this.redisManager.GetClient())
             {
                 redis.AddItemToList(adress,hostName);
+            }
+        }
+
+        public IList<string> GetAdress(string key)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                return redis.GetAllItemsFromList(key);
             }
         }
     }

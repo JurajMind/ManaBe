@@ -1,5 +1,7 @@
 ﻿namespace smartHookahCommon
 {
+    using System.Collections.Generic;
+
     using smartHookah.Models.Redis;
 
     public interface IRedisService
@@ -11,5 +13,7 @@
         DynamicSmokeStatistic GetDynamicSmokeStatistic(string sessionId);
 
         void StoreAdress(string adress, string name);
+
+        IList<string> GetAdress(string key);
     }
 }

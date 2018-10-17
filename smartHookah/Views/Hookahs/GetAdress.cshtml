@@ -1,0 +1,16 @@
+﻿@model System.Collections.Generic.IList<string>
+
+<div class="card">
+    <h3 class="card-header">Adresses</h3>
+    <div class="card-body">
+        
+        <div class="list-group">
+            @foreach (var a in Model)
+            {
+                <div class="list-group-item">
+                    <a href="https://extreme-ip-lookup.com/@a">adress: @a</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
