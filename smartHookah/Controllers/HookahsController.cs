@@ -18,9 +18,12 @@ namespace smartHookah.Controllers
     {
         private readonly SmartHookahContext db;
 
-        public HookahsController(SmartHookahContext db)
+        private readonly IRedisService redisService;
+
+        public HookahsController(SmartHookahContext db, IRedisService redisService)
         {
             this.db = db;
+            this.redisService = redisService;
         }
 
         // GET: Hookahs
@@ -60,6 +63,18 @@ namespace smartHookah.Controllers
             await db.SaveChangesAsync();
 
             return RedirectToAction("Details", new {id = hookah.Id});
+        }
+
+        [Authorize( Roles = "Admin")]
+        public async Task<ActionResult> GetAdress(int id)
+        {
+            var hookah = await db.Hookahs.FindAsync(id);
+            if (hookah == null)
+                return RedirectToAction("Index", "Home");
+
+            var adresses = this.redisService.GetAdress(hookah.Code + "_acces");
+
+            return this.View(adresses);
         }
 
         [HttpPost]
