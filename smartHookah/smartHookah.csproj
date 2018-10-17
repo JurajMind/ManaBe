@@ -2239,6 +2239,7 @@
     <Content Include="Views\Error\Error403.cshtml" />
     <Content Include="Views\Error\Error404.cshtml" />
     <Content Include="Views\Error\GenericHttpError.cshtml" />
+    <Content Include="Views\Hookahs\GetAdress.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
