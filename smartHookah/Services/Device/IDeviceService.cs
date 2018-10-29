@@ -18,6 +18,8 @@ namespace smartHookah.Services.Device
         Task Restart(string deviceId);
         Task SetMode(string deviceId, int mode);
         Task ShowQrCode(string deviceId);
+        Task SetPreset(string deviceId, int settingId);
+
         List<Animation> GetAnimations();
         Animation GetAnimation(int id);
         int GetDeviceVersion(string id);
@@ -25,5 +27,7 @@ namespace smartHookah.Services.Device
         HookahSetting GetStandSettings(string id);
 
         Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds);
+
+        string GetDeviceInitString(string id, int hookahVersion);
     }
 }
