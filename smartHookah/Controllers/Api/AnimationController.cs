@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Dto;
-using smartHookah.Services.Device;
-
-namespace smartHookah.Controllers
+﻿namespace smartHookah.Controllers.Api
 {
+    using System.Web.Http;
+
+    using smartHookah.Models;
+    using smartHookah.Models.Dto;
+    using smartHookah.Services.Device;
+
     [System.Web.Http.RoutePrefix("api/Animations")]
     public class AnimationController : ApiController
     {
-        private readonly SmartHookahContext _db;
+        private readonly SmartHookahContext db;
 
-        public AnimationController(SmartHookahContext db)
+        private readonly IDeviceService deviceService;
+
+        public AnimationController(SmartHookahContext db, IDeviceService deviceService)
         {
-            this._db = db;
+            this.db = db;
+            this.deviceService = deviceService;
         }
         #region Getters
 
@@ -37,8 +31,8 @@ namespace smartHookah.Controllers
                     Message = $"Id \'{id}\' not valid.",
                     HttpResponseCode = 404
                 };
-            var service = new DeviceService(_db, null);
-            var version = service.GetDeviceVersion(id);
+           
+            var version = this.deviceService.GetDeviceVersion(id);
             if (version < 0) return new AnimationsDTO()
             {
                 Success = false,
@@ -46,7 +40,7 @@ namespace smartHookah.Controllers
                 HttpResponseCode = 404
             };
 
-            return new AnimationsDTO(service.GetAnimations(), version)
+            return new AnimationsDTO(this.deviceService.GetAnimations(), version)
             {
                 Success = true,
                 Message = "Animations loaded.",

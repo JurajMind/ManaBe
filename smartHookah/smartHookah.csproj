@@ -826,6 +826,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Migrations\201810292025307_namedSetting.cs" />
+    <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
+      <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\HookahPersonSetting.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -890,6 +895,9 @@
     <EmbeddedResource Include="Migrations\201809222317045_similar.resx">
       <DependentUpon>201809222317045_similar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810292025307_namedSetting.resx">
+      <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -901,6 +909,7 @@
     <Compile Include="Services\Gear\ITobaccoService.cs" />
     <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Person\AccountService.cs" />
+    <Compile Include="Services\Person\PersonHookahSetting.cs" />
     <Compile Include="Services\Place\IReservationService.cs" />
     <Compile Include="Services\Place\ReservationService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
