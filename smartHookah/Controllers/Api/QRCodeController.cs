@@ -16,9 +16,19 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Services.Device;
+
     public class QRCodeController : ApiController
     {
         private static IHubContext ClientContext => GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
+
+        private readonly IDeviceService deviceService;
+
+        public QRCodeController(IDeviceService deviceService)
+        {
+            this.deviceService = deviceService;
+        }
+
         [HttpGet]
         [OptionalHttps(true)]
         [ActionName("DefaultAction")]
@@ -59,7 +69,7 @@ namespace smartHookah.Controllers
             else
             {
                  
-                var initString = DeviceControlController.GetDeviceInitString(id,hookah.Version, db);
+                var initString = this.deviceService.GetDeviceInitString(id,hookah.Version);
                 qrResult = $"{initString};{result}";
             }
 

@@ -14,6 +14,8 @@
     using smartHookah.Models;
     using smartHookah.Services.Device;
 
+    using smartHookahCommon;
+
     using smartHookahTests.Common;
 
     [TestFixture]
@@ -51,9 +53,10 @@
 
             // On iotService, SendToMsg shoud be called with given params, returning task
             iotMock.Setup(a => a.SendMsgToDevice(deviceId, $"led:{(int)state}{1}")).Returns(Task.FromResult(false));
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             await service.SetAnimation(deviceId, animation, state);
@@ -98,11 +101,11 @@
 
             // Mock for iot service
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
-
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // On iotService, SendToMsg shoud be called with given params, returning task
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<NotSupportedException>(() => service.SetAnimation(deviceId, animation, state));
@@ -159,9 +162,9 @@
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
 
             // On iotService, SendToMsg shoud be called with given params, returning task
-
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<ItemNotFoundException>(() => service.SetAnimation(deviceId, animation, state));

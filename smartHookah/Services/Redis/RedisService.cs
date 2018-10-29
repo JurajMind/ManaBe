@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Configuration;
 
+    using smartHookah.Models;
+
     using ServiceStack.Redis;
 
     using smartHookah.Models.Redis;
@@ -53,6 +55,14 @@
             using (var redis = this.redisManager.GetClient())
             {
                 return redis.GetAllItemsFromList(key);
+            }
+        }
+
+        public IList<Puf> GetPufs(string sessionId)
+        {
+            using (var redis = redisManager.GetClient())
+            {
+                return redis.As<Puf>().Lists["pufs:" + sessionId].GetAll();
             }
         }
     }

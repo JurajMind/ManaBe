@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using smartHookah.Models;
+using smartHookah.Support;
 using Westwind.Globalization;
 
 namespace smartHookah.Helpers
@@ -23,8 +24,9 @@ namespace smartHookah.Helpers
 
             var options = "";
             TagBuilder option;
+        
 
-            foreach (var item in selectList.OrderBy(a => a.BrandName).ThenBy(a => a.AccName))
+            foreach (var item in selectList.EmptyIfNull().OrderBy(a => a.BrandName)?.ThenBy(a => a.AccName))
             {
                 option = new TagBuilder("option");
                 option.MergeAttribute("value", item.Id.ToString());
