@@ -559,29 +559,28 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        public JsonResult SetDefault(string id)
+        public JsonResult SetDefault(int id)
         {
 
-            var session = db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);
+            var personSetting = this.db.HookahPersonSetting.FirstOrDefault(a => a.Id == id);
 
-            if(session == null)
+            if (personSetting == null)
             return Json(new{ success = false});
 
 
-            var person = UserHelper.GetCurentPerson(db);
-            if(person.DefaultSetting == null)
-                person.DefaultSetting = new HookahSetting(session.Hookah.Setting);
-            else
+            var person = UserHelper.GetCurentPerson(this.db);
+            var oldDefault = person.Settings.FirstOrDefault(a => a.Defaut);
+            if (oldDefault != null)
             {
-                person.DefaultSetting.Change(session.Hookah.Setting);
+                oldDefault.Defaut = false;
+                this.db.HookahPersonSetting.AddOrUpdate(oldDefault);
             }
-            
-            db.Persons.AddOrUpdate(person);
+            personSetting.Defaut = true;
+            this.db.HookahPersonSetting.AddOrUpdate(personSetting);
 
-            db.SaveChanges();
+            this.db.SaveChanges();
 
             return Json(new { success = true });
-
         }
 
 

@@ -14,16 +14,21 @@ namespace smartHookah.Services.Device
     using smartHookah.Helpers;
     using smartHookah.Models;
 
+    using smartHookahCommon;
+
     public class DeviceService : IDeviceService
     {
         private readonly SmartHookahContext db;
 
         private readonly IIotService iotService;
 
-        public DeviceService(SmartHookahContext db, IIotService iotService)
+        private readonly IRedisService redisService;
+
+        public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService)
         {
             this.db = db;
             this.iotService = iotService;
+            this.redisService = redisService;
         }
 
         public async Task SetAnimation(string deviceId, Animation animation, PufType state)
@@ -116,6 +121,59 @@ namespace smartHookah.Services.Device
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
             await this.iotService.SendMsgToDevice(deviceId, "qrcode:");
+        }
+
+        public async Task SetPreset(string deviceId, int settingId)
+        {
+            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+
+            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+
+            var setting = this.db.HookahPersonSetting.FirstOrDefault(a => a.Id == settingId);
+
+            if (setting == null) throw new ItemNotFoundException($"Person setting with id {settingId} not found");
+
+            var settingString = setting.Setting.GetInitStringWithSpeed(0, 0, "");
+
+            await this.iotService.SendMsgToDevice(deviceId, $"preset:{settingString}");
+        }
+
+        public string GetDeviceInitString(string id, int hookahVersion)
+        {
+            var sessionId = this.redisService.GetSessionId(id);
+
+            var pufs = this.redisService.GetPufs(sessionId);
+
+            var intake = pufs.Count(a => a.Type == Models.PufType.In);
+            var setting = new HookahSetting();
+
+            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == id);
+
+            if (hookah?.Setting != null)
+                setting = hookah.Setting;
+
+            var percentage = 300;
+            var dbSession = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == sessionId);
+
+            if (dbSession != null && dbSession.MetaData != null && dbSession.MetaData.Tobacco != null &&
+                dbSession.MetaData.Tobacco.Statistics != null)
+            {
+                percentage = (int)dbSession.MetaData.Tobacco.Statistics.PufCount;
+            }
+
+            if (hookahVersion < 1000011)
+                return setting.GetInitStringWithColor(intake);
+
+            if (hookahVersion < 1000017)
+                return setting.GetInitStringWithPercentage(intake, percentage);
+
+            if (hookahVersion < 1000024)
+                return setting.GetInitStringWithBrightness(intake, percentage);
+
+            if (hookahVersion < 1000025)
+                return setting.GetInitStringWithSessionId(intake, percentage, sessionId);
+
+            return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
         }
 
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)

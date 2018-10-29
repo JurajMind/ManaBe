@@ -38,6 +38,15 @@
             return buckets.ToList();
         }
 
+        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+            {
+                return new List<T>();
+            }
+            return enumerable;
+        }
+
         public static string Content(this UrlHelper urlHelper, string contentPath, bool toAbsolute = false)
         {
             var path = urlHelper.Content(contentPath);
@@ -172,6 +181,10 @@
             if (result.BowlId != null && result.Bowl == null) result.Bowl = db.Bowls.Find(result.BowlId);
 
             if (result.TobaccoId != null && result.Tobacco == null) result.Tobacco = db.Tobaccos.Find(result.TobaccoId);
+
+            if (result.HeatManagementId != null && result.HeatManagement == null) result.HeatManagement = db.HeatManagments.Find(result.HeatManagementId);
+
+            if (result.CoalId != null && result.Coal == null) result.Coal = db.Coals.Find(result.CoalId);
 
             return result;
         }
