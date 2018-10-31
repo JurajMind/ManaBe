@@ -1,4 +1,6 @@
-﻿using ClosedXML.Excel;
+﻿using System.Net;
+using System.Net.Http;
+using ClosedXML.Excel;
 using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
@@ -22,14 +24,37 @@ namespace smartHookah.Controllers.Api
 
         private readonly IReservationService reservationService;
 
-        public PlacesController(SmartHookahContext db, IReservationService reservationService)
+        private readonly IPlaceService placeService;
+
+        public PlacesController(SmartHookahContext db, IReservationService reservationService, IPlaceService placeService)
         {
             this.db = db;
             this.reservationService = reservationService;
+            this.placeService = placeService;
         }
 
 
-        #region Search nearby places
+        #region Getters
+
+        [HttpGet, Route("GetPlaceInfo")]
+        public async Task<PlaceDto> GetPlaceInfo(int id)
+        {
+            try
+            {
+                var place = await placeService.GetPlace(id);
+                var reviews = await placeService.GetPlaceTobaccoReviews(id);
+
+                var result = PlaceDto.FromModel(place);
+                result.TobaccoReviews = TobaccoReviewDto.FromModelList(reviews);
+
+                return result;
+            }
+            catch(Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
+            }
+        }
 
         [HttpGet]
         [Route("SearchNearby")]
