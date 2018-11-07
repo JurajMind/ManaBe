@@ -22,6 +22,7 @@ namespace smartHookah.Controllers
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Services.Device;
+    using smartHookah.Services.Person;
 
     using smartHookahCommon;
 
@@ -31,10 +32,13 @@ namespace smartHookah.Controllers
 
         private readonly IDeviceService deviceService;
 
-        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService)
+        private readonly IDeviceSettingsPresetService devicePresetService;
+
+        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService, IDeviceSettingsPresetService devicePresetService)
         {
             this.db = db;
             this.deviceService = deviceService;
+            this.devicePresetService = devicePresetService;
         }
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
@@ -561,24 +565,7 @@ namespace smartHookah.Controllers
         [HttpPost]
         public JsonResult SetDefault(int id)
         {
-
-            var personSetting = this.db.DevicePreset.FirstOrDefault(a => a.Id == id);
-
-            if (personSetting == null)
-            return Json(new{ success = false});
-
-
-            var person = UserHelper.GetCurentPerson(this.db);
-            var oldDefault = person.Settings.FirstOrDefault(a => a.Defaut);
-            if (oldDefault != null)
-            {
-                oldDefault.Defaut = false;
-                this.db.DevicePreset.AddOrUpdate(oldDefault);
-            }
-            personSetting.Defaut = true;
-            this.db.DevicePreset.AddOrUpdate(personSetting);
-
-            this.db.SaveChanges();
+            this.devicePresetService.SetDefault(id);
 
             return Json(new { success = true });
         }
@@ -588,22 +575,10 @@ namespace smartHookah.Controllers
         [HttpPost]
         public JsonResult UseDefault(string id)
         {
-            var session = db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);
-
-            if (session == null)
-                return Json(new { success = false });
-
-
-            var person = UserHelper.GetCurentPerson(db);
-            
-            if(person.DefaultSetting == null)
-                return Json(new { success = false });
-
-            var hookahSetting = session.Hookah.Setting;
-            var personSetting = person.DefaultSetting;
-          //@TODO
-
-            return Json(new { success = true });
+           
+            var result = this.devicePresetService.UseDefaut(id);
+         
+            return Json(new { success = result });
 
         }
     }

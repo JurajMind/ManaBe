@@ -9,30 +9,22 @@ namespace smartHookah.Migrations
         {
             RenameTable(name: "dbo.HookahSetting", newName: "DeviceSetting");
             DropForeignKey("dbo.DevicePreset", "SettingId", "dbo.HookahSetting");
-            DropIndex("dbo.DevicePreset", new[] { "SettingId" });
-            DropColumn("dbo.DevicePreset", "Id");
-            RenameColumn(table: "dbo.DevicePreset", name: "SettingId", newName: "Id");
             DropPrimaryKey("dbo.DevicePreset");
             AddColumn("dbo.DeviceSetting", "DevicePresetId", c => c.Int());
             AddColumn("dbo.DevicePreset", "DeviceSettingId", c => c.Int(nullable: false));
-            AlterColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false));
-            AddPrimaryKey("dbo.DevicePreset", "Id");
-            CreateIndex("dbo.DevicePreset", "Id");
-            AddForeignKey("dbo.DevicePreset", " Id", "dbo.DeviceSetting", "Id");
+            AddPrimaryKey("dbo.DevicePreset", "SettingId");
+            AddForeignKey("dbo.DevicePreset", "SettingId", "dbo.DeviceSetting", "Id");
+            DropColumn("dbo.DevicePreset", "Id");
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.DevicePreset", "Id", "dbo.DeviceSetting");
-            DropIndex("dbo.DevicePreset", new[] { "Id" });
+            AddColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false, identity: true));
+            DropForeignKey("dbo.DevicePreset", "SettingId", "dbo.DeviceSetting");
             DropPrimaryKey("dbo.DevicePreset");
-            AlterColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false, identity: true));
             DropColumn("dbo.DevicePreset", "DeviceSettingId");
             DropColumn("dbo.DeviceSetting", "DevicePresetId");
             AddPrimaryKey("dbo.DevicePreset", "Id");
-            RenameColumn(table: "dbo.DevicePreset", name: "Id", newName: "SettingId");
-            AddColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false, identity: true));
-            CreateIndex("dbo.DevicePreset", "SettingId");
             AddForeignKey("dbo.DevicePreset", "SettingId", "dbo.HookahSetting", "Id", cascadeDelete: true);
             RenameTable(name: "dbo.DeviceSetting", newName: "HookahSetting");
         }

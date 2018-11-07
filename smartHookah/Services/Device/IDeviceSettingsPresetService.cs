@@ -10,5 +10,7 @@ namespace smartHookah.Services.Person
         bool AddSetting(string name, DeviceSetting setting);
         ICollection<DevicePreset> GetSettings();
         void Delete(int id);
+
+        bool UseDefaut(string id);
     }
 }

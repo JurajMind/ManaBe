@@ -5,13 +5,14 @@ using System.Web;
 
 namespace smartHookah.Models.Db
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class DevicePreset
     {
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public bool Defaut { get; set; }
 
         public int? PersonId { get; set; }
 
