@@ -21,7 +21,7 @@ namespace smartHookah.Models
         {
             Version = modelHookah.Version;
             Type = modelHookah.Type;
-            Setting = new HookahSetting(modelHookah.Setting);
+            Setting = new DeviceSetting(modelHookah.Setting);
             AutoSessionEndTime = modelHookah.AutoSessionEndTime;
             AutoSleep = modelHookah.AutoSleep;
             UpdateType = modelHookah.UpdateType;
@@ -73,7 +73,7 @@ namespace smartHookah.Models
         public virtual ICollection<Person> Owners { get; set; }
 
         public int? SettingId { get; set; }
-        public virtual HookahSetting Setting { get; set; }
+        public virtual DeviceSetting Setting { get; set; }
 
         public StandType Type { get; set; }
 

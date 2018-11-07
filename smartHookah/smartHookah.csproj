@@ -830,7 +830,29 @@
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
       <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Db\HookahPersonSetting.cs" />
+    <Compile Include="Migrations\201811051621477_Device_preset.cs" />
+    <Compile Include="Migrations\201811051621477_Device_preset.Designer.cs">
+      <DependentUpon>201811051621477_Device_preset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811051626076_Device_preset_refactor.cs" />
+    <Compile Include="Migrations\201811051626076_Device_preset_refactor.Designer.cs">
+      <DependentUpon>201811051626076_Device_preset_refactor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811071503382_hookah_setting_refactor.cs" />
+    <Compile Include="Migrations\201811071503382_hookah_setting_refactor.Designer.cs">
+      <DependentUpon>201811071503382_hookah_setting_refactor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811072046557_hookah_setting_refactor_id.cs" />
+    <Compile Include="Migrations\201811072046557_hookah_setting_refactor_id.Designer.cs">
+      <DependentUpon>201811072046557_hookah_setting_refactor_id.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811072121548_hookah_setting_refactor_default.cs" />
+    <Compile Include="Migrations\201811072121548_hookah_setting_refactor_default.Designer.cs">
+      <DependentUpon>201811072121548_hookah_setting_refactor_default.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\MigrationExtensions.cs" />
+    <Compile Include="Models\Db\DevicePreset.cs" />
+    <Compile Include="Models\Dto\DevicePresetDto.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -880,7 +902,7 @@
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
     <Compile Include="Models\Dto\HookahDto.cs" />
-    <Compile Include="Models\Dto\HookahSettingDto.cs" />
+    <Compile Include="Models\Dto\DeviceSettingDto.cs" />
     <Compile Include="Models\Dto\PersonDTO.cs" />
     <Compile Include="Models\Dto\TobaccoInformationDto.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
@@ -898,6 +920,21 @@
     <EmbeddedResource Include="Migrations\201810292025307_namedSetting.resx">
       <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811051621477_Device_preset.resx">
+      <DependentUpon>201811051621477_Device_preset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811051626076_Device_preset_refactor.resx">
+      <DependentUpon>201811051626076_Device_preset_refactor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811071503382_hookah_setting_refactor.resx">
+      <DependentUpon>201811071503382_hookah_setting_refactor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811072046557_hookah_setting_refactor_id.resx">
+      <DependentUpon>201811072046557_hookah_setting_refactor_id.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811072121548_hookah_setting_refactor_default.resx">
+      <DependentUpon>201811072121548_hookah_setting_refactor_default.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -909,7 +946,8 @@
     <Compile Include="Services\Gear\ITobaccoService.cs" />
     <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Person\AccountService.cs" />
-    <Compile Include="Services\Person\PersonHookahSetting.cs" />
+    <Compile Include="Services\Device\DeviceSettingsPresetService.cs" />
+    <Compile Include="Services\Device\IDeviceSettingsPresetService.cs" />
     <Compile Include="Services\Place\IPlaceService.cs" />
     <Compile Include="Services\Place\IReservationService.cs" />
     <Compile Include="Services\Place\PlaceService.cs" />
@@ -1475,7 +1513,7 @@
     <Compile Include="Models\ViewModel\DataModule.cs" />
     <Compile Include="Models\Db\DbPuf.cs" />
     <Compile Include="Models\Db\Hookah.cs" />
-    <Compile Include="Models\Db\HookahSetting.cs" />
+    <Compile Include="Models\Db\DeviceSetting.cs" />
     <Compile Include="Models\Db\IdentityModels.cs" />
     <Compile Include="Models\ViewModel\ManageViewModels.cs" />
     <Compile Include="Models\Db\Person.cs" />

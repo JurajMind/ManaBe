@@ -22,6 +22,7 @@ namespace smartHookah.Controllers
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Services.Device;
+    using smartHookah.Services.Person;
 
     using smartHookahCommon;
 
@@ -31,10 +32,13 @@ namespace smartHookah.Controllers
 
         private readonly IDeviceService deviceService;
 
-        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService)
+        private readonly IDeviceSettingsPresetService devicePresetService;
+
+        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService, IDeviceSettingsPresetService devicePresetService)
         {
             this.db = db;
             this.deviceService = deviceService;
+            this.devicePresetService = devicePresetService;
         }
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
@@ -221,7 +225,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -299,7 +303,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -347,7 +351,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -421,11 +425,11 @@ namespace smartHookah.Controllers
             return GetDeviceSettingViewModel(settings,hookah.Version);
         }
 
-        public static DeviceSettingViewModel GetDeviceSettingViewModel(HookahSetting setting , int? hookahVersion,SmartHookahContext db = null)
+        public static DeviceSettingViewModel GetDeviceSettingViewModel(DeviceSetting setting , int? hookahVersion,SmartHookahContext db = null)
         {
             if (setting == null)
             { 
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 setting.Color.Value = 255;
                 setting.Color.Hue = 255;
                 setting.Color.Saturation = 255;
@@ -463,7 +467,7 @@ namespace smartHookah.Controllers
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
 
-            var setting = new HookahSetting();
+            var setting = new DeviceSetting();
             var versionInt = Helper.UpdateVersionToInt(version);
             using (var db = new SmartHookahContext())
             {
@@ -499,7 +503,7 @@ namespace smartHookah.Controllers
             var pufs = RedisHelper.GetPufs(sessionId);
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
-            var setting = new HookahSetting();
+            var setting = new DeviceSetting();
 
             var hookah = context.Hookahs.FirstOrDefault(a => a.Code == id);
 
@@ -534,7 +538,7 @@ namespace smartHookah.Controllers
         {
             public int HookahVersion { get; set; }
             public string SessionId { get; set; }
-            public HookahSetting Setting { get; set; }
+            public DeviceSetting Setting { get; set; }
             public int IdleAnimation { get; set; }
             public int PufAnimation { get; set; }
             public int BlowAnimation { get; set; }
@@ -561,24 +565,7 @@ namespace smartHookah.Controllers
         [HttpPost]
         public JsonResult SetDefault(int id)
         {
-
-            var personSetting = this.db.HookahPersonSetting.FirstOrDefault(a => a.Id == id);
-
-            if (personSetting == null)
-            return Json(new{ success = false});
-
-
-            var person = UserHelper.GetCurentPerson(this.db);
-            var oldDefault = person.Settings.FirstOrDefault(a => a.Defaut);
-            if (oldDefault != null)
-            {
-                oldDefault.Defaut = false;
-                this.db.HookahPersonSetting.AddOrUpdate(oldDefault);
-            }
-            personSetting.Defaut = true;
-            this.db.HookahPersonSetting.AddOrUpdate(personSetting);
-
-            this.db.SaveChanges();
+            this.devicePresetService.SetDefault(id);
 
             return Json(new { success = true });
         }
@@ -588,22 +575,10 @@ namespace smartHookah.Controllers
         [HttpPost]
         public JsonResult UseDefault(string id)
         {
-            var session = db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);
-
-            if (session == null)
-                return Json(new { success = false });
-
-
-            var person = UserHelper.GetCurentPerson(db);
-            
-            if(person.DefaultSetting == null)
-                return Json(new { success = false });
-
-            var hookahSetting = session.Hookah.Setting;
-            var personSetting = person.DefaultSetting;
-          //@TODO
-
-            return Json(new { success = true });
+           
+            var result = this.devicePresetService.UseDefaut(id);
+         
+            return Json(new { success = result });
 
         }
     }

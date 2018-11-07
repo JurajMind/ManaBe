@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+
 using Microsoft.TeamFoundation.VersionControl.Client;
+
 using smartHookah.Models;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers.Api
 {
@@ -16,10 +20,12 @@ namespace smartHookah.Controllers.Api
     public class DeviceController : ApiController
     {
         private readonly IDeviceService deviceService;
+        private readonly IDeviceSettingsPresetService deviceSettingsPresetService;
 
-        public DeviceController(IDeviceService deviceService)
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService)
         {
             this.deviceService = deviceService;
+            this.deviceSettingsPresetService = deviceSettingsPresetService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -167,22 +173,53 @@ namespace smartHookah.Controllers.Api
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        [HttpGet, Route("{id}/StandSetting")]
-        public StandSettings GetStandSetting(string id)
+        #region Device preset settings
+
+        [HttpGet, Route("Preset/{id}/GetSetting")]
+        public StandSettings GetSetting(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            try
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                var setting = this.deviceService.GetStandSettings(id);
+                return StandSettings.FromModel(setting);
             }
-
-            var setting = this.deviceService.GetStandSettings(id);
-
-            if (setting == null)
+            catch (Exception e)
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
             }
-
-            return StandSettings.FromModel(setting);
         }
+
+        [HttpGet, Route("Preset/GetUserSetting")]
+        public IEnumerable<DevicePresetDto> GetUserSetting()
+        {
+            try
+            {
+                var presets = this.deviceSettingsPresetService.GetSettings();
+                return DevicePresetDto.FromModelList(presets);
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
+            }
+        }
+
+        [HttpDelete, Route("Preset/{id}/Delete")]
+        public HttpResponseMessage DeleteSetting(int id)
+        {
+            try
+            {
+                this.deviceSettingsPresetService.Delete(id);
+                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.OK, $"Item {id} deleted."));
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
+            }
+        }
+
+        #endregion
     }
 }
