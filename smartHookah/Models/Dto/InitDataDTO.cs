@@ -19,37 +19,36 @@ namespace smartHookah.Models.Dto
         public ActionSettings BlowSettings { get; set; }
         public ActionSettings IdleSettings { get; set; }
 
-        public static StandSettings FromModel(HookahSetting settings)
-        {
-            return new StandSettings()
-                       {
-                           PuffSettings =
-                               new ActionSettings()
-                                   {
-                                       Color = settings.Color,
-                                       AnimationId = settings.PufAnimation,
-                                       Brightness = settings.PufBrightness,
-                                       Speed = settings.PufSpeed
-                                   },
-                           BlowSettings =
-                               new ActionSettings()
-                                   {
-                                       Color = settings.Color,
-                                       AnimationId = settings.BlowAnimation,
-                                       Brightness = settings.PufBrightness,
-                                       Speed = settings.PufSpeed
-                                   },
-                           IdleSettings =
-                               new ActionSettings()
-                                   {
-                                       Color = settings.Color,
-                                       AnimationId = settings.IdleAnimation,
-                                       Brightness = settings.IdleBrightness,
-                                       Speed = settings.IdleSpeed
-                                   }
-                       };
-        }
-}
+        public static StandSettings FromModel(DeviceSetting settings) => settings == null
+            ? null
+            : new StandSettings()
+            {
+                PuffSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.PufAnimation,
+                        Brightness = settings.PufBrightness,
+                        Speed = settings.PufSpeed
+                    },
+                BlowSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.BlowAnimation,
+                        Brightness = settings.PufBrightness,
+                        Speed = settings.PufSpeed
+                    },
+                IdleSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.IdleAnimation,
+                        Brightness = settings.IdleBrightness,
+                        Speed = settings.IdleSpeed
+                    }
+            };
+    }
 
     public class ActionSettings
     {

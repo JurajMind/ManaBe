@@ -24,7 +24,7 @@ namespace smartHookah.Services.Device
         Animation GetAnimation(int id);
         int GetDeviceVersion(string id);
 
-        HookahSetting GetStandSettings(string id);
+        DeviceSetting GetStandSettings(string id);
 
         Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Device
 {
@@ -23,6 +24,7 @@ namespace smartHookah.Services.Device
         private readonly IIotService iotService;
 
         private readonly IRedisService redisService;
+        
 
         public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService)
         {
@@ -129,7 +131,7 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
-            var setting = this.db.HookahPersonSetting.FirstOrDefault(a => a.Id == settingId);
+            var setting = this.db.DevicePreset.FirstOrDefault(a => a.Id == settingId);
 
             if (setting == null) throw new ItemNotFoundException($"Person setting with id {settingId} not found");
 
@@ -145,7 +147,7 @@ namespace smartHookah.Services.Device
             var pufs = this.redisService.GetPufs(sessionId);
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
-            var setting = new HookahSetting();
+            var setting = new DeviceSetting();
 
             var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == id);
 
@@ -175,7 +177,7 @@ namespace smartHookah.Services.Device
 
             return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
         }
-
+        
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
         {
             return this.iotService.GetOnlineStates(deviceIds);
@@ -201,13 +203,13 @@ namespace smartHookah.Services.Device
             return hookah?.Version ?? -1;
         }
 
-        public HookahSetting GetStandSettings(string id)
+        public DeviceSetting GetStandSettings(string id)
         {
             var hookah = db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Code == id);
             return hookah?.Setting;
         }
 
-        private void SetAnimation(HookahSetting setting, int state, int value)
+        private void SetAnimation(DeviceSetting setting, int state, int value)
         {
             switch (state)
             {
@@ -225,7 +227,7 @@ namespace smartHookah.Services.Device
             }
         }
 
-        private void SetBrightness(HookahSetting setting, int state, int value)
+        private void SetBrightness(DeviceSetting setting, int state, int value)
         {
             switch (state)
             {
@@ -243,7 +245,7 @@ namespace smartHookah.Services.Device
             }
         }
 
-        private void SetSpeed(HookahSetting setting, int state, int value)
+        private void SetSpeed(DeviceSetting setting, int state, int value)
         {
             switch (state)
             {
@@ -261,7 +263,7 @@ namespace smartHookah.Services.Device
             }
         }
 
-        private void SetColor(HookahSetting setting, int state, Color color)
+        private void SetColor(DeviceSetting setting, int state, Color color)
         {
             //TODO color change for other states
             setting.Color = color;

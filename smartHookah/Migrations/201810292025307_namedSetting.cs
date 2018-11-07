@@ -10,7 +10,7 @@ namespace smartHookah.Migrations
             DropForeignKey("dbo.Person", "DefaultSettingId", "dbo.HookahSetting");
             DropIndex("dbo.Person", new[] { "DefaultSettingId" });
             CreateTable(
-                "dbo.HookahPersonSetting",
+                "dbo.DevicePreset",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -31,11 +31,11 @@ namespace smartHookah.Migrations
         public override void Down()
         {
             AddColumn("dbo.Person", "DefaultSettingId", c => c.Int());
-            DropForeignKey("dbo.HookahPersonSetting", "SettingId", "dbo.HookahSetting");
-            DropForeignKey("dbo.HookahPersonSetting", "PersonId", "dbo.Person");
-            DropIndex("dbo.HookahPersonSetting", new[] { "SettingId" });
-            DropIndex("dbo.HookahPersonSetting", new[] { "PersonId" });
-            DropTable("dbo.HookahPersonSetting");
+            DropForeignKey("dbo.DevicePreset", "SettingId", "dbo.HookahSetting");
+            DropForeignKey("dbo.DevicePreset", "PersonId", "dbo.Person");
+            DropIndex("dbo.DevicePreset", new[] { "SettingId" });
+            DropIndex("dbo.DevicePreset", new[] { "PersonId" });
+            DropTable("dbo.DevicePreset");
             CreateIndex("dbo.Person", "DefaultSettingId");
             AddForeignKey("dbo.Person", "DefaultSettingId", "dbo.HookahSetting", "Id");
         }
