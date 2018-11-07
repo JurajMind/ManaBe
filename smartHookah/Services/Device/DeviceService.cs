@@ -135,7 +135,7 @@ namespace smartHookah.Services.Device
 
             if (setting == null) throw new ItemNotFoundException($"Person setting with id {settingId} not found");
 
-            var settingString = setting.Setting.GetInitStringWithSpeed(0, 0, "");
+            var settingString = setting.DeviceSetting.GetInitStringWithSpeed(0, 0, "");
 
             await this.iotService.SendMsgToDevice(deviceId, $"preset:{settingString}");
         }

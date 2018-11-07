@@ -37,7 +37,7 @@ namespace smartHookah.Models.Db.Dto
                 Name = model.Name,
                 Defaut = model.Defaut,
                 PersonId = model.PersonId,
-                SettingId = model.SettingId,
+                SettingId = model.DeviceSettingId,
             };
 
 
@@ -58,7 +58,7 @@ namespace smartHookah.Models.Db.Dto
                 Name = Name, 
                 Defaut = Defaut, 
                 PersonId = PersonId, 
-                SettingId = SettingId, 
+                DeviceSettingId = SettingId, 
             }; 
         }
     }

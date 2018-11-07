@@ -838,9 +838,9 @@
     <Compile Include="Migrations\201811051626076_Device_preset_refactor.Designer.cs">
       <DependentUpon>201811051626076_Device_preset_refactor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201811061355371_hookah_setting_refactor.cs" />
-    <Compile Include="Migrations\201811061355371_hookah_setting_refactor.Designer.cs">
-      <DependentUpon>201811061355371_hookah_setting_refactor.cs</DependentUpon>
+    <Compile Include="Migrations\201811071503382_hookah_setting_refactor.cs" />
+    <Compile Include="Migrations\201811071503382_hookah_setting_refactor.Designer.cs">
+      <DependentUpon>201811071503382_hookah_setting_refactor.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Db\DevicePreset.cs" />
     <Compile Include="Models\Dto\DevicePresetDto.cs" />
@@ -917,8 +917,8 @@
     <EmbeddedResource Include="Migrations\201811051626076_Device_preset_refactor.resx">
       <DependentUpon>201811051626076_Device_preset_refactor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811061355371_hookah_setting_refactor.resx">
-      <DependentUpon>201811061355371_hookah_setting_refactor.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811071503382_hookah_setting_refactor.resx">
+      <DependentUpon>201811071503382_hookah_setting_refactor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

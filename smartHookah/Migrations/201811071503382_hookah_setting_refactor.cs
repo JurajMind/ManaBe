@@ -14,10 +14,11 @@ namespace smartHookah.Migrations
             RenameColumn(table: "dbo.DevicePreset", name: "SettingId", newName: "Id");
             DropPrimaryKey("dbo.DevicePreset");
             AddColumn("dbo.DeviceSetting", "DevicePresetId", c => c.Int());
+            AddColumn("dbo.DevicePreset", "DeviceSettingId", c => c.Int(nullable: false));
             AlterColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false));
             AddPrimaryKey("dbo.DevicePreset", "Id");
             CreateIndex("dbo.DevicePreset", "Id");
-            AddForeignKey("dbo.DevicePreset", "Id", "dbo.DeviceSetting", "Id");
+            AddForeignKey("dbo.DevicePreset", " Id", "dbo.DeviceSetting", "Id");
         }
         
         public override void Down()
@@ -26,6 +27,7 @@ namespace smartHookah.Migrations
             DropIndex("dbo.DevicePreset", new[] { "Id" });
             DropPrimaryKey("dbo.DevicePreset");
             AlterColumn("dbo.DevicePreset", "Id", c => c.Int(nullable: false, identity: true));
+            DropColumn("dbo.DevicePreset", "DeviceSettingId");
             DropColumn("dbo.DeviceSetting", "DevicePresetId");
             AddPrimaryKey("dbo.DevicePreset", "Id");
             RenameColumn(table: "dbo.DevicePreset", name: "Id", newName: "SettingId");
