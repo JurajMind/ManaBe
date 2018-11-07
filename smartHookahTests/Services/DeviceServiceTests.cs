@@ -37,12 +37,12 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet =
                 new FakeDbSet<Hookah> { new Hookah() { Code = deviceId, Version = 100, Setting = hookahSetting } };
 
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);
@@ -89,11 +89,11 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet =
                 new FakeDbSet<Hookah> { new Hookah() { Code = deviceId, Version = 100, Setting = hookahSetting } };
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);
@@ -141,7 +141,7 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet = new FakeDbSet<Hookah>
                                     {
@@ -152,7 +152,7 @@
                                                 Setting = hookahSetting
                                             }
                                     };
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);

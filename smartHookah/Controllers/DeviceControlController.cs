@@ -221,7 +221,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -299,7 +299,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -347,7 +347,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 hookah.Setting = setting;
                 db.Hookahs.AddOrUpdate(hookah);
             }
@@ -421,11 +421,11 @@ namespace smartHookah.Controllers
             return GetDeviceSettingViewModel(settings,hookah.Version);
         }
 
-        public static DeviceSettingViewModel GetDeviceSettingViewModel(HookahSetting setting , int? hookahVersion,SmartHookahContext db = null)
+        public static DeviceSettingViewModel GetDeviceSettingViewModel(DeviceSetting setting , int? hookahVersion,SmartHookahContext db = null)
         {
             if (setting == null)
             { 
-                setting = new HookahSetting();
+                setting = new DeviceSetting();
                 setting.Color.Value = 255;
                 setting.Color.Hue = 255;
                 setting.Color.Saturation = 255;
@@ -463,7 +463,7 @@ namespace smartHookah.Controllers
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
 
-            var setting = new HookahSetting();
+            var setting = new DeviceSetting();
             var versionInt = Helper.UpdateVersionToInt(version);
             using (var db = new SmartHookahContext())
             {
@@ -499,7 +499,7 @@ namespace smartHookah.Controllers
             var pufs = RedisHelper.GetPufs(sessionId);
 
             var intake = pufs.Count(a => a.Type == Models.PufType.In);
-            var setting = new HookahSetting();
+            var setting = new DeviceSetting();
 
             var hookah = context.Hookahs.FirstOrDefault(a => a.Code == id);
 
@@ -534,7 +534,7 @@ namespace smartHookah.Controllers
         {
             public int HookahVersion { get; set; }
             public string SessionId { get; set; }
-            public HookahSetting Setting { get; set; }
+            public DeviceSetting Setting { get; set; }
             public int IdleAnimation { get; set; }
             public int PufAnimation { get; set; }
             public int BlowAnimation { get; set; }
@@ -562,7 +562,7 @@ namespace smartHookah.Controllers
         public JsonResult SetDefault(int id)
         {
 
-            var personSetting = this.db.HookahPersonSetting.FirstOrDefault(a => a.Id == id);
+            var personSetting = this.db.DevicePreset.FirstOrDefault(a => a.Id == id);
 
             if (personSetting == null)
             return Json(new{ success = false});
@@ -573,10 +573,10 @@ namespace smartHookah.Controllers
             if (oldDefault != null)
             {
                 oldDefault.Defaut = false;
-                this.db.HookahPersonSetting.AddOrUpdate(oldDefault);
+                this.db.DevicePreset.AddOrUpdate(oldDefault);
             }
             personSetting.Defaut = true;
-            this.db.HookahPersonSetting.AddOrUpdate(personSetting);
+            this.db.DevicePreset.AddOrUpdate(personSetting);
 
             this.db.SaveChanges();
 
