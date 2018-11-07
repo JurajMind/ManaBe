@@ -2,7 +2,7 @@ using System;
 
 namespace smartHookah.Models.Dto
 {
-    public class HookahSettingDto
+    public class DeviceSettingDto
     {
         public int Id { get; set; }
 
@@ -27,9 +27,9 @@ namespace smartHookah.Models.Dto
         public int PictureId { get; set; }
 
 
-        public static HookahSettingDto FromModel(HookahSetting model)
+        public static DeviceSettingDto FromModel(DeviceSetting model)
         {
-            return new HookahSettingDto()
+            return new DeviceSettingDto()
             {
                 Id = model.Id, 
                 PufAnimation = model.PufAnimation, 

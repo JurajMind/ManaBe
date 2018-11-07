@@ -66,15 +66,12 @@ namespace smartHookah.Models
 
         public virtual GamePerson Game { get; set; }
 
-        public virtual HookahSetting DefaultSetting
-        {
-            get
-            {
-                return this.Settings.FirstOrDefault(a => a.Defaut)?.Setting;
-            }
-        }
+        public virtual DeviceSetting DefaultSetting => this.DefaultPreset?.DeviceSetting;
 
-        public virtual ICollection<HookahPersonSetting> Settings { get; set; }
+        public int? DefaultPresetId { get; set; }
+        public virtual DevicePreset DefaultPreset { get; set; }
+
+        public virtual ICollection<DevicePreset> Settings { get; set; }
 
         public int? DefaultMetaDataId { get; set; }
         public virtual SmokeSessionMetaData DefaultMetaData { get; set; }

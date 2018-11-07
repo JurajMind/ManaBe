@@ -43,9 +43,9 @@
 
         public virtual DbSet<Hookah> Hookahs { get; set; }
 
-        public virtual DbSet<HookahSetting> HookahSettings { get; set; }
+        public virtual DbSet<DeviceSetting> HookahSettings { get; set; }
 
-        public virtual DbSet<HookahPersonSetting> HookahPersonSetting { get; set; }
+        public virtual DbSet<DevicePreset> DevicePreset { get; set; }
 
         public DbSet<Media> Media { get; set; }
 
@@ -232,6 +232,11 @@
             modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
 
             modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
+
+            modelBuilder.Entity<DevicePreset>().HasRequired(d => d.DeviceSetting).WithOptional(s => s.DevicePreset);
+
+            modelBuilder.Entity<Person>().HasOptional(d => d.DefaultPreset);
+
         }
 
         private SmokeSession CurrentSession(Hookah hookah)

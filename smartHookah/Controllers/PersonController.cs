@@ -89,7 +89,7 @@ namespace smartHookah.Controllers
 
             if (setting == null)
             {
-                setting = new HookahSetting(person.Hookahs.FirstOrDefault().Setting);
+                setting = new DeviceSetting(person.Hookahs.FirstOrDefault().Setting);
             }
 
             var model = DeviceControlController.GetDeviceSettingViewModel(setting, 1000027, db);
