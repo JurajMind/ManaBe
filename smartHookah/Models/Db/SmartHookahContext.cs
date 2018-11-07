@@ -233,10 +233,10 @@
 
             modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
 
-            modelBuilder.Entity<DeviceSetting>()
-                .HasOptional(d => d.DevicePreset)
-                .WithRequired(s => s.DeviceSetting);
-            
+            modelBuilder.Entity<DevicePreset>().HasRequired(d => d.DeviceSetting).WithOptional(s => s.DevicePreset);
+
+            modelBuilder.Entity<Person>().HasOptional(d => d.DefaultPreset);
+
         }
 
         private SmokeSession CurrentSession(Hookah hookah)

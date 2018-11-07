@@ -1,14 +1,15 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using Microsoft.TeamFoundation.VersionControl.Client;
-
-namespace smartHookah.Services.Person
+﻿namespace smartHookah.Services.Device
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Linq;
+
+    using Microsoft.TeamFoundation.VersionControl.Client;
 
     using smartHookah.Models;
     using smartHookah.Models.Db;
+    using smartHookah.Services.Person;
 
     public class DeviceSettingsPresetService : IDeviceSettingsPresetService
     {
@@ -24,21 +25,14 @@ namespace smartHookah.Services.Person
 
         public bool SetDefault(int id)
         {
+            var defaultPreset = this.db.DevicePreset.FirstOrDefault(a => a.Id == id);
 
-            var personSetting = this.db.DevicePreset.FirstOrDefault(a => a.Id == id);
-
-            if (personSetting == null) return false;
-
+            if (defaultPreset == null) return false;
 
             var person = this.personService.GetCurentPerson();
-            var oldDefault = person.Settings.FirstOrDefault(a => a.Defaut);
-            if (oldDefault != null)
-            {
-                oldDefault.Defaut = false;
-                this.db.DevicePreset.AddOrUpdate(oldDefault);
-            }
-            personSetting.Defaut = true;
-            this.db.DevicePreset.AddOrUpdate(personSetting);
+            person.DefaultPreset = defaultPreset;
+         
+            this.db.Persons.AddOrUpdate(person);
 
             this.db.SaveChanges();
 
@@ -71,13 +65,28 @@ namespace smartHookah.Services.Person
 
         public async void Delete(int id)
         {
-            var setting = await db.HookahSettings.FirstOrDefaultAsync(a => a.Id == id);
+            var setting = await this.db.HookahSettings.FirstOrDefaultAsync(a => a.Id == id);
             if (setting == null)
             {
                 throw new ItemNotFoundException($"Setting id {id} not found.");
             }
-            db.Entry(setting).State = EntityState.Deleted;
-            await db.SaveChangesAsync();
+            this.db.Entry(setting).State = EntityState.Deleted;
+            await this.db.SaveChangesAsync();
+        }
+
+        public bool UseDefaut(string id)
+        {
+            var session = this.db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);
+            if (session == null) return false;
+
+            var person = this.personService.GetCurentPerson();
+
+            if (person.DefaultSetting == null) return false;
+
+            return true;
+
+            //@TODO
+
         }
     }
 }

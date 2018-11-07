@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+
 using Microsoft.TeamFoundation.VersionControl.Client;
+
 using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Dto;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
-using ServiceStack.DesignPatterns.Serialization;
 
 namespace smartHookah.Controllers.Api
 {
@@ -182,7 +180,7 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                var setting = deviceService.GetStandSettings(id);
+                var setting = this.deviceService.GetStandSettings(id);
                 return StandSettings.FromModel(setting);
             }
             catch (Exception e)
@@ -197,7 +195,7 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                var presets = deviceSettingsPresetService.GetSettings();
+                var presets = this.deviceSettingsPresetService.GetSettings();
                 return DevicePresetDto.FromModelList(presets);
             }
             catch (Exception e)
@@ -212,7 +210,7 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                deviceSettingsPresetService.Delete(id);
+                this.deviceSettingsPresetService.Delete(id);
                 return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.OK, $"Item {id} deleted."));
             }
             catch (Exception e)
@@ -223,6 +221,5 @@ namespace smartHookah.Controllers.Api
         }
 
         #endregion
-
     }
 }

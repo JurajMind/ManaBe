@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-
-namespace smartHookah.Models.Db.Dto
+namespace smartHookah.Models.Dto
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
+    using Newtonsoft.Json;
+
+    using smartHookah.Models.Db;
+
     [DataContract]
     public class DevicePresetDto
     {
@@ -16,10 +17,6 @@ namespace smartHookah.Models.Db.Dto
         [DataMember]
         [JsonProperty("name")]
         public string Name { get; set; }
-
-        [DataMember]
-        [JsonProperty("defaut")]
-        public bool Defaut { get; set; }
 
         [DataMember]
         [JsonProperty("personId")]
@@ -35,11 +32,9 @@ namespace smartHookah.Models.Db.Dto
             {
                 Id = model.Id,
                 Name = model.Name,
-                Defaut = model.Defaut,
                 PersonId = model.PersonId,
                 SettingId = model.DeviceSettingId,
             };
-
 
         public static IEnumerable<DevicePresetDto> FromModelList(ICollection<DevicePreset> model)
         {
@@ -54,11 +49,10 @@ namespace smartHookah.Models.Db.Dto
         {
             return new DevicePreset()
             {
-                Id = Id, 
-                Name = Name, 
-                Defaut = Defaut, 
-                PersonId = PersonId, 
-                DeviceSettingId = SettingId, 
+                Id = this.Id, 
+                Name = this.Name,
+                PersonId = this.PersonId, 
+                DeviceSettingId = this.SettingId, 
             }; 
         }
     }

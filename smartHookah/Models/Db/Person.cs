@@ -66,13 +66,10 @@ namespace smartHookah.Models
 
         public virtual GamePerson Game { get; set; }
 
-        public virtual DeviceSetting DefaultSetting
-        {
-            get
-            {
-                return this.Settings.FirstOrDefault(a => a.Defaut)?.DeviceSetting;
-            }
-        }
+        public virtual DeviceSetting DefaultSetting => this.DefaultPreset?.DeviceSetting;
+
+        public int? DefaultPresetId { get; set; }
+        public virtual DevicePreset DefaultPreset { get; set; }
 
         public virtual ICollection<DevicePreset> Settings { get; set; }
 
