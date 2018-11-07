@@ -13,7 +13,7 @@ namespace smartHookah.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201811061355371_hookah_setting_refactor"; }
+            get { return "201811071503382_hookah_setting_refactor"; }
         }
         
         string IMigrationMetadata.Source

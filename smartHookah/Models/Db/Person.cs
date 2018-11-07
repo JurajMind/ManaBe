@@ -70,7 +70,7 @@ namespace smartHookah.Models
         {
             get
             {
-                return this.Settings.FirstOrDefault(a => a.Defaut)?.Setting;
+                return this.Settings.FirstOrDefault(a => a.Defaut)?.DeviceSetting;
             }
         }
 

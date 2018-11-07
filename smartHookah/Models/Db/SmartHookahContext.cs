@@ -235,7 +235,7 @@
 
             modelBuilder.Entity<DeviceSetting>()
                 .HasOptional(d => d.DevicePreset)
-                .WithRequired(s => s.Setting);
+                .WithRequired(s => s.DeviceSetting);
             
         }
 

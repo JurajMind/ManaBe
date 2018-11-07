@@ -51,13 +51,13 @@ namespace smartHookah.Services.Person
             var posibleMatch = this.db.DevicePreset.FirstOrDefault(a => a.Person.Id == person.Id && a.Name == name);
             if (posibleMatch != null)
             {
-                posibleMatch.Setting = setting;
+                posibleMatch.DeviceSetting = setting;
                 this.db.DevicePreset.AddOrUpdate(posibleMatch);
                 this.db.SaveChanges();
                 return true;
             }
 
-            var newSetting = new DevicePreset() { Name = name, Person = person, Setting = setting, };
+            var newSetting = new DevicePreset() { Name = name, Person = person, DeviceSetting = setting, };
             this.db.DevicePreset.AddOrUpdate(newSetting);
             this.db.SaveChanges();
             return true;
