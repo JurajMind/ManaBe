@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -9,7 +10,7 @@ namespace smartHookah.Models.Db
 
     public class DevicePreset
     {
-        [Key]
+        [Key, ForeignKey("DeviceSetting")]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -17,7 +18,7 @@ namespace smartHookah.Models.Db
         public int? PersonId { get; set; }
 
         public virtual Person Person { get; set; }
-
+        
         public int DeviceSettingId { get; set; }
 
         public virtual DeviceSetting DeviceSetting { get; set; }
