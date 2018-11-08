@@ -33,7 +33,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 Name = model.Name,
                 PersonId = model.PersonId,
-                SettingId = model.DeviceSettingId,
+                //SettingId = model.DeviceSettingId,
             };
 
         public static IEnumerable<DevicePresetDto> FromModelList(ICollection<DevicePreset> model)
