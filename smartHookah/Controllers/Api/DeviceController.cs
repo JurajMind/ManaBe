@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -173,9 +175,7 @@ namespace smartHookah.Controllers.Api
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        #region Device preset settings
-
-        [HttpGet, Route("Preset/{id}/GetSetting")]
+        [HttpGet, Route("{id}/GetSetting")]
         public StandSettings GetSetting(string id)
         {
             try
@@ -190,12 +190,31 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpGet, Route("Preset/GetUserSetting")]
-        public IEnumerable<DevicePresetDto> GetUserSetting()
+        #region Device preset settings
+
+        #region Getters
+
+        [HttpGet, Route("Preset/{id}/GetPreset")]
+        public async Task<DevicePresetDto> GetPreset(int id)
         {
             try
             {
-                var presets = this.deviceSettingsPresetService.GetSettings();
+                var preset = await this.deviceSettingsPresetService.GetPreset(id);
+                return DevicePresetDto.FromModel(preset);
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
+            }
+        }
+
+        [HttpGet, Route("Preset/GetUserPresets")]
+        public IEnumerable<DevicePresetDto> GetUserPresets()
+        {
+            try
+            {
+                var presets = this.deviceSettingsPresetService.GetUserPresets();
                 return DevicePresetDto.FromModelList(presets);
             }
             catch (Exception e)
@@ -205,8 +224,77 @@ namespace smartHookah.Controllers.Api
             }
         }
 
+        #endregion
+
+        #region Setters
+
+        [HttpPost, Route("Preset/{sessionCode}/SavePresetFromSession")]
+        public int SavePreset([FromUri] string sessionCode, string name, bool addToPerson = true, bool setDefault = true)
+        {
+            if (string.IsNullOrEmpty(sessionCode))
+            {
+                return -1;
+            }
+
+            try
+            {
+                var presetId = this.deviceSettingsPresetService.SavePreset(sessionCode, name, addToPerson);
+                if (addToPerson && setDefault)
+                {
+                    deviceSettingsPresetService.SetDefault(presetId);
+                }
+                return presetId;
+            }
+            catch (ItemNotFoundException e)
+            {
+                return -1;
+            }
+        }
+
+        [HttpPost, Route("Preset/{deviceId}/SavePresetFromDevice")]
+        public int SavePreset([FromUri] int deviceId, string name, bool addToPerson = true, bool setDefault = true)
+        {
+            try
+            {
+                var presetId = this.deviceSettingsPresetService.SavePreset(deviceId, name, addToPerson);
+                if (addToPerson && setDefault)
+                {
+                    deviceSettingsPresetService.SetDefault(presetId);
+                }
+                return presetId;
+            }
+            catch (ItemNotFoundException e)
+            {
+                return -1;
+            }
+        }
+        
+        [HttpPost, Route("Preset/{id}/SetDefault")]
+        public void SetDefault(int id)
+        {
+            this.deviceSettingsPresetService.SetDefault(id);
+        }
+
+
+
+
+        [HttpPost, Route("Preset/{id}/UseDefault")]
+        public async Task UseDefault(string id)
+        {
+            var result = await this.deviceSettingsPresetService.UseDefaut(id);
+        }
+
+
+        [HttpPost, Route("Preset/{id}/Use/{presetId}")]
+        public async Task UsePreset(string id,int presetId)
+        {
+            var result = await this.deviceSettingsPresetService.UsePreset(id, presetId);
+        }
+
+        #endregion
+
         [HttpDelete, Route("Preset/{id}/Delete")]
-        public HttpResponseMessage DeleteSetting(int id)
+        public HttpResponseMessage DeletePreset(int id)
         {
             try
             {
