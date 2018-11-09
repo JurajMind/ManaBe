@@ -19,6 +19,7 @@ namespace smartHookah.Services.Device
         Task SetMode(string deviceId, int mode);
         Task ShowQrCode(string deviceId);
         Task SetPreset(string deviceId, int settingId);
+        Task SetPreset(string deviceId, DeviceSetting setting);
 
         List<Animation> GetAnimations();
         Animation GetAnimation(int id);

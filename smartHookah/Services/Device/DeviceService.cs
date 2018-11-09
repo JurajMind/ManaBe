@@ -134,8 +134,13 @@ namespace smartHookah.Services.Device
             var setting = this.db.DevicePreset.FirstOrDefault(a => a.Id == settingId);
 
             if (setting == null) throw new ItemNotFoundException($"Person setting with id {settingId} not found");
+            await this.SetPreset(deviceId, setting.DeviceSetting);
+           
+        }
 
-            var settingString = setting.DeviceSetting.GetInitStringWithSpeed(0, 0, "");
+        public async Task SetPreset(string deviceId, DeviceSetting setting)
+        {
+            var settingString = setting.GetInitStringWithSpeed(0, 0, string.Empty);
 
             await this.iotService.SendMsgToDevice(deviceId, $"preset:{settingString}");
         }
