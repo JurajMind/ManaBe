@@ -10,16 +10,15 @@ namespace smartHookah.Models.Db
 
     public class DevicePreset
     {
-        [Key, ForeignKey("DeviceSetting")]
-        public int Id { get; set; }
-
         public string Name { get; set; }
-
+        
         public int? PersonId { get; set; }
 
         public virtual Person Person { get; set; }
-        
-        public int DeviceSettingId { get; set; }
+
+        [Key]
+        [ForeignKey("DeviceSetting")]
+        public int Id { get; set; }
 
         public virtual DeviceSetting DeviceSetting { get; set; }
     }

@@ -235,12 +235,11 @@ namespace smartHookah.Models
             modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
 
             modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
-
-            modelBuilder.Entity<DeviceSetting>()
-                .HasOptional(a => a.DevicePreset)
-                .WithRequired(a => a.DeviceSetting);
             
             modelBuilder.Entity<Person>().HasOptional(d => d.DefaultPreset);
+
+            modelBuilder.Entity<DevicePreset>().HasOptional(a => a.Person).WithMany(a => a.Presets)
+                .HasForeignKey(a => a.PersonId);
 
         }
 
