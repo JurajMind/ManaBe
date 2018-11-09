@@ -1,4 +1,7 @@
-﻿namespace smartHookah.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Azure.Amqp.Encoding;
+
+namespace smartHookah.Models
 {
     using System;
     using System.Data.Entity;
@@ -232,10 +235,11 @@
             modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
 
             modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
-
-            modelBuilder.Entity<DevicePreset>().HasRequired(d => d.DeviceSetting).WithOptional(s => s.DevicePreset);
-
+            
             modelBuilder.Entity<Person>().HasOptional(d => d.DefaultPreset);
+
+            modelBuilder.Entity<DevicePreset>().HasOptional(a => a.Person).WithMany(a => a.Presets)
+                .HasForeignKey(a => a.PersonId);
 
         }
 
