@@ -268,6 +268,28 @@ namespace smartHookah.Controllers.Api
                 return -1;
             }
         }
+        
+        [HttpPost, Route("Preset/{id}/SetDefault")]
+        public void SetDefault(int id)
+        {
+            this.deviceSettingsPresetService.SetDefault(id);
+        }
+
+
+
+
+        [HttpPost, Route("Preset/{id}/UseDefault")]
+        public async Task UseDefault(string id)
+        {
+            var result = await this.deviceSettingsPresetService.UseDefaut(id);
+        }
+
+
+        [HttpPost, Route("Preset/{id}/Use/{presetId}")]
+        public async Task UsePreset(string id,int presetId)
+        {
+            var result = await this.deviceSettingsPresetService.UsePreset(id, presetId);
+        }
 
         #endregion
 

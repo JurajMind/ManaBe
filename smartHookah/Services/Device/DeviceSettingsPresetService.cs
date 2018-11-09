@@ -139,7 +139,7 @@ namespace smartHookah.Services.Device
             await this.db.SaveChangesAsync();
         }
 
-        public bool UseDefaut(string id)
+        public async Task<bool> UseDefaut(string id)
         {
             var session = this.db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);
             if (session == null) return false;
@@ -147,9 +147,7 @@ namespace smartHookah.Services.Device
             var person = this.personService.GetCurentPerson();
 
             if (person.DefaultSetting == null) return false;
-            session.Hookah.SettingId = person.DefaultPreset.Id;
-            this.deviceService.SetPreset(session.Hookah.Code, person.DefaultPreset.DeviceSetting);
-            return true;
+            return await this.UsePreset(id, person.DefaultPreset.Id);
         }
 
         public async Task<bool> UsePreset(string deviceId, int presetId)
