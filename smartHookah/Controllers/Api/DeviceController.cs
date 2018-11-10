@@ -22,6 +22,7 @@ namespace smartHookah.Controllers.Api
     public class DeviceController : ApiController
     {
         private readonly IDeviceService deviceService;
+
         private readonly IDeviceSettingsPresetService deviceSettingsPresetService;
 
         public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService)
@@ -52,7 +53,8 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeBrightness")]
         public async Task<HttpResponseMessage> ChangeBrightness(string id, [FromBody] ChangeBrightness model)
         {
-            if (string.IsNullOrEmpty(id) || model.Brightness < 0 || model.Brightness > 255 || !Enum.IsDefined(typeof(PufType), model.Type))
+            if (string.IsNullOrEmpty(id) || model.Brightness < 0 || model.Brightness > 255
+                || !Enum.IsDefined(typeof(PufType), model.Type))
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
@@ -88,7 +90,8 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeSpeed")]
         public async Task<HttpResponseMessage> ChangeSpeed(string id, [FromBody] ChangeSpeed model)
         {
-            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 255 || !Enum.IsDefined(typeof(PufType), model.Type))
+            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 255
+                || !Enum.IsDefined(typeof(PufType), model.Type))
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
@@ -106,8 +109,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Sleep")]
         public async Task<HttpResponseMessage> Sleep(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.Sleep(id);
@@ -124,8 +126,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Restart")]
         public async Task<HttpResponseMessage> Restart(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.Restart(id);
@@ -142,8 +143,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeMode")]
         public async Task<HttpResponseMessage> ChangeMode(string id, [FromBody] int mode)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.SetMode(id, mode);
@@ -160,8 +160,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ShowQrCode")]
         public async Task<HttpResponseMessage> ShowQrCode(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.ShowQrCode(id);
@@ -190,124 +189,6 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        #region Device preset settings
 
-        #region Getters
-
-        [HttpGet, Route("Preset/{id}/GetPreset")]
-        public async Task<DevicePresetDto> GetPreset(int id)
-        {
-            try
-            {
-                var preset = await this.deviceSettingsPresetService.GetPreset(id);
-                return DevicePresetDto.FromModel(preset);
-            }
-            catch (Exception e)
-            {
-                var err = new HttpError(e.Message);
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
-            }
-        }
-
-        [HttpGet, Route("Preset/GetUserPresets")]
-        public IEnumerable<DevicePresetDto> GetUserPresets()
-        {
-            try
-            {
-                var presets = this.deviceSettingsPresetService.GetUserPresets();
-                return DevicePresetDto.FromModelList(presets);
-            }
-            catch (Exception e)
-            {
-                var err = new HttpError(e.Message);
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
-            }
-        }
-
-        #endregion
-
-        #region Setters
-
-        [HttpPost, Route("Preset/{sessionCode}/SavePresetFromSession")]
-        public int SavePreset([FromUri] string sessionCode, string name, bool addToPerson = true, bool setDefault = true)
-        {
-            if (string.IsNullOrEmpty(sessionCode))
-            {
-                return -1;
-            }
-
-            try
-            {
-                var presetId = this.deviceSettingsPresetService.SavePreset(sessionCode, name, addToPerson);
-                if (addToPerson && setDefault)
-                {
-                    deviceSettingsPresetService.SetDefault(presetId);
-                }
-                return presetId;
-            }
-            catch (ItemNotFoundException e)
-            {
-                return -1;
-            }
-        }
-
-        [HttpPost, Route("Preset/{deviceId}/SavePresetFromDevice")]
-        public int SavePreset([FromUri] int deviceId, string name, bool addToPerson = true, bool setDefault = true)
-        {
-            try
-            {
-                var presetId = this.deviceSettingsPresetService.SavePreset(deviceId, name, addToPerson);
-                if (addToPerson && setDefault)
-                {
-                    deviceSettingsPresetService.SetDefault(presetId);
-                }
-                return presetId;
-            }
-            catch (ItemNotFoundException e)
-            {
-                return -1;
-            }
-        }
-        
-        [HttpPost, Route("Preset/{id}/SetDefault")]
-        public void SetDefault(int id)
-        {
-            this.deviceSettingsPresetService.SetDefault(id);
-        }
-
-
-
-
-        [HttpPost, Route("Preset/{id}/UseDefault")]
-        public async Task UseDefault(string id)
-        {
-            var result = await this.deviceSettingsPresetService.UseDefaut(id);
-        }
-
-
-        [HttpPost, Route("Preset/{id}/Use/{presetId}")]
-        public async Task UsePreset(string id,int presetId)
-        {
-            var result = await this.deviceSettingsPresetService.UsePreset(id, presetId);
-        }
-
-        #endregion
-
-        [HttpDelete, Route("Preset/{id}/Delete")]
-        public HttpResponseMessage DeletePreset(int id)
-        {
-            try
-            {
-                this.deviceSettingsPresetService.Delete(id);
-                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.OK, $"Item {id} deleted."));
-            }
-            catch (Exception e)
-            {
-                var err = new HttpError(e.Message);
-                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
-            }
-        }
-
-        #endregion
     }
 }

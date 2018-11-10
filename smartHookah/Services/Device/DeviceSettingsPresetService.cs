@@ -139,6 +139,18 @@ namespace smartHookah.Services.Device
             await this.db.SaveChangesAsync();
         }
 
+        public async Task<IList<DevicePreset>> GetPresets()
+        {
+
+            var person = this.personService.GetCurentPerson();
+            var personId = person?.Id;
+
+            var presets = this.db.DevicePreset.Include(a => a.DeviceSetting)
+                .Where(a => a.PersonId == personId || a.PersonId == null);
+
+            return await presets.ToListAsync();
+        }
+
         public async Task<bool> UseDefaut(string id)
         {
             var session = this.db.SmokeSessions.FirstOrDefault(s => s.SessionId == id);

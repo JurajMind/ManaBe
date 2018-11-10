@@ -14,6 +14,9 @@ namespace smartHookah.Services.Person
         int SavePreset(int deviceId, string name = "", bool addToPerson = true);
         ICollection<DevicePreset> GetUserPresets();
         Task<DevicePreset> GetPreset(int id);
+
+        Task<IList<DevicePreset>> GetPresets();
+
         void Delete(int id);
         Task<bool> UseDefaut(string id);
 
