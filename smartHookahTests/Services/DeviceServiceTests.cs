@@ -14,6 +14,8 @@
     using smartHookah.Models;
     using smartHookah.Services.Device;
 
+    using smartHookahCommon;
+
     using smartHookahTests.Common;
 
     [TestFixture]
@@ -35,12 +37,12 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet =
                 new FakeDbSet<Hookah> { new Hookah() { Code = deviceId, Version = 100, Setting = hookahSetting } };
 
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);
@@ -51,9 +53,10 @@
 
             // On iotService, SendToMsg shoud be called with given params, returning task
             iotMock.Setup(a => a.SendMsgToDevice(deviceId, $"led:{(int)state}{1}")).Returns(Task.FromResult(false));
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             await service.SetAnimation(deviceId, animation, state);
@@ -86,11 +89,11 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet =
                 new FakeDbSet<Hookah> { new Hookah() { Code = deviceId, Version = 100, Setting = hookahSetting } };
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);
@@ -98,11 +101,11 @@
 
             // Mock for iot service
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
-
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // On iotService, SendToMsg shoud be called with given params, returning task
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<NotSupportedException>(() => service.SetAnimation(deviceId, animation, state));
@@ -138,7 +141,7 @@
                                 };
 
             // db
-            var hookahSetting = new HookahSetting() { Id = 1, IdleAnimation = 0 };
+            var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
             var db = new Mock<SmartHookahContext>();
             var hookahDataSet = new FakeDbSet<Hookah>
                                     {
@@ -149,7 +152,7 @@
                                                 Setting = hookahSetting
                                             }
                                     };
-            var settingDataSet = new FakeDbSet<HookahSetting> { hookahSetting };
+            var settingDataSet = new FakeDbSet<DeviceSetting> { hookahSetting };
 
             // Setup acces to dbSets
             db.Setup(dbContext => dbContext.Hookahs).Returns(hookahDataSet);
@@ -159,9 +162,9 @@
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
 
             // On iotService, SendToMsg shoud be called with given params, returning task
-
+            var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<ItemNotFoundException>(() => service.SetAnimation(deviceId, animation, state));
