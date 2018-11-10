@@ -22,6 +22,10 @@ namespace smartHookah.Models.Dto
         [JsonProperty("personId")]
         public int? PersonId { get; set; }
 
+        [DataMember]
+        [JsonProperty("setting")]
+        public DeviceSettingDto Setting { get; set; }
+
         public static DevicePresetDto FromModel(DevicePreset model) => model == null
             ? null
             : new DevicePresetDto()
@@ -29,6 +33,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 Name = model.Name,
                 PersonId = model.PersonId,
+                Setting = DeviceSettingDto.FromModel(model.DeviceSetting)
             };
 
         public static IEnumerable<DevicePresetDto> FromModelList(ICollection<DevicePreset> model)
