@@ -140,13 +140,13 @@ namespace smartHookah.Services.Device
 
         public async Task SetPreset(string deviceId, DeviceSetting setting)
         {
-            var settingString = setting.GetInitStringWithSpeed(0, 0, string.Empty);
+            var settingString = setting.GetInitStringWithSpeed(-1, -1, "-PR-");
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
             if (device == null) return;
 
             device.Setting.Change(setting);
             this.db.HookahSettings.AddOrUpdate(device.Setting);
-            await this.iotService.SendMsgToDevice(deviceId, $"preset:{settingString}");
+            await this.iotService.SendMsgToDevice(deviceId, $"pres:{settingString}");
         }
 
         public string GetDeviceInitString(string id, int hookahVersion)
