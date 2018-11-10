@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+
 using Microsoft.TeamFoundation.VersionControl.Client;
+
 using smartHookah.Models;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers.Api
 {
@@ -17,9 +23,12 @@ namespace smartHookah.Controllers.Api
     {
         private readonly IDeviceService deviceService;
 
-        public DeviceController(IDeviceService deviceService)
+        private readonly IDeviceSettingsPresetService deviceSettingsPresetService;
+
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService)
         {
             this.deviceService = deviceService;
+            this.deviceSettingsPresetService = deviceSettingsPresetService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -44,7 +53,8 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeBrightness")]
         public async Task<HttpResponseMessage> ChangeBrightness(string id, [FromBody] ChangeBrightness model)
         {
-            if (string.IsNullOrEmpty(id) || model.Brightness < 0 || model.Brightness > 255 || !Enum.IsDefined(typeof(PufType), model.Type))
+            if (string.IsNullOrEmpty(id) || model.Brightness < 0 || model.Brightness > 255
+                || !Enum.IsDefined(typeof(PufType), model.Type))
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
@@ -80,7 +90,8 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeSpeed")]
         public async Task<HttpResponseMessage> ChangeSpeed(string id, [FromBody] ChangeSpeed model)
         {
-            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 255 || !Enum.IsDefined(typeof(PufType), model.Type))
+            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 255
+                || !Enum.IsDefined(typeof(PufType), model.Type))
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
@@ -98,8 +109,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Sleep")]
         public async Task<HttpResponseMessage> Sleep(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.Sleep(id);
@@ -116,8 +126,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Restart")]
         public async Task<HttpResponseMessage> Restart(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.Restart(id);
@@ -134,8 +143,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeMode")]
         public async Task<HttpResponseMessage> ChangeMode(string id, [FromBody] int mode)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.SetMode(id, mode);
@@ -152,8 +160,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ShowQrCode")]
         public async Task<HttpResponseMessage> ShowQrCode(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
             {
                 await this.deviceService.ShowQrCode(id);
@@ -167,22 +174,21 @@ namespace smartHookah.Controllers.Api
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        [HttpGet, Route("{id}/StandSetting")]
-        public StandSettings GetStandSetting(string id)
+        [HttpGet, Route("{id}/GetSetting")]
+        public StandSettings GetSetting(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            try
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                var setting = this.deviceService.GetStandSettings(id);
+                return StandSettings.FromModel(setting);
             }
-
-            var setting = this.deviceService.GetStandSettings(id);
-
-            if (setting == null)
+            catch (Exception e)
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Stand with id {id} not found"));
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
             }
-
-            return StandSettings.FromModel(setting);
         }
+
+
     }
 }

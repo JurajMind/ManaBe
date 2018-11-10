@@ -47,26 +47,7 @@ namespace smartHookah.Models.Dto
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
             Address = model.Address,
-            //BusinessHours = model.BusinessHours.ToList(),
-            //Rating = model.
-        };
-    }
-
-    public class MediaDto
-    {
-        public int Id { get; set; }
-        public DateTime Created { get; set; }
-        public string Path { get; set; }
-        public MediaType Type { get; set; }
-        public bool IsDefault { get; set; }
-
-        public static MediaDto FromModel(Media model) => model == null ? null : new MediaDto
-        {
-            Id = model.Id,
-            Created = model.Created,
-            Path = model.Path,
-            Type = model.Type,
-            IsDefault = model.IsDefault
+            Medias = MediaDto.FromModelList(model.Medias).ToList()
         };
     }
 }
