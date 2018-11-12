@@ -55,7 +55,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{sessionCode}/SavePresetFromSession")]
-        public int SavePreset(
+        public int SaveSessionPreset(
             [FromUri] string sessionCode,
             string name,
             bool addToPerson = true,
@@ -68,7 +68,7 @@ namespace smartHookah.Controllers.Api
 
             try
             {
-                if (addToPerson)
+                if (!addToPerson)
                 {
                     if (User.IsInRole("Admin"))
                     {
@@ -77,7 +77,7 @@ namespace smartHookah.Controllers.Api
                     }
                         
                 }
-                var presetId = this.deviceSettingsPresetService.SavePreset(sessionCode, name, addToPerson);
+                var presetId = this.deviceSettingsPresetService.SaveSessionPreset(sessionCode, name, addToPerson);
                 if (addToPerson && setDefault)
                 {
                     this.deviceSettingsPresetService.SetDefault(presetId);
@@ -91,12 +91,12 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpPost, Route("{deviceId}/SavePresetFromDevice")]
-        public int SavePreset([FromUri] int deviceId, string name, bool addToPerson = true, bool setDefault = true)
+        [HttpPost, Route("SavePresetFromDevice/{deviceId}")]
+        public int SaveDevicePreset([FromUri] string deviceId, string name, bool addToPerson = true, bool setDefault = true)
         {
             try
             {
-                var presetId = this.deviceSettingsPresetService.SavePreset(deviceId, name, addToPerson);
+                var presetId = this.deviceSettingsPresetService.SaveDevicePreset(deviceId, name, addToPerson);
                 if (addToPerson && setDefault)
                 {
                     this.deviceSettingsPresetService.SetDefault(presetId);

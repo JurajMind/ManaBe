@@ -1654,6 +1654,7 @@
     <Compile Include="SimpleRefreshTokenProvider.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Support\Config\ConfigSettings.cs" />
     <Compile Include="Support\DataAnotation.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\Helper.cs" />
