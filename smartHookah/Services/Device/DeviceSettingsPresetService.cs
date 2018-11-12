@@ -82,7 +82,7 @@ namespace smartHookah.Services.Device
             return newSetting.Id;
         }
 
-        public int SavePreset(string sessionCode, string name = "", bool addToPerson = true)
+        public int SaveSessionPreset(string sessionCode, string name = "", bool addToPerson = true)
         {
             var session = this.db.SmokeSessions
                 .Include(a => a.Hookah.Setting)
@@ -99,9 +99,9 @@ namespace smartHookah.Services.Device
             return preset.Id;
         }
 
-        public int SavePreset(int deviceId, string name = "", bool addToPerson = true)
+        public int SaveDevicePreset(string deviceId, string name = "", bool addToPerson = true)
         {
-            var device = this.db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Id == deviceId);
+            var device = this.db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Code == deviceId);
             if (device?.Setting == null) return -1;
             if (addToPerson) return this.AddPreset(this.CreateName(name, device), device.Setting);
 
