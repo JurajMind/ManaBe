@@ -82,7 +82,7 @@ namespace smartHookah.Services.Device
             return newSetting.Id;
         }
 
-        public int SavePreset(string sessionCode, string name = "", bool addToPerson = true)
+        public int SaveSessionPreset(string sessionCode, string name = "", bool addToPerson = true)
         {
             var session = this.db.SmokeSessions
                 .Include(a => a.Hookah.Setting)
@@ -99,9 +99,9 @@ namespace smartHookah.Services.Device
             return preset.Id;
         }
 
-        public int SavePreset(int deviceId, string name = "", bool addToPerson = true)
+        public int SaveDevicePreset(string deviceId, string name = "", bool addToPerson = true)
         {
-            var device = this.db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Id == deviceId);
+            var device = this.db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Code == deviceId);
             if (device?.Setting == null) return -1;
             if (addToPerson) return this.AddPreset(this.CreateName(name, device), device.Setting);
 
@@ -119,7 +119,9 @@ namespace smartHookah.Services.Device
         public ICollection<DevicePreset> GetUserPresets()
         {
             var person = this.personService.GetCurentPerson();
-            return person.Presets.ToList();
+            var personId = person?.Id;
+            var presets = this.db.DevicePreset.Include(a  => a.DeviceSetting).Where(a => a.PersonId == personId || a.Person == null);
+            return presets.ToList();
         }
 
         public async Task<DevicePreset> GetPreset(int id)
@@ -127,7 +129,7 @@ namespace smartHookah.Services.Device
             return await this.db.DevicePreset.FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             var setting = await this.db.HookahSettings.FirstOrDefaultAsync(a => a.Id == id);
             if (setting == null)

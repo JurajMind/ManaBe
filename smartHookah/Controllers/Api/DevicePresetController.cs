@@ -55,7 +55,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{sessionCode}/SavePresetFromSession")]
-        public int SavePreset(
+        public int SaveSessionPreset(
             [FromUri] string sessionCode,
             string name,
             bool addToPerson = true,
@@ -68,16 +68,16 @@ namespace smartHookah.Controllers.Api
 
             try
             {
-                if (addToPerson)
+                if (!addToPerson)
                 {
-                    if (User.IsInRole("Admin"))
+                    if (this.User.IsInRole("Admin"))
                     {
                         var err = new HttpError("Only admin can add default preset");
-                        throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,err));
+                        throw new HttpResponseException(
+                            this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, err));
                     }
-                        
                 }
-                var presetId = this.deviceSettingsPresetService.SavePreset(sessionCode, name, addToPerson);
+                var presetId = this.deviceSettingsPresetService.SaveSessionPreset(sessionCode, name, addToPerson);
                 if (addToPerson && setDefault)
                 {
                     this.deviceSettingsPresetService.SetDefault(presetId);
@@ -91,12 +91,12 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpPost, Route("{deviceId}/SavePresetFromDevice")]
-        public int SavePreset([FromUri] int deviceId, string name, bool addToPerson = true, bool setDefault = true)
+        [HttpPost, Route("SavePresetFromDevice/{deviceId}")]
+        public int SaveDevicePreset([FromUri] string deviceId, string name, bool addToPerson = true, bool setDefault = true)
         {
             try
             {
-                var presetId = this.deviceSettingsPresetService.SavePreset(deviceId, name, addToPerson);
+                var presetId = this.deviceSettingsPresetService.SaveDevicePreset(deviceId, name, addToPerson);
                 if (addToPerson && setDefault)
                 {
                     this.deviceSettingsPresetService.SetDefault(presetId);
@@ -129,18 +129,16 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpDelete, Route("{id}/Delete")]
-        public HttpResponseMessage DeletePreset(int id)
+        public async Task<HttpResponseMessage> DeletePreset(int id)
         {
             try
             {
-                this.deviceSettingsPresetService.Delete(id);
-                return this.Request.CreateResponse(
-                    this.Request.CreateErrorResponse(HttpStatusCode.OK, $"Item {id} deleted."));
+                await this.deviceSettingsPresetService.Delete(id);
+                return this.Request.CreateResponse(HttpStatusCode.OK, $"Item {id} deleted.");
             }
             catch (Exception e)
             {
-                var err = new HttpError(e.Message);
-                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
     }
