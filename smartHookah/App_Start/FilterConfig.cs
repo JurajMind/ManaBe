@@ -15,6 +15,7 @@ namespace smartHookah
             {
                 filters.Add(new OptionalHttpsAttribute());
             }
+            filters.Add(new ExceptionFilter());
 
         }
     }
