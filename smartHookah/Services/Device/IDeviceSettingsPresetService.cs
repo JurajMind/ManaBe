@@ -17,7 +17,7 @@ namespace smartHookah.Services.Person
 
         Task<IList<DevicePreset>> GetPresets();
 
-        void Delete(int id);
+        Task Delete(int id);
         Task<bool> UseDefaut(string id);
 
         Task<bool> UsePreset(string deviceId, int presetId);

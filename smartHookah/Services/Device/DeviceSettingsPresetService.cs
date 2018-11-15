@@ -119,7 +119,9 @@ namespace smartHookah.Services.Device
         public ICollection<DevicePreset> GetUserPresets()
         {
             var person = this.personService.GetCurentPerson();
-            return person.Presets.ToList();
+            var personId = person?.Id;
+            var presets = this.db.DevicePreset.Include(a  => a.DeviceSetting).Where(a => a.PersonId == personId || a.Person == null);
+            return presets.ToList();
         }
 
         public async Task<DevicePreset> GetPreset(int id)
@@ -127,7 +129,7 @@ namespace smartHookah.Services.Device
             return await this.db.DevicePreset.FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             var setting = await this.db.HookahSettings.FirstOrDefaultAsync(a => a.Id == id);
             if (setting == null)

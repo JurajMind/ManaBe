@@ -70,12 +70,12 @@ namespace smartHookah.Controllers.Api
             {
                 if (!addToPerson)
                 {
-                    if (User.IsInRole("Admin"))
+                    if (this.User.IsInRole("Admin"))
                     {
                         var err = new HttpError("Only admin can add default preset");
-                        throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,err));
+                        throw new HttpResponseException(
+                            this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, err));
                     }
-                        
                 }
                 var presetId = this.deviceSettingsPresetService.SaveSessionPreset(sessionCode, name, addToPerson);
                 if (addToPerson && setDefault)
@@ -129,18 +129,16 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpDelete, Route("{id}/Delete")]
-        public HttpResponseMessage DeletePreset(int id)
+        public async Task<HttpResponseMessage> DeletePreset(int id)
         {
             try
             {
-                this.deviceSettingsPresetService.Delete(id);
-                return this.Request.CreateResponse(
-                    this.Request.CreateErrorResponse(HttpStatusCode.OK, $"Item {id} deleted."));
+                await this.deviceSettingsPresetService.Delete(id);
+                return this.Request.CreateResponse(HttpStatusCode.OK, $"Item {id} deleted.");
             }
             catch (Exception e)
             {
-                var err = new HttpError(e.Message);
-                return this.Request.CreateResponse(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
     }
