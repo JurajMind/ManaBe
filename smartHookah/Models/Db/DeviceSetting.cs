@@ -78,8 +78,6 @@ namespace smartHookah.Models
 
         public Color Color { get; set; } = new Color();
 
-        public int? DevicePresetId { get; set; }
-
         public virtual DevicePreset DevicePreset { get; set; }
 
         public string GetInitString()

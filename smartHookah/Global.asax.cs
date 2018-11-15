@@ -12,11 +12,16 @@
     using Autofac.Integration.Mvc;
     using Autofac.Integration.WebApi;
 
+    using log4net;
+
     using smartHookah.Controllers;
+    using smartHookah.Controllers.Api;
     using smartHookah.Models;
+    using smartHookah.Support.Config;
 
     public class MvcApplication : HttpApplication
     {
+        private readonly ILog logger = LogManager.GetLogger(typeof(MixologyController));
         protected void Application_End()
         {
 #if DEBUG
@@ -32,6 +37,8 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AppInsightsHelper.Initialize();
+            this.logger.Info("app start");
         }
 
         private static void SetupInjection()
