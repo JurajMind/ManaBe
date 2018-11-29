@@ -23,7 +23,7 @@ namespace smartHookah.Controllers.Api
             this.deviceSettingsPresetService = deviceSettingsPresetService;
         }
 
-        [HttpGet, Route("Preset/{id}/GetPreset")]
+        [HttpGet, Route("{id}/GetPreset")]
         public async Task<DevicePresetDto> GetPreset(int id)
         {
             try
@@ -39,7 +39,7 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpGet, Route("Preset/GetUserPresets")]
+        [HttpGet, Route("GetUserPresets")]
         public IEnumerable<DevicePresetDto> GetUserPresets()
         {
             try
@@ -55,7 +55,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{sessionCode}/SavePresetFromSession")]
-        public int SaveSessionPreset(
+        public DevicePresetDto SaveSessionPreset(
             [FromUri] string sessionCode,
             string name,
             bool addToPerson = true,
@@ -63,50 +63,56 @@ namespace smartHookah.Controllers.Api
         {
             if (string.IsNullOrEmpty(sessionCode))
             {
-                return -1;
+                return null;
             }
 
             try
             {
                 if (!addToPerson)
                 {
-                    if (this.User.IsInRole("Admin"))
+                    if (!this.User.IsInRole("Admin"))
                     {
-                        var err = new HttpError("Only admin can add default preset");
+                        var err = new HttpError("Only admin can add global presets.");
                         throw new HttpResponseException(
                             this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, err));
                     }
                 }
-                var presetId = this.deviceSettingsPresetService.SaveSessionPreset(sessionCode, name, addToPerson);
+                var preset = this.deviceSettingsPresetService.SaveSessionPreset(sessionCode, name, addToPerson);
                 if (addToPerson && setDefault)
                 {
-                    this.deviceSettingsPresetService.SetDefault(presetId);
+                    this.deviceSettingsPresetService.SetDefault(preset.Id);
                 }
 
-                return presetId;
+                return DevicePresetDto.FromModel(preset);
             }
             catch (ItemNotFoundException e)
             {
-                return -1;
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
             }
         }
 
         [HttpPost, Route("SavePresetFromDevice/{deviceId}")]
-        public int SaveDevicePreset([FromUri] string deviceId, string name, bool addToPerson = true, bool setDefault = true)
+        public DevicePresetDto SaveDevicePreset([FromUri] string deviceId, string name, bool addToPerson = true, bool setDefault = true)
         {
             try
             {
-                var presetId = this.deviceSettingsPresetService.SaveDevicePreset(deviceId, name, addToPerson);
+                var preset = this.deviceSettingsPresetService.SaveDevicePreset(deviceId, name, addToPerson);
+                if (preset == null)
+                {
+                    throw new ItemNotFoundException("Device not found.");
+                }
                 if (addToPerson && setDefault)
                 {
-                    this.deviceSettingsPresetService.SetDefault(presetId);
+                    this.deviceSettingsPresetService.SetDefault(preset.Id);
                 }
 
-                return presetId;
+                return DevicePresetDto.FromModel(preset);
             }
             catch (ItemNotFoundException e)
             {
-                return -1;
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
             }
         }
 
@@ -119,13 +125,13 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("UseDefault/{sessionId}")]
         public async Task UseDefault(string sessionId)
         {
-            var result = await this.deviceSettingsPresetService.UseDefaut(sessionId);
+            await this.deviceSettingsPresetService.UseDefaut(sessionId);
         }
 
         [HttpPost, Route("{presetId}/Use/{sessionId}")]
         public async Task UsePreset(string sessionId, int presetId)
         {
-            var result = await this.deviceSettingsPresetService.UsePreset(sessionId, presetId);
+            await this.deviceSettingsPresetService.UsePreset(sessionId, presetId);
         }
 
         [HttpDelete, Route("{id}/Delete")]
