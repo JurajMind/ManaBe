@@ -54,13 +54,13 @@ namespace smartHookah.Services.Device
                 return true;
             }
 
-            var presetId = this.AddPreset($"{sessionCode} : {DateTime.UtcNow}", setting);
-            return presetId > 0;
+            var preset = this.AddPreset($"{sessionCode} : {DateTime.UtcNow}", setting);
+            return preset.Id > 0;
         }
 
-        public int AddPreset(string name, DeviceSetting setting)
+        public DevicePreset AddPreset(string name, DeviceSetting setting)
         {
-            if (setting == null) return -1;
+            if (setting == null) return null;
             var person = this.personService.GetCurentPerson();
             var posibleMatch = this.db.DevicePreset.FirstOrDefault(a => a.Person.Id == person.Id && a.Name == name);
             if (posibleMatch != null)
@@ -72,22 +72,22 @@ namespace smartHookah.Services.Device
                 posibleMatch.DeviceSetting.Id = matchId;
                 this.db.DevicePreset.AddOrUpdate(posibleMatch);
                 this.db.SaveChanges();
-                return setting.Id;
+                return posibleMatch;
             }
 
             var newSetting = new DeviceSetting(setting);
             var newDevicePreset = new DevicePreset() { Name = name, PersonId = person.Id, DeviceSetting = newSetting };
             this.db.DevicePreset.Add(newDevicePreset);
             this.db.SaveChanges();
-            return newSetting.Id;
+            return newDevicePreset;
         }
 
-        public int SaveSessionPreset(string sessionCode, string name = "", bool addToPerson = true)
+        public DevicePreset SaveSessionPreset(string sessionCode, string name = "", bool addToPerson = true)
         {
             var session = this.db.SmokeSessions
                 .Include(a => a.Hookah.Setting)
                 .FirstOrDefault(a => a.SessionId == sessionCode);
-            if (session?.Hookah?.Setting == null) return -1;
+            if (session?.Hookah?.Setting == null) return null;
             if (addToPerson) return this.AddPreset(this.CreateName(name, session.Hookah), session.Hookah.Setting);
             var preset = new DevicePreset()
             {
@@ -96,13 +96,13 @@ namespace smartHookah.Services.Device
             };
             this.db.DevicePreset.AddOrUpdate(preset);
             this.db.SaveChanges();
-            return preset.Id;
+            return preset;
         }
 
-        public int SaveDevicePreset(string deviceId, string name = "", bool addToPerson = true)
+        public DevicePreset SaveDevicePreset(string deviceId, string name = "", bool addToPerson = true)
         {
             var device = this.db.Hookahs.Include(a => a.Setting).FirstOrDefault(a => a.Code == deviceId);
-            if (device?.Setting == null) return -1;
+            if (device?.Setting == null) return null;
             if (addToPerson) return this.AddPreset(this.CreateName(name, device), device.Setting);
 
             var preset = new DevicePreset()
@@ -113,7 +113,7 @@ namespace smartHookah.Services.Device
 
             this.db.DevicePreset.AddOrUpdate(preset);
             this.db.SaveChanges();
-            return preset.Id;
+            return preset;
         }
 
         public ICollection<DevicePreset> GetUserPresets()
