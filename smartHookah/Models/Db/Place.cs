@@ -308,14 +308,13 @@ namespace smartHookah.Models
 
         public string Sized(int i = 0)
         {
-            if (i == 0) return Path + ".jpg";
-            else return Path + $".{i}.jpg";
+            if (i == 0) return Path + "original.jpg";
+            else return Path + $"{i}.jpg";
         }
         
         public string GetSize(int i)
         {
-            if (i == 0) return Path + ".jpg";
-            else return Path + $".{i}.jpg";
+            return this.Sized(i);
         }
     }
 
