@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -13,11 +11,14 @@ using smartHookah.Models;
 
 namespace smartHookah.Controllers
 {
-    using System.Web.Http;
-
     public class MediaController : Controller
     {
-        private SmartHookahContext db = new SmartHookahContext();
+        private readonly SmartHookahContext db;
+
+        public MediaController(SmartHookahContext db)
+        {
+            this.db = db;
+        }
 
         // GET: Media
         public ActionResult Index()
@@ -60,18 +61,17 @@ namespace smartHookah.Controllers
                 if (file != null)
                 {
                     var extension = System.IO.Path.GetExtension(file.FileName);
-                    var path = $"/Content/Media/{type}/{id}/{Guid.NewGuid()}/";
+                    var path = $"/Content/Media/{type}/{id}/{Path.GetFileNameWithoutExtension(file.FileName)}/";
                     Directory.CreateDirectory(Server.MapPath(path));
-                    path = path + file.FileName;
-                    System.Drawing.Image sourceimage =
-                        System.Drawing.Image.FromStream(file.InputStream);
+                    // path = path + file.FileName;
+                Image sourceimage = System.Drawing.Image.FromStream(file.InputStream);
                     media.Created = DateTime.UtcNow;
                     media.Type = MediaType.Picture;
                     ScaleAndSave(sourceimage, 160, 90,path,Server);
                     ScaleAndSave(sourceimage, 800, 450, path, Server);
                     ScaleAndSave(sourceimage, 1600, 900, path, Server);
-                    path = path + "image";
-                    file.SaveAs(Server.MapPath(path+".jpg"));
+                    // path = path + "image";
+                    file.SaveAs(Server.MapPath(path+"original.jpg"));
                     media.Path = path;
                     db.Media.Add(media);
 
@@ -126,7 +126,7 @@ namespace smartHookah.Controllers
             {
                 encParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)quality);
                 //quality should be in the range [0..100]
-                using (var fileStream = System.IO.File.Create(server.MapPath(path+"image."+image.Height+".jpg")))
+                using (var fileStream = System.IO.File.Create(server.MapPath(path+image.Height+".jpg")))
                 {
                     image.Save(fileStream, jpgInfo, encParams);
                 }
@@ -196,11 +196,7 @@ namespace smartHookah.Controllers
         }
 
         protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+        {          
             base.Dispose(disposing);
         }
     }
