@@ -69,7 +69,7 @@ namespace smartHookah.Controllers.Api
             result.NearbyPlaces = new List<PlaceSimpleDto>();
 
             IQueryable<Place> closestPlaces;
-            var places = this.db.Places.Include("BusinessHours");
+            var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
                 var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
