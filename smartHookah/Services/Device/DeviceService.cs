@@ -43,7 +43,7 @@ namespace smartHookah.Services.Device
               if (animation.VersionFrom >= hookah.Version || animation.VersionTo <= hookah.Version)
                     throw new NotSupportedException($"Animation {animation.DisplayName} not supported by your Hookah OS version.");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int)state}{animation.Id}");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int)state},{animation.Id},");
 
             this.SetAnimation(hookah.Setting, (int)state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
@@ -56,7 +56,7 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int)state}{brightness}");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int)state},{brightness},");
 
             this.SetBrightness(hookah.Setting, (int)state, brightness);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
@@ -69,7 +69,7 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int)state}{speed}");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int)state},{speed},");
 
             this.SetSpeed(hookah.Setting, (int)state, speed);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
