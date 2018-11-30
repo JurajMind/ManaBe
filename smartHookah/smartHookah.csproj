@@ -882,6 +882,8 @@
     <Compile Include="Migrations\MigrationExtensions.cs" />
     <Compile Include="Models\Db\DevicePreset.cs" />
     <Compile Include="Models\Dto\DevicePresetDto.cs" />
+    <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
+    <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
