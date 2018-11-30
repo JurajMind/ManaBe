@@ -90,7 +90,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/ChangeSpeed")]
         public async Task<HttpResponseMessage> ChangeSpeed(string id, [FromBody] ChangeSpeed model)
         {
-            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 255
+            if (string.IsNullOrEmpty(id) || model.Speed < 0 || model.Speed > 600
                 || !Enum.IsDefined(typeof(PufType), model.Type))
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             try
