@@ -8,7 +8,6 @@
         TobaccoMix,
         Heatmanagement,
         Hookah,
-        Coal,
-
+        Coal
     }
 }
