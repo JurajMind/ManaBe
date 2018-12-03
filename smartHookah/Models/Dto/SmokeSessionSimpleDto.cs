@@ -31,7 +31,7 @@ namespace smartHookah.Models.Dto
             }; 
         }
 
-        public static IEnumerable<SmokeSessionSimpleDto> FromModelList(IEnumerable<SmokeSession> model)
+        public static IEnumerable<SmokeSessionSimpleDto> FromModelList(List<SmokeSession> model)
         {
             if (model == null) yield break;
 
