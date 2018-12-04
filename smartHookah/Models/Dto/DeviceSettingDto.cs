@@ -4,75 +4,46 @@ namespace smartHookah.Models.Dto
 {
     public class DeviceSettingDto
     {
-        public int Id { get; set; }
+        public ActionSettings PuffSettings { get; set; }
+        public ActionSettings BlowSettings { get; set; }
+        public ActionSettings IdleSettings { get; set; }
 
-        public int PufAnimation { get; set; }
-
-        public int BlowAnimation { get; set; }
-
-        public int IdleAnimation { get; set; }
-
-        public int IdleBrightness { get; set; }
-
-        public int PufBrightness { get; set; }
-
-        public int IdleSpeed { get; set; }
-
-        public int PufSpeed { get; set; }
-
-        public BtState Bt { get; set; }
-
-        public ColorDto Color { get; set; }
-
-        public int PictureId { get; set; }
-
-
-        public static DeviceSettingDto FromModel(DeviceSetting model)
-        {
-            return new DeviceSettingDto()
+        public static DeviceSettingDto FromModel(DeviceSetting settings) => settings == null
+            ? null
+            : new DeviceSettingDto()
             {
-                Id = model.Id, 
-                PufAnimation = model.PufAnimation, 
-                BlowAnimation = model.BlowAnimation, 
-                IdleAnimation = model.IdleAnimation, 
-                IdleBrightness = model.IdleBrightness, 
-                PufBrightness = model.PufBrightness, 
-                IdleSpeed = model.IdleSpeed, 
-                PufSpeed = model.PufSpeed, 
-                Bt = model.Bt, 
-                Color = ColorDto.FromModel(model.Color), 
-                PictureId = model.PictureId, 
-            }; 
-        }
-
+                PuffSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.PufAnimation,
+                        Brightness = settings.PufBrightness,
+                        Speed = settings.PufSpeed
+                    },
+                BlowSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.BlowAnimation,
+                        Brightness = settings.PufBrightness,
+                        Speed = settings.PufSpeed
+                    },
+                IdleSettings =
+                    new ActionSettings()
+                    {
+                        Color = settings.Color,
+                        AnimationId = settings.IdleAnimation,
+                        Brightness = settings.IdleBrightness,
+                        Speed = settings.IdleSpeed
+                    }
+            };
     }
 
-    public class ColorDto
+    public class ActionSettings
     {
-        public byte Hue { get; set; }
-
-        public byte Saturation { get; set; }
-
-        public byte Value { get; set; }
-
-        public static ColorDto FromModel(Color model)
-        {
-            return new ColorDto()
-            {
-                Hue = model.Hue, 
-                Saturation = model.Saturation, 
-                Value = model.Value, 
-            }; 
-        }
-
-        public Color ToModel()
-        {
-            return new Color()
-            {
-                Hue = Hue, 
-                Saturation = Saturation, 
-                Value = Value, 
-            }; 
-        }
+        public Color Color { get; set; }
+        public int AnimationId { get; set; }
+        public int Brightness { get; set; }
+        public int Speed { get; set; }
     }
 }
