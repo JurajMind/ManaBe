@@ -58,12 +58,12 @@ namespace smartHookah.Controllers.Api
                     tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
                 else
                 {
-                    return new TobaccoReviewDTO(){ Success = false, Message = "Please fill tobacco information first" };
+                    return null;
                 }
 
                 if (UserHelper.GetCurentPerson() == null)
                 {
-                    return new TobaccoReviewDTO(){ Success = false, Message = "Please log in first" };
+                    return null;
                 }
 
                 tobaccoReview.AuthorId = UserHelper.GetCurentPerson().Id;

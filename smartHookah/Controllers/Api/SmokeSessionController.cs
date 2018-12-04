@@ -100,6 +100,21 @@ namespace smartHookah.Controllers.Api
             return new InitDataDto() { SmokeSession = smokeSession, DeviceSettings = deviceSetting };
         }
 
+        [HttpGet, Route("GetMetaData")]
+        public SmokeSessionMetaDataDto GetMetaData(int id)
+        {
+            try
+            {
+                var metadata = sessionService.GetSessionMetaData(id);
+                return SmokeSessionMetaDataDto.FromModel(metadata);
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
+            }
+        }
+
         #endregion
 
         #region Post methods
