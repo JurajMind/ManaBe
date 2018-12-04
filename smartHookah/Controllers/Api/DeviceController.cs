@@ -175,12 +175,12 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet, Route("{id}/GetSetting")]
-        public StandSettings GetSetting(string id)
+        public DeviceSettingDto GetSetting(string id)
         {
             try
             {
                 var setting = this.deviceService.GetStandSettings(id);
-                return StandSettings.FromModel(setting);
+                return DeviceSettingDto.FromModel(setting);
             }
             catch (Exception e)
             {

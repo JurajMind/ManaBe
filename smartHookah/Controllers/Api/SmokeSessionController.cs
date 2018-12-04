@@ -96,8 +96,8 @@ namespace smartHookah.Controllers.Api
             
             var smokeSession =  SmokeSessionSimpleDto.FromModel(session);
 
-            var standSetting = StandSettings.FromModel(session.Hookah.Setting);
-            return new InitDataDto() { SmokeSession = smokeSession, StandSettings = standSetting };
+            var deviceSetting = DeviceSettingDto.FromModel(session.Hookah.Setting);
+            return new InitDataDto() { SmokeSession = smokeSession, DeviceSettings = deviceSetting };
         }
 
         #endregion
