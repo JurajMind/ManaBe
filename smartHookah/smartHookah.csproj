@@ -927,16 +927,16 @@
     </Compile>
     <Compile Include="Models\Dto\AccesoryType.cs" />
     <Compile Include="Models\Dto\GameProfileDto.cs" />
-    <Compile Include="Models\Dto\InitDataDTO.cs" />
+    <Compile Include="Models\Dto\InitDataDto.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryStatisticsDto.cs" />
     <Compile Include="Models\Dto\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
-    <Compile Include="Models\Dto\HookahDto.cs" />
+    <Compile Include="Models\Dto\DeviceSimpleDto.cs" />
     <Compile Include="Models\Dto\DeviceSettingDto.cs" />
-    <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\PersonActiveDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoInformationDto.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
     <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />

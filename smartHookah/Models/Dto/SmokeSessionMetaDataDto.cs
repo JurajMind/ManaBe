@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace smartHookah.Models.Dto
 {
+    [DataContract]
     public class SmokeSessionMetaDataDto
     {
         [DataMember, JsonProperty("Id")]

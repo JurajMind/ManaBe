@@ -108,11 +108,11 @@ namespace smartHookah.Models.Dto
         public string Code { get; set; }
 
         public int Capacity { get; set; }
-       
 
-        public static SeatDto FromModel(Seat model)
-        {
-            return new SeatDto()
+
+        public static SeatDto FromModel(Seat model) => model == null
+            ? null
+            : new SeatDto()
             {
                 Id = model.Id,
                 Name = model.Name,
@@ -120,7 +120,6 @@ namespace smartHookah.Models.Dto
                 Code = model.Code,
                 Capacity = model.Capacity,
             };
-        }
 
         public static IEnumerable<SeatDto> FromModelList(ICollection<Seat> model)
         {
@@ -189,9 +188,9 @@ namespace smartHookah.Models.Dto
 
         public HookahOrderType Type { get; set; }
 
-        public static HookahOrderDto FromModel(HookahOrder model)
-        {
-            return new HookahOrderDto()
+        public static HookahOrderDto FromModel(HookahOrder model) => model == null
+            ? null
+            : new HookahOrderDto()
             {
                 Created = model.Created,
                 Id = model.Id,
@@ -211,7 +210,7 @@ namespace smartHookah.Models.Dto
                 Reservation = ReservationDto.FromModel(model.Reservation),
                 Type = model.Type,
             };
-        }
+        
 
         public static IEnumerable<HookahOrderDto> FromModelList(ICollection<HookahOrder> model)
         {
@@ -271,10 +270,10 @@ namespace smartHookah.Models.Dto
         public string Name { get; set; }
 
         public string DisplayName { get; private set; }
-        
-        public static ReservationDto FromModel(Reservation model)
-        {
-            return new ReservationDto()
+
+        public static ReservationDto FromModel(Reservation model) => model == null
+            ? null
+            : new ReservationDto()
             {
                 Id = model.Id,
                 Created = model.Created,
@@ -289,7 +288,7 @@ namespace smartHookah.Models.Dto
                 Name = model.Name,
                 DisplayName = model.DisplayName,
             };
-        }
+        
 
         public static IEnumerable<ReservationDto> FromModelList(IEnumerable<Reservation> model)
         {
@@ -331,9 +330,9 @@ namespace smartHookah.Models.Dto
 
         public TimeSpan CloseTime { get; set; }
 
-        public static BusinessHoursDto FromModel(BusinessHours model)
-        {
-            return new BusinessHoursDto()
+        public static BusinessHoursDto FromModel(BusinessHours model) => model == null
+            ? null
+            : new BusinessHoursDto()
             {
                 Id = model.Id,
                 PlaceId = model.PlaceId,
@@ -341,7 +340,6 @@ namespace smartHookah.Models.Dto
                 OpenTine = model.OpenTine,
                 CloseTime = model.CloseTime,
             };
-        }
 
         public static IEnumerable<BusinessHoursDto> FromModelList(IEnumerable<BusinessHours> model)
         {
@@ -427,9 +425,9 @@ namespace smartHookah.Models.Dto
 
         public string GetDirectory { get; private set; }
 
-        public static MediaDto FromModel(Media model)
-        {
-            return new MediaDto()
+        public static MediaDto FromModel(Media model) => model == null
+            ? null
+            : new MediaDto()
             {
                 Id = model.Id,
                 Created = model.Created,
@@ -440,7 +438,6 @@ namespace smartHookah.Models.Dto
                 FileName = model.FileName,
                 GetDirectory = model.GetDirectory,
             };
-        }
 
         public Media ToModel()
         {
