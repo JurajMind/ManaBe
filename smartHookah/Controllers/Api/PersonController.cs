@@ -31,7 +31,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("GetPersonActiveData")]
-        public async Task<PersonActiveDataDTO> GetPersonActiveData()
+        public async Task<PersonActiveDataDto> GetPersonActiveData()
         {
             var person = this.personService.GetCurentPerson();
 
@@ -43,7 +43,7 @@ namespace smartHookah.Controllers.Api
 
             var personId = person.Id;
             var standTask = await this.personService.GetUserActiveStands(personId);
-            var stands = standTask.Select(HookahSimpleDto.FromModel).ToList();
+            var devices = standTask.Select(DeviceSimpleDto.FromModel).ToList();
             var sessions = this.personService.GetUserActiveSessions(personId)
                 .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
@@ -52,10 +52,10 @@ namespace smartHookah.Controllers.Api
             var orders = this.personService.GetUserHookahOrders(personId).Select(HookahOrderDto.FromModel).ToList();
             var gameProfile = GameProfileSimpleDto.FromModel(this.personService.GetUserGameProfile(personId));
 
-            return new PersonActiveDataDTO()
+            return new PersonActiveDataDto()
             {
                 ActiveSmokeSessions = sessions,
-                Stands = stands,
+                Devices = devices,
                 ActiveReservations = reservations,
                 ActiveHookahOrders = orders,
                 GameProfile = gameProfile

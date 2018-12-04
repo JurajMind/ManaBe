@@ -51,6 +51,20 @@ namespace smartHookah.Services.SmokeSession
             .Include(a => a.Tobacco)
             .FirstOrDefault(a => a.Id == id);
 
+        public SmokeSessionMetaData GetSessionMetaData(int id)
+        {
+            var session = db.SmokeSessions
+                .Include(a => a.MetaData)
+                .FirstOrDefault(a => a.Id == id);
+            if (session?.MetaData == null)
+            {
+                throw new ItemNotFoundException($"Session id {id} not found or it has no metadata.");
+            }
+
+            return session.MetaData;
+        }
+
+
         public DeviceSetting GetStandSettings(string id)
         {
             var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.Hookah.Setting).FirstOrDefault(s => s.SessionId == id);

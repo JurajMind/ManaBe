@@ -25,7 +25,10 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Used")]
         public int Used { get; set; }
 
-        public static PipeAccessoryUsageDto FromModel(PipeAccesory model) => model == null
+        [DataMember, JsonProperty("Owned")]
+        public bool Owned { get; set; }
+
+/*        public static PipeAccessoryUsageDto FromModel(PipeAccesory model) => model == null
             ? null
             : new PipeAccessoryUsageDto
             {
@@ -33,7 +36,7 @@ namespace smartHookah.Models.Dto
                 AccName = model.AccName,
                 Type = model.GetTypeName(),
                 Used = model.Statistics.Used,
-                BrandName = model.BrandName
+                BrandName = model.Brand.DisplayName
             };
 
         public static IEnumerable<PipeAccessoryUsageDto> FromModelList(IEnumerable<PipeAccesory> model)
@@ -43,6 +46,6 @@ namespace smartHookah.Models.Dto
             {
                 yield return FromModel(item);
             }
-        } 
+        } */
     }
 }

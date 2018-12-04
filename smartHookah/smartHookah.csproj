@@ -827,6 +827,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
+    <Compile Include="Controllers\Api\StatisticsController.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
       <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
@@ -882,6 +883,7 @@
     <Compile Include="Migrations\MigrationExtensions.cs" />
     <Compile Include="Models\Db\DevicePreset.cs" />
     <Compile Include="Models\Dto\DevicePresetDto.cs" />
+    <Compile Include="Models\Dto\PersonStatisticsOverallDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
@@ -925,16 +927,16 @@
     </Compile>
     <Compile Include="Models\Dto\AccesoryType.cs" />
     <Compile Include="Models\Dto\GameProfileDto.cs" />
-    <Compile Include="Models\Dto\InitDataDTO.cs" />
+    <Compile Include="Models\Dto\InitDataDto.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryStatisticsDto.cs" />
     <Compile Include="Models\Dto\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
-    <Compile Include="Models\Dto\HookahDto.cs" />
+    <Compile Include="Models\Dto\DeviceSimpleDto.cs" />
     <Compile Include="Models\Dto\DeviceSettingDto.cs" />
-    <Compile Include="Models\Dto\PersonDTO.cs" />
+    <Compile Include="Models\Dto\PersonActiveDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoInformationDto.cs" />
     <Compile Include="Models\Dto\ValidationDTO.cs" />
     <Compile Include="Models\ParameterObjects\DeviceControllerParameters.cs" />
@@ -1004,6 +1006,8 @@
     <Compile Include="Services\Place\IReservationService.cs" />
     <Compile Include="Services\Place\PlaceService.cs" />
     <Compile Include="Services\Place\ReservationService.cs" />
+    <Compile Include="Services\Statistics\IPersonStatisticsService.cs" />
+    <Compile Include="Services\Statistics\PersonStatisticsService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
     <Compile Include="Services\Person\IPersonService.cs" />
     <Compile Include="Services\Wrappers\OwinContextExtensionsWrapper.cs" />
