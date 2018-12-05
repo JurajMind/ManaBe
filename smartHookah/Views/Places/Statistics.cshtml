@@ -12,11 +12,11 @@
             <h4 class="card-header">Summary</h4>
             <div class="card-body row">
                 <div class="col-md-6">
-                    <h5>Start: {{statsData.Start}}</h5>
-                    <h5>Duration: {{statsData.DataSpan}}</h5>
+                    <h5>Start: {{statsData.from}}</h5>
+                    <h5>Duration: {{statsData.dataSpan}}</h5>
                 </div>
                 <div class="col-md-6">
-                    <h5>#Reservations : {{statsData.ReservationCount}}</h5>
+                    <h5>#Reservations : {{statsData.reservationCount}}</h5>
                     <h5>#Customers : {{statsData.customers}}</h5>
                 </div>
             </div>
@@ -65,7 +65,7 @@
             <div class="card">
                 <h4 class="card-header">Table ussage</h4>
                 <div class="card-body">
-                    <line-chart v-bind:data="statsData.tableUssage.Data" v-bind:labels="statsData.tableUssage.Labels" v-bind:label="'Table ussage'" />
+                    <line-chart v-bind:data="statsData.tableUsage.Data" v-bind:labels="statsData.tableUsage.Labels" v-bind:label="'Table usage'" />
                 </div>
             </div>
         </div>
@@ -111,62 +111,68 @@
             });
 
 
-        var v = new Vue({
-            el: '#stats',
-            created: function () { this.loadData(); },
+            var v = new Vue({
+                el: '#stats',
+                created: function() { this.loadData(); },
 
-            data: {
-                statsData: {
-                    dayDistribution: {
-                        Data: null,
-                        Labels: null
-                    },
-                    timeDistribution: {
-                        Data: null,
-                        Labels: null
-                    },
-                    groupSize: {
-                        Data: null,
-                        Labels: null
-                    },
-                    monthVisit: {
-                        Data: null,
-                        Labels: null
-                    },
-                    weekVisits: {
-                        Data: null,
-                        Labels: null
-                    },
-                    tableUssage: {
-                        Data: null,
-                        Labels: null
-                    },
-                    visitDuration: {
-                        Data: null,
-                        Labels: null
-                    },
-                    Start: null,
-                    Duration: null,
-                    ReservationCount: 0,
-                    customers:0
-
-                },
-                option: {
-                    week: null,
-                }
-            },
-            methods: {
-                loadData() {
-                    var _this = this;
-                    $.getJSON('/Places/getStatisticData',
-                        {
-                            id:placeId
+                data: {
+                    statsData: {
+                        dayDistribution: {
+                            Data: null,
+                            Labels: null
                         },
-                        function(json) {
-                            _this.statsData = json;
-                        })
+                        timeDistribution: {
+                            Data: null,
+                            Labels: null
+                        },
+                        groupSize: {
+                            Data: null,
+                            Labels: null
+                        },
+                        monthVisits: {
+                            Data: null,
+                            Labels: null
+                        },
+                        weekVisits: {
+                            Data: null,
+                            Labels: null
+                        },
+                        tableUsage: {
+                            Data: null,
+                            Labels: null
+                        },
+                        visitDuration: {
+                            Data: null,
+                            Labels: null
+                        },
+                        from: null,
+                        to: null,
+                        duration: null,
+                        dataSpan: 0,
+                        reservationCount: 0,
+                        customers: 0
+                    },
+                    option: {
+                        week: null
+                    }
+                },
+                methods: {
+                    loadData() {
+                        $.getJSON('/api/Places/GetStatistics',
+                            {
+                                id: placeId,
+                                //TODO: doplnit casove rozmezi (momentalne zacatek mesice - ted)
+                                //format pro test: "2013-10-21T13:28:06.419Z"
+                                from: null,
+                                to: null
+                            },
+                            function(data) {
+                                if (data != null) {
+                                    this.statsData = data;
+                                }
+                            });
+                    }
                 }
-            }
-            })
+            });
         </script>
     }

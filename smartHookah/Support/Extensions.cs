@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Support
+﻿using smartHookah.Models.Dto;
+
+namespace smartHookah.Support
 {
     using System;
     using System.Collections.Generic;

@@ -36,6 +36,25 @@ namespace smartHookah.Controllers.Api
 
         #region Getters
 
+        [HttpGet, Route("GetStatistics")]
+        public PlaceStatisticsDto GetStatistics(string id, DateTime? from, DateTime? to)
+        {
+            var now = DateTime.UtcNow;
+            from = from ?? new DateTime(now.Year, now.Month, 1);
+            to = to ?? now;
+            try
+            {
+                var result = placeService.GetPlaceStatisticsDto(id, (DateTime) from, (DateTime) to);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
+            }
+        }
+
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)
         {
@@ -51,8 +70,8 @@ namespace smartHookah.Controllers.Api
             }
             catch(Exception e)
             {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
+                var err = new HttpError(e.Message);
+                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
             }
         }
 
