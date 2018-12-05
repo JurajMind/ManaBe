@@ -1,4 +1,5 @@
-﻿using smartHookah.Services.Person;
+﻿using smartHookah.Models.Dto;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers
 {
@@ -575,55 +576,6 @@ namespace smartHookah.Controllers
             return View(place);
         }
 
-        public async Task<JsonResult> GetStatisticData(string id)
-        {
-            var place = db.Places.Where(a => a.FriendlyUrl ==id)
-                .Include(a => a.Reservations)
-                .Include("Reservations.Seats").FirstOrDefault();
-
-            var reservation = place.Reservations.Where(
-                a => a.Status == ReservationState.VisitConfirmed || a.Status == ReservationState.Confirmed
-                     || a.Status == ReservationState.Created);
-
-            var canceled = reservation.Where(a => a.Status == ReservationState.NonVisit);
-
-            var dayDistribution = reservation.GroupBy(a => a.Time.DayOfWeek)
-                .ToPlotData(a => a.ToString(),a => (int)a.Key);
-
-            var timeDistribution = reservation.GroupBy(a => a.Time.Hour.ToString(), a => a)
-                .ToPlotData(a => a.ToString());
-
-            var groupSize = reservation.GroupBy(a => a.Persons.ToString(), a => a)
-                .ToPlotData(a => a.ToString());
-
-            var duration = reservation.GroupBy(a => a.Duration.ToString(), a => a)
-                .ToPlotData(a => a.ToString());
-
-            var weekVisits = reservation.GroupBy(a => a.Time.GetIso8601WeekOfYear(), a => a)
-                .ToPlotData(a => a.ToString());
-
-            var monthVisit = reservation.GroupBy(a => a.Time.Month, a => a).ToPlotData(a => a.ToString());
-
-            var tableUssage = reservation.GroupBy(a => a.Seats.FirstOrDefault().Name)
-                .ToPlotData(a => a.ToString());
-
-            var model = new GetStatisticModel();
-            model.dayDistribution = dayDistribution;
-            model.timeDistribution = timeDistribution;
-            model.groupSize = groupSize;
-            model.visitDuration = duration;
-            model.weekVisits = weekVisits;
-            model.monthVisit = monthVisit;
-            model.tableUssage = tableUssage;
-            model.customers = reservation.Sum(a => a.Persons);
-            var start = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
-            var end  = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
-            model.DataSpan = (end.Date - start.Date).TotalDays.ToString();
-            model.Start = start.ToString();
-            model.ReservationCount = reservation.Count();
-            return Json(model,JsonRequestBehavior.AllowGet);
-        }
-
         /// <summary>
         ///     The index.
         /// </summary>
@@ -982,43 +934,5 @@ namespace smartHookah.Controllers
 
             return address;
         }
-    }
-
-    public class GetStatisticModel
-    {
-        public PlotData dayDistribution { get; set; }
-
-        public PlotData timeDistribution { get; set; }
-
-        public PlotData groupSize { get; set; }
-
-        public PlotData visitDuration { get; set; }
-
-        public PlotData weekVisits { get; set; }
-
-        public PlotData monthVisit { get; set; }
-
-        public int customers { get; set; }
-
-        public string Start { get; set; }
-
-        public string DataSpan { get; set; }
-
-        public int ReservationCount { get; set; }
-
-        public PlotData tableUssage { get; set; }
-    }
-
-    public class PlotData
-    {
-        public PlotData(List<string> labels, List<int> data)
-        {
-            this.Labels = labels;
-            this.Data = data;
-        }
-
-        public List<string> Labels { get; set; }
-
-        public List<int> Data { get; set; }
     }
 }
