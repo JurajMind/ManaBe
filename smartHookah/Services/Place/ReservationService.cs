@@ -38,7 +38,7 @@
                 List<Reservation> todayActiveReservation;
                 var todayReservation = this.TodayReservation(date, place, out todayActiveReservation);
 
-                model.Times = new List<KeyValuePair<int, string>>();
+                model.Times = new List<Dictionary<int, string>>();
 
                 var minReservationTime = place.MinimumReservationTime;
                 model.MinimumReservationTime = place.MinimumReservationTime;
@@ -50,12 +50,12 @@
                 for (int i = minReservationTime; i < 9; i++)
                 {
                     var text = $"{ i * 0.5}";
-                    model.Times.Add(new KeyValuePair<int, string>(i, text));
+                    model.Times.Add(new Dictionary<int, string> { {i, text} });
                 }
 
                 if (includeReservation)
                 {
-                    model.Times.Add(new KeyValuePair<int, string>(timeSlot.Count, "Do zavíračky"));
+                    model.Times.Add(new Dictionary<int, string>(){ {timeSlot.Count, "Do zavíračky"} });
                 }
 
 
