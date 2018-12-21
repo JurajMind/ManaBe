@@ -93,7 +93,7 @@ namespace smartHookah.Controllers.Api
 
                 var ownDs = new DynamicSmokeStatisticDto(ds);
 
-                ClientContext.Clients.Group(session).updateStats(oldDs);
+                ClientContext.Clients.Group(session).updateStats(ownDs);
                 ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);
             }
         }
