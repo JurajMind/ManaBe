@@ -13,6 +13,8 @@ using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Services.Redis;
+
     [Authorize]
     public class HookahsController : Controller
     {
