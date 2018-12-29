@@ -15,6 +15,7 @@ using smartHookahCommon;
 namespace smartHookah.Controllers.Api
 {
     using smartHookah.ErrorHandler;
+    using smartHookah.Services.Redis;
 
     [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController

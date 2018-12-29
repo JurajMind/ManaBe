@@ -22,6 +22,7 @@ namespace smartHookah.Controllers
 
     using smartHookah.Helpers;
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 

@@ -12,11 +12,27 @@ using smartHookahCommon;
 
 namespace smartHookah.Jobs
 {
+    using smartHookah.Services.Device;
+
     public class SessionAutoEnd
     {
+
+        private readonly IIotService iotService;
+
+        private readonly SmartHookahContext db;
         private readonly ILog logger = LogManager.GetLogger(typeof(SessionAutoEnd));
 
         private readonly int offlineMulti = 2;
+
+        public SessionAutoEnd() : this(new IotService(), new SmartHookahContext())
+        {
+        }
+
+        public SessionAutoEnd(IIotService iotService, SmartHookahContext db)
+        {
+            this.iotService = iotService;
+            this.db = db;
+        }
 
         private async Task CleanSleep(string hookahCode, bool online, bool autoSleep)
         {
@@ -40,17 +56,16 @@ namespace smartHookah.Jobs
 
         public async Task EndSmokeSessions(PerformContext context, bool debug = false)
         {
-            using (var db = new SmartHookahContext())
-            {
-                var stands = db.Hookahs.ToList();
-
-
+            
+                var stands = this.db.Hookahs.ToList();
+                var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code));
                 foreach (var hookah in stands)
                     try
                     {
                         var stand = hookah.Code;
                         var redisSession = RedisHelper.GetSmokeSessionId(stand);
-                        var online = await IotDeviceHelper.GetState(stand);
+                        var online = onlineStates[hookah.Code];
+
                         // Hookah dont want auto session end
                         if (hookah.AutoSessionEndTime == -1)
                             continue;
@@ -61,7 +76,7 @@ namespace smartHookah.Jobs
                         // No puf was made
                         if (ds?.LastPuf == null)
                         {
-                            await CleanSleep(stand, online, hookah.AutoSleep);
+                            await this.CleanSleep(stand, online, hookah.AutoSleep);
                             continue;
                         }
 
@@ -69,7 +84,7 @@ namespace smartHookah.Jobs
                         if (online)
                             span = hookah.AutoSessionEndTime;
                         else
-                            span = hookah.AutoSessionEndTime * offlineMulti;
+                            span = hookah.AutoSessionEndTime * this.offlineMulti;
 
 
                         if (ds.LastPufTime.AddMinutes(span) > DateTime.UtcNow)
@@ -104,6 +119,6 @@ namespace smartHookah.Jobs
                         context.WriteLine(e);
                     }
             }
-        }
+        
     }
 }

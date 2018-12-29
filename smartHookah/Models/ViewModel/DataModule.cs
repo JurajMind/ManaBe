@@ -11,6 +11,7 @@ namespace smartHookah.Models
     using Microsoft.Owin;
 
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 

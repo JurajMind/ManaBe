@@ -13,6 +13,7 @@
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Services.Device;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 

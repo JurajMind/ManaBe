@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+
 using smartHookah.Controllers;
-using smartHookah.Models;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Models
 {
     using System.Globalization;
+
+    using smartHookah.Models.Dto;
 
     public class SeatDto
     {
