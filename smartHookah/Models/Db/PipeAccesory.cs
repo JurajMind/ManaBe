@@ -11,6 +11,8 @@ using smartHookah.Support;
 
 namespace smartHookah.Models
 {
+    using smartHookah.Models.Dto;
+
     public class PipeAccesory
     {
         [Key]
@@ -65,6 +67,13 @@ namespace smartHookah.Models
                 return "Tobacco";
 
             return "";
+        }
+
+        public AccesoryType GetTypeEnum()
+        {
+            Enum.TryParse<AccesoryType>(this.GetTypeName(), true, out var result);
+
+            return result;
         }
 
 

@@ -72,7 +72,7 @@ namespace smartHookah.Controllers.Api
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
-                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
+                var myLocation = DbGeography.FromText($"POINT({lng} {lat})");
 
                 closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
             }

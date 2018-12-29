@@ -12,6 +12,8 @@ namespace smartHookah.Services.Gear
         PipeAccesory GetPipeAccessory(int id);
         void Vote(int id, VoteValue value);
 
+        Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
+
         List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type,int page,int pageSize);
     }
 }

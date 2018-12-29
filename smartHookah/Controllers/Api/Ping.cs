@@ -12,6 +12,8 @@ namespace smartHookah.Controllers.Api
 {
     using System.Web;
 
+    using smartHookah.Services.Redis;
+
     public class PingController : ApiController
     {
 

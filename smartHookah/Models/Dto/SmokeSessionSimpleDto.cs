@@ -18,7 +18,7 @@ namespace smartHookah.Models.Dto
         public DeviceSimpleDto Device { get; set; }
 
         [DataMember, JsonProperty("Statistic")]
-        public DynamicSmokeStatisticDto Statistic { get; set; }
+        public DynamicSmokeStatisticRawDto Statistic { get; set; }
 
         [DataMember, JsonProperty("MetaData")]
         public SmokeSessionMetaDataDto MetaData { get; set; }
@@ -34,7 +34,7 @@ namespace smartHookah.Models.Dto
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
                 Place = PlaceSimpleDto.FromModel(model.Place),
-                Statistic = new DynamicSmokeStatisticDto(model.DynamicSmokeStatistic)
+                Statistic = new DynamicSmokeStatisticRawDto(model.DynamicSmokeStatistic)
             }; 
         
 

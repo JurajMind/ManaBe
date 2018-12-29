@@ -23,6 +23,7 @@ namespace smartHookah.Controllers
 
     using smartHookah.Helpers;
     using smartHookah.Models;
+    using smartHookah.Models.Dto;
     using smartHookah.Models.Redis;
     using smartHookah.Support;
 
