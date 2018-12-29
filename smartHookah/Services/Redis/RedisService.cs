@@ -8,6 +8,7 @@
     using ServiceStack.Redis;
 
     using smartHookah.Models.Redis;
+    using smartHookah.Services.Redis;
 
     public class RedisService : IRedisService
     {
@@ -17,6 +18,7 @@
         {
             this.redisManager = new PooledRedisClientManager(ConfigurationManager.AppSettings["RedisConnectionString"]);
         }
+
         public string GetHookahId(string sessionId)
         {
             using (var redis = this.redisManager.GetClient())

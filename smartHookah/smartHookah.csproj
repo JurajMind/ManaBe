@@ -886,6 +886,8 @@
     <Compile Include="Models\Dto\PersonStatisticsOverallDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
+    <Compile Include="Services\Config\ConfigService.cs" />
+    <Compile Include="Services\Config\IConfigService.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -1006,6 +1008,7 @@
     <Compile Include="Services\Place\IReservationService.cs" />
     <Compile Include="Services\Place\PlaceService.cs" />
     <Compile Include="Services\Place\ReservationService.cs" />
+    <Compile Include="Services\Redis\CacheService.cs" />
     <Compile Include="Services\Statistics\IPersonStatisticsService.cs" />
     <Compile Include="Services\Statistics\PersonStatisticsService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
@@ -1891,6 +1894,8 @@
     <Content Include="ClientApp\components\fetch-data.vue" />
     <Content Include="ClientApp\components\home-page.vue" />
     <Content Include="ClientApp\components\nav-menu.vue" />
+    <Compile Include="Models\Dto\DynamicSmokeStatisticDto.cs" />
+    <Compile Include="Models\Dto\BrandGroupDto.cs" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
@@ -1977,6 +1982,7 @@
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\slim\slim.kickstart.min.js" />
+    <Compile Include="Services\Redis\ICacheService.cs" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />

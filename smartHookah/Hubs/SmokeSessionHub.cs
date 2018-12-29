@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
+
 using Microsoft.AspNet.SignalR;
-using smartHookah.Helpers;
+
 using smartHookah.Models;
 
 namespace smartHookah.Hubs
@@ -19,7 +17,12 @@ namespace smartHookah.Hubs
 
         public Task JoinSession(string sessionId)
         {
-            return Groups.Add(Context.ConnectionId, sessionId);
+            return this.Groups.Add(Context.ConnectionId, sessionId);
+        }
+
+        public Task LeaveSession(string sessionId)
+        {
+            return this.Groups.Remove(Context.ConnectionId, sessionId);
         }
 
         public async Task JoinLounge(int id)

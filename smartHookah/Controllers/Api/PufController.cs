@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.ApplicationInsights;
@@ -14,8 +10,11 @@ using smartHookah.Models.Redis;
 using smartHookah.Support;
 using smartHookahCommon;
 
+
 namespace smartHookah.Controllers.Api
 {
+    using smartHookah.Models.Dto;
+
     public class PufController : ApiController
     {
         private IHubContext ClientContext => GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
@@ -95,7 +94,8 @@ namespace smartHookah.Controllers.Api
 
                 ClientContext.Clients.Group(session).updateStats(oldDs);
                 ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);
-            }
+                ClientContext.Clients.Group(session).updateState(new DynamicSmokeStatisticRawDto(ds));
+            };
         }
 
         private static Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime)
