@@ -38,6 +38,16 @@ namespace smartHookah.Controllers.Api
             }
         }
 
+        [HttpGet, Route("search")]
+        public List<TobaccoDto> Search(int page, int pageSize, TobaccoFilter filter)
+        {
+            var tobaccos = this.tobaccoService.GetTobaccoList(page, pageSize, filter);
+
+             var result = tobaccos.Select(TobaccoDto.FromModel).ToList();
+            return result;
+        }
+
+
         [HttpGet, Route("{id}/GetAllInfo")]
         public async Task<TobaccoInformationDto> GetTobaccoInfo(int id)
         {
