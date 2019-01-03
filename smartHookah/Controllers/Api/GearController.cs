@@ -56,5 +56,6 @@ namespace smartHookah.Controllers.Api
         {
             return this.gearService.GetBrands();
         }
+
     }
 }

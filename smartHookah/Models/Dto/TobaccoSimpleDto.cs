@@ -3,6 +3,13 @@ using System.Linq;
 
 namespace smartHookah.Models.Dto
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    using Newtonsoft.Json;
+
+    using smartHookah.Support;
+
     public class TobaccoTasteDto
     {
         public string CzName { get; set; }
@@ -57,6 +64,36 @@ namespace smartHookah.Models.Dto
                            BrandId = model.BrandName,
                            Picture = model.Picture,
                            Name = model.Name
+                       };
+        }
+    }
+
+    public class TobaccoDto : TobaccoSimpleDto
+    {
+        [DataMember]
+        [JsonProperty("Used")]
+        public int Used { get; set; }
+
+        public int Duration { get; set; }
+
+        public int PufCount { get; set; }
+
+        public double Rating { get; set; }
+
+        public static new TobaccoDto FromModel(Tobacco model)
+        {
+            var tobaccoDto = TobaccoSimpleDto.FromModel(model);
+            return new TobaccoDto
+            {
+                           Id = tobaccoDto.Id,
+                           BrandName = tobaccoDto.BrandName,
+                           BrandId = tobaccoDto.BrandName,
+                           Picture = tobaccoDto.Picture,
+                           Name = tobaccoDto.Name,
+                           PufCount = (int) (model?.Statistics?.PufCount ?? 0),
+                           Used = model.Statistics?.Used ?? 0,
+                           Duration = (int)(model.Statistics?.SmokeDurationTick ?? 0)
+                           
                        };
         }
     }
