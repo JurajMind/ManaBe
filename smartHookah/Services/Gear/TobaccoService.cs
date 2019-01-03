@@ -12,6 +12,8 @@ using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
 {
+    using System.Web.Helpers;
+
     public class TobaccoService : ITobaccoService
     {
         private readonly SmartHookahContext db;
@@ -76,6 +78,54 @@ namespace smartHookah.Services.Gear
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(page * pageSize)
                 .Take(pageSize).ToListAsync();
+        }
+
+
+        public IList<Tobacco> GetTobaccoList(int page = 1, int pageSize = 50, TobaccoFilter filter = null )
+        {
+            if (filter == null)
+            {
+                filter = new TobaccoFilter { SortDirection = SortDirection.Ascending,SortBy = TobaccoSortBy.Smart};
+            }
+            var filteredTobacco = this.GetFilteredTobacco(filter);
+
+            var skip = (page - 1) * pageSize;
+
+            return filteredTobacco.OrderBy(a => a.Id).Skip(skip).Take(pageSize).ToList();
+        }
+
+        private IQueryable<Tobacco> GetFilteredTobacco(TobaccoFilter filter)
+        {
+            var tobacco = this.db.Tobaccos.Include("Statistics").AsQueryable();
+            if (filter == null)
+            {
+                return tobacco;
+            }
+            var person = this.personService.GetCurentPerson();
+
+            if (filter.Owned)
+            {
+                tobacco = person.Tobacco.AsQueryable();
+            }
+
+            if (filter.Smoked)
+            {
+                tobacco = person.SmokeSessions.Where(a => a.MetaData != null && a.MetaData.Tobacco != null)
+                    .Select(a => a.MetaData.Tobacco).AsQueryable();
+            }
+
+            if (!string.IsNullOrEmpty(filter.Brand))
+            {
+                tobacco = tobacco.Where(t => t.BrandName == filter.Brand);
+            }
+
+            if (filter.Tastes != null && filter.Tastes.Any())
+            {
+                tobacco = tobacco.Where(a => a.Tastes.All(t => filter.Tastes.Contains(t.Id)));
+            }
+
+
+            return tobacco;
         }
 
         #endregion
