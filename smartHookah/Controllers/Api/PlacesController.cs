@@ -127,14 +127,6 @@ namespace smartHookah.Controllers.Api
         #endregion
 
         #region Reservations
-
-        [HttpGet]
-        [Route("{id}/Reservations")]
-        public ReservationInfo GetReservations(int id, string date)
-        {
-            var parseDate = DateTime.ParseExact(date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-            return this.reservationService.GetReservation(id, parseDate);
-        }
             
 
 

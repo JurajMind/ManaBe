@@ -5,10 +5,14 @@
     using System.Data.Entity;
     using System.Globalization;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using smartHookah.Controllers;
     using smartHookah.Models;
+    using smartHookah.Models.Dto;
     using smartHookah.Support;
+
+    using ReservationDto = smartHookah.Controllers.ReservationDto;
 
     public class ReservationService: IReservationService
     {
@@ -16,86 +20,42 @@
         private readonly TimeSpan slotDuration = new TimeSpan(0, 30, 0);
         private IEmailService emailService;
 
-        public ReservationService(SmartHookahContext db, IEmailService emailService)
+        private readonly IPlaceService placeService;
+
+        public ReservationService(SmartHookahContext db, IEmailService emailService, IPlaceService placeService)
         {
             this.db = db;
             this.emailService = emailService;
+            this.placeService = placeService;
         }
 
-        public ReservationInfo GetReservation(int id, DateTime date, bool includeReservation = false)
+
+        public async Task<ReservationManageDto> GetReservationManage(int id, DateTime date)
         {
-            var place = db.Places.Where(a => a.Id == id).Include(a => a.Seats).FirstOrDefault();
-            
-            var todayDay = (int)date.DayOfWeek;
-            var timeSlot = new List<TimeSlot>();
-
-            var placeTime = place.BusinessHours.FirstOrDefault(a => a.Day == todayDay);
-            var model = new ReservationInfo();
-            if (placeTime != null)
+            var place = await this.placeService.GetManagedPlace(id);
+            var tables = SeatDto.FromModelList(place.Seats);
+            var reservations = this.TodayReservation(date, place, out var today);
+            var placeTime = place.BusinessHours.FirstOrDefault(a => a.Day == date.Day);
+            var endTime = date.Date + placeTime.CloseTime;
+            if (placeTime.CloseTime < placeTime.OpenTine)
             {
-                timeSlot = this.GetTimeSlots(date, includeReservation, placeTime);
-
-                List<Reservation> todayActiveReservation;
-                var todayReservation = this.TodayReservation(date, place, out todayActiveReservation);
-
-                model.Times = new List<Dictionary<int, string>>();
-
-                var minReservationTime = place.MinimumReservationTime;
-                model.MinimumReservationTime = place.MinimumReservationTime;
-                if (includeReservation)
-                {
-                    minReservationTime = 1;
-                }
-
-                for (int i = minReservationTime; i < 9; i++)
-                {
-                    var text = $"{ i * 0.5}";
-                    model.Times.Add(new Dictionary<int, string> { {i, text} });
-                }
-
-                if (includeReservation)
-                {
-                    model.Times.Add(new Dictionary<int, string>(){ {timeSlot.Count, "Do zavíračky"} });
-                }
-
-
-                model.Tables = new List<TableDto>(place.Seats
-                    .Select(a => new TableDto { Id = a.Id, Capacity = a.Capacity, Name = a.Name }).ToList());
-
-                if (includeReservation)
-                {
-                    model.TodayReservation = todayActiveReservation.ToDictionary(
-                        a => a.Id.ToString(),
-                        a => new ReservationDto(a, this.slotDuration));
-                    model.Canceled = todayReservation
-                        .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied || a.Status == ReservationState.NonVisit)
-                        .Select(a => new ReservationDto(a, this.slotDuration));
-                }
-
-
-                model.Reservations = new Dictionary<string, List<TimeSlot>>();
-
-                foreach (var table in model.Tables)
-                {
-                    var tableReservation = todayActiveReservation.Where(a => a.Seats.Any(b => b.Id == table.Id));
-
-                    var timeTable = this.CreateTableTable(tableReservation, timeSlot, includeReservation);
-                    model.Reservations.Add(table.Id.ToString(), timeTable);
-                }
-
-                foreach (var slot in timeSlot)
-                {
-                    var slotData = model.Reservations.Values.SelectMany(a => a.ToArray()).Where(a => a.Value == slot.Value);
-
-                    if (slotData.Count(a => !a.Reserved) <= 0)
-                        slot.Reserved = true;
-                }
-
-
-                model.TimeSlots = timeSlot;
+                endTime = endTime + new TimeSpan(1, 0, 0, 0);
             }
-            return model;
+            return new ReservationManageDto
+                       {
+                           Date = date,
+                           Tables = tables.ToList(),
+                           startTime = date.Date + placeTime.OpenTine,
+                           endTime = endTime,
+                           Reservations =
+                               smartHookah.Models.Dto.ReservationDto.FromModelList(reservations)
+                                   .ToList(),
+                           TimeSlotSize = 30,
+                       };
+
         }
+
+
 
         private List<Reservation> TodayReservation(DateTime date, Place place, out List<Reservation> todayActiveReservation)
         {

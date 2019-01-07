@@ -324,7 +324,7 @@ namespace smartHookah.Controllers
 
             
 
-            model.Times = new List<Dictionary<int, string>>();
+            model.Times = new List<Dictionary<string, string>>();
 
             var minReservationTime = place.MinimumReservationTime;
             model.MinimumReservationTime = place.MinimumReservationTime;
@@ -336,13 +336,13 @@ namespace smartHookah.Controllers
             for (int i = minReservationTime; i < 9; i++)
             {
                 var text = $"{ i * 0.5} hodiny";
-                    model.Times.Add(new Dictionary<int, string>() {
-                        { i,text} });
+                    model.Times.Add(new Dictionary<string, string>() {
+                        { i.ToString(),text} });
             }
 
             if (includeReservation)
             {
-                model.Times.Add(new Dictionary<int, string>() { {index, "Do zavíračky"} });
+                model.Times.Add(new Dictionary<string, string>() { {index.ToString(), "Do zavíračky"} });
             }
 
 
@@ -718,7 +718,7 @@ namespace smartHookah.Controllers
         public Dictionary<string, ReservationDto> TodayReservation { get; set; }
         public IEnumerable<ReservationDto> Canceled { get; set; }
 
-        public List<Dictionary<int,string>> Times { get; set; }
+        public List<Dictionary<string, string>> Times { get; set; }
 
         public int MinimumReservationTime { get; set; }
     }

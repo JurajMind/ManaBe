@@ -9,17 +9,6 @@ namespace smartHookah.Models
 
     using smartHookah.Models.Dto;
 
-    public class SeatDto
-    {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public SeatDto(Seat seat)
-        {
-            this.Code = seat.Code;
-            this.Name = seat.Name;
-        }
-    }
-
     public class EditPricePostModel
     {
         public int PlaceId { get; set; }
