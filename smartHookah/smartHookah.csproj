@@ -827,6 +827,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
+    <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
@@ -885,6 +886,7 @@
     <Compile Include="Models\Dto\DevicePresetDto.cs" />
     <Compile Include="Models\Dto\PersonStatisticsOverallDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
+    <Compile Include="Models\Dto\ReservationDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
