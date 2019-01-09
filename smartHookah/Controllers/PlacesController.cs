@@ -258,7 +258,16 @@ namespace smartHookah.Controllers
             var model = new PlaceDetailsViewModel();
             if (lounge == null) return this.HttpNotFound();
 
-            var person = UserHelper.GetCurentPerson(this.db, lounge.PersonId);
+            Person person = null;
+            try
+            {
+                person = UserHelper.GetCurentPerson(db, lounge.PersonId);
+            }
+            catch (Exception e)
+            {
+              
+            }
+               
             model.Place = lounge;
             model.CanEdit = person != null;
             return this.View(model);

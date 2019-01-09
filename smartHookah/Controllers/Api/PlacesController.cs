@@ -45,18 +45,18 @@ namespace smartHookah.Controllers.Api
 
                 var priceGroups = place.PriceGroups.ToList().Select(a => new PriceGroupDto(a)).ToList();
 
-                var priceMatrix = new Dictionary<string, Dictionary<string, decimal>>();
+                var priceMatrix = new Dictionary<int, Dictionary<int, decimal>>();
 
                 foreach (var pc in priceGroups)
                 {
-                    var pcMatrix = new Dictionary<string, decimal>();
+                    var pcMatrix = new Dictionary<int, decimal>();
                     foreach (var item in place.Person.OwnedPipeAccesories)
                     {
                         var priceGroup = item.Prices.FirstOrDefault(a => a.PriceGroupId == pc.Id);
-                        if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId.ToString(), priceGroup.Price);
+                        if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId, priceGroup.Price);
                     }
 
-                    priceMatrix.Add(pc.Id.ToString(), pcMatrix);
+                    priceMatrix.Add(pc.Id, pcMatrix);
                 }
 
                 return new PlaceMenuDto()
@@ -66,7 +66,7 @@ namespace smartHookah.Controllers.Api
                     TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList(),
                     PriceGroup = priceGroups,
                     BasePrice = place.BaseHookahPrice,
-                    PriceMatrix = priceMatrix,
+                    PriceMatrix = priceMatrix.Select(s => new PriceGroupItems{GroupId = s.Key,Prices = s.Value}).ToList(),
                     Currency = place.Currency
                 };
             }
