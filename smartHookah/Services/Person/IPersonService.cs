@@ -31,5 +31,7 @@
         ICollection<HookahOrder> GetUserHookahOrders(int? personId);
 
         GameProfile GetUserGameProfile(int? personId);
+
+        bool IsPlaceManager(int placeId);
     }
 }

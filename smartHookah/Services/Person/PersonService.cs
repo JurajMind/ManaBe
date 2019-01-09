@@ -13,6 +13,7 @@
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Services.Device;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 
@@ -130,15 +131,21 @@
                 personId = user.Id;
             }
 
-            var sessions = db.SmokeSessions.Where(a => a.Statistics == null).Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
+            var sessions = db.SmokeSessions.Where(a => a.Statistics == null)
+                .Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
+
+            var result = new List<SmokeSession>();
 
             foreach (var session in sessions)
             {
-               var ds =  this.redisService.GetDynamicSmokeStatistic(session.SessionId);
-               session.DynamicSmokeStatistic = ds;
+                var ds = this.redisService.GetDynamicSmokeStatistic(session.SessionId);
+                var code = redisService.GetHookahId(session.SessionId);
+                if (code == null) continue;
+                session.DynamicSmokeStatistic = ds;
+                result.Add(session);
             }
 
-            return sessions;
+            return result;
         }
 
         public ICollection<Reservation> GetUserActiveReservations(int? personId)
@@ -172,6 +179,12 @@
             }
 
             return db.GameProfiles.FirstOrDefault(a => a.Person.Id == personId);
+        }
+
+        public bool IsPlaceManager(int placeId)
+        {
+            var person = this.GetCurentPersonIQuerable().FirstOrDefault();
+            return person.Manage.Any(a => a.Id == placeId);
         }
 
         private string UserId()

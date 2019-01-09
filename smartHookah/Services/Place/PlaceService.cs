@@ -9,20 +9,39 @@ using smartHookah.Models;
 
 namespace smartHookah.Services.Place
 {
+    using smartHookah.Services.Person;
+
+    using Place = smartHookah.Models.Place;
+
     public class PlaceService : IPlaceService
     {
         private readonly SmartHookahContext db;
 
-        public PlaceService(SmartHookahContext db)
+        private readonly IPersonService personService;
+
+        public PlaceService(SmartHookahContext db, IPersonService personService)
         {
             this.db = db;
+            this.personService = personService;
         }
 
         public async Task<Models.Place> GetPlace(int id)
         {
-            var place = await db.Places.FirstOrDefaultAsync(a => a.Id == id);
+            var place = await db.Places
+                .Include(a => a.Person)
+                .Include(a => a.OrderExtras)
+                .FirstOrDefaultAsync(a => a.Id == id);
             if (place == null) throw new ItemNotFoundException($"Place with id {id} not found.");
             return place;
+        }
+
+        public async Task<Place> GetManagedPlace(int id)
+        {
+            var place = await this.GetPlace(id);
+
+            if (this.personService.IsPlaceManager(id)) return place;
+
+            return null;
         }
 
         public async Task<IEnumerable<TobaccoReview>> GetPlaceTobaccoReviews(int id, int pageSize = 10, int page = 0) =>
@@ -30,6 +49,19 @@ namespace smartHookah.Services.Place
                 .Where(a => a.SmokeSession.PlaceId != null && a.SmokeSession.PlaceId == id)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
-        
+
+        public IEnumerable<PipeAccesory> GetPlaceAccessories(Place place)
+        {
+            return db.Persons
+                .FirstOrDefault(a => a.Id == place.Person.Id)?
+                .OwnedPipeAccesories
+                .Select(a => a.PipeAccesory);
+        }
+
+
+        public async Task<List<TobaccoMix>> GetPlaceTobaccoMixes(Place place)
+        {
+            return await db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
+        }
     }
 }

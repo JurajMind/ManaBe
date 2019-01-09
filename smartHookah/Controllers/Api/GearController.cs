@@ -50,5 +50,12 @@ namespace smartHookah.Controllers.Api
             throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"Type:{type} was not recognize"));
 
         }
+
+        [HttpGet, Authorize, Route("Brands/")]
+        public Dictionary<AccesoryType,List<BrandGroupDto>> GetBrands()
+        {
+            return this.gearService.GetBrands();
+        }
+
     }
 }

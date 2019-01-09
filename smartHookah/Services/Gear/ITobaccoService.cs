@@ -15,6 +15,9 @@ namespace smartHookah.Services.Gear
         Task<List<TobaccoReview>> GetTobaccoReviews(Tobacco tobacco, int pageSize = 10, int page = 0);
 
 
+        IList<Tobacco> GetTobaccoList(int page, int pageSize, TobaccoFilter filter);
+
+
         Task<TobaccoMix> GetTobaccoMix(int id);
         Task<PipeAccesoryStatistics> GetTobaccoMixStatistics(TobaccoMix mix);
         Task<PipeAccesoryStatistics> GetPersonTobaccoMixStatistics(TobaccoMix mix);
