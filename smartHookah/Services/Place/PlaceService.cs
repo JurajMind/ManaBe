@@ -27,7 +27,10 @@ namespace smartHookah.Services.Place
 
         public async Task<Models.Place> GetPlace(int id)
         {
-            var place = await db.Places.FirstOrDefaultAsync(a => a.Id == id);
+            var place = await db.Places
+                .Include(a => a.Person)
+                .Include(a => a.OrderExtras)
+                .FirstOrDefaultAsync(a => a.Id == id);
             if (place == null) throw new ItemNotFoundException($"Place with id {id} not found.");
             return place;
         }
@@ -46,6 +49,19 @@ namespace smartHookah.Services.Place
                 .Where(a => a.SmokeSession.PlaceId != null && a.SmokeSession.PlaceId == id)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
-        
+
+        public IEnumerable<PipeAccesory> GetPlaceAccessories(Place place)
+        {
+            return db.Persons
+                .FirstOrDefault(a => a.Id == place.Person.Id)?
+                .OwnedPipeAccesories
+                .Select(a => a.PipeAccesory);
+        }
+
+
+        public async Task<List<TobaccoMix>> GetPlaceTobaccoMixes(Place place)
+        {
+            return await db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
+        }
     }
 }

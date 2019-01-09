@@ -80,6 +80,15 @@ namespace smartHookah.Models
         public decimal Price { get; set; }
 
         public string Name { get; set; }
+
+        public static IEnumerable<OrderExtraDto> FromModelList(IEnumerable<OrderExtra> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return new OrderExtraDto(item);
+            }
+        }
     }
 
     public class ProcessOrderViewModel
