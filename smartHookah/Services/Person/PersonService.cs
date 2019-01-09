@@ -175,6 +175,12 @@
             return db.GameProfiles.FirstOrDefault(a => a.Person.Id == personId);
         }
 
+        public bool IsPlaceManager(int placeId)
+        {
+            var person = this.GetCurentPersonIQuerable().FirstOrDefault();
+            return person.Manage.Any(a => a.Id == placeId);
+        }
+
         private string UserId()
         {
             var userIdentity = this.user.Identity.GetUserId();
