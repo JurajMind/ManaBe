@@ -267,6 +267,8 @@ namespace smartHookah.Models.Dto
 
         public string DisplayName { get; private set; }
 
+        public int Status { get; set; }
+
         public List<int> Seats { get; set; }
 
         public static ReservationDto FromModel(Reservation model) => model == null
@@ -287,6 +289,23 @@ namespace smartHookah.Models.Dto
                 DisplayName = model.DisplayName,
                 Seats = model.Seats.Select(a => a.Id).ToList()
             };
+
+        public static Reservation ToModel(ReservationDto dto)
+        {
+            return new Reservation
+                       {
+                           PersonId = dto.PersonId,
+                           Created = dto.Created,
+                           Started = dto.Started,
+                           Time = dto.Time,
+                           Duration = dto.Duration,
+                           Id = dto.Id,
+                           Name = dto.Name,
+                           Text = dto.Text,
+                           PlaceId = dto.PlaceId,
+                           Status = (ReservationState)dto.Status,
+                       };
+        }
         
 
         public static IEnumerable<ReservationDto> FromModelList(IEnumerable<Reservation> model)

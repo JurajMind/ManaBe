@@ -24,5 +24,11 @@ namespace smartHookah.Controllers.Api
             return await this.reservationService.GetReservationManage(id, date);
         }
 
+        [HttpPost, Route("Create")]
+        public async Task<bool> Create(ReservationDto reservation)
+        {
+            return await this.reservationService.CreateReservation(reservation);
+        }
+
     }
 }
