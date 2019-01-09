@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
+
 using Newtonsoft.Json;
 
 namespace smartHookah.Models.Dto
 {
+    using smartHookah.Controllers;
+
     [DataContract]
     public class PlaceMenuDto
     {
@@ -18,5 +18,17 @@ namespace smartHookah.Models.Dto
 
         [DataMember, JsonProperty("OrderExtras")]
         public ICollection<OrderExtraDto> OrderExtras { get; set; }
+
+        [DataMember, JsonProperty("BasePrice")]
+        public decimal BasePrice { get; set; }
+
+        [DataMember, JsonProperty("Currency")]
+        public string Currency { get; set; }
+
+        [DataMember, JsonProperty("PriceGroup")]
+        public List<PriceGroupDto> PriceGroup { get; set; }
+
+        [DataMember, JsonProperty("Prices")]
+        public Dictionary<string, Dictionary<string, decimal>> PriceMatrix { get; set; }
     }
 }
