@@ -1,14 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http;
-using ClosedXML.Excel;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
     using System;
     using System.Collections.Generic;
     using System.Data.Entity.Spatial;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -45,11 +42,32 @@ namespace smartHookah.Controllers.Api
                 var accessories = placeService.GetPlaceAccessories(place);
                 var mixes = await placeService.GetPlaceTobaccoMixes(place);
 
+
+                var priceGroups = place.PriceGroups.ToList().Select(a => new PriceGroupDto(a)).ToList();
+
+                var priceMatrix = new Dictionary<string, Dictionary<string, decimal>>();
+
+                foreach (var pc in priceGroups)
+                {
+                    var pcMatrix = new Dictionary<string, decimal>();
+                    foreach (var item in place.Person.OwnedPipeAccesories)
+                    {
+                        var priceGroup = item.Prices.FirstOrDefault(a => a.PriceGroupId == pc.Id);
+                        if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId.ToString(), priceGroup.Price);
+                    }
+
+                    priceMatrix.Add(pc.Id.ToString(), pcMatrix);
+                }
+
                 return new PlaceMenuDto()
                 {
                     OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
                     Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
-                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList()
+                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList(),
+                    PriceGroup = priceGroups,
+                    BasePrice = place.BaseHookahPrice,
+                    PriceMatrix = priceMatrix,
+                    Currency = place.Currency
                 };
             }
             catch (Exception e)
