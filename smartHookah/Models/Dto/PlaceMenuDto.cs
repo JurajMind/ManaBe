@@ -29,6 +29,15 @@ namespace smartHookah.Models.Dto
         public List<PriceGroupDto> PriceGroup { get; set; }
 
         [DataMember, JsonProperty("Prices")]
-        public Dictionary<string, Dictionary<string, decimal>> PriceMatrix { get; set; }
+        public List<PriceGroupItems> PriceMatrix { get; set; }
+    }
+
+    public class PriceGroupItems
+    {
+        [DataMember, JsonProperty("GroupId")]
+        public int GroupId { get; set; }
+
+        [DataMember, JsonProperty("Price")]
+        public Dictionary<int, decimal> Prices { get; set; }
     }
 }
