@@ -76,6 +76,15 @@ namespace smartHookah.Models.Dto
                 DisLikeCount = model.DisLikeCount
             };
 
+        public static IEnumerable<PipeAccesorySimpleDto> FromModelList(IEnumerable<PipeAccesory> model)
+        {
+            if(model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
+
         public static PipeAccesorySimpleDto FromModel(Bowl model)
         {
             if (model == null) return null;

@@ -42,6 +42,15 @@ namespace smartHookah.Models.Dto
             this.Tobaccos = new List<TobaccoInMix>();
         }
 
+        public static IEnumerable<TobaccoMixSimpleDto> FromModelList(ICollection<TobaccoMix> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
+
         public static TobaccoMixSimpleDto FromModel(TobaccoMix model)
         {
             return model == null

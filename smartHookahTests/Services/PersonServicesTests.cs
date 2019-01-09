@@ -16,6 +16,7 @@
     using smartHookah.Models;
     using smartHookah.Services.Device;
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 
