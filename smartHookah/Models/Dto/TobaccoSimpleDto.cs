@@ -44,7 +44,7 @@ namespace smartHookah.Models.Dto
     {
         public string SubCategory { get; set; }
 
-        public static new TobaccoSimpleDto FromModel(Tobacco model)
+        public new static TobaccoSimpleDto FromModel(Tobacco model)
         {
             var pipeAccesory = PipeAccesorySimpleDto.FromModel(model);
             if (pipeAccesory == null) return null;
@@ -55,17 +55,26 @@ namespace smartHookah.Models.Dto
             return result;
         }
 
-        public static TobaccoSimpleDto FromModel(PipeAccesorySimpleDto model)
+        public static TobaccoSimpleDto FromModel(PipeAccesorySimpleDto model) => model == null
+            ? null
+            : new TobaccoSimpleDto
+            {
+                Id = model.Id,
+                BrandName = model.BrandName,
+                BrandId = model.BrandName,
+                Picture = model.Picture,
+                Name = model.Name
+            };
+
+        public static IEnumerable<TobaccoSimpleDto> FromModelList(IEnumerable<Tobacco> model)
         {
-            return new TobaccoSimpleDto
-                       {
-                           Id = model.Id,
-                           BrandName = model.BrandName,
-                           BrandId = model.BrandName,
-                           Picture = model.Picture,
-                           Name = model.Name
-                       };
+            if(model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
         }
+        
     }
 
     public class TobaccoDto : TobaccoSimpleDto

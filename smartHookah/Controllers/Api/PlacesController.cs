@@ -36,6 +36,29 @@ namespace smartHookah.Controllers.Api
 
         #region Getters
 
+        [HttpGet, Route("{id}/Menu")]
+        public async Task<PlaceMenuDto> GetPlaceMenu(int id)
+        {
+            try
+            {
+                var place = await placeService.GetPlace(id);
+                var accessories = placeService.GetPlaceAccessories(place);
+                var mixes = await placeService.GetPlaceTobaccoMixes(place);
+
+                return new PlaceMenuDto()
+                {
+                    OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
+                    Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
+                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList()
+                };
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
+        }
+
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)
         {
