@@ -16,6 +16,8 @@ using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
+    using System.Data.Entity.Core.Objects;
+
     using Accord.IO;
     using System.Web.Hosting;
 
@@ -322,11 +324,11 @@ namespace smartHookah.Controllers
             var todayActiveReservation = todayReservation
                 .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisit).ToList();
 
-            
 
-            model.Times = new List<Dictionary<string, string>>();
 
-            var minReservationTime = place.MinimumReservationTime;
+                model.Times = new List<KeyValuePair<int, string>>();
+
+                var minReservationTime = place.MinimumReservationTime;
             model.MinimumReservationTime = place.MinimumReservationTime;
             if (includeReservation)
             {
@@ -336,14 +338,13 @@ namespace smartHookah.Controllers
             for (int i = minReservationTime; i < 9; i++)
             {
                 var text = $"{ i * 0.5} hodiny";
-                    model.Times.Add(new Dictionary<string, string>() {
-                        { i.ToString(),text} });
-            }
+                model.Times.Add(new KeyValuePair<int, string>(i, text));
+                }
 
             if (includeReservation)
             {
-                model.Times.Add(new Dictionary<string, string>() { {index.ToString(), "Do zavíračky"} });
-            }
+                model.Times.Add(new KeyValuePair<int, string>(index, "Do zavíračky"));
+                }
 
 
             model.Tables = new List<TableDto>(place.Seats
@@ -718,7 +719,7 @@ namespace smartHookah.Controllers
         public Dictionary<string, ReservationDto> TodayReservation { get; set; }
         public IEnumerable<ReservationDto> Canceled { get; set; }
 
-        public List<Dictionary<string, string>> Times { get; set; }
+        public List<KeyValuePair<int, string>> Times { get; set; }
 
         public int MinimumReservationTime { get; set; }
     }
