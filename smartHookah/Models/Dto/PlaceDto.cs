@@ -102,8 +102,6 @@ namespace smartHookah.Models.Dto
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public int? PlaceId { get; set; }
         
         public string Code { get; set; }
 
@@ -116,7 +114,6 @@ namespace smartHookah.Models.Dto
             {
                 Id = model.Id,
                 Name = model.Name,
-                PlaceId = model.PlaceId,
                 Code = model.Code,
                 Capacity = model.Capacity,
             };
@@ -136,7 +133,6 @@ namespace smartHookah.Models.Dto
             {
                 Id = Id,
                 Name = Name,
-                PlaceId = PlaceId,
                 Code = Code,
                 Capacity = Capacity,
             };
@@ -271,6 +267,10 @@ namespace smartHookah.Models.Dto
 
         public string DisplayName { get; private set; }
 
+        public int Status { get; set; }
+
+        public List<int> Seats { get; set; }
+
         public static ReservationDto FromModel(Reservation model) => model == null
             ? null
             : new ReservationDto()
@@ -287,7 +287,25 @@ namespace smartHookah.Models.Dto
                 Text = model.Text,
                 Name = model.Name,
                 DisplayName = model.DisplayName,
+                Seats = model.Seats.Select(a => a.Id).ToList()
             };
+
+        public static Reservation ToModel(ReservationDto dto)
+        {
+            return new Reservation
+                       {
+                           PersonId = dto.PersonId,
+                           Created = dto.Created,
+                           Started = dto.Started,
+                           Time = dto.Time,
+                           Duration = dto.Duration,
+                           Id = dto.Id,
+                           Name = dto.Name,
+                           Text = dto.Text,
+                           PlaceId = dto.PlaceId,
+                           Status = (ReservationState)dto.Status,
+                       };
+        }
         
 
         public static IEnumerable<ReservationDto> FromModelList(IEnumerable<Reservation> model)

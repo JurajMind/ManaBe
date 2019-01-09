@@ -1,11 +1,15 @@
 ﻿namespace smartHookah.Controllers.Mobile
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Formatting;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
+    using System.Web.Http.Results;
 
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
@@ -21,19 +25,31 @@
     {
         private readonly IAccountService accountService;
 
+
         public ApplicationUserManager UserManager
         {
-            get => this._userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            get => this.userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-            private set => this._userManager = value;
+            private set => this.userManager = value;
         }
-        private ApplicationUserManager _userManager;
-        private readonly AuthRepository _repo;
+
+        public ApplicationSignInManager SignInManager
+        {
+            get => this.signInManager ?? HttpContext.Current.GetOwinContext().Get<ApplicationSignInManager>();
+
+            private set => this.signInManager = value;
+        }
+
+        private ApplicationUserManager userManager;
+
+        private ApplicationSignInManager signInManager;
+
+        private readonly AuthRepository repo;
 
         public AccountController(IAccountService accountService)
         {
             this.accountService = accountService;
-            this._repo = new AuthRepository();
+            this.repo = new AuthRepository();
         }
 
         // POST api/Account/Register
@@ -51,6 +67,22 @@
                            };
             var result = await this.UserManager.CreateAsync(user,userModel.Password);
 
+            if (result.Succeeded)
+            {
+                await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                await this.UserManager.UpdateAsync(user);
+                // Send an email with this link
+                string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var callbackUrl = this.Url.Link(
+                    "ConfirmEmail",
+                    new { controller = "Account", userId = user.Id, code = code });
+                await this.UserManager.SendEmailAsync(
+                    user.Id,
+                    "Confirm your account",
+                    "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            }
+
             var errorResult = this.GetErrorResult(result);
 
             if (errorResult != null) return errorResult;
@@ -63,9 +95,41 @@
             return this.ResponseMessage(response);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ForgotPassword")]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = await this.UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await this.UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    var nonConfirmEmailResponse = this.Request.CreateResponse(HttpStatusCode.OK);
+                    return this.ResponseMessage(nonConfirmEmailResponse);
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                string code = await this.UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = this.Url.Link(
+                    "ResetPassword",
+                    new { controller = "Account", userId = user.Id, code = code });
+                await this.UserManager.SendEmailAsync(
+                    user.Id,
+                    "Reset Password",
+                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                var response = this.Request.CreateResponse(HttpStatusCode.OK);
+                return this.ResponseMessage(response);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return this.BadRequest(this.ModelState);
+        }
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing) this._repo.Dispose();
+            if (disposing) this.repo.Dispose();
 
             base.Dispose(disposing);
         }
@@ -77,7 +141,7 @@
             if (!result.Succeeded)
             {
                 if (result.Errors != null)
-                    foreach (var error in result.Errors) this.ModelState.AddModelError(string.Empty, error);
+                    foreach (var error in result.Errors) this.ModelState.AddModelError(string.Empty, this.TransformErrorCode(error));
 
                 if (this.ModelState.IsValid) return this.BadRequest();
 
@@ -85,6 +149,40 @@
             }
 
             return null;
+        }
+
+        private string TransformErrorCode(string error)
+        {
+            if(error.StartsWith("Passwords must have at least one digit")) return "ERR_PASS_DIGIT";
+            if (error.Contains("is invalid, can only contain letters or digits.")) return "ERR_NAME";
+            if (error.Contains("is already taken")) return "ERR_EMAIL_REGISTERED";
+            return $"ERR_UNKNOWN :{error}";
+
+        }
+    }
+
+    public class InvalidModelStateResultCode : InvalidModelStateResult
+    {
+        public List<string> ErrorCodes;
+
+        public InvalidModelStateResultCode(ModelStateDictionary modelState, bool includeErrorDetail, IContentNegotiator contentNegotiator, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
+            : base(modelState, includeErrorDetail, contentNegotiator, request, formatters)
+        {
+            handleModelState();
+        }
+
+        public InvalidModelStateResultCode(ModelStateDictionary modelState, ApiController controller)
+            : base(modelState, controller)
+        {
+            handleModelState();
+        }
+
+        private void handleModelState()
+        {
+            foreach (var modelStateValue in this.ModelState.Values)
+            {
+               this.ErrorCodes.Add(modelStateValue.Value.AttemptedValue);
+            }
         }
     }
 

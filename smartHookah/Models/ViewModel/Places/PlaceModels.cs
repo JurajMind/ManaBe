@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+
 using smartHookah.Controllers;
-using smartHookah.Models;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Models
 {
     using System.Globalization;
 
-    public class SeatDto
-    {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public SeatDto(Seat seat)
-        {
-            this.Code = seat.Code;
-            this.Name = seat.Name;
-        }
-    }
+    using smartHookah.Models.Dto;
 
     public class EditPricePostModel
     {
@@ -92,6 +80,15 @@ namespace smartHookah.Models
         public decimal Price { get; set; }
 
         public string Name { get; set; }
+
+        public static IEnumerable<OrderExtraDto> FromModelList(IEnumerable<OrderExtra> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return new OrderExtraDto(item);
+            }
+        }
     }
 
     public class ProcessOrderViewModel

@@ -1,14 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http;
-using ClosedXML.Excel;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
     using System;
     using System.Collections.Generic;
     using System.Data.Entity.Spatial;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -35,6 +32,50 @@ namespace smartHookah.Controllers.Api
 
 
         #region Getters
+
+        [HttpGet, Route("{id}/Menu")]
+        public async Task<PlaceMenuDto> GetPlaceMenu(int id)
+        {
+            try
+            {
+                var place = await placeService.GetPlace(id);
+                var accessories = placeService.GetPlaceAccessories(place);
+                var mixes = await placeService.GetPlaceTobaccoMixes(place);
+
+
+                var priceGroups = place.PriceGroups.ToList().Select(a => new PriceGroupDto(a)).ToList();
+
+                var priceMatrix = new Dictionary<int, Dictionary<int, decimal>>();
+
+                foreach (var pc in priceGroups)
+                {
+                    var pcMatrix = new Dictionary<int, decimal>();
+                    foreach (var item in place.Person.OwnedPipeAccesories)
+                    {
+                        var priceGroup = item.Prices.FirstOrDefault(a => a.PriceGroupId == pc.Id);
+                        if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId, priceGroup.Price);
+                    }
+
+                    priceMatrix.Add(pc.Id, pcMatrix);
+                }
+
+                return new PlaceMenuDto()
+                {
+                    OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
+                    Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
+                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList(),
+                    PriceGroup = priceGroups,
+                    BasePrice = place.BaseHookahPrice,
+                    PriceMatrix = priceMatrix.Select(s => new PriceGroupItems{GroupId = s.Key,Prices = s.Value}).ToList(),
+                    Currency = place.Currency
+                };
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
+        }
 
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)
@@ -72,7 +113,7 @@ namespace smartHookah.Controllers.Api
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
-                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
+                var myLocation = DbGeography.FromText($"POINT({lng} {lat})");
 
                 closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
             }
@@ -127,14 +168,6 @@ namespace smartHookah.Controllers.Api
         #endregion
 
         #region Reservations
-
-        [HttpGet]
-        [Route("{id}/Reservations")]
-        public ReservationInfo GetReservations(int id, string date)
-        {
-            var parseDate = DateTime.ParseExact(date, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-            return this.reservationService.GetReservation(id, parseDate);
-        }
             
 
 

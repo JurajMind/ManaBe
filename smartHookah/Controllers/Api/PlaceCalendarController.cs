@@ -30,7 +30,7 @@ namespace smartHookah.Controllers.Api
 
         #region Creators and editors
 
-        [System.Web.Http.AcceptVerbs("POST", "GET")]
+        [System.Web.Http.AcceptVerbs("POST")]
         [System.Web.Http.Route("SavePlaceDay")]
         public async Task<DTO> SavePlaceDay([Bind(Include = "Id,PlaceId,Day,OpenHour,CloseHour")] PlaceDayDTO placeDay)
         {
@@ -56,7 +56,7 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [System.Web.Http.AcceptVerbs("POST", "GET")]
+        [System.Web.Http.AcceptVerbs("POST")]
         [System.Web.Http.Route("SavePlaceEvent")]
         public async Task<DTO> SavePlaceEvent([Bind(Include = "Id,PlaceDayId,Title,Description,Start,End,PrivacyType,FacebookUrl")] PlaceEventDTO placeEvent)
         {
@@ -270,7 +270,7 @@ namespace smartHookah.Controllers.Api
 
         #region Deleters
 
-        [System.Web.Http.AcceptVerbs("DELETE", "GET")]
+        [System.Web.Http.AcceptVerbs("DELETE")]
         [System.Web.Http.Route("DeletePlaceDay")]
         public async Task<DTO> DeletePlaceDay(int dayId)
         {
@@ -293,7 +293,7 @@ namespace smartHookah.Controllers.Api
             return new DTO(){Success = false, Message = $"Cannot find PlaceDay with id {dayId}."};
         }
 
-        [System.Web.Http.AcceptVerbs("DELETE", "GET")]
+        [System.Web.Http.AcceptVerbs("DELETE")]
         [System.Web.Http.Route("DeletePlaceEvent")]
         public async Task<DTO> DeletePlaceEvent(int eventId)
         {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Web;
+
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
-using PInvoke;
+
 using smartHookah.Models;
 using smartHookah.Services.Person;
 
@@ -15,16 +14,20 @@ namespace smartHookah.Services.Gear
 
     using smartHookah.Helpers;
     using smartHookah.Models.Dto;
+    using smartHookah.Services.Redis;
 
     public partial class GearService : IGearService
     {
         private readonly SmartHookahContext db;
         private readonly IPersonService personService;
 
-        public GearService(SmartHookahContext db, IPersonService personService)
+        private readonly ICacheService cacheService;
+
+        public GearService(SmartHookahContext db, IPersonService personService, ICacheService cacheService)
         {
             this.db = db;
             this.personService = personService;
+            this.cacheService = cacheService;
         }
 
         public List<PipeAccesory> GetPersonAccessories(int? personId, string type)
@@ -115,7 +118,44 @@ namespace smartHookah.Services.Gear
             db.SaveChanges();
         }
 
-        public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type,int page,int pageSize)
+        public Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands()
+        {
+            var cachedResult = this.cacheService.Get<Dictionary<AccesoryType, List<BrandGroupDto>>>("brands");
+
+            if (cachedResult != null)
+            {
+                return cachedResult;
+            }
+
+            var brands = this.db.PipeAccesories.Include("Brand").ToList();
+
+            var groupedBrands = brands.GroupBy(a => a.GetTypeEnum());
+
+            var result = groupedBrands.ToDictionary(
+                k => k.Key,
+                v => v.Select(s => s.Brand).OrderBy(a => a.DisplayName).Distinct().Select(
+                    b => new BrandGroupDto
+                             {
+                             Id = b.Name,
+                             Name = b.DisplayName,
+                             Picture = b.Picture,
+                             ItemCount = v.Count(a => a.BrandName == b.Name)
+                         }).ToList());
+
+            this.cacheService.Store("brands", result);
+
+            return result;
+
+        }
+
+
+
+
+        public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(
+            string search,
+            AccesoryType type,
+            int page,
+            int pageSize)
         {
             page = page + 1;
             var query = ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql");
@@ -125,13 +165,11 @@ namespace smartHookah.Services.Gear
                 , new SqlParameter("personId", userId)
                 , new SqlParameter("sp", search)
                 , new SqlParameter("type", type.GetSearchName())
-                , new SqlParameter("PageNumber", page)
-                , new SqlParameter("RowspPage", pageSize)
-                ).ToList();
+                , new SqlParameter("PageNumber", page),
+                new SqlParameter("RowspPage", pageSize)).ToList();
 
             return result;
         }
-
         
     }
 

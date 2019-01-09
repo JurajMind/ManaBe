@@ -24,6 +24,7 @@ using static System.Threading.Tasks.Task;
 namespace smartHookah.Controllers
 {
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     [System.Web.Mvc.Authorize]
     

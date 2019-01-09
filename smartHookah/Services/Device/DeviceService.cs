@@ -14,6 +14,7 @@ namespace smartHookah.Services.Device
 
     using smartHookah.Helpers;
     using smartHookah.Models;
+    using smartHookah.Services.Redis;
 
     using smartHookahCommon;
 
