@@ -49,5 +49,14 @@ namespace smartHookah.Models.Dto
             Address = model.Address,
             Medias = MediaDto.FromModelList(model.Medias).ToList()
         };
+
+        public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
     }
 }

@@ -16,6 +16,10 @@
 
         Person GetCurentPerson(int? personId, bool manage = false);
 
+        ApplicationUser GetCurrentUser();
+
+        List<string> GetUserRoles(string userId);
+
         IQueryable<Person> GetCurentPersonIQuerable();
 
         Task<IEnumerable<Hookah>> GetUserStands();
@@ -31,7 +35,7 @@
         ICollection<HookahOrder> GetUserHookahOrders(int? personId);
 
         GameProfile GetUserGameProfile(int? personId);
-
+        
         bool IsPlaceManager(int placeId);
     }
 }
