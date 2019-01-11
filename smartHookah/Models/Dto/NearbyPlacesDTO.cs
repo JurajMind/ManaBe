@@ -55,6 +55,13 @@ namespace smartHookah.Models.Dto
             Facebook = model.Facebook,
         };
 
-
+        public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
     }
 }

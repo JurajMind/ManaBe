@@ -884,6 +884,7 @@
     <Compile Include="Migrations\MigrationExtensions.cs" />
     <Compile Include="Models\Db\DevicePreset.cs" />
     <Compile Include="Models\Dto\DevicePresetDto.cs" />
+    <Compile Include="Models\Dto\PersonInfoDto.cs" />
     <Compile Include="Models\Dto\PersonStatisticsOverallDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
     <Compile Include="Models\Dto\PlaceMenuDto.cs" />
