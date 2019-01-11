@@ -57,6 +57,16 @@
                            .FirstOrDefault();
         }
 
+        public ApplicationUser GetCurrentUser()
+        {
+            return this.owinContext.GetUserManager<ApplicationUserManager>().FindById(this.user.Identity.GetUserId());
+        }
+
+        public List<string> GetUserRoles(string userId)
+        {
+            return owinContext.GetUserManager<ApplicationUserManager>().GetRoles(userId).ToList();
+        }
+
         public IQueryable<Person> GetCurentPersonIQuerable()
         {
             var userId = this.UserId();

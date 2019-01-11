@@ -126,7 +126,6 @@ new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             var user = System.Web.HttpContext.Current.GetOwinContext()
                 .GetUserManager<ApplicationUserManager>()
                 .FindByName(UserName);
-
             if (UserManager.IsInRole(user.Id, RoleName))
             {
                 UserManager.RemoveFromRole(user.Id, RoleName);
