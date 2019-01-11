@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Device
 {
@@ -15,8 +13,6 @@ namespace smartHookah.Services.Device
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Services.Redis;
-
-    using smartHookahCommon;
 
     public class DeviceService : IDeviceService
     {
@@ -36,7 +32,7 @@ namespace smartHookah.Services.Device
 
         public async Task SetAnimation(string deviceId, Animation animation, PufType state)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -53,7 +49,7 @@ namespace smartHookah.Services.Device
 
         public async Task SetBrightness(string deviceId, int brightness, PufType state)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -64,9 +60,16 @@ namespace smartHookah.Services.Device
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 
-        public async Task SetSpeed(string deviceId, int speed, PufType state)
+        private Hookah getDevice(string deviceId)
         {
             var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            if (hookah == null) return null;
+            return hookah.Type == StandType.Emulator ? null : hookah;
+        }
+
+        public async Task SetSpeed(string deviceId, int speed, PufType state)
+        {
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -79,7 +82,7 @@ namespace smartHookah.Services.Device
 
         public async Task SetColor(string deviceId, Color color, PufType state)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -92,7 +95,7 @@ namespace smartHookah.Services.Device
 
         public async Task Sleep(string deviceId)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -101,7 +104,7 @@ namespace smartHookah.Services.Device
 
         public async Task Restart(string deviceId)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -110,7 +113,7 @@ namespace smartHookah.Services.Device
 
         public async Task SetMode(string deviceId, int mode)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -119,7 +122,7 @@ namespace smartHookah.Services.Device
 
         public async Task ShowQrCode(string deviceId)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
@@ -128,7 +131,7 @@ namespace smartHookah.Services.Device
 
         public async Task SetPreset(string deviceId, int settingId)
         {
-            var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
 
