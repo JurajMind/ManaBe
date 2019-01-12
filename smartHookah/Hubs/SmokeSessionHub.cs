@@ -20,6 +20,11 @@ namespace smartHookah.Hubs
             return this.Groups.Add(Context.ConnectionId, sessionId);
         }
 
+        public Task JoinPerson(string personId)
+        {
+            return this.Groups.Add(Context.ConnectionId, personId);
+        }
+
         public Task LeaveSession(string sessionId)
         {
             return this.Groups.Remove(Context.ConnectionId, sessionId);
