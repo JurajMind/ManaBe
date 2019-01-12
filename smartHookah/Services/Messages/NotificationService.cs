@@ -8,6 +8,7 @@
 
     using smartHookah.Hubs;
     using smartHookah.Models;
+    using smartHookah.Models.Dto;
     using smartHookah.Services.Redis;
 
     public class NotificationService : INotificationService
@@ -29,9 +30,9 @@
             var device = this.db.Hookahs.Where(a => a.Code == code).Include(d => d.Owners).FirstOrDefault();
             var sessionCode = this.redisService.GetSessionId(code);
 
-            foreach (var owner in device.Owners)
+            foreach (var emails in device.Owners.SelectMany(s => s.User.Select(u => u.Email)))
             {
-                this.ClientContext.Clients.Group(owner.Id.ToString()).deviceOnline(sessionCode);
+                this.ClientContext.Clients.Group(emails).deviceOnline(sessionCode,  device.Name);
             }
         }
     }
