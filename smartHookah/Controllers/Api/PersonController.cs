@@ -31,7 +31,7 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [HttpGet]
-        [Route("GetPersonActiveData")]
+        [Route("InitData")]
         public async Task<PersonActiveDataDto> GetPersonActiveData()
         {
             var person = this.personService.GetCurentPerson();
