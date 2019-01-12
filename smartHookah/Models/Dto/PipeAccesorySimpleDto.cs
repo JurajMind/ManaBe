@@ -45,6 +45,7 @@ namespace smartHookah.Models.Dto
         [JsonProperty("DisLikeCount")]
         public int DisLikeCount { get; set; }
 
+
         [Authorize(Roles = "Admin")]
         public static PipeAccesorySimpleDto FromModel(PipeAccesory model, bool includeVotes) => model == null
             ? null
@@ -53,7 +54,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 BrandName = model.Brand.DisplayName,
                 BrandId = model.BrandName,
-                Picture = model.Picture,
+                Picture = model.Picture ?? model.Brand.Picture,
                 Name = model.AccName,
                 Type = model.GetTypeName(),
                 Likes = includeVotes ? GetLikesList(model.Likes) : null,
