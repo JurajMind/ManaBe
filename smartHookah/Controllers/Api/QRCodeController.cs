@@ -17,6 +17,7 @@ using smartHookahCommon;
 namespace smartHookah.Controllers
 {
     using smartHookah.Services.Device;
+    using smartHookah.Services.Messages;
 
     public class QRCodeController : ApiController
     {
@@ -24,9 +25,12 @@ namespace smartHookah.Controllers
 
         private readonly IDeviceService deviceService;
 
-        public QRCodeController(IDeviceService deviceService)
+        private readonly INotificationService notificationService;
+
+        public QRCodeController(IDeviceService deviceService, INotificationService notificationService)
         {
             this.deviceService = deviceService;
+            this.notificationService = notificationService;
         }
 
         [HttpGet]
@@ -44,7 +48,7 @@ namespace smartHookah.Controllers
                 try
                 {
                     ClientContext.Clients.Group(hookah.Code).online(hookah.Code);
-
+                    Task.Factory.StartNew(() => this.notificationService.OnlineDevice(hookah.Code));
                     Task.Factory.StartNew(() => IFFTHelper.PushToMakerConnect(id)
                     );
 
@@ -52,7 +56,7 @@ namespace smartHookah.Controllers
                 catch (Exception)
                 {
                     
-                    throw;
+                  
                 }
 
             var sessionId = RedisHelper.GetSmokeSessionId(id);
