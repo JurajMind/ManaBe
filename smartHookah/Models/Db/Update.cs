@@ -41,7 +41,12 @@ namespace smartHookah.Models
         Ring60_BT = 5,
         SenzorOnly_BT = 6,
         Ring8_BT = 7,
-        HydrogenArgon = 8
+        HydrogenArgon = 8,
+        Emulator = 9,
+        TearWhite = 10,
+        TearBlack = 11,
+        TearNatural = 12,
+        TearLegacy = 13
     }
 
 
