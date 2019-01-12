@@ -33,6 +33,9 @@ namespace smartHookah.Models.Dto
         public int Rating { get; set; }
         public ICollection<MediaDto> Medias { get; set; }
 
+        public string PhoneNumber { get; set; }
+        public string Facebook { get; set; }
+
         public PlaceSimpleDto()
         {
             Address = new Address();
@@ -47,7 +50,18 @@ namespace smartHookah.Models.Dto
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
             Address = model.Address,
-            Medias = MediaDto.FromModelList(model.Medias).ToList()
+            Medias = MediaDto.FromModelList(model.Medias).ToList(),
+            PhoneNumber = model.PhoneNumber,
+            Facebook = model.Facebook,
         };
+
+        public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
     }
 }
