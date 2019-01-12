@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using Microsoft.AspNet.Identity.EntityFramework;
 using smartHookah.Models;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Gear;
@@ -30,7 +31,7 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [HttpGet]
-        [Route("GetPersonActiveData")]
+        [Route("InitData")]
         public async Task<PersonActiveDataDto> GetPersonActiveData()
         {
             var person = this.personService.GetCurentPerson();
@@ -60,6 +61,27 @@ namespace smartHookah.Controllers.Api
                 ActiveHookahOrders = orders,
                 GameProfile = gameProfile
             };
+        }
+
+        [Authorize, HttpGet, Route("Info")]
+        public PersonInfoDto GetPersonInfo()
+        {
+            try
+            {
+                var user = personService.GetCurrentUser();
+                return new PersonInfoDto()
+                {
+                    DisplayName = user.Person.DisplayName,
+                    Email = user.Email,
+                    ManagedPlaces = PlaceSimpleDto.FromModelList(user.Person.Manage).ToList(),
+                    Roles = personService.GetUserRoles(user.Id)
+                };
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
         }
 
         [HttpGet, Authorize, Route("MyGear")]

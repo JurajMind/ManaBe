@@ -57,6 +57,16 @@
                            .FirstOrDefault();
         }
 
+        public ApplicationUser GetCurrentUser()
+        {
+            return this.owinContext.GetUserManager<ApplicationUserManager>().FindById(this.user.Identity.GetUserId());
+        }
+
+        public List<string> GetUserRoles(string userId)
+        {
+            return owinContext.GetUserManager<ApplicationUserManager>().GetRoles(userId).ToList();
+        }
+
         public IQueryable<Person> GetCurentPersonIQuerable()
         {
             var userId = this.UserId();
@@ -120,7 +130,7 @@
             }
             return await db.Hookahs
                 .Where(a => a.Owners.Any(x => x.Id == personId))
-                .Where(a => a.SmokeSessions.Any(x => x.Statistics == null)).ToListAsync();
+                .ToListAsync();
         }
 
         public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
