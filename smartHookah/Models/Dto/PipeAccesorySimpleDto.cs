@@ -69,7 +69,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 BrandName = model.Brand.DisplayName,
                 BrandId = model.BrandName,
-                Picture = model.Picture,
+                Picture = model.Picture ?? model.Brand.Picture,
                 Name = model.AccName,
                 Type = model.GetTypeName(),
                 Likes = null,
