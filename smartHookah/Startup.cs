@@ -9,6 +9,8 @@ namespace smartHookah
     using System;
     using System.Configuration;
 
+    using EFCache;
+
     using Hangfire;
     using Hangfire.Common;
     using Hangfire.Console;
@@ -28,6 +30,7 @@ namespace smartHookah
         public static OAuthAuthorizationServerOptions OAuthServerOptions { get; set; }
         public void Configuration(IAppBuilder app)
         {
+            EntityFrameworkCache.Initialize(new InMemoryCache());
             GlobalConfiguration.Configuration.UseSqlServerStorage("SmartHookah").UseConsole();
 
             this.ConfigureAuth(app);
