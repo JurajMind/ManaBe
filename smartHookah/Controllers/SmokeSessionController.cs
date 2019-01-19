@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ClosedXML.Excel;
-using EntityFramework.BulkInsert.Extensions;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -23,6 +22,9 @@ using static System.Threading.Tasks.Task;
 
 namespace smartHookah.Controllers
 {
+    using EntityFramework.BulkInsert;
+    using EntityFramework.BulkInsert.Extensions;
+
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
