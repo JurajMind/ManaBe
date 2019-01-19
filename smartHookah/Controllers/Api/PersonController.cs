@@ -4,8 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
-using smartHookah.Models;
+
 using smartHookah.Models.Dto;
 using smartHookah.Services.Gear;
 
@@ -13,7 +12,7 @@ namespace smartHookah.Controllers.Api
 {
     using System.Threading.Tasks;
 
-    using smartHookah.Models.Redis;
+    using smartHookah.ErrorHandler;
     using smartHookah.Services.Person;
 
     [RoutePrefix("api/Person")]
@@ -31,7 +30,7 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [HttpGet]
-        [Route("InitData")]
+        [ApiAuthorizeAttribute,Route("InitData")]
         public async Task<PersonActiveDataDto> GetPersonActiveData()
         {
             var person = this.personService.GetCurentPerson();
@@ -63,7 +62,7 @@ namespace smartHookah.Controllers.Api
             };
         }
 
-        [Authorize, HttpGet, Route("Info")]
+        [ApiAuthorize, HttpGet, Route("Info")]
         public PersonInfoDto GetPersonInfo()
         {
             try
@@ -84,7 +83,7 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpGet, Authorize, Route("MyGear")]
+        [HttpGet, ApiAuthorizeAttribute, Route("MyGear")]
         public IEnumerable<PipeAccesorySimpleDto> MyGear(string type = "All")
         {
             var accessories = gearService.GetPersonAccessories(null, type);
