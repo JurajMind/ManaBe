@@ -234,10 +234,10 @@ namespace smartHookah.Models
         Canceled = 1,
         Denied = 2,
         Confirmed = 3,
-        VisitConfirmed = 4,
+        Visited = 4,
         UnConfirmed = 5,
         ConfirmationRequired = 6,
-        NonVisit = 7,
+        NonVisited = 7,
     }
 
 
