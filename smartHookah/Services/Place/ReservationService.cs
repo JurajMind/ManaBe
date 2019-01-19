@@ -74,6 +74,17 @@
             return false;
         }
 
+        public async Task<ReservationDataDto> GetReservationData(int placeId, DateTime date)
+        {
+            var reservations = this.db.Reservations.Where(
+                reservation => reservation.PlaceId == placeId && reservation.Time.Date == date.Date && 
+                reservation.Status != ReservationState.Canceled && reservation.Status != ReservationState.Denied && reservation.Status != ReservationState.NonVisited);
+
+            return null;
+
+
+        }
+
         private async Task<bool> ReservationTableCheck(Reservation reservation, int seatId)
         {
 
@@ -83,7 +94,7 @@
             var posibleConflict = seat?.Reservations.Where(a => a.Time.Date == reservationDate &&
                                                              a.Status != ReservationState.Canceled
                                                              && a.Status != ReservationState.Denied
-                                                             && a.Status != ReservationState.NonVisit).ToList();
+                                                             && a.Status != ReservationState.NonVisited).ToList();
             return true;
         }
 
@@ -114,7 +125,7 @@
 
             todayActiveReservation = todayReservation.Where(
                 a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied
-                     && a.Status != ReservationState.NonVisit).ToList();
+                     && a.Status != ReservationState.NonVisited).ToList();
             return todayReservation;
         }
 
@@ -184,5 +195,18 @@
                                  };
             }
         }
+    }
+
+    public class ReservationDataDto
+    {
+        public string StartTime { get; set; }
+
+        public string EndTime { get; set; }
+
+        public int SlotCount { get; set; }
+
+        public int MinimalReservation { get; set; }
+
+    
     }
 }
