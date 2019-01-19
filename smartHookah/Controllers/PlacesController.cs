@@ -592,10 +592,10 @@ namespace smartHookah.Controllers
                 .Include("Reservations.Seats").FirstOrDefault();
 
             var reservation = place.Reservations.Where(
-                a => a.Status == ReservationState.VisitConfirmed || a.Status == ReservationState.Confirmed
+                a => a.Status == ReservationState.Visited || a.Status == ReservationState.Confirmed
                      || a.Status == ReservationState.Created);
 
-            var canceled = reservation.Where(a => a.Status == ReservationState.NonVisit);
+            var canceled = reservation.Where(a => a.Status == ReservationState.NonVisited);
 
             var dayDistribution = reservation.GroupBy(a => a.Time.DayOfWeek)
                 .ToPlotData(a => a.ToString(),a => (int)a.Key);

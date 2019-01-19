@@ -17,7 +17,7 @@
 {
 
 }
-@if (Model.Reservation.Status == ReservationState.VisitConfirmed)
+@if (Model.Reservation.Status == ReservationState.Visited)
 {
     <div class="card">
         <div class="card-body row">
@@ -31,7 +31,7 @@
 
 
 <div class="card-deck">
-    @if (Model.Reservation.Status == ReservationState.VisitConfirmed)
+    @if (Model.Reservation.Status == ReservationState.Visited)
     {
         <div class="card">
             <h4 class="card-header">@Person.activeSessions</h4>
@@ -90,7 +90,7 @@
 
     @if (Model.Reservation.Status == ReservationState.Created
         || Model.Reservation.Status == ReservationState.Confirmed
-        || Model.Reservation.Status == ReservationState.VisitConfirmed)
+        || Model.Reservation.Status == ReservationState.Visited)
     {
         <div class="card">
             <h4 class="card-header">Objednávky  <a href="@Url.Action("Order", "Places", new { id = @Model.Reservation.Place.FriendlyUrl, resId = @Model.Reservation.Id })" class="btn btn-success btn-raised pull-right">Objednat dýmku (alfa)</a></h4>
@@ -122,7 +122,7 @@
 
 <div class="card">
     <div class="card-body">
-        @if (Model.Reservation.Status == ReservationState.Canceled || Model.Reservation.Status == ReservationState.Denied || Model.Reservation.Status == ReservationState.NonVisit)
+        @if (Model.Reservation.Status == ReservationState.Canceled || Model.Reservation.Status == ReservationState.Denied || Model.Reservation.Status == ReservationState.NonVisited)
     {
         <a href="@Url.Action("Create",new {id = Model.Reservation.Place.ShortDescriptions})" class="btn btn-success">Vytvorit novou rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
 }
