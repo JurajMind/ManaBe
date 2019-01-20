@@ -11,5 +11,8 @@
 
         Task<bool> CreateReservation(ReservationDto reservation);
 
+        Task<ReservationUsageDto> GetReservationUsage(int placeId, DateTime date);
+
+        Task<ReservationUsageDto> UpdateReservationUsage(int placeId, DateTime date);
     }
 }
