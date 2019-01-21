@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using smartHookah.Models;
 
 namespace smartHookah.Services.Gear
@@ -11,14 +12,24 @@ namespace smartHookah.Services.Gear
     public interface IGearService
     {
         List<PipeAccesory> GetPersonAccessories(int? personId, string type);
+
         PipeAccesory GetPipeAccessory(int id);
+
         void Vote(int id, VoteValue value);
 
         Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
 
         List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type,int page,int pageSize);
+        
+        int UsedByPerson(PipeAccesory accessory, int personId);
 
+        int UsedByPerson(PipeAccesory accessory);
 
+        IDictionary<PipeAccesory, int> UsedWith(PipeAccesory accessory);
+
+        int OwnedByPersons(PipeAccesory accessory);
+
+        int OwnedByPlaces(PipeAccesory accessory);
     }
 
     public class GearFilter
