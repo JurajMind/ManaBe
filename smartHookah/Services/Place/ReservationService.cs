@@ -73,7 +73,8 @@
 
         public async Task<ReservationUsageDto> GetReservationUsage(int placeId, DateTime date)
         {
-            var result = this.redisService.GetReservationUsage(placeId, date) ?? await this.UpdateReservationUsage(placeId, date);
+            //var result = this.redisService.GetReservationUsage(placeId, date) ?? await this.UpdateReservationUsage(placeId, date);
+            var result = await this.UpdateReservationUsage(placeId, date);
             return result;
         }
 
@@ -192,11 +193,11 @@
                     .ToList();
                 
                 var takenTable = reservation.SelectMany(s => s.Seats).Select(s => s.Id);
-                var freeTable = seats.Where(s => !takenTable.Contains(s.Id));
+                var freeTable = seats.Where(s => !takenTable.Contains(s.Id)).ToList();
 
-                slot.MaxTable = freeTable.Max(s => s.Capacity);
+                slot.MaxTable = freeTable.Any() ? freeTable.Max(s => s.Capacity) : 0;
                 slot.CapacityLeft = placeCapacity - reservation.EmptyIfNull().Sum(s => s.Persons);
-                slot.Reserved = slot.CapacityLeft == 0;
+                slot.Reserved = slot.CapacityLeft <= 0;
                 result.Add(slot);
             }
 
