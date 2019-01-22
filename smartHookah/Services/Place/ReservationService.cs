@@ -89,7 +89,7 @@
                 true,
                 place.BusinessHours.First(a => a.Day == (int)date.DayOfWeek));
 
-            var tableData = this.CreateTableTable(place.Seats, reservations, timesSlots, true);
+            var tableData = this.CreateTableTable(place.Seats, reservations.ToList(), timesSlots.ToList(), true);
 
             var reservationUsage = new ReservationUsageDto { TimeSlots = tableData };
 
@@ -177,24 +177,22 @@
         }
 
         private List<TimeSlot> CreateTableTable(
-            IEnumerable<Seat> seats,
-            IEnumerable<Reservation> reservations,
-            IEnumerable<TimeSlot> timeSlot,
+            ICollection<Seat> seats,
+            ICollection<Reservation> reservations,
+            ICollection<TimeSlot> timeSlot,
             bool include)
         {
             var result = new List<TimeSlot>();
-            var seatsList = seats as IList<Seat> ?? seats.ToList();
-            var placeCapacity = seatsList.Sum(s => s.Capacity);
+            var placeCapacity = seats.Sum(s => s.Capacity);
+
             foreach (var slot in timeSlot)
             {
-                var enumerable = reservations as IList<Reservation> ?? reservations.ToList();
-                var slotReservation = enumerable.Where(
-                    r => r.Time.ToShortInt() >= slot.Value
-                         && r.Time.ToShortInt() < (slot.Value + this.slotDuration.Minutes));
-
-                var reservation = slotReservation as IList<Reservation> ?? slotReservation.ToList();
+                var reservation = reservations.Where(
+                        r => r.Time.ToShortInt() < slot.Value + this.slotDuration.ToShortInt() && slot.Value < r.Time.ToShortInt() + r.Duration.ToShortInt())
+                    .ToList();
+                
                 var takenTable = reservation.SelectMany(s => s.Seats).Select(s => s.Id);
-                var freeTable = seatsList.Where(s => !takenTable.Contains(s.Id));
+                var freeTable = seats.Where(s => !takenTable.Contains(s.Id));
 
                 slot.MaxTable = freeTable.Max(s => s.Capacity);
                 slot.CapacityLeft = placeCapacity - reservation.EmptyIfNull().Sum(s => s.Persons);
