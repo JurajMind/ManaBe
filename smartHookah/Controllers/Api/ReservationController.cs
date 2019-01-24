@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
@@ -24,10 +25,23 @@ namespace smartHookah.Controllers.Api
             return await this.reservationService.GetReservationManage(id, date);
         }
 
+        [HttpGet, Route("Person")]
+        public IEnumerable<ReservationDto> GetPersonReservations()
+        {
+            var reservations = this.reservationService.GetPersonReservations();
+            foreach (var item in reservations) yield return ReservationDto.FromModel(item);
+        }
+
         [HttpPost, Route("Create")]
         public async Task<bool> Create(ReservationDto reservation)
         {
             return await this.reservationService.CreateReservation(reservation);
+        }
+
+        [HttpGet, Route("{id}/Usage")]
+        public async Task<ReservationUsageDto> GetReservationUsage(int id, DateTime date)
+        {
+            return await this.reservationService.GetReservationUsage(id, date);
         }
 
     }

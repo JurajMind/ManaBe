@@ -210,13 +210,16 @@
                 <a href="@Url.Action("MyGear", "Person")" class="list-group-item">
                     <i class="material-icons" role="presentation">inbox</i>@LocalizationHelper.Translate("MyGear", "Menu")
                 </a>
+            @if (User.IsInRole("Admin"))
+            {
                 <a href="@Url.Action("Index", "Tobacco")"class="list-group-item">
                     <i class="material-icons" role="presentation">delete</i>@LocalizationHelper.Translate("Tobacco", "Menu")
                 </a>
-                <a href="@Url.Action("Mix", "Tobacco")"class="list-group-item">
-                    @*<i class="material-icons" role="presentation">report</i>@Home.Home.mixology*@
+            }
+                @*<a href="@Url.Action("Mix", "Tobacco")"class="list-group-item">
+                    @*<i class="material-icons" role="presentation">report</i>@Home.Home.mixology
                     <i class="fa fa-pie-chart fa-material" style="font-size: 24px"></i>@LocalizationHelper.Translate("Mixology", "Menu")
-                </a>
+                </a>*@
                 <a href="@Url.Action("Index", "Places")"class="list-group-item">
                     <i class="material-icons" role="presentation">weekend</i>@LocalizationHelper.Translate("Place", "Menu")
                 </a>
