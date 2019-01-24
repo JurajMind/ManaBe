@@ -63,7 +63,10 @@
         public async Task<bool> CreateReservation(ReservationDto reservation)
         {
             reservation.PersonId = this.personService.GetCurentPerson().Id;
+            reservation.Created = DateTime.UtcNow;
+            reservation.Started = null;
             var modelReservation = ReservationDto.ToModel(reservation);
+            modelReservation.Status = ReservationState.ConfirmationRequired;
             var check = await this.ReservationCheck(modelReservation, reservation.Seats);
             if (!check) return false;
             this.db.Reservations.Add(modelReservation);
