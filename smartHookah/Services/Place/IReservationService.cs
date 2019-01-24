@@ -1,4 +1,7 @@
-﻿namespace smartHookah.Services.Place
+﻿using System.Collections.Generic;
+using smartHookah.Models;
+
+namespace smartHookah.Services.Place
 {
     using System;
     using System.Threading.Tasks;
@@ -11,5 +14,10 @@
 
         Task<bool> CreateReservation(ReservationDto reservation);
 
+        Task<ReservationUsageDto> GetReservationUsage(int placeId, DateTime date);
+
+        Task<ReservationUsageDto> UpdateReservationUsage(int placeId, DateTime date);
+
+        ICollection<Reservation> GetPersonReservations();
     }
 }

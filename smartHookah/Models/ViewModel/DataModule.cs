@@ -10,6 +10,7 @@ namespace smartHookah.Models
 
     using Microsoft.Owin;
 
+    using smartHookah.Services.Config;
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
@@ -22,7 +23,7 @@ namespace smartHookah.Models
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SmartHookahContext>().AsSelf().InstancePerRequest();
-            builder.Register(s => new RedisService()).AsSelf().As<IRedisService>().SingleInstance().AutoActivate();
+            builder.Register(s => new RedisService(new ConfigService())).AsSelf().As<IRedisService>().SingleInstance().AutoActivate();
             builder.Register(s => HttpContext.Current.GetOwinContext()).As<IOwinContext>();
             builder.Register(s => HttpContext.Current.User).As<IPrincipal>();
             builder.RegisterType<OwinContextExtensionsWrapper>().As<IOwinContextExtensionsWrapper>();

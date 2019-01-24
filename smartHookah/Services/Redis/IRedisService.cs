@@ -1,9 +1,12 @@
 ﻿namespace smartHookah.Services.Redis
 {
+    using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using smartHookah.Models;
     using smartHookah.Models.Redis;
+    using smartHookah.Services.Place;
 
     public interface IRedisService
     {
@@ -18,5 +21,9 @@
         IList<string> GetAdress(string key);
 
         IList<Puf> GetPufs(string sessionId);
+
+        void SetReservationUsage(int placeId, DateTime date, ReservationUsageDto reservationUsage);
+
+        ReservationUsageDto GetReservationUsage(int placeId, DateTime date);
     }
 }

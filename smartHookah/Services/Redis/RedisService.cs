@@ -1,21 +1,25 @@
-﻿namespace smartHookahCommon
+﻿namespace smartHookah.Services.Redis
 {
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
 
-    using smartHookah.Models;
-
     using ServiceStack.Redis;
 
+    using smartHookah.Models;
     using smartHookah.Models.Redis;
-    using smartHookah.Services.Redis;
+    using smartHookah.Services.Config;
+    using smartHookah.Services.Place;
 
     public class RedisService : IRedisService
     {
         private readonly PooledRedisClientManager redisManager;
 
-        public RedisService()
+        private readonly IConfigService configService;
+
+        public RedisService(IConfigService configService)
         {
+            this.configService = configService;
             this.redisManager = new PooledRedisClientManager(ConfigurationManager.AppSettings["RedisConnectionString"]);
         }
 
@@ -40,7 +44,6 @@
             using (var redis = this.redisManager.GetClient())
             {
                 return redis.Get<DynamicSmokeStatistic>($"DS:{sessionId}");
-                
             }
         }
 
@@ -48,7 +51,7 @@
         {
             using (var redis = this.redisManager.GetClient())
             {
-                redis.AddItemToList(adress,hostName);
+                redis.AddItemToList(adress, hostName);
             }
         }
 
@@ -62,10 +65,31 @@
 
         public IList<Puf> GetPufs(string sessionId)
         {
-            using (var redis = redisManager.GetClient())
+            using (var redis = this.redisManager.GetClient())
             {
                 return redis.As<Puf>().Lists["pufs:" + sessionId].GetAll();
             }
+        }
+
+        public void SetReservationUsage(int placeId, DateTime date, ReservationUsageDto reservationUsage)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                redis.Set(this.GetNamespacedKey($"Reservations:{placeId}_{date:yyyy-MM-dd}"), reservationUsage);
+            }
+        }
+
+        public ReservationUsageDto GetReservationUsage(int placeId, DateTime date)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                return redis.Get<ReservationUsageDto>(this.GetNamespacedKey($"Reservations:{placeId}_{date:yyyy-MM-dd}"));
+            }
+        }
+
+        private string GetNamespacedKey(string key)
+        {
+            return $"{this.configService.Enviroment}:{key}";
         }
     }
 }

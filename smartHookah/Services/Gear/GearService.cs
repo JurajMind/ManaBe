@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-
+using System.Threading.Tasks;
+using Accord.Math;
+using ClosedXML.Excel;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
-
+using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Models;
 using smartHookah.Services.Person;
 
@@ -148,9 +152,6 @@ namespace smartHookah.Services.Gear
 
         }
 
-
-
-
         public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(
             string search,
             AccesoryType type,
@@ -170,7 +171,82 @@ namespace smartHookah.Services.Gear
 
             return result;
         }
-        
+
+        public int UsedByPerson(PipeAccesory accessory, int personId)
+        {
+            var person = personService.GetCurentPerson(personId);
+
+            var result = db.Persons.FirstOrDefault(a => a.Id == person.Id)?.SmokeSessions?
+                .Count(a => a.MetaData.Bowl?.Id == accessory.Id || 
+                            a.MetaData.Pipe?.Id == accessory.Id || 
+                            a.MetaData.HeatManagement?.Id == accessory.Id || 
+                            a.MetaData.Coal?.Id == accessory.Id);
+
+            return result ?? 0;
+        }
+
+        public int UsedByPerson(PipeAccesory accessory)
+        {
+            var person = personService.GetCurentPerson();
+            
+            var result = db.Persons.FirstOrDefault(a => a.Id == person.Id)?.SmokeSessions?
+                .Count(a => a.MetaData.Bowl?.Id == accessory.Id ||
+                            a.MetaData.Pipe?.Id == accessory.Id ||
+                            a.MetaData.HeatManagement?.Id == accessory.Id ||
+                            a.MetaData.Coal?.Id == accessory.Id);
+
+            return result ?? 0;
+        }
+
+        public IDictionary<PipeAccesory, int> UsedWith(PipeAccesory accessory)
+        {
+            var sessions = db.SmokeSessions
+                .Include(a => a.MetaData)
+                .Where(a => a.MetaData.Bowl.Id == accessory.Id ||
+                            a.MetaData.Pipe.Id == accessory.Id ||
+                            a.MetaData.HeatManagement.Id == accessory.Id ||
+                            a.MetaData.Coal.Id == accessory.Id).ToList();
+            var result = new Dictionary<PipeAccesory, int>();
+
+            var bowls = (from o in sessions
+                where o.MetaData.Bowl != null
+                where o.MetaData.Bowl.Id != accessory.Id
+                group o by o.MetaData.Bowl).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+
+            var pipes = (from o in sessions
+                where o.MetaData.Pipe != null
+                where o.MetaData.Pipe.Id != accessory.Id
+                group o by o.MetaData.Pipe).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+
+            var hmds = (from o in sessions
+                where o.MetaData.HeatManagement != null
+                where o.MetaData.HeatManagement.Id != accessory.Id
+                group o by o.MetaData.HeatManagement).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+
+            var coals = (from o in sessions
+                where o.MetaData.Coal != null
+                where o.MetaData.Coal.Id != accessory.Id
+                group o by o.MetaData.Coal).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+            
+            result.AddRangeIfRangeNotNull(bowls);
+            result.AddRangeIfRangeNotNull(hmds);
+            result.AddRangeIfRangeNotNull(pipes);
+            result.AddRangeIfRangeNotNull(coals);
+
+            return result;
+        }
+
+        public int OwnedByPersons(PipeAccesory accessory)
+        {
+            var result = db.Persons.Count(a => !a.Places.Any() && a.OwnedPipeAccesories.Any(x => x.PipeAccesory.Id == accessory.Id));
+            return result;
+        }
+
+        public int OwnedByPlaces(PipeAccesory accessory)
+        {
+            var result = db.Persons.Count(a => a.Places.Any() && a.OwnedPipeAccesories.Any(x => x.PipeAccesory.Id == accessory.Id));
+            return result;
+        }
     }
 
 }

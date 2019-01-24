@@ -12,6 +12,9 @@ using smartHookahCommon;
 
 namespace smartHookah.Jobs
 {
+    using System.Collections.Generic;
+    using System.Data.Entity;
+
     using smartHookah.Services.Device;
 
     public class SessionAutoEnd
@@ -57,68 +60,78 @@ namespace smartHookah.Jobs
         public async Task EndSmokeSessions(PerformContext context, bool debug = false)
         {
             
-                var stands = this.db.Hookahs.ToList();
+                var stands = await this.db.Hookahs.ToListAsync();
                 var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code));
-                foreach (var hookah in stands)
-                    try
+
+            Parallel.ForEach(
+                stands,
+                async device =>
                     {
-                        var stand = hookah.Code;
-                        var redisSession = RedisHelper.GetSmokeSessionId(stand);
-                        var online = onlineStates[hookah.Code];
-
-                        // Hookah dont want auto session end
-                        if (hookah.AutoSessionEndTime == -1)
-                            continue;
-
-                        // Get curent smoke statistic
-                        var ds = DynamicSmokeStatistic.GetStatistic(redisSession);
-
-                        // No puf was made
-                        if (ds?.LastPuf == null)
+                        try
                         {
-                            await this.CleanSleep(stand, online, hookah.AutoSleep);
-                            continue;
+                            await this.ProceedDevice(context, debug, device, onlineStates);
+                            
                         }
-
-                        int span;
-                        if (online)
-                            span = hookah.AutoSessionEndTime;
-                        else
-                            span = hookah.AutoSessionEndTime * this.offlineMulti;
-
-
-                        if (ds.LastPufTime.AddMinutes(span) > DateTime.UtcNow)
-                            continue;
-
-                        if (!debug)
+                        catch (Exception e)
                         {
-                            var sessionId = await SmokeSessionController.EndSmokeSession(redisSession, db, true);
-                            if (online)
-                                if (hookah.AutoSleep)
-                                {
-                                    context.WriteLine($"Autosleep {stand}:{sessionId}");
-                                    await IotDeviceHelper.SendMsgToDevice(stand, "slp:");
-                                }
-
-
-                                else
-                                {
-                                    context.WriteLine($"Autosleep {stand}:{sessionId}");
-                                    await IotDeviceHelper.SendMsgToDevice(stand, "restart:");
-                                }
+                            context.WriteLine($"Error with {device.Code}");
+                            context.WriteLine(e.Message);
                         }
-                        else
-                        {
-                            context.WriteLine($"Autoend debug {stand}:{redisSession}");
-                        }
+                    });
+        }
+
+        private async Task ProceedDevice(PerformContext context, bool debug, Hookah hookah, Dictionary<string, bool> onlineStates)
+        {
+            var stand = hookah.Code;
+            var redisSession = RedisHelper.GetSmokeSessionId(stand);
+            var stateExist = onlineStates.TryGetValue(hookah.Code, out var online);
+
+            if (!stateExist)
+            {
+                context.WriteLine($"{hookah.Code} does not have state");
+                return;
+            }
+
+            // Hookah dont want auto session end
+            if (hookah.AutoSessionEndTime == -1) return;
+
+            // Get curent smoke statistic
+            var ds = DynamicSmokeStatistic.GetStatistic(redisSession);
+
+            // No puf was made
+            if (ds?.LastPuf == null)
+            {
+                await this.CleanSleep(stand, online, hookah.AutoSleep);
+                return;
+            }
+
+            int span;
+            if (online) span = hookah.AutoSessionEndTime;
+            else span = hookah.AutoSessionEndTime * this.offlineMulti;
+
+            if (ds.LastPufTime.AddMinutes(span) > DateTime.UtcNow) return;
+
+            if (!debug)
+            {
+                var sessionId = await SmokeSessionController.EndSmokeSession(redisSession, this.db, true);
+                if (online)
+                    if (hookah.AutoSleep)
+                    {
+                        context.WriteLine($"Autosleep {stand}:{sessionId}");
+                        await IotDeviceHelper.SendMsgToDevice(stand, "slp:");
                     }
-                    catch (Exception e)
 
+                    else
                     {
-                        context.WriteLine(hookah.Code);
-                        context.WriteLine(e);
+                        context.WriteLine($"Autosleep {stand}:{sessionId}");
+                        await IotDeviceHelper.SendMsgToDevice(stand, "restart:");
                     }
             }
-        
+            else
+            {
+                context.WriteLine($"Autoend debug {stand}:{redisSession}");
+            }
+            return;
+        }
     }
 }
