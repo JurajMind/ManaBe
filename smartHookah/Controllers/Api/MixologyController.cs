@@ -22,6 +22,7 @@ namespace smartHookah.Controllers.Api
 
     using MaxMind.GeoIP2.Exceptions;
 
+    using smartHookah.ErrorHandler;
     using smartHookah.Migrations;
     using smartHookah.Services.Person;
 
@@ -50,6 +51,7 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixes")]
+        [ApiAuthorize]
         public async Task<MixListDTO> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
         {
            var query = from a in this.db.TobaccoMixs select a;

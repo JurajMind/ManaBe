@@ -26,6 +26,7 @@ namespace smartHookah.Controllers
 
     using smartHookahCommon;
 
+    [Authorize(Roles = "Admin")]
     public class TobaccoController : Controller
     {
         private readonly SmartHookahContext db;

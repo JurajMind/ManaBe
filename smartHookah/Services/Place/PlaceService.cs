@@ -25,9 +25,9 @@ namespace smartHookah.Services.Place
             this.personService = personService;
         }
 
-        public async Task<Models.Place> GetPlace(int id)
+        public async Task<Place> GetPlace(int id)
         {
-            var place = await db.Places
+            var place = await this.db.Places
                 .Include(a => a.Person)
                 .Include(a => a.OrderExtras)
                 .FirstOrDefaultAsync(a => a.Id == id);
@@ -45,14 +45,14 @@ namespace smartHookah.Services.Place
         }
 
         public async Task<IEnumerable<TobaccoReview>> GetPlaceTobaccoReviews(int id, int pageSize = 10, int page = 0) =>
-            await db.TobaccoReviews
+            await this.db.TobaccoReviews
                 .Where(a => a.SmokeSession.PlaceId != null && a.SmokeSession.PlaceId == id)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
 
         public IEnumerable<PipeAccesory> GetPlaceAccessories(Place place)
         {
-            return db.Persons
+            return this.db.Persons
                 .FirstOrDefault(a => a.Id == place.Person.Id)?
                 .OwnedPipeAccesories
                 .Select(a => a.PipeAccesory);
@@ -61,7 +61,7 @@ namespace smartHookah.Services.Place
 
         public async Task<List<TobaccoMix>> GetPlaceTobaccoMixes(Place place)
         {
-            return await db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
+            return await this.db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
         }
     }
 }

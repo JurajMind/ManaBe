@@ -21,15 +21,20 @@ namespace smartHookah.Controllers
     using Accord.IO;
     using System.Web.Hosting;
 
+    using smartHookah.Models.Dto.Reservations;
+    using smartHookah.Services.Place;
+
     [System.Web.Mvc.Authorize]
     public class ReservationController : Controller
     {
+        private readonly IReservationService reservationService;
         private TimeSpan _slotDuration = new TimeSpan(0, 30, 0);
         private readonly SmartHookahContext db;
         private EmailService emailService;
-        public ReservationController(SmartHookahContext db)
+        public ReservationController(SmartHookahContext db, IReservationService reservationService)
         {
             this.db = db;
+            this.reservationService = reservationService;
             this.emailService = new EmailService();
         }
 
@@ -157,7 +162,6 @@ namespace smartHookah.Controllers
 
                     if (!string.IsNullOrEmpty(model.Name))
                         newReservation.Name = model.Name;
-
                   
 
                     //scope.Complete();
@@ -197,6 +201,7 @@ namespace smartHookah.Controllers
 
                     scope.Commit();
                     ReservationContext.Clients.Group(id.ToString()).reload();
+                    await reservationService.UpdateReservationUsage(place.Id, parseDate.Date);
                     return Json(new {success = !conflict, id = newReservation.Id});
                 }
                 catch (Exception e)
@@ -614,19 +619,6 @@ namespace smartHookah.Controllers
         public string Text { get; set; }
 
         public string Name { get; set; }
-    }
-
-    public class TimeSlot
-    {
-        public int Value { get; set; }
-        public string Text { get; set; }
-        public bool Reserved { get; set; }
-
-        public int CapacityLeft { get; set; }
-
-        public int Id { get; set; }
-
-        public int OrderIndex { get; set; }
     }
 
     public class TableDto
