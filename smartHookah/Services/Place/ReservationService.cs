@@ -102,6 +102,13 @@
             return reservationUsage;
         }
 
+        public ICollection<Reservation> GetPersonReservations()
+        {
+            var person = this.personService.GetCurentPerson();
+            var now = DateTime.UtcNow;
+            return person.Reservations.Where(a => a.Time.Add(a.Duration) > now).ToList();
+        }
+
         private async Task<bool> ReservationTableCheck(Reservation reservation, int seatId)
         {
             var seat = await this.db.Seats.Where(s => s.Id == seatId).Include(r => r.Reservations).SingleAsync();
