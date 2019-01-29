@@ -1,0 +1,61 @@
+﻿@model smartHookah.Models.Db.Brand
+
+@{
+    ViewBag.Title = "Import";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+   
+    @using (Html.BeginForm("ImportPost", "PipeAccesorry", FormMethod.Post, new { enctype = "multipart/form-data", id = "createForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4 class="card-header">Import batch pipe accesory</h4>
+        <div class="card-body container form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <label class="btn btn-primary" >
+                        <input  name="file" type="file" style="display:none;" onchange="$('#importFileInfo').html(this.files[0].name);">
+                        Upload
+                    </label>
+                    <span class='label label-info' id="importFileInfo"></span>
+                </div>
+            </div>
+         
+            <div class="form-group">
+                <label class="col-md-2">Type</label>
+                <div class="input-group">
+                    <select id="type" name="type" class="form-control">
+                        <option value="" selected="selected">None</option>
+                        <option value="tobacco">Tobacco</option>
+                        <option value="bowl">Bowl</option>
+                        <option value="pipe">Hookah</option>
+                        <option value="heatmanagement">HeatManagment</option>
+                        <option value="coal">Coal</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-md-2">Preview</label>
+                <div class="input-group">
+                    <select id="type" name="type" class="form-control">
+                        <option value="true" selected="selected">Preview</option>
+                        <option value="false">Write to db</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

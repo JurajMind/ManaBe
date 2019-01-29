@@ -46,6 +46,11 @@ namespace smartHookah.Models
             }
         }
 
+        public static explicit operator Hookah(PipeAccesory v)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Bt
         {
             get

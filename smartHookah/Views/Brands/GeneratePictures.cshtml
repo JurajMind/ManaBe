@@ -1,0 +1,18 @@
+﻿
+
+@{
+    ViewBag.Title = "Hookah brands";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var model = ViewBag.Result as List<string>;
+}
+
+<div class="card row">
+   
+    @foreach (var picture in model)
+    {
+        <div class="col-1">
+            <img src="@picture" style="height: 100px"/>
+        </div>
+    }
+
+</div>

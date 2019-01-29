@@ -1,0 +1,44 @@
+﻿@model smartHookah.Models.ViewModel.ImportResultModel
+@{
+    ViewBag.Title = "Import result";
+}
+
+<div class="card">
+    <h1 class="card-header">New brand</h1>
+    <div class="card-body">
+        <ul>
+            @foreach (var brand in Model.newBrands)
+            {
+                <li>@brand.DisplayName</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<hr />
+
+<div class="card">
+    <h1 class="card-header">New accesory</h1>
+    <div class="card-body">
+        <ul>
+            @foreach (var brand in Model.newImport)
+            {
+                <li>@brand.BrandName @brand.AccName</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<hr />
+
+<div class="card">
+    <h1 class="card-header">Update accesory</h1>
+    <div class="card-body">
+        <ul>
+            @foreach (var brand in Model.updateImport)
+            {
+                <li>@brand.BrandName @brand.AccName</li>
+            }
+        </ul>
+    </div>
+</div>
