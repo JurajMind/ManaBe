@@ -41,7 +41,7 @@
                     @item.DisplayName
                 </td>
                 <td>
-                    @Html.ActionLink(@Home.Home.findMore, "ByBrand", new { brand = item.DisplayName}, new {@class="btn btn-info"})
+                    @Html.ActionLink(@Home.Home.findMore, "ByBrand", new { brand = item.Name}, new {@class="btn btn-info"})
                 </td>
             </tr>
         }
