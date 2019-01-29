@@ -537,6 +537,37 @@ namespace smartHookah.Controllers
             return this.View();
         }
 
+        [HttpGet]
+        public ActionResult RemovedDuplicity(string id)
+        {
+
+            var brands = this.db.Brands.Where(b => !b.TobaccoMixBrand).Select(s => s.Name);
+            foreach (var brand in brands)
+            {
+                var tobacco = this.db.Tobaccos.Where(p => p.BrandName == brand);
+                var groupBy = tobacco.GroupBy(g => g.SubCategory + g.AccName.ToUpper()).Where(s => s.Count() > 1).ToList();
+
+                try
+                {
+                    foreach (var item in groupBy)
+                    {
+                        var minId = item.Min(s => s.Id);
+                        this.db.Tobaccos.RemoveRange(item.Where(i => i.Id != minId));
+                        this.db.SaveChanges();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    
+                }
+               
+               
+            }
+            return null;
+
+        }
+
         [HttpPost]
         public async Task<ActionResult> ImportPost(HttpPostedFileBase file)
         {
@@ -554,16 +585,18 @@ namespace smartHookah.Controllers
                 {
                     try
                     {
+                        var displayArray = record.Brand.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+                        var name = new string(displayArray);
                         var brand = this.db.Brands.FirstOrDefault(a => a.DisplayName == record.Brand || a.Name == record.Name);
                         if (brand == null)
                         {
 
-                            var displayArray = record.Brand.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+                         
 
                             brand = new Brand
                                         {
                                             Tobacco = true,
-                                            Name = new string(displayArray),
+                                            Name = name,
                                             DisplayName = record.Brand
                                         };
                             this.db.Brands.Add(brand);
