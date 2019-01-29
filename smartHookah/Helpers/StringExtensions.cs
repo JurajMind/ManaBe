@@ -67,3 +67,4 @@
             return new string(src, 0, dstIdx);
         }
     }
+}
