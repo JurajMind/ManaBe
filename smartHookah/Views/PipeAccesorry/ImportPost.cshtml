@@ -18,10 +18,10 @@
 <hr />
 
 <div class="card">
-    <h1 class="card-header">New tobacco</h1>
+    <h1 class="card-header">New accesory</h1>
     <div class="card-body">
         <ul>
-            @foreach (var brand in Model.resultTobacco)
+            @foreach (var brand in Model.newImport)
             {
                 <li>@brand.BrandName @brand.AccName</li>
             }
@@ -32,10 +32,10 @@
 <hr />
 
 <div class="card">
-    <h1 class="card-header">New brand</h1>
+    <h1 class="card-header">Update accesory</h1>
     <div class="card-body">
         <ul>
-            @foreach (var brand in Model.updatedTobacco)
+            @foreach (var brand in Model.updateImport)
             {
                 <li>@brand.BrandName @brand.AccName</li>
             }

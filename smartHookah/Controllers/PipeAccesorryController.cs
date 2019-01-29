@@ -12,6 +12,16 @@ using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
+    using System.IO;
+
+    using CsvHelper;
+    using CsvHelper.Configuration;
+    using CsvHelper.Configuration.Attributes;
+
+    using smartHookah.Models.Factory;
+    using smartHookah.Models.ViewModel;
+    using smartHookah.Support;
+
     [Authorize]
     public class PipeAccesorryController : Controller
     {
@@ -266,7 +276,148 @@ namespace smartHookah.Controllers
         {
             return Json(new {brans = brands.Select(a => a.Name).OrderBy(a => a).ToList()},JsonRequestBehavior.AllowGet);
         }
-     
+
+        [HttpGet]
+        public ActionResult Import()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
+        public ActionResult RemovedDuplicity(string id)
+        {
+
+            var brands = this.db.Brands.Where(b => !b.TobaccoMixBrand).Select(s => s.Name);
+            foreach (var brand in brands)
+            {
+                var tobacco = this.db.Tobaccos.Where(p => p.BrandName == brand);
+                var groupBy = tobacco.GroupBy(g => g.SubCategory + StringExtensions.TrimAllWithInplaceCharArray(g.AccName.ToUpper())).Where(s => s.Count() > 1).ToList();
+
+                try
+                {
+                    foreach (var item in groupBy)
+                    {
+                        var minId = item.Min(s => s.Id);
+                        this.db.Tobaccos.RemoveRange(item.Where(i => i.Id != minId));
+                        this.db.SaveChanges();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+
+                }
+
+
+            }
+            return null;
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportPost(HttpPostedFileBase file, string type,bool preview = true)
+        {
+            var model = new ImportResultModel();
+
+            using (var reader = new StreamReader(file.InputStream))
+            using (var csv = new CsvReader(reader))
+            {
+                csv.Configuration.MissingFieldFound = null;
+                csv.Configuration.Delimiter = ",";
+                csv.Configuration.TrimOptions = TrimOptions.Trim;
+                var records = csv.GetRecords<ImportPipeAccesory>();
+
+                foreach (var record in records)
+                {
+                    try
+                    {
+                        var displayArray = record.Brand.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+                        var name = new string(displayArray);
+                        var brand = this.db.Brands.FirstOrDefault(a => a.DisplayName == record.Brand || a.Name == record.Brand || a.Name == name);
+
+
+                        if (brand == null)
+                        {
+                            brand = BrandFactory.FromFactory(record.Brand, type);
+                            this.db.Brands.Add(brand);
+                            this.db.SaveChanges();
+                            model.newBrands.Add(brand);
+                        }
+                        else
+                        {
+                            var newBrand = BrandFactory.SetFlag(brand, type);
+                            if (!preview)
+                            {
+                                this.db.Brands.AddOrUpdate(newBrand);
+                                this.db.SaveChanges();
+                            }
+
+                        }
+
+                        if (record.Name == null)
+                        {
+                            continue;
+                        }
+                        var pipeAccesory = brand.PipeAccesories.EmptyIfNull().FirstOrDefault(a => a.AccName != null && a.AccName.ToUpper() == record.Name.ToUpper());
+                        if (pipeAccesory != null)
+                        {
+                            pipeAccesory.UpdatedAt = DateTimeOffset.UtcNow;
+                            this.db.PipeAccesories.AddOrUpdate(pipeAccesory);
+                            model.updateImport.Add(pipeAccesory);
+                        }
+                        else
+                        {
+                            PipeAccesory newPipeAccesory = PipeAccesoryFactory.CreateFromRecort(record, brand, type);
+                            model.newImport.Add(newPipeAccesory);
+                            this.db.PipeAccesories.AddOrUpdate(newPipeAccesory);
+                        }
+                        if (!preview)
+                        {
+                            await this.db.SaveChangesAsync();
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+
+                    }
+
+                }
+
+
+
+            }
+            return View(model);
+        }
+
+        public ActionResult DataClean()
+        {
+            var tobaccoInMix = this.db.TobaccosMixParts.Select(s => s.TobaccoId);
+            var tobaccoInSession = this.db.SmokeSessions.Where(s => s.MetaData != null && s.MetaData.Tobacco != null)
+                .Select(s => s.MetaData.Tobacco.Id);
+
+            var allIds = tobaccoInMix.Union(tobaccoInSession);
+
+            var tobaccos = this.db.Tobaccos.Where(s => allIds.Contains(s.Id));
+
+            var allBrands = tobaccos.Select(b => b.Brand).ToList();
+
+            var allBrandName = allBrands.Select(b => b.Name);
+            var brandsLeft = this.db.Brands.Where(b => !allBrandName.Contains(b.Name)).ToList().Where(
+                a => a.Tobacco == true && a.Hookah == false && a.Bowl == false && a.TobaccoMixBrand == false
+                     && a.Coal == false && a.HeatManagment == false);
+
+
+            var bb = brandsLeft.ToList();
+
+            this.db.Brands.RemoveRange(brandsLeft);
+
+
+            this.db.SaveChanges();
+            return null;
+        }
+
 
     }
 
@@ -276,5 +427,17 @@ namespace smartHookah.Controllers
         public List<int> owndItemsId;
         public string accessoryType;
         public int amount;
+    }
+
+    public class ImportPipeAccesory
+    {
+        [Index(0)]
+        public string Brand { get; set; }
+
+        [Index(1)]
+        public string SubType { get; set; }
+
+        [Index(2)]
+        public string Name { get; set; }
     }
 }
