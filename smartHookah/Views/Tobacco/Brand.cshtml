@@ -31,9 +31,9 @@
                 <td>
                     @item.Name
                 </td>
-                <td>
+                @*<td>
                     <img src="@item.Picture" height="50px" />
-                </td>
+                </td>*@
                 <td>
                     @Html.ActionLink(@Home.Home.findMore, "ByBrand", new { brand = item.Name }) 
                 </td>
