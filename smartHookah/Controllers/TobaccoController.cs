@@ -17,10 +17,17 @@ using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
+    using System.IO;
+    using System.Web;
     using System.Web.UI;
     using System.Web.UI.WebControls;
 
+    using CsvHelper;
+    using CsvHelper.Configuration;
+    using CsvHelper.Configuration.Attributes;
+
     using smartHookah.Helpers;
+    using smartHookah.Models.ViewModel;
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
@@ -497,195 +504,133 @@ namespace smartHookah.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Download()
+        public ActionResult DataClean()
         {
-            var BaseUril = "http://smokedex.info/";
-            var Url = "http://smokedex.info/hersteller";
-            var web = new HtmlWeb();
-            var doc = web.Load(Url);
+            var tobaccoInMix = this.db.TobaccosMixParts.Select(s => s.TobaccoId);
+            var tobaccoInSession = this.db.SmokeSessions.Where(s => s.MetaData != null && s.MetaData.Tobacco != null)
+                .Select(s => s.MetaData.Tobacco.Id);
 
-            var brands = doc.DocumentNode.SelectNodes(@"//*[@class='feature-box media-box fbox-bg']");
-            var addedTobaccos = new List<Tobacco>();
+            var allIds = tobaccoInMix.Union(tobaccoInSession);
 
-            foreach (var brand in brands)
-            {
-                var name = brand.InnerText.Trim();
-             if(name.ToLower().First() < 's' )
-                    continue;;
-               var url = brand.SelectSingleNode(@".//a[@rel='bookmark']").Attributes["href"].Value;
-                var pictureSrc = brand.SelectSingleNode(".//div[@class='lazy bildnachgeladen']").Attributes["data-src"].Value;
-                var displayArray = name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
-                var keyName = new string(displayArray);
-                var newBrand = db.Brands.FirstOrDefault(a => a.Name ==name || a.Name == keyName);
+            var tobaccos = this.db.Tobaccos.Where(s => allIds.Contains(s.Id));
 
-                if (newBrand == null)
-                {
+            var allBrands = tobaccos.Select(b => b.Brand).ToList();
 
-                    newBrand = new Brand
-                    {
-                        Url = BaseUril + url,
-                        Picture = pictureSrc,
-                        Name = keyName,
-                        DisplayName = name,
+            var allBrandName = allBrands.Select(b => b.Name);
+            var brandsLeft = this.db.Brands.Where(b => !allBrandName.Contains(b.Name)).ToList().Where(
+                a => a.Tobacco == true && a.Hookah == false && a.Bowl == false && a.TobaccoMixBrand == false
+                     && a.Coal == false && a.HeatManagment == false);
 
 
-                    };
+            var bb = brandsLeft.ToList();
 
-                    newBrand.Tobacco = true;
-
-                    db.Brands.AddOrUpdate(newBrand);
-                }
-                var similar = new Dictionary<string,List<string>>();
-                var Tobacco = GetTobaco(BaseUril, url, newBrand, null,similar).ToList();
-
-                foreach (var tobacco in Tobacco)
-                {
-                    
-
-                    tobacco.BrandName = newBrand.Name;
-                    var oldTobaco =
-                        db.Tobaccos.FirstOrDefault(a => a.BrandName == tobacco.BrandName && a.AccName == tobacco.AccName);
-                  
-
-                    if (oldTobaco != null)
-                    {
-                        if (oldTobaco.Tastes.Any())
-                            continue;
-
-                        if(oldTobaco.Tastes.Count == tobacco.Tastes.Count)
-                            continue;
-
-                        MatchTobacco(similar, oldTobaco);
-                        
-                        oldTobaco.Tastes = tobacco.Tastes;
-
-                        
-                        db.Tobaccos.AddOrUpdate(oldTobaco);
-                    }
-                    else
-                    {
-                        MatchTobacco(similar, tobacco);
-                        db.Tobaccos.AddOrUpdate(tobacco);
-                    }
-                    addedTobaccos.Add(tobacco);
-
-                }
-
-             db.SaveChanges();
-
-            }
-
-            return View(addedTobaccos);
-        }
-
-        private void MatchTobacco(Dictionary<string,List<string>> similar, Tobacco tobacco)
-        {
-            if (!similar.Keys.Any()) return;
-            Tobacco matchTobacco = null;
-            List<string> similarTobacco;
-            var haveSimilar = similar.TryGetValue(tobacco.AccName, out similarTobacco);
-            if(!haveSimilar)
-                return;
-
-            foreach (var s in similarTobacco)
-            {
-                if (similar.TryGetValue(tobacco.AccName, out similarTobacco))
-                {
-                    matchTobacco = this.db.Tobaccos.FirstOrDefault(a => a.BrandName == tobacco.BrandName && a.AccName == s && a.SubCategory == tobacco.SubCategory);
-                }
-                if (matchTobacco != null
-                    && !tobacco.SimilarAccesories.Any(a => a.OriginalId == matchTobacco.Id || a.SimilarId == matchTobacco.Id))
-                {
-                    tobacco.SimilarAccesories.Add(
-                        new SimilarAccesories() { OriginalId = tobacco.Id, SimilarId = matchTobacco.Id, });
-                }
-            }
-
-          
-        }
-
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DownloadPictures()
-        {
-            var brands = db.Brands;
-            var path = $"/Content/BrandPicture/";
-            foreach (var brand in brands)
-            {
-                if (brand.Picture == null)
-                    continue;
-                if (brand.Picture.StartsWith("http"))
-                {
-                    try
-                    {
-                        var uri = new Uri(brand.Picture);
-                        var filename = uri.Segments.Last();
-                        using (WebClient client = new WebClient())
-                        {
-                            client.DownloadFile(uri, Server.MapPath(path + filename));
-                            brand.Picture = path + filename;
+            this.db.Brands.RemoveRange(brandsLeft);
 
 
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        brand.Picture = $"/Content/icons/tobacco.svg"; ;
-                    }
-                    db.Brands.AddOrUpdate(brand);
-                }
-            }
-            db.SaveChanges();
+            this.db.SaveChanges();
             return null;
         }
 
-        public async Task<JsonResult> GetTobaccoFlavor(string id, bool ownGear = false)
+        [HttpGet]
+        public ActionResult Import()
         {
-            var tobacos = new List<Tobacco>();
-            if (ownGear)
-            {
-                var person = UserHelper.GetCurentPerson(db);
-                if (person == null)
-                {
-                    tobacos = db.Tobaccos.Where(a => a.Brand.Name == id).ToList();
-                }
-                else
-                {
-                    if (id == "My mixes")
-                    {
-                        tobacos = db.TobaccoMixs.Where(a => a.AuthorId == person.Id).ToList().Cast<Tobacco>().ToList();
-                    }
-                    else
-                    {
-                        tobacos = person.Tobacco.Where(a => a.BrandName == id).ToList();
-                    }
-
-
-                }
-            }
-            else
-            {
-                tobacos = db.Tobaccos.Where(a => a.Brand.Name == id).ToList();
-            }
-
-
-            if (tobacos.Any(a => !(a is TobaccoMix)))
-                return Json(tobacos.OrderBy(a => a.AccName).Select(a => new { name = a.AccName, id = a.Id }), JsonRequestBehavior.AllowGet);
-
-            var tobacoMix = tobacos.Where(a => !String.IsNullOrEmpty(a.AccName)).Select(t => t as TobaccoMix);
-
-            return Json(tobacoMix.OrderBy(a => a.AccName).Select(x => new
-            {
-                name = x.AccName,
-                id = x.Id,
-                parts = x.Tobaccos.Select(y => new
-                {
-                    name = y.Tobacco.AccName,
-                    brand = y.Tobacco.BrandName,
-                    fraction = y.Fraction
-                })
-            }), JsonRequestBehavior.AllowGet);
+            return this.View();
         }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportPost(HttpPostedFileBase file)
+        {
+            var model = new ImportResultModel();
+
+            using (var reader = new StreamReader(file.InputStream))
+            using (var csv = new CsvReader(reader))
+            {
+                csv.Configuration.MissingFieldFound = null;
+                csv.Configuration.Delimiter = ",";
+                csv.Configuration.TrimOptions = TrimOptions.Trim;
+                var records = csv.GetRecords<ImportTobacco>();
+
+                foreach (var record in records)
+                {
+                    try
+                    {
+                        var brand = this.db.Brands.FirstOrDefault(a => a.DisplayName == record.Brand || a.Name == record.Name);
+                        if (brand == null)
+                        {
+
+                            var displayArray = record.Brand.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
+
+                            brand = new Brand
+                                        {
+                                            Tobacco = true,
+                                            Name = new string(displayArray),
+                                            DisplayName = record.Brand
+                                        };
+                            this.db.Brands.Add(brand);
+                            this.db.SaveChanges();
+                            model.newBrands.Add(brand);
+                        }
+
+                        if (record.Name == null)
+                        {
+                            continue;
+                        }
+                        var tobacco = brand.PipeAccesories.EmptyIfNull().FirstOrDefault(a => a.AccName != null && a.AccName.ToUpper() == record.Name.ToUpper());
+                        if (tobacco != null)
+                        {
+                            tobacco.UpdatedAt = DateTimeOffset.UtcNow;
+                            this.db.PipeAccesories.AddOrUpdate(tobacco);
+                            model.updatedTobacco.Add(tobacco);
+                        }
+                        else
+                        {
+                            Tobacco newTobacco = new Tobacco
+                                                     {
+                                                         BrandName = brand.Name,
+                                                         AccName = this.UppercaseFirst(record.Name),
+                                                         SubCategory = record.SubType,
+                                                         CreatedAt = DateTimeOffset.UtcNow
+                                                     };
+                            model.resultTobacco.Add(newTobacco);
+                            this.db.Tobaccos.AddOrUpdate(newTobacco);
+                        }
+                        await db.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                     
+                    }
+
+                }
+
+
+
+            }
+            return  View(model);
+        }
+
+        
+
+        string UppercaseFirst(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return string.Empty;
+            return char.ToUpper(str[0]) + str.Substring(1).ToLower();
+        }
+
+        public class ImportTobacco
+        {
+            [Index(0)]
+            public string Brand { get; set; }
+
+            [Index(1)]
+            public string SubType { get; set; }
+
+            [Index(2)]
+            public string Name { get; set; }
+        }
+
 
         public static Tobacco GetTobacoFromMetadata(SaveSmokeMetadataModel model, SmartHookahContext db)
         {
