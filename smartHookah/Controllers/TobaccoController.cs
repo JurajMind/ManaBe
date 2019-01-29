@@ -545,7 +545,7 @@ namespace smartHookah.Controllers
             foreach (var brand in brands)
             {
                 var tobacco = this.db.Tobaccos.Where(p => p.BrandName == brand);
-                var groupBy = tobacco.GroupBy(g => g.SubCategory + g.AccName.ToUpper()).Where(s => s.Count() > 1).ToList();
+                var groupBy = tobacco.GroupBy(g => g.SubCategory + StringExtensions.TrimAllWithInplaceCharArray(g.AccName.ToUpper())).Where(s => s.Count() > 1).ToList();
 
                 try
                 {
