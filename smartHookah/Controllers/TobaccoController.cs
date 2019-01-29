@@ -7,8 +7,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-using HtmlAgilityPack;
-
 using PagedList;
 
 using smartHookah.Models;
@@ -17,24 +15,11 @@ using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
-    using System.IO;
-    using System.Web;
-    using System.Web.UI;
-    using System.Web.UI.WebControls;
-
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using CsvHelper.Configuration.Attributes;
-
     using smartHookah.Helpers;
-    using smartHookah.Models.Factory;
-    using smartHookah.Models.ViewModel;
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
-    using smartHookahCommon;
-
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class TobaccoController : Controller
     {
         private readonly SmartHookahContext db;
