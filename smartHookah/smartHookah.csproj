@@ -902,6 +902,8 @@
     <Compile Include="Models\Dto\PlaceMenuDto.cs" />
     <Compile Include="Models\Dto\ReservationDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
+    <Compile Include="Models\Factory\BrandFactory.cs" />
+    <Compile Include="Models\Factory\PipeAccesoryFactory.cs" />
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
@@ -2372,6 +2374,7 @@
     <Content Include="Views\Error\GenericHttpError.cshtml" />
     <Content Include="Views\Hookahs\GetAdress.cshtml" />
     <Content Include="Views\Brands\Import.cshtml" />
+    <Content Include="Views\Brands\GeneratePictures.cshtml" />
     <None Include="Views\Person\PersonList.cshtml" />
     <Content Include="Views\Person\_PersonSmokeSession.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
@@ -2431,8 +2434,8 @@
     <Content Include="Views\Places\Statistics.cshtml" />
     <Content Include="Views\TobaccoReviews\_TobaccoReview.cshtml" />
     <Content Include="Views\TobaccoReviews\smokeSessionReview.cshtml" />
-    <Content Include="Views\Tobacco\Import.cshtml" />
-    <Content Include="Views\Tobacco\ImportPost.cshtml" />
+    <Content Include="Views\PipeAccesorry\Import.cshtml" />
+    <Content Include="Views\PipeAccesorry\ImportPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppDbContextMigration\" />

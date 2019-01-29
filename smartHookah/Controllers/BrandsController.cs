@@ -157,6 +157,47 @@ namespace smartHookah.Controllers
             return RedirectToAction("Index");
         }
 
+         [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GeneratePictures(string id)
+        {
+            var brands = this.db.Brands;
+            var random = new Random();
+            var colors = new List<string> { "1F03FF", "19F7AD", "000000", "F41CF4" };
+            var path = $"/Content/BrandPicture/";
+            var format = "https://dummyimage.com/300x300/000/fff.jpg&text={1}";
+            var result = new List<string>();
+            foreach (var brand in brands)
+            {
+                var colorIndex = random.Next(0, colors.Count);
+                
+                var name = string.Join(" ",brand.DisplayName.Split(new []{' '},StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]).ToList());
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = 0.ToString();
+                }
+
+                var url = String.Format(format, colors[colorIndex], name);
+
+                var uri = new Uri(url);
+                var filename = brand.Name + ".jpg";
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(uri, Server.MapPath(path + filename));
+                    brand.Picture = path + filename;
+                    db.Brands.AddOrUpdate(brand);
+
+                }
+               
+
+                result.Add(brand.Picture);
+            }
+
+            db.SaveChanges();
+
+            ViewBag.Result = result;
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -165,5 +206,6 @@ namespace smartHookah.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
