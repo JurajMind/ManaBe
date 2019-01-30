@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.VisualStudio.Services.WebApi;
+using smartHookah.ErrorHandler;
 using smartHookah.Models;
 using smartHookah.Services.Gear;
 using ServiceStack.Common.Web;
@@ -29,7 +30,7 @@ namespace smartHookah.Controllers.Api
 
         #region Getters
 
-        [HttpGet, Authorize, System.Web.Http.Route("{type}/Search/{search}")]
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("{type}/Search/{search}")]
         public List<GearService.SearchPipeAccesory> Search(string search, string type, int page = 0, int pageSize = 50)
         {
             if (Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
@@ -41,13 +42,13 @@ namespace smartHookah.Controllers.Api
                 $"Type:{type} was not recognize"));
         }
 
-        [HttpGet, Authorize, System.Web.Http.Route("Brands/")]
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("Brands/")]
         public Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands()
         {
             return this.gearService.GetBrands();
         }
 
-        [HttpGet, Authorize, System.Web.Http.Route("{id}/Detail")]
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("{id}/Detail")]
         public PipeAccessoryDetailsDto GetDetails(int id)
         {
             try
@@ -84,7 +85,7 @@ namespace smartHookah.Controllers.Api
 
         #endregion
 
-        [HttpPost, Authorize, System.Web.Http.Route("{id}/Vote")]
+        [HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
         public HttpResponseMessage Vote(int id, [FromBody] int value)
         {
             value = value < 0 ? (int) VoteValue.Dislike : value > 0 ? (int) VoteValue.Like : (int) VoteValue.Unlike;
