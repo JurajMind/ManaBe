@@ -30,7 +30,7 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [HttpGet]
-        [ApiAuthorizeAttribute,Route("InitData")]
+        [ApiAuthorize, Route("InitData")]
         public async Task<PersonActiveDataDto> GetPersonActiveData()
         {
             var person = this.personService.GetCurentPerson();
@@ -83,7 +83,7 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpGet, ApiAuthorizeAttribute, Route("MyGear")]
+        [HttpGet, ApiAuthorize, Route("MyGear")]
         public IEnumerable<PipeAccesorySimpleDto> MyGear(string type = "All")
         {
             var accessories = gearService.GetPersonAccessories(null, type);
