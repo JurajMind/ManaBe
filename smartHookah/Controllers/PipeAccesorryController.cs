@@ -325,10 +325,10 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ImportPost(HttpPostedFileBase file, string type,bool preview = true)
+        public async Task<ActionResult> ImportPost(HttpPostedFileBase file, string type,string save = "")
         {
             var model = new ImportResultModel();
-
+            var preview = save == "save";
             using (var reader = new StreamReader(file.InputStream))
             using (var csv = new CsvReader(reader))
             {
@@ -349,9 +349,12 @@ namespace smartHookah.Controllers
                         if (brand == null)
                         {
                             brand = BrandFactory.FromFactory(record.Brand, type);
-                            this.db.Brands.Add(brand);
-                            this.db.SaveChanges();
-                            model.newBrands.Add(brand);
+                            if (!preview)
+                            {
+                                this.db.Brands.Add(brand);
+                                this.db.SaveChanges();
+                                model.newBrands.Add(brand);
+                            }
                         }
                         else
                         {
@@ -379,7 +382,10 @@ namespace smartHookah.Controllers
                         {
                             PipeAccesory newPipeAccesory = PipeAccesoryFactory.CreateFromRecort(record, brand, type);
                             model.newImport.Add(newPipeAccesory);
-                            this.db.PipeAccesories.AddOrUpdate(newPipeAccesory);
+                            if (!preview)
+                            {
+                                this.db.PipeAccesories.AddOrUpdate(newPipeAccesory);
+                            }
                         }
                         if (!preview)
                         {
@@ -392,10 +398,7 @@ namespace smartHookah.Controllers
                         Console.WriteLine(e);
 
                     }
-
                 }
-
-
 
             }
             return View(model);

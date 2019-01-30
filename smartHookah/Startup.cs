@@ -30,7 +30,7 @@ namespace smartHookah
         public static OAuthAuthorizationServerOptions OAuthServerOptions { get; set; }
         public void Configuration(IAppBuilder app)
         {
-            EntityFrameworkCache.Initialize(new InMemoryCache());
+            // EntityFrameworkCache.Initialize(new InMemoryCache());
             GlobalConfiguration.Configuration.UseSqlServerStorage("SmartHookah").UseConsole();
 
             this.ConfigureAuth(app);
