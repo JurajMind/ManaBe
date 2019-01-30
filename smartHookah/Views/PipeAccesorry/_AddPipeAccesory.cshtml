@@ -41,8 +41,12 @@
                     case "tobacco":
                             <input @(owned ? "disabled=\"disabled\"" : "") class="form-control input-format" id="@item.Id" type="number" min="1" step="5" value="50"/>
                             <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, document.getElementById('@item.Id').value, this)" class="btn btn-success btn-md btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button>
-                        break;
-                }
+                                break;
+                            default:
+                                <input @(owned ? "disabled=\"disabled\"" : "") class="form-control input-format" id="@item.Id" type="number" min="1" step="1" value="1"/>
+                                <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, document.getElementById('@item.Id').value, this)" class="btn btn-success btn-md btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button>
+                                break;
+                        }
                 <!--
                 <button @(owned ? "disabled=\"disabled\"" : "") onclick="AddNewGear(@item.Id, this)" class="btn btn-success btn-sm btn-raised btn-fab btn-fab-mini"><i class="fa fa-plus"></i></button> 
                 -->
