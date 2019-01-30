@@ -18,6 +18,8 @@ namespace smartHookah.Controllers
     using CsvHelper.Configuration;
     using CsvHelper.Configuration.Attributes;
 
+    using Google.Apis.Services;
+
     using smartHookah.Models.Factory;
     using smartHookah.Models.ViewModel;
     using smartHookah.Support;
@@ -262,6 +264,14 @@ namespace smartHookah.Controllers
                 case "tobacco":
                     items = brans.PipeAccesories.Where(a => a is Tobacco).OrderBy(a => a.AccName).ToList();
                     break;
+
+                case "heatmanagement":
+                    items = brans.PipeAccesories.Where(a => a is HeatManagment).OrderBy(a => a.AccName).ToList();
+                    break;
+
+                case "coal":
+                    items = brans.PipeAccesories.Where(a => a is Coal).OrderBy(a => a.AccName).ToList();
+                    break;
             }
 
             var model = new AddPipeAccesoryViewModel();
@@ -291,7 +301,7 @@ namespace smartHookah.Controllers
             foreach (var brand in brands)
             {
                 var tobacco = this.db.Tobaccos.Where(p => p.BrandName == brand);
-                var groupBy = tobacco.GroupBy(g => g.SubCategory + StringExtensions.TrimAllWithInplaceCharArray(g.AccName.ToUpper())).Where(s => s.Count() > 1).ToList();
+                var groupBy = tobacco.GroupBy(g => g.SubCategory + g.AccName.ToUpper().Trim()).Where(s => s.Count() > 1).ToList();
 
                 try
                 {
@@ -418,6 +428,24 @@ namespace smartHookah.Controllers
             return null;
         }
 
+        public ActionResult GoogleCheck(string id = "Tobacco")
+        {
+            var accesory = this.db.PipeAccesories.Where(a => a is Tobacco);
+            string apiKey = "AIzaSyCf57DrGRdV3LwOGkPfiW0ahi-N2LNyZjQ";
+            string cx = "014066877753874603507:loehrtgydoe";
+
+            foreach (var pipeAccesory in accesory)
+            {
+                var svc = new Google.Apis.Customsearch.v1.CustomsearchService(new BaseClientService.Initializer { ApiKey = apiKey });
+                var query = $"\"{pipeAccesory.Brand.DisplayName} {pipeAccesory.AccName}\"";
+                var listRequest = svc.Cse.List(query);
+
+                listRequest.Cx = cx;
+                var search = listRequest.Execute();
+                var searchResultCount = search.SearchInformation.TotalResults;
+            }
+            return null;
+        }
 
     }
 
