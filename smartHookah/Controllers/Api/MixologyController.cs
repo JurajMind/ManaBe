@@ -294,7 +294,7 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [System.Web.Http.HttpPost, System.Web.Http.Authorize, System.Web.Http.Route("{id}/Vote")]
+        [System.Web.Http.HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
         public HttpResponseMessage Vote(int id, [FromBody] int value)
         {
             value = value < 0 ? (int)VoteValue.Dislike : value > 0 ? (int)VoteValue.Like : (int)VoteValue.Unlike;
