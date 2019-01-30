@@ -384,6 +384,8 @@ namespace smartHookah.Controllers
             model.Pipes = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Pipe && a.DeleteDate == null).Select(a => a.PipeAccesory as Pipe).ToList();
             model.Bowls = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Bowl && a.DeleteDate == null).Select(a => a.PipeAccesory as Bowl).ToList();
             model.Tobaccos = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Tobacco && a.DeleteDate == null ).Select(a => a.PipeAccesory as Tobacco).ToList();
+            model.HeatManagments = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is HeatManagment && a.DeleteDate == null).Select(a => a.PipeAccesory as HeatManagment).ToList();
+            model.Goals = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Coal && a.DeleteDate == null).Select(a => a.PipeAccesory as Coal).ToList();
             model.Person = person;
             var user = db.Users.First(a => a.PersonId == person.Id);
 

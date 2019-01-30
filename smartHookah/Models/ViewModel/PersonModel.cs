@@ -56,6 +56,10 @@ namespace smartHookah.Controllers
         public List<Bowl> Bowls { get; set; }
         public List<Pipe> Pipes { get; set; }
 
+        public List<Coal> Goals { get; set; }
+
+        public List<HeatManagment> HeatManagments { get; set; }
+
         public Person Person { get; set; }
         public bool CanEdit { get; set; }
         public string DisplayName { get; set; }
