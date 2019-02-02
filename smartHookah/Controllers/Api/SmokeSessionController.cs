@@ -15,6 +15,7 @@ using smartHookahCommon;
 namespace smartHookah.Controllers.Api
 {
     using smartHookah.ErrorHandler;
+    using smartHookah.Services.Gear;
     using smartHookah.Services.Redis;
 
     [RoutePrefix("api/SmokeSession")]
@@ -26,11 +27,14 @@ namespace smartHookah.Controllers.Api
 
         private readonly IRedisService redisService;
 
-        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService)
+        private readonly ITobaccoService tobaccoService;
+
+        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService, ITobaccoService tobaccoService)
         {
             this.db = db;
             this.sessionService = sessionService;
             this.redisService = redisService;
+            this.tobaccoService = tobaccoService;
         }
 
         #region Getters and Validators
@@ -102,7 +106,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet, Route("GetMetaData")]
-        public SmokeSessionMetaDataDto GetMetaData(int id)
+        public SmokeSessionMetaDataDto GetMetaData(string id)
         {
             try
             {
@@ -125,7 +129,14 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                var result = await sessionService.SaveMetaData(id, model.ToModel());
+                if (model.TobaccoMix != null && model.TobaccoMix.Id == 0)
+                {
+                    TobaccoMix newMix = TobaccoMixSimpleDto.ToModel(model.TobaccoMix);
+                    var createdMix = await this.tobaccoService.CreateMix(newMix);
+                    model.Tobacco.Id = createdMix.Id;
+                }
+
+                var result = await this.sessionService.SaveMetaData(id, model.ToModel());
                 return SmokeSessionMetaDataDto.FromModel(result);
             }
             catch (Exception e)

@@ -12,10 +12,18 @@ using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
 {
+    using System.Data.Entity.Migrations;
+    using System.Net;
     using System.Web.Helpers;
+
+    using log4net;
+
+    using smartHookah.Controllers.Api;
+    using smartHookah.Models.Dto;
 
     public class TobaccoService : ITobaccoService
     {
+        private readonly ILog logger = LogManager.GetLogger(typeof(TobaccoService));
         private readonly SmartHookahContext db;
         private readonly IPersonService personService;
 
@@ -180,6 +188,49 @@ namespace smartHookah.Services.Gear
         public Task<List<TobaccoReview>> GetTobaccoMixReviews(TobaccoMix mix, int count = 10)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<TobaccoMix> CreateMix (TobaccoMix newMix)
+        {
+            if (newMix == null)
+            {
+                return null;
+            }
+
+            var author = this.personService.GetCurentPerson();
+            var mix = new TobaccoMix()
+            {
+                AccName = newMix.AccName,
+                Author = author,
+                CreatedAt = DateTimeOffset.UtcNow,
+                BrandName = author.AssignedBrandId ?? "OwnBrand"
+            };
+
+            foreach (var tobacco in newMix.Tobaccos)
+            {
+                var t = this.db.Tobaccos.Find(tobacco.Tobacco.Id);
+                if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
+                    throw new ArgumentException("TobaccoInMix not fount or fraction not within acceptable range.");
+
+                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Tobacco.Id))
+                    throw new ArgumentException(
+                        $"TobaccoInMix {tobacco.Tobacco.BrandName} {tobacco.Tobacco.AccName} was already added to mix.");
+            
+
+                mix.Tobaccos.Add(new TobacoMixPart() { TobaccoId = tobacco.Tobacco.Id, Fraction = tobacco.Fraction });
+            }
+            try
+            {
+                this.db.TobaccoMixs.AddOrUpdate(mix);
+                await this.db.SaveChangesAsync();
+                return mix;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e);
+                throw new Exception(
+                    $"Unknown error",e);
+            }
         }
 
         #endregion
