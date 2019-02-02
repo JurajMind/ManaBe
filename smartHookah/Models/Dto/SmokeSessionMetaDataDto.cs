@@ -17,7 +17,7 @@ namespace smartHookah.Models.Dto
         public PipeAccesorySimpleDto Tobacco { get; set; }
 
         [DataMember, JsonProperty("TobaccoMix")]
-        public Mix TobaccoMix { get; set; }
+        public TobaccoMixSimpleDto TobaccoMix { get; set; }
 
         [DataMember, JsonProperty("TobaccoWeight")]
         public double TobaccoWeight { get; set; }
@@ -62,7 +62,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 TobaccoId = model.TobaccoId,
                 Tobacco = model.Tobacco == null ? null : PipeAccesorySimpleDto.FromModel(model.Tobacco),
-                TobaccoMix = Mix.FromModel(model.Tobacco as TobaccoMix),
+                TobaccoMix = TobaccoMixSimpleDto.FromModel(model.Tobacco as TobaccoMix),
                 TobaccoWeight = model.TobaccoWeight,
                 AnonymPeopleCount = model.AnonymPeopleCount,
                 BowlId = model.BowlId,

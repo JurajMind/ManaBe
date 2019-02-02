@@ -191,7 +191,7 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("AddToMix")]
-        public async Task<TobaccoMixSimpleDto> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] Mix newMix)
+        public async Task<TobaccoMixSimpleDto> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] TobaccoMixSimpleDto newMix)
         {
             if (newMix == null)
             {
@@ -202,7 +202,7 @@ namespace smartHookah.Controllers.Api
             var author = this.personService.GetCurentPerson();
             var mix = new TobaccoMix()
             {
-                AccName = newMix.AccName,
+                AccName = newMix.Name,
                 Author = author,
                 CreatedAt = DateTimeOffset.UtcNow,
                 BrandName = author.AssignedBrandId ?? "OwnBrand"

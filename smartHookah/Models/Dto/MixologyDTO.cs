@@ -21,15 +21,6 @@ namespace smartHookah.Models.Dto
         }
     }
     
-    public class MixListDTO : DTO
-    {
-        public ICollection<Mix> Mixes { get; set; }
-
-        public MixListDTO()
-        {
-            this.Mixes = new List<Mix>();
-        }
-    }
 
     [DataContract]
     public class TobaccoMixSimpleDto : TobaccoSimpleDto
@@ -70,36 +61,10 @@ namespace smartHookah.Models.Dto
                         }).ToList()
                 };
         }
-    }
 
-    public class Mix
-    {
-        public int Id { get; set; }
-        public string AccName { get; set; }
-        public ICollection<TobaccoInMix> Tobaccos { get; set; }
-        public int Used { get; set; }
-        public double Overall { get; set; }
-
-        public Mix()
+        public static TobaccoMix ToModel(TobaccoMixSimpleDto modelTobaccoMix)
         {
-            this.Tobaccos = new List<TobaccoInMix>();
-        }
-
-        public static Mix FromModel(TobaccoMix model)
-        {
-            if (model == null)
-            {
-                return null;
-            }
-
-            var result = new Mix()
-            {
-                Id = model.Id,
-                AccName = model.AccName,
-                Tobaccos = model.Tobaccos.Select(TobaccoInMix.FromModel).ToList()
-            };
-
-            return result;
+            throw new NotImplementedException();
         }
     }
 
