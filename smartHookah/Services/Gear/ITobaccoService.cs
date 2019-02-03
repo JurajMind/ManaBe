@@ -25,5 +25,7 @@ namespace smartHookah.Services.Gear
         Dictionary<int, List<TobaccoTaste>> GetTobaccoMixTastes(TobaccoMix mix);
         Task<List<Models.SmokeSession>> GetTobaccoMixSessions(TobaccoMix mix, int count = 10);
         Task<List<TobaccoReview>> GetTobaccoMixReviews(TobaccoMix mix, int count = 10);
+
+        Task<TobaccoMix> AddOrUpdateMix(TobaccoMix newMix);
     }
 }
