@@ -851,6 +851,10 @@
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
+    <Compile Include="Migrations\201902031613008_mixPart.cs" />
+    <Compile Include="Migrations\201902031613008_mixPart.Designer.cs">
+      <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
@@ -1021,6 +1025,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811152005069_device_setting_clean.resx">
       <DependentUpon>201811152005069_device_setting_clean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031613008_mixPart.resx">
+      <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
