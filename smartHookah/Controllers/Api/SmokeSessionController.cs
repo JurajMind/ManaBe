@@ -133,7 +133,7 @@ namespace smartHookah.Controllers.Api
                 {
                     TobaccoMix newMix = TobaccoMixSimpleDto.ToModel(model.TobaccoMix);
                     var createdMix = await this.tobaccoService.AddOrUpdateMix(newMix);
-                    model.Tobacco.Id = createdMix.Id;
+                    model.TobaccoId = createdMix.Id;
                 }
 
                 var result = await this.sessionService.SaveMetaData(id, model.ToModel());

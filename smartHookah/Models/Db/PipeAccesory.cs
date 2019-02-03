@@ -230,6 +230,10 @@ namespace smartHookah.Models
 
         public virtual Tobacco Tobacco { get; set; }
 
+        public int InMixId { get; set; }
+
+        public virtual TobaccoMix InMix { get; set; }
+
     }
     
     public class Pipe : PipeAccesory
