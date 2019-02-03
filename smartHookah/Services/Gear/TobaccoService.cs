@@ -190,40 +190,41 @@ namespace smartHookah.Services.Gear
             throw new NotImplementedException();
         }
 
-        public async Task<TobaccoMix> CreateMix (TobaccoMix newMix)
+        public async Task<TobaccoMix> AddOrUpdateMix (TobaccoMix newMix)
         {
             if (newMix == null)
             {
                 return null;
             }
 
-            var author = this.personService.GetCurentPerson();
-            var mix = new TobaccoMix()
+            var originalMix = await this.db.TobaccoMixs.FindAsync(newMix.Id);
+
+            if (this.MatchMixes(originalMix, newMix))
             {
-                AccName = newMix.AccName,
-                Author = author,
-                CreatedAt = DateTimeOffset.UtcNow,
-                BrandName = author.AssignedBrandId ?? "OwnBrand"
-            };
-
-            foreach (var tobacco in newMix.Tobaccos)
-            {
-                var t = this.db.Tobaccos.Find(tobacco.Tobacco.Id);
-                if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
-                    throw new ArgumentException("TobaccoInMix not fount or fraction not within acceptable range.");
-
-                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Tobacco.Id))
-                    throw new ArgumentException(
-                        $"TobaccoInMix {tobacco.Tobacco.BrandName} {tobacco.Tobacco.AccName} was already added to mix.");
-            
-
-                mix.Tobaccos.Add(new TobacoMixPart() { TobaccoId = tobacco.Tobacco.Id, Fraction = tobacco.Fraction });
+                return originalMix;
             }
+            if (originalMix != null)
+            {
+                newMix.Id = this.db.SessionMetaDatas.Count(a => a.TobaccoId == originalMix.Id) <= 1
+                                ? originalMix.Id
+                                : 0;
+            }
+            else
+            {
+                newMix.Id = 0;
+            }
+
+
+            newMix.CreatedAt = DateTimeOffset.UtcNow;
+            var author = this.personService.GetCurentPerson();
+            newMix.AuthorId = author.Id;
+            newMix.BrandName = author.AssignedBrandId ?? "OwnBrand";
+
             try
             {
-                this.db.TobaccoMixs.AddOrUpdate(mix);
+                this.db.TobaccoMixs.AddOrUpdate(newMix);
                 await this.db.SaveChangesAsync();
-                return mix;
+                return newMix;
             }
             catch (Exception e)
             {
@@ -231,6 +232,12 @@ namespace smartHookah.Services.Gear
                 throw new Exception(
                     $"Unknown error",e);
             }
+        }
+
+        private bool MatchMixes(TobaccoMix originalMix, TobaccoMix newMix)
+        {
+            if (originalMix == null) return false;
+            return newMix.Tobaccos.All(mixPart => originalMix.Tobaccos.Any(t => t.TobaccoId == mixPart.TobaccoId && t.Fraction == mixPart.Fraction)) && originalMix.Tobaccos.All(mixPart => newMix.Tobaccos.Any(t => t.TobaccoId == mixPart.TobaccoId && t.Fraction == mixPart.Fraction));
         }
 
         #endregion

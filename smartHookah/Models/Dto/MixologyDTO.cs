@@ -11,6 +11,8 @@ namespace smartHookah.Models.Dto
 {
     using Accord.Statistics;
 
+    using smartHookah.Support;
+
     public class MixCreatorsDTO : DTO
     {
         public ICollection<MixCreator> MixCreatorsList { get; set; }
@@ -62,9 +64,22 @@ namespace smartHookah.Models.Dto
                 };
         }
 
-        public static TobaccoMix ToModel(TobaccoMixSimpleDto modelTobaccoMix)
+        public static TobaccoMix ToModel(TobaccoMixSimpleDto model)
         {
-            throw new NotImplementedException();
+            return model == null
+                       ? null
+                       : new TobaccoMix
+                             {
+                                 Id = model.Id,
+                                 AccName = model.Name,
+                                 BrandName = model.BrandId,
+                                 Tobaccos = model.Tobaccos.EmptyIfNull().Select(
+                                     t => new TobacoMixPart
+                                              {
+                                                  Fraction = t.Fraction,
+                                                  TobaccoId = t.Tobacco.Id
+                                     }).ToList()
+                             };
         }
     }
 

@@ -90,17 +90,23 @@ namespace smartHookah.Services.SmokeSession
             var session = db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
             if (session == null) throw new ItemNotFoundException($"Session with id {id} not found.");
             
-            if (session.MetaDataId == model.Id)
+            if (session.MetaDataId != model.Id)
             {
-                db.SessionMetaDatas.AddOrUpdate(model);
-                await db.SaveChangesAsync();
-                return model;
+                model.Id = session.MetaDataId ?? 0;
             }
-            
-            session.MetaData = model;
-            db.SmokeSessions.AddOrUpdate(session);
-            await db.SaveChangesAsync();
-            return GetMetaData(session.MetaData.Id);
+
+            db.SessionMetaDatas.AddOrUpdate(model);
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return model;
         }
     }
 }
