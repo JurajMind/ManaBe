@@ -106,7 +106,7 @@ namespace smartHookah.Services.SmokeSession
                 throw;
             }
 
-            return model;
+            return await this.db.SessionMetaDatas.FindAsync(model.Id);
         }
     }
 }

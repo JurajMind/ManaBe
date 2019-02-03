@@ -208,6 +208,15 @@ namespace smartHookah.Services.Gear
                 newMix.Id = this.db.SessionMetaDatas.Count(a => a.TobaccoId == originalMix.Id) <= 1
                                 ? originalMix.Id
                                 : 0;
+                var mixParts = originalMix.Tobaccos.ToList();
+
+                this.db.TobaccosMixParts.RemoveRange(mixParts);
+                foreach (var part in newMix.Tobaccos)
+                {
+                    part.InMixId = newMix.Id;
+                }
+                this.db.TobaccosMixParts.AddRange(newMix.Tobaccos);
+
             }
             else
             {
@@ -222,9 +231,10 @@ namespace smartHookah.Services.Gear
 
             try
             {
-                this.db.TobaccoMixs.AddOrUpdate(newMix);
+                this.db.PipeAccesories.AddOrUpdate(newMix);
                 await this.db.SaveChangesAsync();
-                return newMix;
+                var test = await this.db.TobaccoMixs.FindAsync(newMix.Id);
+                return test;
             }
             catch (Exception e)
             {

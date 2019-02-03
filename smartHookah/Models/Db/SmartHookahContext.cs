@@ -201,6 +201,8 @@ namespace smartHookah.Models
 
             modelBuilder.Entity<Person>().HasOptional(a => a.Game).WithRequired(a => a.Person);
 
+            modelBuilder.Entity<TobaccoMix>().HasMany(a => a.Tobaccos).WithRequired(b => b.InMix).WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Reservation>().HasMany(s => s.Customers).WithMany(h => h.InReservations).Map(
                 cs =>
                     {
