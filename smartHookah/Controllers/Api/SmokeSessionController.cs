@@ -129,10 +129,10 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                if (model.TobaccoMix != null && model.TobaccoMix.Id == 0)
+                if (model.TobaccoMix != null)
                 {
                     TobaccoMix newMix = TobaccoMixSimpleDto.ToModel(model.TobaccoMix);
-                    var createdMix = await this.tobaccoService.CreateMix(newMix);
+                    var createdMix = await this.tobaccoService.AddOrUpdateMix(newMix);
                     model.Tobacco.Id = createdMix.Id;
                 }
 

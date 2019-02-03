@@ -89,7 +89,7 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateMix")]
+        [ActionName("AddOrUpdateMix")]
         [Authorize]
         public async Task<ActionResult> SaveCreateMix(SaveSmokeMetadataModel model)
         {
