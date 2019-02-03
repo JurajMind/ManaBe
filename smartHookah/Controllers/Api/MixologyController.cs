@@ -52,7 +52,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixes")]
         [ApiAuthorize]
-        public async Task<MixListDTO> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
+        public async Task<IEnumerable<TobaccoMixSimpleDto>> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
         {
            var query = from a in this.db.TobaccoMixs select a;
             if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
@@ -70,7 +70,7 @@ namespace smartHookah.Controllers.Api
                 var userId = user.Id;
                 query = from m in query where m.Author.Id == userId select m;
             }
-
+            var result = new List<TobaccoMixSimpleDto>();
             switch (orderBy.ToLower())
             {
                 case "name":
@@ -94,52 +94,13 @@ namespace smartHookah.Controllers.Api
                                 : from a in query orderby a.Statistics.SmokeDurationTick descending select a;
                     break;
                 default:
-                    return new MixListDTO()
-                               {
-                                   Success = false,
-                                   Message =
-                                       "Invalid OrderBy value, select \"name\", \"used\", \"rating\" or \"time\"."
-                               };
+                    throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"bad order value {orderBy}"));
             }
             query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
 
             var res = query.ToList();
 
-            if (res.Count > 0)
-            {
-                var result = new MixListDTO() { Success = true, Message = $"{res.Count} mixes found." };
-                foreach (var r in res)
-                {
-                    var m = new Mix()
-                                {
-                                    Id = r.Id,
-                                    AccName = r.AccName,
-                                    Overall = r.Statistics?.Overall ?? -1,
-                                    Used = r.Statistics?.Used ?? -1
-                                };
-                    foreach (var x in r.Tobaccos)
-                    {
-                        var t = new Models.Dto.TobaccoInMix()
-                                    {
-                                        Tobacco = new TobaccoSimpleDto()
-                                                      {
-                                                          Id = x.TobaccoId,
-                                                          Name = x.Tobacco.AccName,
-                                                          BrandName = x.Tobacco.Brand.DisplayName,
-                                                          Type = "Tobbaco",
-                                                          SubCategory = x.Tobacco.SubCategory
-                                                          
-                                                      },
-                                        Fraction = x.Fraction
-                                    };
-
-                        m.Tobaccos.Add(t);
-                    }
-                    result.Mixes.Add(m);
-                }
-                return result;
-            }
-            return new MixListDTO() { Success = false, Message = "No mixes found." };
+            return TobaccoMixSimpleDto.FromModelList(res);
         }
 
         [System.Web.Http.HttpGet]
@@ -230,7 +191,7 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("AddToMix")]
-        public async Task<TobaccoMixSimpleDto> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] Mix newMix)
+        public async Task<TobaccoMixSimpleDto> AddToMix([Bind(Include = "Id,AccName,Tobaccos")] TobaccoMixSimpleDto newMix)
         {
             if (newMix == null)
             {
@@ -241,7 +202,7 @@ namespace smartHookah.Controllers.Api
             var author = this.personService.GetCurentPerson();
             var mix = new TobaccoMix()
             {
-                AccName = newMix.AccName,
+                AccName = newMix.Name,
                 Author = author,
                 CreatedAt = DateTimeOffset.UtcNow,
                 BrandName = author.AssignedBrandId ?? "OwnBrand"

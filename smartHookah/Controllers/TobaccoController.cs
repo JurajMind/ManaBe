@@ -89,7 +89,7 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateMix")]
+        [ActionName("AddOrUpdateMix")]
         [Authorize]
         public async Task<ActionResult> SaveCreateMix(SaveSmokeMetadataModel model)
         {
@@ -490,10 +490,53 @@ namespace smartHookah.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<JsonResult> GetTobaccoFlavor(string id, bool ownGear = false)
+        {
+            var tobacos = new List<Tobacco>();
+            if (ownGear)
+            {
+                var person = UserHelper.GetCurentPerson(db);
+                if (person == null)
+                {
+                    tobacos = db.Tobaccos.Where(a => a.Brand.Name == id).ToList();
+                }
+                else
+                {
+                    if (id == "My mixes")
+                    {
+                        tobacos = db.TobaccoMixs.Where(a => a.AuthorId == person.Id).ToList().Cast<Tobacco>().ToList();
+                    }
+                    else
+                    {
+                        tobacos = person.Tobacco.Where(a => a.BrandName == id).ToList();
+                    }
 
 
+                }
+            }
+            else
+            {
+                tobacos = db.Tobaccos.Where(a => a.Brand.Name == id).ToList();
+            }
 
 
+            if (tobacos.Any(a => !(a is TobaccoMix)))
+                return Json(tobacos.OrderBy(a => a.AccName).Select(a => new { name = a.AccName, id = a.Id }), JsonRequestBehavior.AllowGet);
+
+            var tobacoMix = tobacos.Where(a => !String.IsNullOrEmpty(a.AccName)).Select(t => t as TobaccoMix);
+
+            return Json(tobacoMix.OrderBy(a => a.AccName).Select(x => new
+                                                                          {
+                                                                              name = x.AccName,
+                                                                              id = x.Id,
+                                                                              parts = x.Tobaccos.Select(y => new
+                                                                                                                 {
+                                                                                                                     name = y.Tobacco.AccName,
+                                                                                                                     brand = y.Tobacco.BrandName,
+                                                                                                                     fraction = y.Fraction
+                                                                                                                 })
+                                                                          }), JsonRequestBehavior.AllowGet);
+        }
 
         public static Tobacco GetTobacoFromMetadata(SaveSmokeMetadataModel model, SmartHookahContext db)
         {

@@ -12,10 +12,18 @@ using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
 {
+    using System.Data.Entity.Migrations;
+    using System.Net;
     using System.Web.Helpers;
+
+    using log4net;
+
+    using smartHookah.Controllers.Api;
+    using smartHookah.Models.Dto;
 
     public class TobaccoService : ITobaccoService
     {
+        private readonly ILog logger = LogManager.GetLogger(typeof(TobaccoService));
         private readonly SmartHookahContext db;
         private readonly IPersonService personService;
 
@@ -180,6 +188,66 @@ namespace smartHookah.Services.Gear
         public Task<List<TobaccoReview>> GetTobaccoMixReviews(TobaccoMix mix, int count = 10)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<TobaccoMix> AddOrUpdateMix (TobaccoMix newMix)
+        {
+            if (newMix == null)
+            {
+                return null;
+            }
+
+            var originalMix = await this.db.TobaccoMixs.FindAsync(newMix.Id);
+
+            if (this.MatchMixes(originalMix, newMix))
+            {
+                return originalMix;
+            }
+            if (originalMix != null)
+            {
+                newMix.Id = this.db.SessionMetaDatas.Count(a => a.TobaccoId == originalMix.Id) <= 1
+                                ? originalMix.Id
+                                : 0;
+                var mixParts = originalMix.Tobaccos.ToList();
+
+                this.db.TobaccosMixParts.RemoveRange(mixParts);
+                foreach (var part in newMix.Tobaccos)
+                {
+                    part.InMixId = newMix.Id;
+                }
+                this.db.TobaccosMixParts.AddRange(newMix.Tobaccos);
+
+            }
+            else
+            {
+                newMix.Id = 0;
+            }
+
+
+            newMix.CreatedAt = DateTimeOffset.UtcNow;
+            var author = this.personService.GetCurentPerson();
+            newMix.AuthorId = author.Id;
+            newMix.BrandName = author.AssignedBrandId ?? "OwnBrand";
+
+            try
+            {
+                this.db.PipeAccesories.AddOrUpdate(newMix);
+                await this.db.SaveChangesAsync();
+                var test = await this.db.TobaccoMixs.FindAsync(newMix.Id);
+                return test;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e);
+                throw new Exception(
+                    $"Unknown error",e);
+            }
+        }
+
+        private bool MatchMixes(TobaccoMix originalMix, TobaccoMix newMix)
+        {
+            if (originalMix == null) return false;
+            return newMix.Tobaccos.All(mixPart => originalMix.Tobaccos.Any(t => t.TobaccoId == mixPart.TobaccoId && t.Fraction == mixPart.Fraction)) && originalMix.Tobaccos.All(mixPart => newMix.Tobaccos.Any(t => t.TobaccoId == mixPart.TobaccoId && t.Fraction == mixPart.Fraction));
         }
 
         #endregion
