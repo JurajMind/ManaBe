@@ -106,7 +106,7 @@ namespace smartHookah.Services.SmokeSession
                 throw;
             }
 
-            return await this.db.SessionMetaDatas.FindAsync(model.Id);
+            return this.db.SessionMetaDatas.Where(a => a.Id == model.Id).Include(a => a.Tobacco).FirstOrDefault();
         }
     }
 }

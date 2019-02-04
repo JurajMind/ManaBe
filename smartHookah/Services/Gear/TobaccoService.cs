@@ -198,7 +198,10 @@ namespace smartHookah.Services.Gear
             }
 
             var originalMix = await this.db.TobaccoMixs.FindAsync(newMix.Id);
-
+            newMix.CreatedAt = DateTimeOffset.UtcNow;
+            var author = this.personService.GetCurentPerson();
+            newMix.AuthorId = author.Id;
+            newMix.BrandName = author.AssignedBrandId ?? "OwnBrand";
             if (this.MatchMixes(originalMix, newMix))
             {
                 return originalMix;
@@ -221,13 +224,12 @@ namespace smartHookah.Services.Gear
             else
             {
                 newMix.Id = 0;
+                newMix.Brand = this.db.Brands.Find(newMix.BrandName);
+                foreach (var newMixTobacco in newMix.Tobaccos)
+                {
+                    newMixTobacco.Tobacco = await this.db.Tobaccos.FindAsync(newMixTobacco.TobaccoId);
+                }
             }
-
-
-            newMix.CreatedAt = DateTimeOffset.UtcNow;
-            var author = this.personService.GetCurentPerson();
-            newMix.AuthorId = author.Id;
-            newMix.BrandName = author.AssignedBrandId ?? "OwnBrand";
 
             try
             {
