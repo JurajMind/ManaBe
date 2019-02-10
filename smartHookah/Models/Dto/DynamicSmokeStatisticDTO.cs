@@ -52,6 +52,8 @@ namespace smartHookah.Models.Dto
         public long Duration { get; private set; }
         public long LongestPufMilis { get; private set; }
 
+        public DynamicSmokeStatisticRawDto() { }
+
         public DynamicSmokeStatisticRawDto(DynamicSmokeStatistic ds)
         {
             if (ds == null)
