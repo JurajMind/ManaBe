@@ -34,7 +34,7 @@ namespace smartHookah.Models.Dto
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
                 Place = PlaceSimpleDto.FromModel(model.Place),
-                Statistic = new DynamicSmokeStatisticRawDto(model.DynamicSmokeStatistic)
+                Statistic = new DynamicSmokeStatisticRawDto(model.Statistics)
             }; 
         
 
