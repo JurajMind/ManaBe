@@ -42,6 +42,7 @@ namespace smartHookah.Models.Dto
 
     public class DynamicSmokeStatisticRawDto
     {
+        
         public int PufCount { get; private set; }
         public long LastPuf { get; private set; }
         public long LastPufTime { get; private set; }
@@ -75,6 +76,14 @@ namespace smartHookah.Models.Dto
             this.LongestPufMilis = ds.LongestPuf.Ticks;
         }
 
-
+        public DynamicSmokeStatisticRawDto(SmokeSessionStatistics statistics)
+        {
+            this.PufCount = statistics.PufCount;
+            this.SmokeDuration = statistics.SmokeDuration.Ticks;
+            this.LongestPuf = statistics.LongestPuf.Ticks;
+            this.Start = statistics.Start.Ticks;
+            this.Duration = statistics.SessionDuration.Ticks;
+            this.LongestPuf = statistics.LongestPuf.Ticks;
+        }
     }
 }
