@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {
-    using smartHookah.Models.Redis;
-
     [DataContract]
     public class SmokeSessionSimpleDto
     {
@@ -26,16 +22,31 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Place")]
         public PlaceSimpleDto Place { get; set; }
 
-        public static SmokeSessionSimpleDto FromModel(SmokeSession model) => model == null
-            ? null
-            : new SmokeSessionSimpleDto()
+        public static SmokeSessionSimpleDto FromModel(SmokeSession model)
+        {
+            if(model == null)
+            {
+                return null;
+            }
+            var statistic = new DynamicSmokeStatisticRawDto();
+            if( model.DynamicSmokeStatistic != null)
+            {
+                statistic = new DynamicSmokeStatisticRawDto(model.DynamicSmokeStatistic);
+            }else if(model.Statistics != null)
+            {
+                statistic = new DynamicSmokeStatisticRawDto(model.Statistics);
+            }
+            return new SmokeSessionSimpleDto()
             {
                 SessionId = model.SessionId,
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
                 Place = PlaceSimpleDto.FromModel(model.Place),
-                Statistic = new DynamicSmokeStatisticRawDto(model.Statistics)
-            }; 
+                Statistic = statistic
+            };
+        }
+    
+            
         
 
         public static IEnumerable<SmokeSessionSimpleDto> FromModelList(List<SmokeSession> model)
