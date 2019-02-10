@@ -81,11 +81,11 @@ namespace smartHookah.Models.Dto
         public DynamicSmokeStatisticRawDto(SmokeSessionStatistics statistics)
         {
             this.PufCount = statistics.PufCount;
-            this.SmokeDuration = statistics.SmokeDuration.Milliseconds;
-            this.LongestPuf = statistics.LongestPuf.Milliseconds;
-            this.Start = statistics.Start.Millisecond;
-            this.Duration = statistics.SessionDuration.Milliseconds;
-            this.LongestPuf = statistics.LongestPuf.Milliseconds;
+            this.SmokeDuration = statistics.SmokeDuration.Ticks;
+            this.LongestPuf = statistics.LongestPuf.Ticks;
+            this.Start = statistics.Start.Ticks;
+            this.Duration = statistics.SessionDuration.Ticks;
+            this.LongestPuf = statistics.LongestPuf.Ticks;
         }
     }
 }
