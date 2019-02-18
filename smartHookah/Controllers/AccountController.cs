@@ -12,6 +12,7 @@ using smartHookah.Models;
 namespace smartHookah.Controllers
 {
     using System.Configuration;
+    using System.Data.Entity.Migrations;
     using System.Net.Http;
 
     using Microsoft.Owin;
@@ -34,11 +35,14 @@ namespace smartHookah.Controllers
 
         private readonly IAccountService accountService;
 
-        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService)
+        private readonly SmartHookahContext db;
+
+        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService, SmartHookahContext db)
         {
             this.owinContext = owinContext;
             this.personService = personService;
             this.accountService = accountService;
+            this.db = db;
         }
 
         public AccountController(
@@ -209,8 +213,9 @@ namespace smartHookah.Controllers
                 {
                     await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                  
-
+                    var person = new Person();
+                    person.GameProfile = new GameProfile();
+                    user.Person = person;
 
                     await this.UserManager.UpdateAsync(user);
 
@@ -237,6 +242,21 @@ namespace smartHookah.Controllers
             return this.View(model);
         }
 
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult> RegeneratePersons(){
+           var badUsers =  this.db.Users.Where(a => a.PersonId == null);
+
+            foreach(var user in badUsers)
+            {
+                var person = new Person();
+                person.GameProfile = new GameProfile();
+                user.Person = person;
+                this.db.Users.AddOrUpdate(user);
+            }
+
+            await this.db.SaveChangesAsync();
+            return null;
+        }
 
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
