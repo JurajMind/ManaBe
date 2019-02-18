@@ -71,6 +71,9 @@
             {
                 await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
+                var person = new Person();
+                person.GameProfile = new GameProfile();
+                user.Person = person;
                 await this.UserManager.UpdateAsync(user);
                 // Send an email with this link
                 string code = await this.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
