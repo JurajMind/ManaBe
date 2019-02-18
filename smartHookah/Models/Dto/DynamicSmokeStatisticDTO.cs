@@ -42,6 +42,7 @@ namespace smartHookah.Models.Dto
 
     public class DynamicSmokeStatisticRawDto
     {
+        
         public int PufCount { get; private set; }
         public long LastPuf { get; private set; }
         public long LastPufTime { get; private set; }
@@ -50,6 +51,8 @@ namespace smartHookah.Models.Dto
         public long Start { get; private set; }
         public long Duration { get; private set; }
         public long LongestPufMilis { get; private set; }
+
+        public DynamicSmokeStatisticRawDto() { }
 
         public DynamicSmokeStatisticRawDto(DynamicSmokeStatistic ds)
         {
@@ -68,13 +71,21 @@ namespace smartHookah.Models.Dto
                 this.LastPufTime = ds.LastPufTime.Ticks;
             }
 
-            this.SmokeDuration = ds.TotalSmokeTime.Ticks;
-            this.LongestPuf = ds.LongestPuf.Ticks;
-            this.Start = ds.Start.Ticks;
-            this.Duration = (DateTime.UtcNow - ds.Start).Ticks;
-            this.LongestPufMilis = ds.LongestPuf.Ticks;
+            this.SmokeDuration = (int)ds.TotalSmokeTime.TotalMilliseconds;
+            this.LongestPuf = (int)ds.LongestPuf.TotalMilliseconds;
+            this.Start = new DateTimeOffset(ds.Start).ToUnixTimeMilliseconds();
+            this.Duration = (int)(DateTime.UtcNow - ds.Start).TotalMilliseconds;
+            this.LongestPufMilis = (int)ds.LongestPuf.TotalMilliseconds;
         }
 
-
+        public DynamicSmokeStatisticRawDto(SmokeSessionStatistics statistics)
+        {
+            this.PufCount = statistics.PufCount;
+            this.SmokeDuration = (int)statistics.SmokeDuration.TotalMilliseconds;
+            this.LongestPuf = (int)statistics.LongestPuf.TotalMilliseconds; ;
+            this.Start = new DateTimeOffset(statistics.Start).ToUnixTimeMilliseconds();
+            this.Duration = (int)statistics.SessionDuration.TotalMilliseconds; ;
+            this.LongestPuf = (int)statistics.LongestPuf.TotalMilliseconds; ;
+        }
     }
 }

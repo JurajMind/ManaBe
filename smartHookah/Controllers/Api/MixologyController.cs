@@ -198,61 +198,9 @@ namespace smartHookah.Controllers.Api
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
                     "Mix is null"));
             }
-
-            var author = this.personService.GetCurentPerson();
-            var mix = new TobaccoMix()
-            {
-                AccName = newMix.Name,
-                Author = author,
-                CreatedAt = DateTimeOffset.UtcNow,
-                BrandName = author.AssignedBrandId ?? "OwnBrand"
-            };
-
-            foreach (var tobacco in newMix.Tobaccos)
-            {
-                var t = this.db.Tobaccos.Find(tobacco.Tobacco.Id);
-                if (tobacco.Fraction < 1 || tobacco.Fraction > 40 || t == null)
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                        "TobaccoInMix not fount or fraction not within acceptable range."));
-
-                if (mix.Tobaccos.Any(a => a.TobaccoId == tobacco.Tobacco.Id))
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                        $"TobaccoInMix {tobacco.Tobacco.BrandName} {tobacco.Tobacco.Name} was already added to mix."));
-
-                mix.Tobaccos.Add(new TobacoMixPart(){TobaccoId = tobacco.Tobacco.Id, Fraction = tobacco.Fraction});
-            }
-            try
-            {
-                this.db.TobaccoMixs.AddOrUpdate(mix);
-                await this.db.SaveChangesAsync();
-                var response = new TobaccoMixSimpleDto()
-                {
-                    Id = mix.Id,
-                    Name = mix.AccName
-                };
-                foreach (var m in mix.Tobaccos)
-                {
-                    var x = new TobaccoInMix()
-                    {
-                        Tobacco =  new TobaccoSimpleDto()
-                                       {
-                                           Id = m.Tobacco.Id,
-                                           Name = m.Tobacco.AccName,
-                                           BrandId = m.Tobacco.BrandName,
-                                           BrandName = m.Tobacco.Brand.Name
-                                       },
-                        Fraction = m.Fraction
-                    };
-                    response.Tobaccos.Add(x);
-                }
-                return response;
-            }
-            catch (Exception e)
-            {
-                this.logger.Error(e);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError,
-                    $"Server error"));
-            }
+            TobaccoMix newMixModel = TobaccoMixSimpleDto.ToModel(newMix);
+            var result = await this.tobaccoService.AddOrUpdateMix(newMixModel);
+            return TobaccoMixSimpleDto.FromModel(result);
         }
 
         [System.Web.Http.HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
