@@ -72,7 +72,7 @@
                 await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                 var person = new Person();
-                person.GameProfile = new GameProfile();
+                 person.GameProfile = new GameProfile();
                 user.Person = person;
                 await this.UserManager.UpdateAsync(user);
                 // Send an email with this link
@@ -80,6 +80,10 @@
                 var callbackUrl = this.Url.Link(
                     "ConfirmEmail",
                     new { controller = "Account", userId = user.Id, code = code });
+
+                // fix email link to not point to api
+                callbackUrl = callbackUrl.Replace("/api/Account/api/Account/ConfirmEmail", "/Account/ConfirmEmail");
+
                 await this.UserManager.SendEmailAsync(
                     user.Id,
                     "Confirm your account",
@@ -98,6 +102,14 @@
             return this.ResponseMessage(response);
         }
 
+
+        [AllowAnonymous]
+        [Route("api/Account/ConfirmEmail/", Name = "ConfirmEmail")]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId,string code)
+        {
+         // dummy 
+            return null;
+        }
         [HttpPost]
         [AllowAnonymous]
         [Route("ForgotPassword")]
