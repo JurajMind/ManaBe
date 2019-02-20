@@ -93,6 +93,52 @@ namespace smartHookah.Controllers.Api
             }
         }
 
+        [HttpGet, ApiAuthorize, Route("MyGear/Used/{sessionCount}")]
+        public ICollection<PipeAccesorySimpleDto> GetRecentAccessories(int sessionCount = 10)
+        {
+            try
+            {
+                return PipeAccesorySimpleDto.FromModelList(gearService.GetRecentAccessories(sessionCount)).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
+        }
+
+        #endregion
+
+        #region Setters
+
+        [HttpPost, ApiAuthorize, Route("MyGear/{id}/Add/{count}")]
+        public async Task<PipeAccesorySimpleDto> AddMyGear(int id, int count)
+        {
+            try
+            {
+                return PipeAccesorySimpleDto.FromModel(await gearService.AddMyGear(id, count, null));
+            }
+            catch(Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
+        }
+
+        [HttpPost, ApiAuthorize, Route("MyGear/{id}/Delete")]
+        public async Task<bool> DeleteMyGear(int id, int? count)
+        {
+            try
+            {
+                return await gearService.DeleteMyGear(id, count, null);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
+            }
+        }
+
         #endregion
     }
 }
