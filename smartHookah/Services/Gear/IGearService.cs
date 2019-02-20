@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using smartHookah.Models;
 
@@ -30,6 +31,12 @@ namespace smartHookah.Services.Gear
         int OwnedByPersons(PipeAccesory accessory);
 
         int OwnedByPlaces(PipeAccesory accessory);
+
+        Task<PipeAccesory> AddMyGear(int id, int count, int? personId);
+
+        Task<bool> DeleteMyGear(int id, int? count, int? personId);
+
+        ICollection<PipeAccesory> GetRecentAccessories(int count);
     }
 
     public class GearFilter
