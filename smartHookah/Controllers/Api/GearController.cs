@@ -31,11 +31,12 @@ namespace smartHookah.Controllers.Api
         #region Getters
 
         [HttpGet, ApiAuthorize, System.Web.Http.Route("{type}/Search/{search}")]
-        public List<GearService.SearchPipeAccesory> Search(string search, string type, int page = 0, int pageSize = 50)
+        public List<GearService.SearchPipeAccesory> Search(string search, string type, int page = 0, int pageSize = 50, string searchType = "All")
         {
             if (Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
             {
-                return this.gearService.SearchAccesories(search, result, page, pageSize);
+                if(Enum.TryParse<SearchType>(searchType.FirstLetterToUpper(), out var searchTypeType))
+                return this.gearService.SearchAccesories(search, result, searchTypeType, page, pageSize);
             }
 
             throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,

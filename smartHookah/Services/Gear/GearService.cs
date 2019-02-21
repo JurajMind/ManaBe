@@ -155,11 +155,12 @@ namespace smartHookah.Services.Gear
         public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(
             string search,
             AccesoryType type,
+            SearchType searchType,
             int page,
             int pageSize)
         {
             page = page + 1;
-            var query = ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql");
+            var query = searchType == SearchType.All ? ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql") : ResourceHelper.ReadResources("smartHookah.Queries.searchByBrand.sql");
             var userId = this.personService.GetCurentPerson().Id;
             var result = this.db.Database.SqlQuery<Models.Dto.GearService.SearchPipeAccesory>(
                 query
@@ -246,6 +247,95 @@ namespace smartHookah.Services.Gear
         {
             var result = db.Persons.Count(a => a.Places.Any() && a.OwnedPipeAccesories.Any(x => x.PipeAccesory.Id == accessory.Id));
             return result;
+        }
+
+        public async Task<PipeAccesory> AddMyGear(int id, int count, int? personId)
+        {
+            var person = personId == null
+                ? personService.GetCurentPerson()
+                : personService.GetCurentPerson(personId);
+
+            var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
+
+            if (accessory == null) throw new ItemNotFoundException($"Accessory id {id} not found.");
+
+            if (person.OwnedPipeAccesories.Any(a => a.PipeAccesory.Id == accessory.Id))
+            {
+                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
+                if (current != null)
+                {
+                    current.Amount += count;
+                    db.OwnPipeAccesorieses.AddOrUpdate(current);
+                    await db.SaveChangesAsync();
+                    return accessory;
+                }
+            }
+            db.OwnPipeAccesorieses.Add(new OwnPipeAccesories()
+            {
+                Amount = count,
+                PipeAccesoryId = accessory.Id,
+                PersonId = person.Id,
+                CreatedDate = DateTime.UtcNow
+            });
+            await db.SaveChangesAsync();
+            return accessory;
+        }
+
+        public async Task<bool> DeleteMyGear(int id, int? count, int? personId)
+        {
+            var person = personId == null
+                ? personService.GetCurentPerson()
+                : personService.GetCurentPerson(personId);
+
+            var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
+
+            if (accessory == null) throw new ItemNotFoundException($"Accessory id {id} not found.");
+
+            if (person.OwnedPipeAccesories.All(a => a.PipeAccesory.Id != accessory.Id))
+                throw new ItemNotFoundException($"OwnAccessory id {id} not found.");
+            {
+                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
+                if (current == null) throw new ItemNotFoundException($"OwnAccessory id {id} not found.");
+                if (count != null && current.Amount > count)
+                {
+                    current.Amount -= (decimal) count;
+                    db.OwnPipeAccesorieses.AddOrUpdate(current);
+                    await db.SaveChangesAsync();
+                    return true;
+                }
+
+                current.Amount = 0;
+                current.DeleteDate = DateTime.UtcNow;
+                db.OwnPipeAccesorieses.AddOrUpdate(current);
+                await db.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        public ICollection<PipeAccesory> GetRecentAccessories(int count)
+        {
+            var person = personService.GetCurentPerson();
+
+            var sessions = person.SmokeSessions
+                .OrderByDescending(a => a.CreatedAt)
+                .Take(count)
+                .ToList();
+
+            var result = new List<PipeAccesory>();
+
+            var bowls = sessions.Select(a => a.MetaData.Bowl as PipeAccesory).Where(a => a != null).ToList();
+            var hmds = sessions.Select(a => a.MetaData.HeatManagement as PipeAccesory).Where(a => a != null).ToList();
+            var pipes = sessions.Select(a => a.MetaData.Pipe as PipeAccesory).Where(a => a != null).ToList();
+            var coals = sessions.Select(a => a.MetaData.Coal as PipeAccesory).Where(a => a != null).ToList();
+            var tobacco = sessions.Where(a => !(a.MetaData.Tobacco is TobaccoMix) ).Select(a => a.MetaData.Tobacco as PipeAccesory).Where(a => a != null).ToList();
+
+            result.AddRangeIfRangeNotNull(bowls);
+            result.AddRangeIfRangeNotNull(hmds);
+            result.AddRangeIfRangeNotNull(pipes);
+            result.AddRangeIfRangeNotNull(coals);
+            result.AddRangeIfRangeNotNull(tobacco);
+
+            return result.GroupBy(a => a.Id).Select(a => a.First()).ToList();
         }
     }
 
