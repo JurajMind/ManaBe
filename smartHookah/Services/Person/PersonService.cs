@@ -121,16 +121,25 @@
             return onlineState;
         }
 
-        public async Task<ICollection<Hookah>> GetUserActiveStands(int? personId)
+        public async Task<ICollection<Hookah>> GetUserDevices(int? personId)
         {
             if (personId == null)
             {
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            return await db.Hookahs
+            var devices =  await db.Hookahs
                 .Where(a => a.Owners.Any(x => x.Id == personId))
                 .ToListAsync();
+
+            var onlineState = await this.deviceService.GetOnlineStates(devices.Select(s => s.Code));
+
+            foreach (var device in devices)
+            {
+                device.OnlineState = onlineState[device.Code];
+            }
+
+            return devices;
         }
 
         public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
