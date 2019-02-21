@@ -26,7 +26,7 @@
 
         Task<IEnumerable<Hookah>> GetAllStands();
 
-        Task<ICollection<Hookah>> GetUserActiveStands(int? personId);
+        Task<ICollection<Hookah>> GetUserDevices(int? personId);
 
         ICollection<SmokeSession> GetUserActiveSessions(int? personId);
 
