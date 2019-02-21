@@ -155,11 +155,12 @@ namespace smartHookah.Services.Gear
         public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(
             string search,
             AccesoryType type,
+            SearchType searchType,
             int page,
             int pageSize)
         {
             page = page + 1;
-            var query = ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql");
+            var query = searchType == SearchType.All ? ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql") : ResourceHelper.ReadResources("smartHookah.Queries.searchByBrand.sql");
             var userId = this.personService.GetCurentPerson().Id;
             var result = this.db.Database.SqlQuery<Models.Dto.GearService.SearchPipeAccesory>(
                 query
@@ -317,20 +318,22 @@ namespace smartHookah.Services.Gear
 
             var sessions = person.SmokeSessions
                 .OrderByDescending(a => a.CreatedAt)
-                .Take(10)
+                .Take(count)
                 .ToList();
 
             var result = new List<PipeAccesory>();
 
-            var bowls = sessions.Select(a => a.MetaData.Coal as PipeAccesory).Where(a => a != null).ToList();
+            var bowls = sessions.Select(a => a.MetaData.Bowl as PipeAccesory).Where(a => a != null).ToList();
             var hmds = sessions.Select(a => a.MetaData.HeatManagement as PipeAccesory).Where(a => a != null).ToList();
             var pipes = sessions.Select(a => a.MetaData.Pipe as PipeAccesory).Where(a => a != null).ToList();
             var coals = sessions.Select(a => a.MetaData.Coal as PipeAccesory).Where(a => a != null).ToList();
+            var tobacco = sessions.Where(a => !(a.MetaData.Tobacco is TobaccoMix) ).Select(a => a.MetaData.Tobacco as PipeAccesory).Where(a => a != null).ToList();
 
             result.AddRangeIfRangeNotNull(bowls);
             result.AddRangeIfRangeNotNull(hmds);
             result.AddRangeIfRangeNotNull(pipes);
             result.AddRangeIfRangeNotNull(coals);
+            result.AddRangeIfRangeNotNull(tobacco);
 
             return result.GroupBy(a => a.Id).Select(a => a.First()).ToList();
         }

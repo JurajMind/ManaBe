@@ -20,7 +20,7 @@ namespace smartHookah.Services.Gear
 
         Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
 
-        List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type,int page,int pageSize);
+        List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
         
         int UsedByPerson(PipeAccesory accessory, int personId);
 
