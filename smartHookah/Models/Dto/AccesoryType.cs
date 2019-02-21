@@ -10,4 +10,10 @@
         Hookah,
         Coal
     }
+
+    public enum SearchType
+    {
+        All,
+        Brand,
+    }
 }

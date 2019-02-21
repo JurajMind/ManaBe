@@ -10,57 +10,57 @@ namespace smartHookah.Hubs
 {
     public class SmokeSessionHub : Hub
     {
-        public void Puf(string hookahCode , int direction)
+        public void Puf(string hookahCode, int direction)
         {
-
         }
 
         public Task JoinSession(string sessionId)
         {
-            return this.Groups.Add(Context.ConnectionId, sessionId);
+            return this.Groups.Add(this.Context.ConnectionId, sessionId);
         }
-        
+
+        public void Ping()
+        {
+            this.Clients.Client(this.Context.ConnectionId).Ping();
+        }
 
         public Task JoinPerson(string personId)
         {
-            return this.Groups.Add(Context.ConnectionId, personId);
+            return this.Groups.Add(this.Context.ConnectionId, personId);
         }
 
         public Task LeaveSession(string sessionId)
         {
-            return this.Groups.Remove(Context.ConnectionId, sessionId);
+            return this.Groups.Remove(this.Context.ConnectionId, sessionId);
         }
 
         public async Task JoinLounge(int id)
         {
             using (var db = new SmartHookahContext())
             {
-                //var person = UserHelper.GetCurentPerson(db, int.Parse(id));
+                // var person = UserHelper.GetCurentPerson(db, int.Parse(id));
                 var place = db.Places.Where(a => a.Id == id).Include(a => a.Person.Hookahs).FirstOrDefault();
-                if(place == null)
-                    return;
+                if (place == null) return;
                 var hookahs = place.Person.Hookahs;
 
                 foreach (var personHookah in hookahs)
                 {
-                    await Groups.Add(Context.ConnectionId, personHookah.Code);
+                    await this.Groups.Add(this.Context.ConnectionId, personHookah.Code);
                 }
-
             }
         }
 
         public Task JoinHookah(string hookahId)
         {
-            return Groups.Add(Context.ConnectionId, hookahId);
+            return this.Groups.Add(this.Context.ConnectionId, hookahId);
         }
-
     }
 
     public class ReservationHub : Hub
     {
         public async Task JoinPlace(int id)
         {
-            await Groups.Add(Context.ConnectionId, id.ToString());
+            await this.Groups.Add(this.Context.ConnectionId, id.ToString());
         }
     }
 }
