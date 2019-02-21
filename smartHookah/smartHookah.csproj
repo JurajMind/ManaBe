@@ -1935,6 +1935,7 @@
     <Content Include="ClientApp\components\nav-menu.vue" />
     <Compile Include="Models\Dto\DynamicSmokeStatisticDto.cs" />
     <Compile Include="Models\Dto\BrandGroupDto.cs" />
+    <EmbeddedResource Include="Queries\searchByBrand.sql" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
