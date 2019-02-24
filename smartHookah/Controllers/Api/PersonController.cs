@@ -47,7 +47,7 @@ namespace smartHookah.Controllers.Api
             var sessions = this.personService.GetUserActiveSessions(personId)
                 .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
-            var reservations = this.personService.GetUserActiveReservations(personId)
+            var reservations = this.personService.GetUpcomingReservation(personId)
                 .Select(Models.Dto.ReservationDto.FromModel).ToList();
             var orders = this.personService.GetUserHookahOrders(personId).Select(HookahOrderDto.FromModel).ToList();
             var gameProfile = GameProfileSimpleDto.FromModel(this.personService.GetUserGameProfile(personId));

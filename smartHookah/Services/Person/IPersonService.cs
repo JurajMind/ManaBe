@@ -32,6 +32,8 @@
 
         ICollection<Reservation> GetUserActiveReservations(int? personId);
 
+        ICollection<Reservation> GetUpcomingReservation(int? personId);
+
         ICollection<HookahOrder> GetUserHookahOrders(int? personId);
 
         GameProfile GetUserGameProfile(int? personId);
