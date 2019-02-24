@@ -158,6 +158,14 @@
                 a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied
                      && a.Status != ReservationState.NonVisited);
         }
+
+        public IEnumerable<Reservation> GetReservations(DateTime from, DateTime to)
+        {
+            var person = this.personService.GetCurentPerson();
+
+            return this.db.Reservations.Where(a => a.PersonId == person.Id &&
+                                                    DbFunctions.TruncateTime(a.Time) >= from && DbFunctions.TruncateTime(a.Time) <= to);
+        }
  
         private IEnumerable<TimeSlot> GetTimeSlots(DateTime date, bool includeReservation, BusinessHours placeTime)
         {

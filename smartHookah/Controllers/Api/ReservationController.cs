@@ -6,6 +6,7 @@ namespace smartHookah.Controllers.Api
 {
     using System.Threading.Tasks;
 
+    using smartHookah.ErrorHandler;
     using smartHookah.Models.Dto;
     using smartHookah.Services.Place;
 
@@ -29,6 +30,14 @@ namespace smartHookah.Controllers.Api
         public IEnumerable<ReservationDto> GetPersonReservations()
         {
             var reservations = this.reservationService.GetPersonReservations();
+            foreach (var item in reservations) yield return ReservationDto.FromModel(item);
+        }
+
+        [HttpGet, Route("Reservations")]
+        [ApiAuthorize]
+        public IEnumerable<ReservationDto> GetReservations(DateTime from, DateTime to)
+        {
+            var reservations = this.reservationService.GetReservations(from,to);
             foreach (var item in reservations) yield return ReservationDto.FromModel(item);
         }
 
