@@ -21,5 +21,7 @@ namespace smartHookah.Services.Place
         ICollection<Reservation> GetPersonReservations();
 
         IEnumerable<Reservation> GetReservations(DateTime from, DateTime to);
+
+        Task<bool> UpdateReservationState(int id, ReservationState state);
     }
 }
