@@ -854,6 +854,7 @@
     <Compile Include="Migrations\201902031613008_mixPart.Designer.cs">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\ReservationDetailDto.cs" />
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">

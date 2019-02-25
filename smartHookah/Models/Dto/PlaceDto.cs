@@ -251,6 +251,8 @@ namespace smartHookah.Models.Dto
         
         public int PlaceId { get; set; }
 
+        public string PlaceName { get; set; }
+
         public DateTime? Started { get; set; }
 
         public DateTime? End { get; set; }
@@ -279,6 +281,7 @@ namespace smartHookah.Models.Dto
                 Created = model.Created,
                 PersonId = model.PersonId,
                 PlaceId = model.PlaceId,
+                PlaceName = model.Place.Name,
                 Started = model.Started,
                 End = model.End,
                 Persons = model.Persons,

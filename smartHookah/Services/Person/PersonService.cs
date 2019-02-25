@@ -1,5 +1,6 @@
 ﻿namespace smartHookah.Services.Person
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -121,16 +122,25 @@
             return onlineState;
         }
 
-        public async Task<ICollection<Hookah>> GetUserActiveStands(int? personId)
+        public async Task<ICollection<Hookah>> GetUserDevices(int? personId)
         {
             if (personId == null)
             {
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            return await db.Hookahs
+            var devices =  await db.Hookahs
                 .Where(a => a.Owners.Any(x => x.Id == personId))
                 .ToListAsync();
+
+            var onlineState = await this.deviceService.GetOnlineStates(devices.Select(s => s.Code));
+
+            foreach (var device in devices)
+            {
+                device.OnlineState = onlineState[device.Code];
+            }
+
+            return devices;
         }
 
         public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
@@ -167,6 +177,18 @@
             }
 
             return db.Reservations.Where(a => a.Person.Id == personId).Where(a => a.Status == ReservationState.Confirmed).ToList();
+        }
+
+        public ICollection<Reservation> GetUpcomingReservation(int? personId)
+        {
+            if (personId == null)
+            {
+                var user = this.GetCurentPerson();
+                personId = user.Id;
+            }
+
+            var today = DateTime.Today.Date;
+            return this.db.Reservations.Where(a => a.Person.Id == personId).Where(a => DbFunctions.TruncateTime(a.Time) >= today).Take(10).ToList();
         }
 
         public ICollection<HookahOrder> GetUserHookahOrders(int? personId)
