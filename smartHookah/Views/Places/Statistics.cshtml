@@ -50,9 +50,15 @@
                 </div>
             </div>
             <div class="card">
+                <h4 class="card-header">Month visits distribution</h4>
+                <div class="card-body">
+                    <line-chart v-bind:data="statsData.monthVisit.Data" v-bind:labels="statsData.monthVisit.Labels" v-bind:label="'Month visits distribution'" />
+                </div>
+            </div>
+            <div class="card">
                 <h4 class="card-header">Month visits</h4>
                 <div class="card-body">
-                    <line-chart v-bind:data="statsData.monthVisit.Data" v-bind:labels="statsData.monthVisit.Labels" v-bind:label="'Month visits'" />
+                    <line-chart v-bind:data="statsData.byMonthVisit.Data" v-bind:labels="statsData.byMonthVisit.Labels" v-bind:label="'Month visits'" />
                 </div>
             </div>
             <div class="card">
@@ -144,6 +150,10 @@
                     visitDuration: {
                         Data: null,
                         Labels: null
+                    },
+                    byMonthVisit: {
+                        Data:null,
+                        Labels:null
                     },
                     Start: null,
                     Duration: null,

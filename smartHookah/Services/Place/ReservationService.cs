@@ -1,4 +1,7 @@
-﻿namespace smartHookah.Services.Place
+﻿using System.Data.Entity.Migrations;
+using Microsoft.TeamFoundation.VersionControl.Client;
+
+namespace smartHookah.Services.Place
 {
     using System;
     using System.Collections.Generic;
@@ -158,7 +161,30 @@
                 a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied
                      && a.Status != ReservationState.NonVisited);
         }
- 
+
+        public IEnumerable<Reservation> GetReservations(DateTime from, DateTime to)
+        {
+            var person = this.personService.GetCurentPerson();
+
+            return this.db.Reservations.Where(a => a.PersonId == person.Id &&
+                                                    DbFunctions.TruncateTime(a.Time) >= from && DbFunctions.TruncateTime(a.Time) <= to);
+        }
+
+        public async Task<Reservation> GetReservation(int id)
+        {
+            return await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<bool> UpdateReservationState(int id, ReservationState state)
+        {
+            var reservation = await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);
+            if (reservation == null) return false;
+            reservation.Status = state;
+            db.Reservations.AddOrUpdate(reservation);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
         private IEnumerable<TimeSlot> GetTimeSlots(DateTime date, bool includeReservation, BusinessHours placeTime)
         {
             var result = new List<TimeSlot>();
