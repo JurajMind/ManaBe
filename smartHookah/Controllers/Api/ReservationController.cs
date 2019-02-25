@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using smartHookah.Models;
 
 namespace smartHookah.Controllers.Api
 {
@@ -53,5 +54,15 @@ namespace smartHookah.Controllers.Api
             return await this.reservationService.GetReservationUsage(id, date);
         }
 
+        [HttpPost, Route("{id}/UpdateState/{state}")]
+        public async Task<bool> UpdateReservationState(int id, string state)
+        {
+            if (Enum.TryParse(state, true, out ReservationState status) && Enum.IsDefined(typeof(ReservationState), status))
+            {
+                return await reservationService.UpdateReservationState(id, status);
+            }
+
+            return false;
+        }
     }
 }
