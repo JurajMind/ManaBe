@@ -42,12 +42,12 @@ namespace smartHookah.Controllers.Api
             }
 
             var personId = person.Id;
-            var standTask = await this.personService.GetUserActiveStands(personId);
+            var standTask = await this.personService.GetUserDevices(personId);
             var devices = standTask.Select(DeviceSimpleDto.FromModel).ToList();
             var sessions = this.personService.GetUserActiveSessions(personId)
                 .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
-            var reservations = this.personService.GetUserActiveReservations(personId)
+            var reservations = this.personService.GetUpcomingReservation(personId)
                 .Select(Models.Dto.ReservationDto.FromModel).ToList();
             var orders = this.personService.GetUserHookahOrders(personId).Select(HookahOrderDto.FromModel).ToList();
             var gameProfile = GameProfileSimpleDto.FromModel(this.personService.GetUserGameProfile(personId));
@@ -60,6 +60,24 @@ namespace smartHookah.Controllers.Api
                 ActiveHookahOrders = orders,
                 GameProfile = gameProfile
             };
+        }
+
+        [HttpGet]
+        [ApiAuthorize, Route("Devices")]
+        public async Task<List<DeviceSimpleDto>> GetPersonDevices()
+        {
+            var person = this.personService.GetCurentPerson();
+
+            if (person == null)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Person not logged"));
+            }
+
+            var personId = person.Id;
+            var standTask = await this.personService.GetUserDevices(personId);
+            var devices = standTask.Select(DeviceSimpleDto.FromModel).ToList();
+            return devices;
         }
 
         [ApiAuthorize, HttpGet, Route("Info")]

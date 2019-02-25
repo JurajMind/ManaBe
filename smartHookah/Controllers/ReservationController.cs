@@ -716,9 +716,4 @@ namespace smartHookah.Controllers
         public int MinimumReservationTime { get; set; }
     }
 
-    public class PlaceReservationInfo : ReservationInfo
-    {
-        
-    }
-
     }

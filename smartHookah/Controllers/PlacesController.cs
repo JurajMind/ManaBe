@@ -593,7 +593,7 @@ namespace smartHookah.Controllers
 
             var reservation = place.Reservations.Where(
                 a => a.Status == ReservationState.Visited || a.Status == ReservationState.Confirmed
-                     || a.Status == ReservationState.Created);
+                     || a.Status == ReservationState.Created).ToList();
 
             var canceled = reservation.Where(a => a.Status == ReservationState.NonVisited);
 
@@ -609,10 +609,12 @@ namespace smartHookah.Controllers
             var duration = reservation.GroupBy(a => a.Duration.ToString(), a => a)
                 .ToPlotData(a => a.ToString());
 
-            var weekVisits = reservation.GroupBy(a => a.Time.GetIso8601WeekOfYear(), a => a)
+            var weekVisits = reservation.GroupBy(a => $"{a.Time.Year}_{a.Time.GetIso8601WeekOfYear().ToString()}", a => a)
                 .ToPlotData(a => a.ToString());
 
             var monthVisit = reservation.GroupBy(a => a.Time.Month, a => a).ToPlotData(a => a.ToString());
+
+            var byMonthVisit = reservation.GroupBy(a => a.Time.ToString("yyyy.MM"), a => a).ToPlotData(a => a.ToString());
 
             var tableUssage = reservation.GroupBy(a => a.Seats.FirstOrDefault().Name)
                 .ToPlotData(a => a.ToString());
@@ -624,6 +626,7 @@ namespace smartHookah.Controllers
             model.visitDuration = duration;
             model.weekVisits = weekVisits;
             model.monthVisit = monthVisit;
+            model.byMonthVisit = byMonthVisit;
             model.tableUssage = tableUssage;
             model.customers = reservation.Sum(a => a.Persons);
             var start = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
@@ -996,6 +999,8 @@ namespace smartHookah.Controllers
 
     public class GetStatisticModel
     {
+        public PlotData byMonthVisit;
+
         public PlotData dayDistribution { get; set; }
 
         public PlotData timeDistribution { get; set; }
