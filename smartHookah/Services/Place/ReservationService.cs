@@ -170,6 +170,11 @@ namespace smartHookah.Services.Place
                                                     DbFunctions.TruncateTime(a.Time) >= from && DbFunctions.TruncateTime(a.Time) <= to);
         }
 
+        public async Task<Reservation> GetReservation(int id)
+        {
+            return await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<bool> UpdateReservationState(int id, ReservationState state)
         {
             var reservation = await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);
