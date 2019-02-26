@@ -587,13 +587,11 @@ namespace smartHookah.Controllers
 
         public async Task<JsonResult> GetStatisticData(string id)
         {
-            var place = db.Places.Where(a => a.FriendlyUrl ==id)
-                .Include(a => a.Reservations)
-                .Include("Reservations.Seats").FirstOrDefault();
+            var place = db.Places.Where(a => a.FriendlyUrl ==id).FirstOrDefault();
 
-            var reservation = place.Reservations.Where(
-                a => a.Status == ReservationState.Visited || a.Status == ReservationState.Confirmed
-                     || a.Status == ReservationState.Created).ToList();
+            var reservation = db.Reservations.Include(a  => a.Seats).Where(
+                a => a.PlaceId == place.Id && (a.Status == ReservationState.Visited || a.Status == ReservationState.Confirmed
+                     || a.Status == ReservationState.Created)).ToList();
 
             var canceled = reservation.Where(a => a.Status == ReservationState.NonVisited);
 
@@ -615,7 +613,7 @@ namespace smartHookah.Controllers
             var monthVisit = reservation.GroupBy(a => a.Time.Month, a => a).ToPlotData(a => a.ToString());
 
             var byMonthVisit = reservation.GroupBy(a => a.Time.ToString("yyyy.MM"), a => a).ToPlotData(a => a.ToString());
-
+            var test = reservation.Where(a => a.Seats.Count(b => b.Id == 40) > 0);
             var tableUssage = reservation.GroupBy(a => a.Seats.FirstOrDefault().Name)
                 .ToPlotData(a => a.ToString());
 
