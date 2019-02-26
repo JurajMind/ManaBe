@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
+using smartHookah.Models;
 
 namespace smartHookah.Controllers.Api
 {
@@ -53,5 +55,29 @@ namespace smartHookah.Controllers.Api
             return await this.reservationService.GetReservationUsage(id, date);
         }
 
+
+        [HttpPost, Route("{id}/UpdateState/{state}")]
+        public async Task<bool> UpdateReservationState(int id, string state)
+        {
+            if (Enum.TryParse(state, true, out ReservationState status) && Enum.IsDefined(typeof(ReservationState), status))
+            {
+                return await reservationService.UpdateReservationState(id, status);
+            }
+
+            return false;
+        }
+
+        [HttpGet, Route("{id}/Detail")]
+        public async Task<ReservationDetailDto> GetReservationDetail(int id)
+        {
+            var reservation = await reservationService.GetReservation(id);
+            return new ReservationDetailDto()
+            {
+                Reservation = ReservationDto.FromModel(reservation),
+                Orders = HookahOrderDto.FromModelList(reservation.Orders).ToList(),
+                Place = PlaceDto.FromModel(reservation.Place),
+                SmokeSessions = SmokeSessionSimpleDto.FromModelList(reservation.Orders.Select(a => a.SmokeSession).ToList()).ToList()
+            };
+        }
     }
 }

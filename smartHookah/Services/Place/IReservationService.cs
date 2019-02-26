@@ -10,7 +10,7 @@ namespace smartHookah.Services.Place
 
     public interface IReservationService
     {
-       Task<ReservationManageDto> GetReservationManage(int id, DateTime date);
+        Task<ReservationManageDto> GetReservationManage(int id, DateTime date);
 
         Task<bool> CreateReservation(ReservationDto reservation);
 
@@ -21,5 +21,10 @@ namespace smartHookah.Services.Place
         ICollection<Reservation> GetPersonReservations();
 
         IEnumerable<Reservation> GetReservations(DateTime from, DateTime to);
+
+        Task<bool> UpdateReservationState(int id, ReservationState state);
+
+        Task<Reservation> GetReservation(int id);
+
     }
 }
