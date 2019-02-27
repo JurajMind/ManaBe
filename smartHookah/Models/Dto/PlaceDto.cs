@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hangfire.Annotations;
 
 namespace smartHookah.Models.Dto
 {
@@ -71,28 +70,27 @@ namespace smartHookah.Models.Dto
                 FranchiseId = model.FranchiseId,
                 Franchise = FranchiseDto.FromModel(model.Franchise)
             };
-        
 
         public Place ToModel()
         {
             return new Place()
             {
-                Id = Id,
-                Name = Name,
-                LogoPath = LogoPath,
-                ShortDescriptions = ShortDescriptions,
-                Descriptions = Descriptions,
-                FriendlyUrl = FriendlyUrl,
-                AddressId = AddressId,
-                Address = Address.ToModel(),
-                PhoneNumber = PhoneNumber,
-                Facebook = Facebook,
-                BaseHookahPrice = BaseHookahPrice,
-                Currency = Currency,
-                AllowReservation = AllowReservation,
-                MinimumReservationTime = MinimumReservationTime,
-                FranchiseId = FranchiseId,
-                Franchise = Franchise.ToModel(),
+                Id = this.Id,
+                Name = this.Name,
+                LogoPath = this.LogoPath,
+                ShortDescriptions = this.ShortDescriptions,
+                Descriptions = this.Descriptions,
+                FriendlyUrl = this.FriendlyUrl,
+                AddressId = this.AddressId,
+                Address = this.Address.ToModel(),
+                PhoneNumber = this.PhoneNumber,
+                Facebook = this.Facebook,
+                BaseHookahPrice = this.BaseHookahPrice,
+                Currency = this.Currency,
+                AllowReservation = this.AllowReservation,
+                MinimumReservationTime = this.MinimumReservationTime,
+                FranchiseId = this.FranchiseId,
+                Franchise = this.Franchise.ToModel(),
             };
         }
     }
@@ -106,7 +104,6 @@ namespace smartHookah.Models.Dto
         public string Code { get; set; }
 
         public int Capacity { get; set; }
-
 
         public static SeatDto FromModel(Seat model) => model == null
             ? null
@@ -131,10 +128,10 @@ namespace smartHookah.Models.Dto
         {
             return new Seat()
             {
-                Id = Id,
-                Name = Name,
-                Code = Code,
-                Capacity = Capacity,
+                Id = this.Id,
+                Name = this.Name,
+                Code = this.Code,
+                Capacity = this.Capacity,
             };
         }
 
@@ -221,22 +218,22 @@ namespace smartHookah.Models.Dto
         {
             return new HookahOrder()
             {
-                Created = Created,
-                Id = Id,
-                PlaceId = PlaceId,
-                PersonId = PersonId,
-                SmokeSessionMetaDataId = SmokeSessionMetaDataId,
-                SmokeSessionMetaData = SmokeSessionMetaData.ToModel(),
-                SmokeSessionId = SmokeSessionId,
-                ExtraInfo = ExtraInfo,
-                State = State,
-                Price = Price,
-                Currency = Currency,
-                SeatId = SeatId,
-                Seat = Seat.ToModel(),
-                ReservationId = ReservationId,
-                Reservation = Reservation.ToModel(),
-                Type = Type,
+                Created = this.Created,
+                Id = this.Id,
+                PlaceId = this.PlaceId,
+                PersonId = this.PersonId,
+                SmokeSessionMetaDataId = this.SmokeSessionMetaDataId,
+                SmokeSessionMetaData = this.SmokeSessionMetaData.ToModel(),
+                SmokeSessionId = this.SmokeSessionId,
+                ExtraInfo = this.ExtraInfo,
+                State = this.State,
+                Price = this.Price,
+                Currency = this.Currency,
+                SeatId = this.SeatId,
+                Seat = this.Seat.ToModel(),
+                ReservationId = this.ReservationId,
+                Reservation = ReservationDto.ToModel(this.Reservation),
+                Type = this.Type,
             };
         }
     }
@@ -290,7 +287,8 @@ namespace smartHookah.Models.Dto
                 Text = model.Text,
                 Name = model.Name,
                 DisplayName = model.DisplayName,
-                Seats = model.Seats.Select(a => a.Id).ToList()
+                Seats = model.Seats.Select(a => a.Id).ToList(),
+                Status = (int)model.Status
             };
 
         public static Reservation ToModel(ReservationDto dto)
@@ -309,33 +307,14 @@ namespace smartHookah.Models.Dto
                            Status = (ReservationState)dto.Status,
                        };
         }
-        
 
         public static IEnumerable<ReservationDto> FromModelList(IEnumerable<Reservation> model)
         {
-            if(model == null) yield break;
+            if (model == null) yield break;
             foreach (var item in model)
             {
                 yield return FromModel(item);
             }
-        }
-
-        public Reservation ToModel()
-        {
-            return new Reservation()
-            {
-                Id = Id,
-                Created = Created,
-                PersonId = PersonId,
-                PlaceId = PlaceId,
-                Started = Started,
-                End = End,
-                Persons = Persons,
-                Duration = Duration,
-                Time = Time,
-                Text = Text,
-                Name = Name,
-            };
         }
     }
 
@@ -375,11 +354,11 @@ namespace smartHookah.Models.Dto
         {
             return new BusinessHours()
             {
-                Id = Id,
-                PlaceId = PlaceId,
-                Day = Day,
-                OpenTine = OpenTine,
-                CloseTime = CloseTime,
+                Id = this.Id,
+                PlaceId = this.PlaceId,
+                Day = this.Day,
+                OpenTine = this.OpenTine,
+                CloseTime = this.CloseTime,
             };
         }
     }
@@ -417,13 +396,13 @@ namespace smartHookah.Models.Dto
         {
             return new Address()
             {
-                Id = Id,
-                Street = Street,
-                City = City,
-                Number = Number,
-                ZIP = ZIP,
-                Lat = Lat,
-                Lng = Lng
+                Id = this.Id,
+                Street = this.Street,
+                City = this.City,
+                Number = this.Number,
+                ZIP = this.ZIP,
+                Lat = this.Lat,
+                Lng = this.Lng
             };
         }
     }
@@ -464,11 +443,11 @@ namespace smartHookah.Models.Dto
         {
             return new Media()
             {
-                Id = Id,
-                Created = Created,
-                Path = Path,
-                Type = Type,
-                IsDefault = IsDefault,
+                Id = this.Id,
+                Created = this.Created,
+                Path = this.Path,
+                Type = this.Type,
+                IsDefault = this.IsDefault,
             };
         }
 
@@ -502,9 +481,9 @@ namespace smartHookah.Models.Dto
         {
             return new Franchise()
             {
-                Id = Id,
-                Name = Name,
-                Uril = Uril,
+                Id = this.Id,
+                Name = this.Name,
+                Uril = this.Uril,
             };
         }
     }
