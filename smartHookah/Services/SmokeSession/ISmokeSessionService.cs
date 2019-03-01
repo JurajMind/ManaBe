@@ -19,5 +19,7 @@ namespace smartHookah.Services.SmokeSession
         DeviceSetting GetStandSettings(string id);
         SmokeSession GetLiveSmokeSession(string id);
         Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model);
+
+        void StoreOldPufs();
     }
 }

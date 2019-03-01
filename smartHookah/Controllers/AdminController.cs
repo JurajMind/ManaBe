@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using smartHookah.Models;
+using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Controllers
 {
@@ -20,11 +21,13 @@ namespace smartHookah.Controllers
     public class AdminController : Controller
     {
         private SmartHookahContext db;
+        private readonly ISmokeSessionService smokeSessionService;
 
         private IMailChimpManager manager;
-        public AdminController(SmartHookahContext context)
+        public AdminController(SmartHookahContext context, ISmokeSessionService smokeSessionService)
         {
             this.db = context;
+            this.smokeSessionService = smokeSessionService;
             this.manager = new MailChimpManager(ConfigurationManager.AppSettings["MailChimpApiKey"]);
         }
         // GET: Admin
@@ -54,9 +57,15 @@ namespace smartHookah.Controllers
             var smokesession = db.SmokeSessions.Where(a => a.Statistics != null && a.Statistics.PufCount < 20);
             db.SmokeSessions.RemoveRange(smokesession);
             db.SessionMetaDatas.RemoveRange(smokesession.Where(a => a.MetaData != null).Select(a => a.MetaData));
-            db.DbPufs.RemoveRange(smokesession.SelectMany(a => a.Pufs));
+            db.DbPufs.RemoveRange(smokesession.SelectMany(a => a.DbPufs));
             db.SaveChanges();
             return View("CleanEmptySmokeSession", smokesession.Count());
+        }
+
+        public ActionResult StoreOldSessions()
+        {
+            smokeSessionService.StoreOldPufs();
+            return null;
         }
 
         public async Task<ActionResult> UpdateMailChimp()

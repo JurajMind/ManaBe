@@ -27,7 +27,7 @@ namespace smartHookah.Controllers
             if (session != null)
             {
 
-                if (session.Pufs.Any())
+                if (session.DbPufs.Any())
                 {
                     var statsModel = new SmokeSessionGetStaticsticsModel();
                     statsModel.Create(db, session.Id);
