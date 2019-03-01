@@ -46,6 +46,7 @@ namespace smartHookah.Helpers.ModelExtensions
                 if (!exists)
                     Directory.CreateDirectory(HttpContext.Current.Server.MapPath(subPath));
                 var path = System.IO.Path.Combine(serverPath, $"{session.SessionId}.json");
+                var relativePath = subPath + $"{session.SessionId}.json";
                 foreach (var sessionDbPuf in session.DbPufs)
                 {
                     sessionDbPuf.SmokeSession = null;
@@ -61,7 +62,7 @@ namespace smartHookah.Helpers.ModelExtensions
                 var json = JsonConvert.SerializeObject(pufs,new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
 
                 System.IO.File.WriteAllText(path, json);
-                return path;
+                return relativePath;
             }
             catch (Exception e)
             {
