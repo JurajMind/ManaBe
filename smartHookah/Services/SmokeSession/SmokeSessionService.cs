@@ -12,6 +12,7 @@ using smartHookah.Models.Redis;
 using smartHookahCommon;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Services.Gear;
 using ServiceStack.Common.Utils;
 
@@ -107,6 +108,23 @@ namespace smartHookah.Services.SmokeSession
             }
 
             return this.db.SessionMetaDatas.Where(a => a.Id == model.Id).Include(a => a.Tobacco).FirstOrDefault();
+        }
+
+        public void StoreOldPufs()
+        {
+            var batchId = smartHookah.Support.Support.RandomString(5);
+            var session = this.db.SmokeSessions.Where(s => s.StatisticsId != null && s.StorePath == null).OrderBy(s => s.Statistics.Start)
+                .Take(100).ToList();
+
+            foreach (var smokeSession in session)
+            {
+                var storePath = SmokeSessionPufExtension.StoredPufs(smokeSession, batchId);
+                smokeSession.StorePath = storePath;
+                this.db.DbPufs.RemoveRange(smokeSession.DbPufs);
+                this.db.SmokeSessions.AddOrUpdate(smokeSession);
+                db.SaveChanges();
+            }
+
         }
     }
 }

@@ -24,9 +24,9 @@ namespace smartHookah.Controllers
             SmokeSessionMetaData outMetaData;
             this.SmokeMetadataModalViewModel = SmokeMetadataModalViewModel.CreateSmokeMetadataModalViewModel(db,this.SmokeSession.SessionId,
                UserHelper.GetCurentPerson(db), out outMetaData);
-            //var pufs = model.SmokeSession.Pufs.Select(a => (Puf) a).ToList();
+            //var pufs = model.SmokeSession.DbPufs.Select(a => (Puf) a).ToList();
             var pufs =
-                db.DbPufs.Where(p => p.SmokeSession_Id == this.SmokeSession.Id).ToList().Select(a => (Puf)a).OrderBy(a => a.DateTime).ToList();
+               SmokeSession.Pufs.ToList().Select(a => (Puf)a).OrderBy(a => a.DateTime).ToList();
             this.LiveStatistic = SmokeHelper.GetSmokeStatistics(pufs);
             this.Histogram = SmokeHelper.CreateHistogram(pufs, 300);
             var user = UserHelper.GetCurentPerson(db);

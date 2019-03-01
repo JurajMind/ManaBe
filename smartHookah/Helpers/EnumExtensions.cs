@@ -1,4 +1,7 @@
-﻿namespace smartHookah.Helpers
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace smartHookah.Helpers
 {
     using System;
 
@@ -32,5 +35,12 @@
             return "";
         }
 
+        public static IEnumerable<Enum> GetFlags(this Enum e)
+        {
+            return Enum.GetValues(e.GetType()).Cast<Enum>().Where(e.HasFlag);
+        }
+
     }
+
+
 }

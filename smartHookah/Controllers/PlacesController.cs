@@ -854,7 +854,7 @@ namespace smartHookah.Controllers
             model.Hookahs = new List<Hookah>();
             foreach (var sessionId in hookahSessionId)
             {
-                var session = this.db.SmokeSessions.Include(a => a.Pufs).FirstOrDefault(a => a.SessionId == sessionId);
+                var session = this.db.SmokeSessions.Include(a => a.DbPufs).FirstOrDefault(a => a.SessionId == sessionId);
 
                 var pufs = RedisHelper.GetPufs(sessionId);
 

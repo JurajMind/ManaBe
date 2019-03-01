@@ -284,7 +284,7 @@ namespace smartHookah.Controllers
                 return RedirectToAction("SmokeSession", "SmokeSession", new {id});
             var ss = await _db.SmokeSessions.FindAsync(intId);
             var hookah = ss.Hookah.Id;
-            _db.DbPufs.RemoveRange(ss.Pufs);
+            _db.DbPufs.RemoveRange(ss.DbPufs);
             _db.SessionMetaDatas.Remove(ss.MetaData);
             if (ss.Statistics != null)
                 _db.SessionStatistics.Remove(ss.Statistics);
@@ -466,7 +466,7 @@ namespace smartHookah.Controllers
                     dbSession = new SmokeSession
                     {
                         MetaData = metadata,
-                        Pufs = new List<DbPuf>(),
+                        DbPufs = new List<DbPuf>(),
                         Persons = new List<Person>()
                     };
             }
@@ -496,7 +496,7 @@ namespace smartHookah.Controllers
             dbSession.MetaData.AnonymPeopleCount = model.PersonCount - dbSession.Persons.Count;
 
             //Online Session
-            if (!dbSession.Pufs.Any() && dbSession.MetaData.Tobacco != null && dbSession.Hookah != null)
+            if (!dbSession.DbPufs.Any() && dbSession.MetaData.Tobacco != null && dbSession.Hookah != null)
                 await SentPercentageToDevice(dbSession.Hookah, dbSession.MetaData.Tobacco);
 
             _db.SessionMetaDatas.AddOrUpdate(dbSession.MetaData);

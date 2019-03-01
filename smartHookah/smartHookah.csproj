@@ -850,9 +850,18 @@
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
+    <Compile Include="Helpers\ModelExtensions\SmokeSessionPufExtension.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.Designer.cs">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902282353102_storedSession.cs" />
+    <Compile Include="Migrations\201902282353102_storedSession.Designer.cs">
+      <DependentUpon>201902282353102_storedSession.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903010936534_placeFlag.cs" />
+    <Compile Include="Migrations\201903010936534_placeFlag.Designer.cs">
+      <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Dto\ReservationDetailDto.cs" />
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
@@ -1028,6 +1037,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902031613008_mixPart.resx">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902282353102_storedSession.resx">
+      <DependentUpon>201902282353102_storedSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903010936534_placeFlag.resx">
+      <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

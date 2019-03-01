@@ -62,7 +62,7 @@ namespace smartHookah.Controllers
                 RedirectToAction("Index", "Home");
             }
 
-            var cpufs = session.Pufs.ToList().GetClusterPuf().Where(a => a.Presure > 0).ToArray();
+            var cpufs = session.DbPufs.ToList().GetClusterPuf().Where(a => a.Presure > 0).ToArray();
             var observations = cpufs.Select(a => new double[] {a.Presure, a.Duration.TotalMilliseconds}).ToArray();
 
             Accord.Math.Random.Generator.Seed = 0;

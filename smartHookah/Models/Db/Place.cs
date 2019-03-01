@@ -71,6 +71,8 @@ namespace smartHookah.Models
 
         public bool Public { get; set; }
 
+        public virtual ICollection<PlaceFlag> PlaceFlags { get; set; }
+
         public virtual int? FranchiseId { get; set; }
 
         public virtual Franchise Franchise { get; set; }
@@ -119,6 +121,17 @@ namespace smartHookah.Models
 
     }
 
+    public class PlaceFlag
+    {
+        public int Id { get; set; }
+
+        public virtual ICollection<Place> Places { get; set; }
+
+        public string Code { get; set; }
+
+        public string DisplayName { get; set; }
+
+    }
 
     public class Seat
     {

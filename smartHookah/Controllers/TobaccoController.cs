@@ -849,7 +849,7 @@ namespace smartHookah.Controllers
                 return null;
             result.PufCount = smokeSessions.Average(a => a.Statistics.PufCount);
             result.PackType = smokeSessions.GroupBy(i => i.MetaData.PackType).OrderByDescending(j => j.Count()).Select(a => a.Key).First();
-            result.BlowCount = smokeSessions.Average(b => b.Pufs.Count(puf => puf.Type == PufType.Out));
+            result.BlowCount = smokeSessions.Average(b => b.DbPufs.Count(puf => puf.Type == PufType.Out));
             result.SessionDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SessionDuration.TotalSeconds));
             result.SmokeDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SmokeDuration.TotalSeconds));
             result.Used = smokeSessions.Count();

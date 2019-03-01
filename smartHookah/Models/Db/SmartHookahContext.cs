@@ -111,6 +111,8 @@ namespace smartHookah.Models
 
         public DbSet<Update> Updates { get; set; }
 
+        public DbSet<PlaceFlag> PlaceFlags { get; set; }
+
         public static SmartHookahContext Create()
         {
             return new SmartHookahContext();
@@ -226,6 +228,14 @@ namespace smartHookah.Models
                         cs.MapRightKey("SeatRefId");
                         cs.ToTable("ReservationSeat");
                     });
+
+            modelBuilder.Entity<Place>().HasMany(s => s.PlaceFlags).WithMany(h => h.Places).Map(
+                cs =>
+                {
+                    cs.MapLeftKey("PlaceRefId");
+                    cs.MapRightKey("FlagRefId");
+                    cs.ToTable("PlaceFlagMapping");
+                });
 
             modelBuilder.Entity<OwnPipeAccesories>().HasMany(s => s.Prices).WithRequired(a => a.PipeAccesorie);
 
