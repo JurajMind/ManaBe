@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class SmokeSessionMetaData
     {

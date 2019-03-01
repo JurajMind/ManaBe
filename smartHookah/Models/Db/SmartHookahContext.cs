@@ -1,17 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Azure.Amqp.Encoding;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.ModelConfiguration.Conventions;
-    using System.Linq;
-
-    using Microsoft.AspNet.Identity.EntityFramework;
-
-    using smartHookah.Models.Db;
-
     public class SmartHookahContext : IdentityDbContext<ApplicationUser>
     {
         public SmartHookahContext()

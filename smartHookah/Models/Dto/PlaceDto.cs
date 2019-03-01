@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -46,6 +47,8 @@ namespace smartHookah.Models.Dto
 
         public FranchiseDto Franchise { get; set; }
 
+        public List<string> Flags { get; set; }
+
         public static PlaceDto FromModel(Place model) => model == null
             ? null
             : new PlaceDto()
@@ -68,7 +71,9 @@ namespace smartHookah.Models.Dto
                 AllowReservation = model.AllowReservation,
                 MinimumReservationTime = model.MinimumReservationTime,
                 FranchiseId = model.FranchiseId,
-                Franchise = FranchiseDto.FromModel(model.Franchise)
+                Franchise = FranchiseDto.FromModel(model.Franchise),
+                Flags = model.PlaceFlags.Select(s => s.Code).ToList()
+                
             };
 
         public Place ToModel()

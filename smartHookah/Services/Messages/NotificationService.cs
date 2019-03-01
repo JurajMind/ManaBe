@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Messages
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Messages
 {
     using System.Data.Entity;
     using System.Linq;

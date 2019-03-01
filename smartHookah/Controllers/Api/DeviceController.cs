@@ -10,6 +10,7 @@ using System.Web.Http;
 using Microsoft.TeamFoundation.VersionControl.Client;
 
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;

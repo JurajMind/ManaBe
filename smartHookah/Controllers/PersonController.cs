@@ -12,6 +12,7 @@ using Accord.Statistics.Kernels;
 using Microsoft.AspNet.Identity.Owin;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookahCommon;
 

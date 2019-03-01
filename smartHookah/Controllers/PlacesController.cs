@@ -1,4 +1,5 @@
-﻿using smartHookah.Services.Person;
+﻿using smartHookah.Models.Db;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers
 {

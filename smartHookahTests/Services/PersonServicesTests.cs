@@ -1,4 +1,6 @@
-﻿namespace smartHookahTests.Services
+﻿using smartHookah.Models.Db;
+
+namespace smartHookahTests.Services
 {
     using System.Collections.Generic;
     using System.Data.Entity;

@@ -6,6 +6,7 @@ using System.Web;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Newtonsoft.Json;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Helpers.ModelExtensions
 {

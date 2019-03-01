@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Services.SmokeSession
 {
-    using SmokeSession = smartHookah.Models.SmokeSession;
+    using SmokeSession = Models.Db.SmokeSession;
 
     public interface ISmokeSessionService
     {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {

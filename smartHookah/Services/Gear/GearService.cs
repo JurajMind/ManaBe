@@ -10,6 +10,7 @@ using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear

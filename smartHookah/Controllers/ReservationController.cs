@@ -10,6 +10,7 @@ using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
 using smartHookah.Hubs;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Support;
 using smartHookahCommon;

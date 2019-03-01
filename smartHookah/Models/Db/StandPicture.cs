@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Web;
 using smartHookah.Helpers;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class StandPicture
     {

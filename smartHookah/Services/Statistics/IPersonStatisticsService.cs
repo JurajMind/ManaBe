@@ -6,10 +6,10 @@ namespace smartHookah.Services.Statistics
 {
     public interface IPersonStatisticsService
     {
-        List<Models.SmokeSession> GetPersonSessions(DateTime? from, DateTime? to);
+        List<Models.Db.SmokeSession> GetPersonSessions(DateTime? from, DateTime? to);
 
-        SmokeSessionTimeStatisticsDto GetSessionTimeStatistics(IEnumerable<Models.SmokeSession> sessions);
+        SmokeSessionTimeStatisticsDto GetSessionTimeStatistics(IEnumerable<Models.Db.SmokeSession> sessions);
 
-        List<PipeAccessoryUsageDto> GetAccessoriesUsage(IEnumerable<Models.SmokeSession> session);
+        List<PipeAccessoryUsageDto> GetAccessoriesUsage(IEnumerable<Models.Db.SmokeSession> session);
     }
 }

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api

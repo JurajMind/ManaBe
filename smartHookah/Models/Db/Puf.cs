@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class Puf
     {

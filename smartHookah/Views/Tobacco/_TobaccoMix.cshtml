@@ -1,5 +1,5 @@
 ﻿@using Tbc
-@model smartHookah.Models.TobaccoMix
+@model smartHookah.Models.Db.TobaccoMix
 
 <div class="card">
     <h3 class="card-header"><a href="@Url.Action("Details","Tobacco",new {id = @Model.Id})">@(string.IsNullOrEmpty(Model.AccName) ? "Mix" : Model.AccName)</a> @Tobacco.parts:</h3>

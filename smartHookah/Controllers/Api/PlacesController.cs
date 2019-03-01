@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {

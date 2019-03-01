@@ -8,6 +8,7 @@ using System.Web.Http;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
@@ -69,7 +70,7 @@ namespace smartHookah.Services.Gear
             return tobacco.Tastes.ToList();
         }
 
-        public async Task<List<Models.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0)
+        public async Task<List<Models.Db.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0)
         {
             return await db.SmokeSessions
                 .Where(a => a.MetaData.TobaccoId == tobacco.Id)
@@ -180,7 +181,7 @@ namespace smartHookah.Services.Gear
             return tobaccos.ToDictionary(tobacco => tobacco.Id, GetTobaccoTastes);
         }
 
-        public Task<List<Models.SmokeSession>> GetTobaccoMixSessions(TobaccoMix mix, int count = 10)
+        public Task<List<Models.Db.SmokeSession>> GetTobaccoMixSessions(TobaccoMix mix, int count = 10)
         {
             throw new NotImplementedException();
         }
@@ -255,11 +256,11 @@ namespace smartHookah.Services.Gear
         #endregion
 
 
-        private PipeAccesoryStatistics CalculateStatistics(IEnumerable<Models.SmokeSession> session)
+        private PipeAccesoryStatistics CalculateStatistics(IEnumerable<Models.Db.SmokeSession> session)
         {
             var result = new PipeAccesoryStatistics();
             
-            var smokeSessions = session as Models.SmokeSession[] ?? session.ToArray();
+            var smokeSessions = session as Models.Db.SmokeSession[] ?? session.ToArray();
 
             if (!smokeSessions.Any())
                 return null;

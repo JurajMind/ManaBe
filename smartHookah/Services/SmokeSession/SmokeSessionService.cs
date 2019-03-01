@@ -13,12 +13,13 @@ using smartHookahCommon;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Helpers.ModelExtensions;
+using smartHookah.Models.Db;
 using smartHookah.Services.Gear;
 using ServiceStack.Common.Utils;
 
 namespace smartHookah.Services.SmokeSession
 {
-    using SmokeSession = smartHookah.Models.SmokeSession;
+    using SmokeSession = Models.Db.SmokeSession;
 
     public class SmokeSessionService : ISmokeSessionService
     {

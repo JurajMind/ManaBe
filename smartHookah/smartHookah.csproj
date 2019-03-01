@@ -1623,7 +1623,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ViewModel\AccountViewModels.cs" />
-    <Compile Include="Models\Db\ApplicationRole.cs" />
     <Compile Include="Models\ViewModel\DataModule.cs" />
     <Compile Include="Models\Db\DbPuf.cs" />
     <Compile Include="Models\Db\Hookah.cs" />
