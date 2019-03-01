@@ -46,7 +46,7 @@ namespace smartHookah.Helpers.ModelExtensions
                 if (!exists)
                     Directory.CreateDirectory(HttpContext.Current.Server.MapPath(subPath));
                 var path = System.IO.Path.Combine(serverPath, $"{session.SessionId}.json");
-                var relativePath = subPath + $"{session.SessionId}.json";
+                var relativePath = subPath + $"/{session.SessionId}.json";
                 foreach (var sessionDbPuf in session.DbPufs)
                 {
                     sessionDbPuf.SmokeSession = null;

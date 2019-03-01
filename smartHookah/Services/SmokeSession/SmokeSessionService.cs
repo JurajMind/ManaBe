@@ -121,7 +121,9 @@ namespace smartHookah.Services.SmokeSession
             {
                 var storePath = SmokeSessionPufExtension.StoredPufs(smokeSession, batchId);
                 smokeSession.StorePath = storePath;
-                this.db.DbPufs.RemoveRange(smokeSession.DbPufs);
+            
+                this.db.Database.ExecuteSqlCommand("DELETE FROM DbPuf where id=@p0",smokeSession.Id);
+
                 this.db.SmokeSessions.AddOrUpdate(smokeSession);
                 db.SaveChanges();
             }
