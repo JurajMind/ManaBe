@@ -114,7 +114,7 @@ namespace smartHookah.Services.SmokeSession
         public void StoreOldPufs()
         {
             var batchId = smartHookah.Support.Support.RandomString(5);
-            var session = this.db.SmokeSessions.Where(s => s.StatisticsId != null && s.StorePath == null).OrderBy(s => s.Statistics.Start)
+            var session = this.db.SmokeSessions.Where(s => s.StatisticsId != null && s.StorePath == null).Include(s => s.Statistics).OrderBy(s => s.Statistics.Start)
                 .Take(100).ToList();
 
             foreach (var smokeSession in session)
@@ -123,11 +123,9 @@ namespace smartHookah.Services.SmokeSession
                 smokeSession.StorePath = storePath;
             
                 this.db.Database.ExecuteSqlCommand("DELETE FROM DbPuf where id=@p0",smokeSession.Id);
-
-                this.db.SmokeSessions.AddOrUpdate(smokeSession);
-                db.SaveChanges();
+                this.db.Database.ExecuteSqlCommand("update SmokeSession set StorePath = @p0 where id = @p1", storePath, smokeSession.Id);
+       
             }
-
         }
     }
 }
