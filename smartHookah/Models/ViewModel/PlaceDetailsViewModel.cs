@@ -1,4 +1,5 @@
 ﻿using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {

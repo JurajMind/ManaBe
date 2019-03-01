@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {

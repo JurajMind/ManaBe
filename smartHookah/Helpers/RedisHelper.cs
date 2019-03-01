@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using smartHookah.Controllers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Support;
 using ServiceStack.Redis;

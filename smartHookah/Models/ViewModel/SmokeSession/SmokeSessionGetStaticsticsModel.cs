@@ -2,6 +2,7 @@
 using System.Linq;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {

@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Person
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Person
 {
     using System;
     using System.Security.Claims;

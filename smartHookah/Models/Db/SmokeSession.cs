@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
-using Microsoft.Azure.Mobile.Server.Tables;
 using smartHookah.Helpers.ModelExtensions;
+using smartHookah.Models.Redis;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
-    using smartHookah.Models.Redis;
-
     public  class 
         SmokeSession
     {

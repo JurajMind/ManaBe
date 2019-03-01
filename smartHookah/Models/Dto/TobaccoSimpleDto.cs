@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {

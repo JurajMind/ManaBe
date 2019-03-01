@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Controllers.Api
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Controllers.Api
 {
     using System;
     using System.Collections.Generic;

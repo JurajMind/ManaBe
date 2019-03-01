@@ -1,4 +1,5 @@
 ﻿using System;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Device
 {
@@ -159,7 +160,7 @@ namespace smartHookah.Services.Device
 
             var pufs = this.redisService.GetPufs(sessionId);
 
-            var intake = pufs.Count(a => a.Type == Models.PufType.In);
+            var intake = pufs.Count(a => a.Type == PufType.In);
             var setting = new DeviceSetting();
 
             var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == id);

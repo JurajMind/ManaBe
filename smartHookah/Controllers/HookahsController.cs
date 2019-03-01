@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Accord;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookahCommon;
 using smartHookah.Support;
 

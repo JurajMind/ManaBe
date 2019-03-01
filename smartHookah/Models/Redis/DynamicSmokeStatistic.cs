@@ -6,6 +6,7 @@ using System.Web;
 using ServiceStack.Redis;
 
 using smartHookah.Hubs;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 
 using smartHookahCommon;

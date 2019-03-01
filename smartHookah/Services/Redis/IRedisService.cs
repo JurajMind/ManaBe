@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Redis
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Redis
 {
     using System;
     using System.Collections.Generic;

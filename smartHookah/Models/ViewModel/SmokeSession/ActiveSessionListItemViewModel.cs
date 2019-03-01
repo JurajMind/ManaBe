@@ -1,3 +1,4 @@
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Models

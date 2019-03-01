@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using Autofac.Integration.WebApi;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 using smartHookahCommon;
 

@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Place
 {
     using smartHookah.Services.Person;
 
-    using Place = smartHookah.Models.Place;
+    using Place = Models.Db.Place;
 
     public class PlaceService : IPlaceService
     {

@@ -9,6 +9,7 @@ using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Helpers
 {

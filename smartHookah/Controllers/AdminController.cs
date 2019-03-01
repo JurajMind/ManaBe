@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Controllers

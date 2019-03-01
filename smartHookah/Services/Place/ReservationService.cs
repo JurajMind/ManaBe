@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity.Migrations;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Place
 {
@@ -144,7 +145,7 @@ namespace smartHookah.Services.Place
             return true;
         }
 
-        private IEnumerable<Reservation> TodayReservation(DateTime date, Place place, out List<Reservation> todayActiveReservation)
+        private IEnumerable<Reservation> TodayReservation(DateTime date, Models.Db.Place place, out List<Reservation> todayActiveReservation)
         {
             var todayReservation = this.db.Reservations
                 .Where(a => a.PlaceId == place.Id && DbFunctions.TruncateTime(a.Time) == date).ToList();

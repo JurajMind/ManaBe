@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Accord.MachineLearning;
 using Newtonsoft.Json;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 
 namespace smartHookah.Controllers

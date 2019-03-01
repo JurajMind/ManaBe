@@ -7,6 +7,7 @@ using log4net;
 using smartHookah.Controllers;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookahCommon;
 
