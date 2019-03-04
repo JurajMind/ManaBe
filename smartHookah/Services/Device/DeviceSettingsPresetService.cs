@@ -134,7 +134,7 @@ namespace smartHookah.Services.Device
             var setting = await this.db.HookahSettings.FirstOrDefaultAsync(a => a.Id == id);
             if (setting == null)
             {
-                throw new ItemNotFoundException($"Setting id {id} not found.");
+                throw new KeyNotFoundException($"Setting id {id} not found.");
             }
 
             this.db.Entry(setting).State = EntityState.Deleted;

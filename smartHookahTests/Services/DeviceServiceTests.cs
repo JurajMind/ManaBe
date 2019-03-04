@@ -170,7 +170,7 @@ namespace smartHookahTests.Services
             var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object);
 
             // Execute
-            var ex = Assert.ThrowsAsync<ItemNotFoundException>(() => service.SetAnimation(deviceId, animation, state));
+            var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => service.SetAnimation(deviceId, animation, state));
 
             // get "stored" setting value
             var storedItem = db.Object.HookahSettings.FirstOrDefault(a => a.Id == 1);

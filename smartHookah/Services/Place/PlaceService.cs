@@ -7,6 +7,8 @@ using System.Web;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Place
 {
@@ -32,7 +34,7 @@ namespace smartHookah.Services.Place
                 .Include(a => a.Person)
                 .Include(a => a.OrderExtras)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if (place == null) throw new ItemNotFoundException($"Place with id {id} not found.");
+            if (place == null) throw new ManaException(ErrorCodes.PlaceNotFound, "Place with id 33 not found.");
             return place;
         }
 

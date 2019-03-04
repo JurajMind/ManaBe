@@ -63,7 +63,7 @@ namespace smartHookah.Services.Gear
                 case "all":
                     break;
                 default:
-                    throw new ItemNotFoundException($"Accessories of type \'{type}\' not found.");
+                    throw new KeyNotFoundException($"Accessories of type \'{type}\' not found.");
             }
 
             return query.ToList();
@@ -72,7 +72,7 @@ namespace smartHookah.Services.Gear
         public PipeAccesory GetPipeAccessory(int id)
         {
             var accessory = db.PipeAccesories.Find(id);
-            if(accessory == null) throw new ItemNotFoundException($"Accessory with id {id} not found.");
+            if(accessory == null) throw new KeyNotFoundException($"Accessory with id {id} not found.");
             return accessory;
         }
         
@@ -105,7 +105,7 @@ namespace smartHookah.Services.Gear
             }
             else
             {
-                if (value == VoteValue.Unlike) throw new ItemNotFoundException("Cannot unlike accessory that has never been liked/disliked.");
+                if (value == VoteValue.Unlike) throw new KeyNotFoundException("Cannot unlike accessory that has never been liked/disliked.");
                 accessory.LikeCount += value == VoteValue.Like ? 1 : 0;
                 accessory.DisLikeCount += value == VoteValue.Dislike ? 1 : 0;
             }
@@ -258,7 +258,7 @@ namespace smartHookah.Services.Gear
 
             var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
 
-            if (accessory == null) throw new ItemNotFoundException($"Accessory id {id} not found.");
+            if (accessory == null) throw new KeyNotFoundException($"Accessory id {id} not found.");
 
             if (person.OwnedPipeAccesories.Any(a => a.PipeAccesory.Id == accessory.Id))
             {
@@ -290,13 +290,13 @@ namespace smartHookah.Services.Gear
 
             var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
 
-            if (accessory == null) throw new ItemNotFoundException($"Accessory id {id} not found.");
+            if (accessory == null) throw new KeyNotFoundException($"Accessory id {id} not found.");
 
             if (person.OwnedPipeAccesories.All(a => a.PipeAccesory.Id != accessory.Id))
-                throw new ItemNotFoundException($"OwnAccessory id {id} not found.");
+                throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
             {
                 var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
-                if (current == null) throw new ItemNotFoundException($"OwnAccessory id {id} not found.");
+                if (current == null) throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
                 if (count != null && current.Amount > count)
                 {
                     current.Amount -= (decimal) count;

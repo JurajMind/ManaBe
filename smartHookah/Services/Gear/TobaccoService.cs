@@ -39,7 +39,7 @@ namespace smartHookah.Services.Gear
         public async Task<Tobacco> GetTobacco(int id)
         {
             var tobacco = await db.Tobaccos.FirstOrDefaultAsync(a => a.Id == id);
-            if(tobacco == null) throw new ItemNotFoundException($"Tobacco with id {id} not found.");
+            if(tobacco == null) throw new KeyNotFoundException($"Tobacco with id {id} not found.");
             return tobacco;
         }
 
@@ -144,7 +144,7 @@ namespace smartHookah.Services.Gear
         public async Task<TobaccoMix> GetTobaccoMix(int id)
         {
             var mix = await db.TobaccoMixs.FirstOrDefaultAsync(a => a.Id == id);
-            if (mix == null) throw new ItemNotFoundException($"Tobacco mix with id {id} not found.");
+            if (mix == null) throw new KeyNotFoundException($"Tobacco mix with id {id} not found.");
             return mix;
         }
 
