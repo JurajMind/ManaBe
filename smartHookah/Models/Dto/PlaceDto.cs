@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using smartHookah.Models.Db;
 using smartHookah.Support;
@@ -303,6 +304,7 @@ namespace smartHookah.Models.Dto
                        {
                            PersonId = dto.PersonId,
                            Created = dto.Created,
+                           Persons = dto.Persons,
                            Started = dto.Started,
                            Time = dto.Time,
                            Duration = dto.Duration,
@@ -311,7 +313,19 @@ namespace smartHookah.Models.Dto
                            Text = dto.Text,
                            PlaceId = dto.PlaceId,
                            Status = (ReservationState)dto.Status,
+                           Seats = new List<Seat>()
                        };
+        }
+
+        public static Reservation ToModel(ReservationDto dto, IEnumerable<Seat> seats)
+        {
+            var reservation = ToModel(dto);
+            if (dto.Seats.Count > 0)
+            {
+                reservation.Seats = seats.Where(s => dto.Seats.Contains(s.Id)).ToList();
+            }
+
+            return reservation;
         }
 
         public static IEnumerable<ReservationDto> FromModelList(IEnumerable<Reservation> model)
