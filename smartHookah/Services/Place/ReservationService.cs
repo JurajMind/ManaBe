@@ -84,7 +84,7 @@ namespace smartHookah.Services.Place
             }
 
             db.Reservations.Add(modelReservation);
-           // await db.SaveChangesAsync();
+            await db.SaveChangesAsync();
             var dbReservation = await this.db.Reservations.FindAsync(modelReservation.Id);
             return ReservationDto.FromModel(dbReservation);
         }
