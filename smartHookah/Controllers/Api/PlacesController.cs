@@ -37,8 +37,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("{id}/Menu")]
         public async Task<PlaceMenuDto> GetPlaceMenu(int id)
         {
-            try
-            {
+           
                 var place = await placeService.GetPlace(id);
                 var accessories = placeService.GetPlaceAccessories(place);
                 var mixes = await placeService.GetPlaceTobaccoMixes(place);
@@ -71,12 +70,6 @@ namespace smartHookah.Controllers.Api
                     Currency = place.Currency
                 };
             }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
-            }
-        }
 
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)

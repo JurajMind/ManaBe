@@ -73,7 +73,7 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public void SetReservationUsage(int placeId, DateTime date, ReservationUsageDto reservationUsage)
+        public void SetReservationUsage(int placeId, DateTime date, ReservationUsage reservationUsage)
         {
             using (var redis = this.redisManager.GetClient())
             {
@@ -81,11 +81,11 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public ReservationUsageDto GetReservationUsage(int placeId, DateTime date)
+        public ReservationUsage GetReservationUsage(int placeId, DateTime date)
         {
             using (var redis = this.redisManager.GetClient())
             {
-                return redis.Get<ReservationUsageDto>(this.GetNamespacedKey($"Reservations:{placeId}_{date:yyyy-MM-dd}"));
+                return redis.Get<ReservationUsage>(this.GetNamespacedKey($"Reservations:{placeId}_{date:yyyy-MM-dd}"));
             }
         }
 

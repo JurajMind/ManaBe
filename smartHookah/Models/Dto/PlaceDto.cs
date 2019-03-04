@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using smartHookah.Models.Db;
+using smartHookah.Support;
 
 namespace smartHookah.Models.Dto
 {
@@ -292,7 +293,7 @@ namespace smartHookah.Models.Dto
                 Text = model.Text,
                 Name = model.Name,
                 DisplayName = model.DisplayName,
-                Seats = model.Seats.Select(a => a.Id).ToList(),
+                Seats = model.Seats.EmptyIfNull().Select(a => a.Id).ToList(),
                 Status = (int)model.Status
             };
 

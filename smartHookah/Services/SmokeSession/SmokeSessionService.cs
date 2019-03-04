@@ -60,7 +60,7 @@ namespace smartHookah.Services.SmokeSession
                 .FirstOrDefault(a => a.SessionId == id);
             if (session?.MetaData == null)
             {
-                throw new ItemNotFoundException($"Session id {id} not found or it has no metadata.");
+                throw new KeyNotFoundException($"Session id {id} not found or it has no metadata.");
             }
 
             return session.MetaData;
@@ -90,7 +90,7 @@ namespace smartHookah.Services.SmokeSession
             if (model == null || string.IsNullOrEmpty(id)) throw new ArgumentNullException();
 
             var session = db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
-            if (session == null) throw new ItemNotFoundException($"Session with id {id} not found.");
+            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found.");
             
             if (session.MetaDataId != model.Id)
             {

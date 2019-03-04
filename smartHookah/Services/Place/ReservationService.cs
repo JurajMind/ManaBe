@@ -1,22 +1,24 @@
 ﻿using System.Data.Entity.Migrations;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Models.Db;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Linq;
+using System.Threading.Tasks;
+using Accord.Math;
+using smartHookah.Models;
+using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Reservations;
+using smartHookah.Services.Person;
+using smartHookah.Services.Redis;
+using smartHookah.Support;
+using ServiceStack.Common.Extensions;
 
 namespace smartHookah.Services.Place
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
-    using System.Threading.Tasks;
 
-    using smartHookah.Models;
-    using smartHookah.Models.Dto;
-    using smartHookah.Models.Dto.Reservations;
-    using smartHookah.Services.Person;
-    using smartHookah.Services.Redis;
-    using smartHookah.Support;
 
     public class ReservationService : IReservationService
     {
@@ -41,9 +43,9 @@ namespace smartHookah.Services.Place
 
         public async Task<ReservationManageDto> GetReservationManage(int id, DateTime date)
         {
-            var place = await this.placeService.GetManagedPlace(id);
+            var place = await placeService.GetManagedPlace(id);
             var tables = SeatDto.FromModelList(place.Seats);
-            var reservations = this.TodayReservation(date, place, out var today);
+            var reservations = TodayReservation(date, place, out var today);
             var placeTime = place.BusinessHours.First(a => a.Day == (int)date.DayOfWeek);
             var endTime = date.Date + placeTime.CloseTime;
             if (placeTime.CloseTime < placeTime.OpenTine)
@@ -64,58 +66,72 @@ namespace smartHookah.Services.Place
                        };
         }
 
-        public async Task<bool> CreateReservation(ReservationDto reservation)
+        public async Task<ReservationDto> CreateReservation(ReservationDto reservation)
         {
-            reservation.PersonId = this.personService.GetCurentPerson().Id;
+            reservation.PersonId = personService.GetCurentPerson().Id;
             reservation.Created = DateTime.UtcNow;
             reservation.Started = null;
             var modelReservation = ReservationDto.ToModel(reservation);
             modelReservation.Status = ReservationState.ConfirmationRequired;
-            var check = await this.ReservationCheck(modelReservation, reservation.Seats);
-            if (!check) return false;
-            this.db.Reservations.Add(modelReservation);
-            await this.db.SaveChangesAsync();
-            return true;
+
+
+            var check = await AllocateSeat(modelReservation);
+            if (check != null)
+            {
+                var seat = await this.db.Seats.FindAsync(check.Value);
+                modelReservation.Seats.Add(seat);
+                modelReservation.Status = ReservationState.Confirmed;
+            }
+
+            db.Reservations.Add(modelReservation);
+           // await db.SaveChangesAsync();
+            var dbReservation = await this.db.Reservations.FindAsync(modelReservation.Id);
+            return ReservationDto.FromModel(dbReservation);
         }
 
-        public async Task<ReservationUsageDto> GetReservationUsage(int placeId, DateTime date)
+        public async Task<ReservationUsage> GetReservationUsage(int placeId, DateTime date)
         {
             //var result = this.redisService.GetReservationUsage(placeId, date) ?? await this.UpdateReservationUsage(placeId, date);
-            var result = await this.UpdateReservationUsage(placeId, date);
+            var result = await UpdateReservationUsage(placeId, date);
             return result;
         }
 
-        public async Task<ReservationUsageDto> UpdateReservationUsage(int placeId, DateTime date)
+        public async Task<ReservationUsage> UpdateReservationUsage(int placeId, DateTime date)
         {
-            var place = await this.placeService.GetPlace(placeId);
-            var reservations = this.db.Reservations.Where(a => a.PlaceId == place.Id && EntityFunctions.TruncateTime(a.Time) == date);
-            reservations = this.GetActiveReservations(reservations);
+            var place = await placeService.GetPlace(placeId);
+
+            if (place.BusinessHours.FirstOrDefault(a => a.Day == (int) date.DayOfWeek) == null)
+            {
+                return new ReservationUsage();
+            } 
+
+            var reservations = db.Reservations.Where(a => a.PlaceId == place.Id && EntityFunctions.TruncateTime(a.Time) == date);
+            reservations = GetActiveReservations(reservations);
             var reservationsList = await reservations.ToListAsync();
 
-            var timesSlots = this.GetTimeSlots(
+            var timesSlots = GetTimeSlots(
                 date,
-                true,
                 place.BusinessHours.First(a => a.Day == (int)date.DayOfWeek));
 
-            var tableData = this.CreateTableTable(place.Seats, reservations.ToList(), timesSlots.ToList(), true);
+            var tableData = CreateTableTable(place.Seats, reservations.ToList(), timesSlots.ToList(), true);
 
-            var reservationUsage = new ReservationUsageDto { TimeSlots = tableData };
+            var reservationUsage = new ReservationUsage { TimeSlots = tableData };
 
-            this.redisService.SetReservationUsage(placeId, date, reservationUsage);
+            redisService.SetReservationUsage(placeId, date, reservationUsage);
 
             return reservationUsage;
         }
 
         public ICollection<Reservation> GetPersonReservations()
         {
-            var person = this.personService.GetCurentPerson();
+            var person = personService.GetCurentPerson();
             var now = DateTime.UtcNow;
             return person.Reservations.Where(a => a.Time.Add(a.Duration) > now).ToList();
         }
 
         private async Task<bool> ReservationTableCheck(Reservation reservation, int seatId)
         {
-            var seat = await this.db.Seats.Where(s => s.Id == seatId).Include(r => r.Reservations).SingleAsync();
+            var seat = await db.Seats.Where(s => s.Id == seatId).Include(r => r.Reservations).SingleAsync();
             var reservationDate = reservation.Time.Date;
           
             var posibleConflict = seat?.Reservations.Where(a => a.Time.Date == reservationDate &&
@@ -125,29 +141,72 @@ namespace smartHookah.Services.Place
             return true;
         }
 
-        private async Task<bool> ReservationCheck(Reservation reservation, List<int> seats)
+        private IEnumerable<int> getReservationTimeSlots(Reservation reservation, BusinessHours businessHours)
         {
-            var place = await this.db.Places.FindAsync(reservation.PlaceId);
+            var timeSlot = this.GetTimeSlots(reservation.Time.Date, businessHours);
+            var reservationStart = reservation.Time.TimeOfDay.ToShortInt();
+            var slots = timeSlot.SkipWhile(s => s.Value + slotDuration.ToShortInt() < reservationStart);
+            var takenSlots = Math.Round(reservation.Duration.Ticks / (double)slotDuration.Ticks);
+            return slots.Take((int)takenSlots).Select(s => s.Value);
+        }
+
+        private async Task<int?> AllocateSeat(Reservation reservation)
+        {
+           
+            var place = await db.Places.FindAsync(reservation.PlaceId);
             if (place == null)
             {
-                return false;
+                return null;
             }
 
-            var seatCheck = seats.Select(s => this.ReservationTableCheck(reservation, s)).ToList();
+            var tableUsage = await this.GetReservationUsage(place.Id, reservation.Time.Date);
 
-            await Task.WhenAll(seatCheck);
+            var reservationSlots = getReservationTimeSlots(reservation,place.BusinessHours.FirstOrDefault(s => s.Day == (int) reservation.Time.DayOfWeek)).ToList();
 
-            foreach (var task in seatCheck)
+            if (reservationSlots.Count() > (int) Math.Round(reservation.Duration.Ticks / (double) slotDuration.Ticks))
             {
-                if (!await task) return false;
+                return null;
             }
 
-            return true;
+            var suitableTables = tableUsage.TimeSlots.SelectMany(s => s.TableSlots.Keys).Distinct().ToList();
+
+            foreach (var slot in reservationSlots)
+            {
+                var tableSlot = tableUsage.TimeSlots.FirstOrDefault(a => a.Value == slot);
+                var suitableSlotTables = tableSlot.TableSlots.Values.Where(a => a.ReservationId == null && a.Capacity >= reservation.Persons);
+                suitableTables = suitableTables.Union(suitableSlotTables.Select(s => s.TableId)).ToList();
+            }
+
+            // select right suitableTable
+
+            Dictionary<int, List<TableSlot>> continuoseSlotLeft = new Dictionary<int, List<TableSlot>>();
+            var nextTimeSlot = reservationSlots.Last() + slotDuration.ToShortInt();
+            suitableTables.ForEach(s => continuoseSlotLeft.Add(s,new List<TableSlot>()));
+            foreach (var tableTimeSlot in tableUsage.TimeSlots.SkipWhile(s => s.Value < nextTimeSlot))
+            {
+                var usableTableCount = 0;
+                foreach (var suitableTable in suitableTables)
+                {
+                    if((tableTimeSlot.TableSlots[suitableTable].ReservationId == null))
+                    {
+                        usableTableCount++;
+                        continuoseSlotLeft[suitableTable].Add(tableTimeSlot.TableSlots[suitableTable]);
+                    }
+                }
+
+                if (usableTableCount == 0)
+                {
+                    break;
+                }
+            }
+
+            return continuoseSlotLeft.Max(a => a.Value.Count);
+
         }
 
         private IEnumerable<Reservation> TodayReservation(DateTime date, Models.Db.Place place, out List<Reservation> todayActiveReservation)
         {
-            var todayReservation = this.db.Reservations
+            var todayReservation = db.Reservations
                 .Where(a => a.PlaceId == place.Id && DbFunctions.TruncateTime(a.Time) == date).ToList();
 
             todayActiveReservation = todayReservation.Where(
@@ -165,9 +224,9 @@ namespace smartHookah.Services.Place
 
         public IEnumerable<Reservation> GetReservations(DateTime from, DateTime to)
         {
-            var person = this.personService.GetCurentPerson();
+            var person = personService.GetCurentPerson();
 
-            return this.db.Reservations.Where(a => a.PersonId == person.Id &&
+            return db.Reservations.Where(a => a.PersonId == person.Id &&
                                                     DbFunctions.TruncateTime(a.Time) >= from && DbFunctions.TruncateTime(a.Time) <= to);
         }
 
@@ -186,13 +245,12 @@ namespace smartHookah.Services.Place
             return true;
         }
 
-        private IEnumerable<TimeSlot> GetTimeSlots(DateTime date, bool includeReservation, BusinessHours placeTime)
+        private IEnumerable<TimeSlot> GetTimeSlots(DateTime date, BusinessHours placeTime)
         {
             var result = new List<TimeSlot>();
             var startTime = placeTime.OpenTine;
             var nowTime = DateTime.Now.RoundUp(new TimeSpan(0, 30, 0)).TimeOfDay;
-            if (date.Date == DateTime.Now.Date && !includeReservation)
-                startTime = new TimeSpan(Math.Max(nowTime.Ticks, placeTime.OpenTine.Ticks));
+          
 
             var endTime = placeTime.CloseTime;
 
@@ -208,34 +266,44 @@ namespace smartHookah.Services.Place
                 result.Add(
                     new TimeSlot { Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"), OrderIndex = index });
                 index++;
-                startTime = startTime + this.slotDuration;
+                startTime = startTime + slotDuration;
             }
 
             return result;
         }
 
-        private List<TimeSlot> CreateTableTable(
+        private List<TableTimeSlot> CreateTableTable(
             ICollection<Seat> seats,
             ICollection<Reservation> reservations,
             ICollection<TimeSlot> timeSlot,
             bool include)
         {
-            var result = new List<TimeSlot>();
+            var result = new List<TableTimeSlot>();
             var placeCapacity = seats.Sum(s => s.Capacity);
 
             foreach (var slot in timeSlot)
             {
                 var reservation = reservations.Where(
-                        r => r.Time.ToShortInt() < slot.Value + this.slotDuration.ToShortInt() && slot.Value < r.Time.ToShortInt() + r.Duration.ToShortInt())
+                        r => r.Time.ToShortInt() < slot.Value + slotDuration.ToShortInt() && slot.Value < r.Time.ToShortInt() + r.Duration.ToShortInt())
                     .ToList();
-                
-                var takenTable = reservation.SelectMany(s => s.Seats).Select(s => s.Id);
-                var freeTable = seats.Where(s => !takenTable.Contains(s.Id)).ToList();
+                var tableSlot = new TableTimeSlot(slot);
+                foreach (var seat in seats)
+                {
+                    var seatReservation = reservation.FirstOrDefault(r => r.Seats.Select(s => s.Id).Contains(seat.Id));
+                    tableSlot.TableSlots.Add(seat.Id, new TableSlot
+                    {
+                        Capacity = seat.Capacity,
+                        ReservationId = seatReservation?.Id,
+                        Used = seatReservation?.Persons ?? 0,
+                        TableId = seat.Id
+                    });
+                }
 
-                slot.MaxTable = freeTable.Any() ? freeTable.Max(s => s.Capacity) : 0;
-                slot.CapacityLeft = placeCapacity - reservation.EmptyIfNull().Sum(s => s.Persons);
-                slot.Reserved = slot.CapacityLeft <= 0;
-                result.Add(slot);
+                tableSlot.MaxTable = tableSlot.TableSlots.Values.Max(s => s.Capacity - s.Used);
+                tableSlot.CapacityLeft = tableSlot.TableSlots.Values.Sum(s => s.Capacity - s.Used);
+                tableSlot.Reserved = slot.CapacityLeft <= 0;
+               
+                result.Add(tableSlot);
             }
 
             return result;
@@ -245,6 +313,11 @@ namespace smartHookah.Services.Place
     public class ReservationUsageDto
     {
         public  List<TimeSlot> TimeSlots { get; set; }
+    }
+
+    public class ReservationUsage
+    {
+        public List<TableTimeSlot> TimeSlots { get; set; }
     }
 
     public class ReservationDataDto

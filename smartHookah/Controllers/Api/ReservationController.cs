@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Reservations;
 
 namespace smartHookah.Controllers.Api
 {
@@ -45,7 +46,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("Create")]
-        public async Task<bool> Create(ReservationDto reservation)
+        public async Task<ReservationDto> Create(ReservationDto reservation)
         {
             return await this.reservationService.CreateReservation(reservation);
         }
@@ -53,7 +54,12 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("{id}/Usage")]
         public async Task<ReservationUsageDto> GetReservationUsage(int id, DateTime date)
         {
-            return await this.reservationService.GetReservationUsage(id, date);
+            var reservationUsage = await this.reservationService.GetReservationUsage(id, date);
+            var result = new ReservationUsageDto
+            {
+                TimeSlots = reservationUsage.TimeSlots.Select(s => new TimeSlot(s)).ToList()
+            };
+            return result;
         }
 
 
