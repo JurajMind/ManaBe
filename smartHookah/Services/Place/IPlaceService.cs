@@ -18,5 +18,9 @@ namespace smartHookah.Services.Place
         IEnumerable<PipeAccesory> GetPlaceAccessories(Place place);
 
         Task<List<TobaccoMix>> GetPlaceTobaccoMixes(Place place);
+
+        Task<Place> AddPlace(Place place);
+
+        Task<Address> GetLocation(Address address);
     }
 }
