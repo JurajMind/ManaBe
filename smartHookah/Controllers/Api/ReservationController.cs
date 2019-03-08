@@ -63,8 +63,8 @@ namespace smartHookah.Controllers.Api
         }
 
 
-        [HttpPost, Route("{id}/UpdateState/{state}")]
-        public async Task<bool> UpdateReservationState(int id, string state)
+        [HttpPost, Route("{id}/UpdateState")]
+        public async Task<bool> UpdateReservationState(int id, [FromBody]string state)
         {
             if (Enum.TryParse(state, true, out ReservationState status) && Enum.IsDefined(typeof(ReservationState), status))
             {
@@ -72,6 +72,12 @@ namespace smartHookah.Controllers.Api
             }
 
             return false;
+        }
+
+        [HttpPost, Route("{id}/Cancel")]
+        public async Task<bool> CancelReservation(int id)
+        {
+            return await reservationService.UpdateReservationState(id, ReservationState.Canceled);
         }
 
         [HttpGet, Route("{id}/Detail")]
@@ -85,6 +91,20 @@ namespace smartHookah.Controllers.Api
                 Place = PlaceDto.FromModel(reservation.Place),
                 SmokeSessions = SmokeSessionSimpleDto.FromModelList(reservation.Orders.Select(a => a.SmokeSession).ToList()).ToList()
             };
+        }
+
+        [HttpPost, Route("{id}/AddTable")]
+        public async Task<ReservationDto> AddTable(int id,[FromBody] int tableId)
+        {
+            var reservation = await reservationService.AddTable(id,tableId);
+            return ReservationDto.FromModel(reservation);
+        }
+
+        [HttpDelete, Route("{id}/RemoveTable")]
+        public async Task<ReservationDto> RemoveTable(int id, [FromBody]int tableId)
+        {
+            var reservation = await reservationService.RemoveTable(id, tableId);
+            return ReservationDto.FromModel(reservation);
         }
     }
 }

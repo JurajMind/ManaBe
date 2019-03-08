@@ -55,6 +55,11 @@ namespace smartHookah.Hubs
         {
             return this.Groups.Add(this.Context.ConnectionId, hookahId);
         }
+
+        public async Task JoinPlace(int id)
+        {
+            await this.Groups.Add(this.Context.ConnectionId, $"place_{id.ToString()}");
+        }
     }
 
     public class ReservationHub : Hub
