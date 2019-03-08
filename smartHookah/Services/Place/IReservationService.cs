@@ -27,5 +27,9 @@ namespace smartHookah.Services.Place
 
         Task<Reservation> GetReservation(int id);
 
+        Task<Reservation> AddTable(int id, int tableId);
+
+        Task<Reservation> RemoveTable(int id, int tableId);
+
     }
 }

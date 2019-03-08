@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using smartHookah.Controllers.Mobile;
 using smartHookah.Filters;
 using smartHookah.Helpers;
+using smartHookah.Helpers.Formaters;
 using smartHookah.Models;
 using Formatting = Newtonsoft.Json.Formatting;
 
@@ -24,6 +25,7 @@ namespace smartHookah
         public static void Register(HttpConfiguration config)
         {
             config.Filters.Add(new ApiExceptionFilter());
+           // config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new ShortIsoDateFormatConverter());
             var cors = new EnableCorsAttribute("http://localhost:8080", "*", "*");
             
             config.EnableCors(cors);
