@@ -1059,8 +1059,10 @@
     <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Messages\IMessageLogService.cs" />
     <Compile Include="Services\Messages\INotificationService.cs" />
+    <Compile Include="Services\Messages\IReservationEmailService.cs" />
     <Compile Include="Services\Messages\MessageLogService.cs" />
     <Compile Include="Services\Messages\NotificationService.cs" />
+    <Compile Include="Services\Messages\ReservationEmailService.cs" />
     <Compile Include="Services\Person\AccountService.cs" />
     <Compile Include="Services\Device\DeviceSettingsPresetService.cs" />
     <Compile Include="Services\Device\IDeviceSettingsPresetService.cs" />

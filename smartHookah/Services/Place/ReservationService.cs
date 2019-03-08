@@ -21,7 +21,7 @@ namespace smartHookah.Services.Place
     {
         private readonly SmartHookahContext db;
         private readonly TimeSpan slotDuration = new TimeSpan(0, 30, 0);
-        private IEmailService emailService;
+        private IReservationEmailService emailService;
 
         private readonly IRedisService redisService;
 
@@ -31,7 +31,7 @@ namespace smartHookah.Services.Place
 
         private readonly INotificationService notificationService;
 
-        public ReservationService(SmartHookahContext db, IEmailService emailService, IPlaceService placeService,
+        public ReservationService(SmartHookahContext db, IReservationEmailService emailService, IPlaceService placeService,
             IPersonService personService, IRedisService redisService, INotificationService notificationService)
         {
             this.db = db;
@@ -87,6 +87,8 @@ namespace smartHookah.Services.Place
             db.Reservations.Add(modelReservation);
             await db.SaveChangesAsync();
             var dbReservation = await this.db.Reservations.FindAsync(modelReservation.Id);
+            this.notificationService.ReservationChanged(dbReservation);
+            this.emailService.CreatedReservation(dbReservation);
             return ReservationDto.FromModel(dbReservation);
         }
 
@@ -284,6 +286,7 @@ namespace smartHookah.Services.Place
             if (reservation.Status == ReservationState.ConfirmationRequired || reservation.Status == ReservationState.Canceled || reservation.Status == ReservationState.NonVisited) 
             {
                 reservation.Status = ReservationState.Confirmed;
+                this.emailService.CreatedReservation(reservation);
             }
 
             reservation.Seats.Add(table);
@@ -364,6 +367,7 @@ namespace smartHookah.Services.Place
             if (reservation.Seats.Count == 0)
             {
                 reservation.Status = ReservationState.UnConfirmed;
+                this.emailService.CreatedReservation(reservation);
             }
             
             await db.SaveChangesAsync();
@@ -398,6 +402,7 @@ namespace smartHookah.Services.Place
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
             this.notificationService.ReservationChanged(reservation);
+            this.emailService.StateChanged(reservation);
             return true;
         }
 
