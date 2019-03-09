@@ -463,6 +463,7 @@ namespace smartHookah.Services.Place
                 }
 
                 tableSlot.MaxTable = tableSlot.TableSlots.Values.Max(s => s.Capacity - s.Used);
+                tableSlot.TablesLeft = tableSlot.TableSlots.Values.Count(a => a.ReservationId == null);
                 tableSlot.CapacityLeft = tableSlot.TableSlots.Values.Sum(s => s.Capacity - s.Used);
                 tableSlot.Reserved = slot.CapacityLeft <= 0;
 

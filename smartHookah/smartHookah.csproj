@@ -2389,21 +2389,31 @@
     <Content Include="Views\Game\GameResult.cshtml" />
     <Content Include="Views\DeviceControl\DefaultMetadata.cshtml" />
     <Content Include="Views\Game\Halloween.cshtml" />
-    <Content Include="Views\Emails\hello.cshtml" />
+    <None Include="Views\Emails\hello.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Views\Home\VueTest.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
-    <Content Include="Views\Emails\_EmailLayout.cshtml">
+    <None Include="Views\Emails\_EmailLayout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Emails\test.cshtml">
+    </None>
+    <None Include="Views\Emails\test.cshtml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Emails\reservationDenied.cshtml" />
-    <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
-    <Content Include="Views\Emails\reservationConfirm.cshtml" />
-    <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
+    </None>
+    <None Include="Views\Emails\reservationDenied.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationConfirmManual.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationConfirm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationWaitForConfirm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Assets\_PrivacyPolicy.cshtml" />

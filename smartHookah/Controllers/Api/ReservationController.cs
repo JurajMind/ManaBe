@@ -5,6 +5,7 @@ using System.Web.Http;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto.Reservations;
+using smartHookah.Support;
 
 namespace smartHookah.Controllers.Api
 {
@@ -57,7 +58,7 @@ namespace smartHookah.Controllers.Api
             var reservationUsage = await this.reservationService.GetReservationUsage(id, date);
             var result = new ReservationUsageDto
             {
-                TimeSlots = reservationUsage.TimeSlots.Select(s => new TimeSlot(s)).ToList()
+                TimeSlots = reservationUsage.TimeSlots.EmptyIfNull().Select(s => new TimeSlot(s)).ToList()
             };
             return result;
         }
