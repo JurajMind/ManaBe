@@ -10,6 +10,8 @@ namespace smartHookah.Models.Dto.Reservations
 
         public int CapacityLeft { get; set; }
 
+        public int TablesLeft { get; set; }
+
         public int MaxTable { get; set; }
 
         public int Id { get; set; }
@@ -29,6 +31,7 @@ namespace smartHookah.Models.Dto.Reservations
             this.OrderIndex = table.OrderIndex;
             this.MaxTable = table.MaxTable;
             this.CapacityLeft = table.CapacityLeft;
+            this.TablesLeft = table.TablesLeft;
         }
 
     }
