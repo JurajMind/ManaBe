@@ -1,4 +1,5 @@
 using System;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {

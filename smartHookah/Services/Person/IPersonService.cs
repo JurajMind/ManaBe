@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Person
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Person
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -12,15 +14,15 @@
 
     public interface IPersonService
     {
-        Person GetCurentPerson();
+        Models.Db.Person GetCurentPerson();
 
-        Person GetCurentPerson(int? personId, bool manage = false);
+        Models.Db.Person GetCurentPerson(int? personId, bool manage = false);
 
         ApplicationUser GetCurrentUser();
 
         List<string> GetUserRoles(string userId);
 
-        IQueryable<Person> GetCurentPersonIQuerable();
+        IQueryable<Models.Db.Person> GetCurentPersonIQuerable();
 
         Task<IEnumerable<Hookah>> GetUserStands();
 
@@ -28,7 +30,7 @@
 
         Task<ICollection<Hookah>> GetUserDevices(int? personId);
 
-        ICollection<SmokeSession> GetUserActiveSessions(int? personId);
+        ICollection<Models.Db.SmokeSession> GetUserActiveSessions(int? personId);
 
         ICollection<Reservation> GetUserActiveReservations(int? personId);
 

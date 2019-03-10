@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Controllers.Mobile
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Controllers.Api
 {
     using System;
     using System.Collections.Generic;
@@ -183,13 +185,13 @@
         public InvalidModelStateResultCode(ModelStateDictionary modelState, bool includeErrorDetail, IContentNegotiator contentNegotiator, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
             : base(modelState, includeErrorDetail, contentNegotiator, request, formatters)
         {
-            handleModelState();
+            this.handleModelState();
         }
 
         public InvalidModelStateResultCode(ModelStateDictionary modelState, ApiController controller)
             : base(modelState, controller)
         {
-            handleModelState();
+            this.handleModelState();
         }
 
         private void handleModelState()

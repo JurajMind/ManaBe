@@ -1,3 +1,5 @@
+using smartHookah.Models.Db;
+
 namespace smartHookah.Migrations
 {
     using System;
@@ -5,7 +7,7 @@ namespace smartHookah.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<smartHookah.Models.SmartHookahContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<SmartHookahContext>
     {
         public Configuration()
         {
@@ -13,7 +15,7 @@ namespace smartHookah.Migrations
             ContextKey = "smartHookah.Models.SmartHookahContext";
         }
 
-        protected override void Seed(smartHookah.Models.SmartHookahContext context)
+        protected override void Seed(SmartHookahContext context)
         {
             //  This method will be called after migrating to the latest version.
 

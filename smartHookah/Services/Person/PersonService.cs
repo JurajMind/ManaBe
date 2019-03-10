@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Person
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Person
 {
     using System;
     using System.Collections.Generic;
@@ -40,14 +42,14 @@
             this.redisService = redisService;
         }
 
-        public Person GetCurentPerson()
+        public Models.Db.Person GetCurentPerson()
         {
             var user = this.owinContext.GetUserManager<ApplicationUserManager>().FindById(this.user.Identity.GetUserId());
 
             return user?.Person;
         }
 
-        public Person GetCurentPerson(int? personId, bool manage = false)
+        public Models.Db.Person GetCurentPerson(int? personId, bool manage = false)
         {
             var userId = this.UserId();
             var user = this.db.Users.Find(userId);
@@ -68,7 +70,7 @@
             return owinContext.GetUserManager<ApplicationUserManager>().GetRoles(userId).ToList();
         }
 
-        public IQueryable<Person> GetCurentPersonIQuerable()
+        public IQueryable<Models.Db.Person> GetCurentPersonIQuerable()
         {
             var userId = this.UserId();
             var user = this.db.Users.Find(userId);
@@ -143,7 +145,7 @@
             return devices;
         }
 
-        public ICollection<SmokeSession> GetUserActiveSessions(int? personId)
+        public ICollection<Models.Db.SmokeSession> GetUserActiveSessions(int? personId)
         {
             if (personId == null)
             {
@@ -154,7 +156,7 @@
             var sessions = db.SmokeSessions.Where(a => a.Statistics == null)
                 .Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
 
-            var result = new List<SmokeSession>();
+            var result = new List<Models.Db.SmokeSession>();
 
             foreach (var session in sessions)
             {

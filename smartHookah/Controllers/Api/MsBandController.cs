@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Mvc;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 using smartHookahCommon;
 

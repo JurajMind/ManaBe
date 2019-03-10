@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class Update
     {

@@ -1,17 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Azure.Amqp.Encoding;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.ModelConfiguration.Conventions;
-    using System.Linq;
-
-    using Microsoft.AspNet.Identity.EntityFramework;
-
-    using smartHookah.Models.Db;
-
     public class SmartHookahContext : IdentityDbContext<ApplicationUser>
     {
         public SmartHookahContext()
@@ -110,6 +104,8 @@ namespace smartHookah.Models
         public DbSet<UpdateLog> UpdateLogs { get; set; }
 
         public DbSet<Update> Updates { get; set; }
+
+        public DbSet<PlaceFlag> PlaceFlags { get; set; }
 
         public static SmartHookahContext Create()
         {
@@ -226,6 +222,14 @@ namespace smartHookah.Models
                         cs.MapRightKey("SeatRefId");
                         cs.ToTable("ReservationSeat");
                     });
+
+            modelBuilder.Entity<Place>().HasMany(s => s.PlaceFlags).WithMany(h => h.Places).Map(
+                cs =>
+                {
+                    cs.MapLeftKey("PlaceRefId");
+                    cs.MapRightKey("FlagRefId");
+                    cs.ToTable("PlaceFlagMapping");
+                });
 
             modelBuilder.Entity<OwnPipeAccesories>().HasMany(s => s.Prices).WithRequired(a => a.PipeAccesorie);
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Place
 {
-    using Place = smartHookah.Models.Place;
+    using Place = Models.Db.Place;
 
     public interface IPlaceService
     {

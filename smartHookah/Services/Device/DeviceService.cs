@@ -1,4 +1,5 @@
 ﻿using System;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Device
 {
@@ -34,7 +35,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             if (animation.VersionFrom != 0 && animation.VersionTo != 0)
               if (animation.VersionFrom >= hookah.Version || animation.VersionTo <= hookah.Version)
@@ -51,7 +52,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int)state},{brightness},");
 
@@ -71,7 +72,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int)state},{speed},");
 
@@ -84,7 +85,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             var sendTask = this.iotService.SendMsgToDevice(deviceId, $"clr:{color.Hue:000},{color.Saturation:000},{color.Value:000}");
 
@@ -97,7 +98,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             await this.iotService.SendMsgToDevice(deviceId, "slp:");
         }
@@ -106,7 +107,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             await this.iotService.SendMsgToDevice(deviceId, "restart:");
         }
@@ -115,7 +116,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             await this.iotService.SendMsgToDevice(deviceId, $"mode:{mode}");
         }
@@ -124,7 +125,7 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             await this.iotService.SendMsgToDevice(deviceId, "qrcode:");
         }
@@ -133,11 +134,11 @@ namespace smartHookah.Services.Device
         {
             var hookah = this.getDevice(deviceId);
 
-            if (hookah == null) throw new ItemNotFoundException($"Device with id {deviceId} not found");
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             var setting = this.db.DevicePreset.FirstOrDefault(a => a.Id == settingId);
 
-            if (setting == null) throw new ItemNotFoundException($"Person setting with id {settingId} not found");
+            if (setting == null) throw new KeyNotFoundException($"Person setting with id {settingId} not found");
             await this.SetPreset(deviceId, setting.DeviceSetting);
            
         }
@@ -159,7 +160,7 @@ namespace smartHookah.Services.Device
 
             var pufs = this.redisService.GetPufs(sessionId);
 
-            var intake = pufs.Count(a => a.Type == Models.PufType.In);
+            var intake = pufs.Count(a => a.Type == PufType.In);
             var setting = new DeviceSetting();
 
             var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == id);
@@ -207,7 +208,7 @@ namespace smartHookah.Services.Device
             if (animations.Any(a => a.Id == id))
                 return animations.FirstOrDefault(a => a.Id == id);
 
-            throw new ItemNotFoundException("Animation not found.");
+            throw new KeyNotFoundException("Animation not found.");
         }
 
         public int GetDeviceVersion(string id)

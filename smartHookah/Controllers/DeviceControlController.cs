@@ -1,4 +1,6 @@
 ﻿
+using smartHookah.Models.Db;
+
 namespace smartHookah.Controllers
 {
     using System.Collections.Generic;

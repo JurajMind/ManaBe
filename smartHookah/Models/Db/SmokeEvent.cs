@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class SmokeEvent
     {
