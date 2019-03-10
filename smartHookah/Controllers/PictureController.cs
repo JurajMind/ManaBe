@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using Accord.IO;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {

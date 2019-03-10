@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using smartHookah.Models.Db;
 
 namespace smartHookah
 {

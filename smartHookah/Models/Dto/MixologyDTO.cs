@@ -6,6 +6,7 @@ using System.Web;
 using DocumentFormat.OpenXml.Math;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {

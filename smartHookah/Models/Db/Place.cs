@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Spatial;
 using System.Linq;
-using smartHookah.Models.Db;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
-    using System.Data.Entity.Spatial;
-
     public class Place
     {
         [Key]
@@ -71,45 +69,45 @@ namespace smartHookah.Models
 
         public bool Public { get; set; }
 
+        public virtual ICollection<PlaceFlag> PlaceFlags { get; set; }
+
         public virtual int? FranchiseId { get; set; }
 
         public virtual Franchise Franchise { get; set; }
 
         public virtual ICollection<PriceGroup> PriceGroups { get; set; }
 
-        public bool IsOpen(DateTime Open)
+        public bool IsOpen(DateTime open)
         {
-            var todayInt = (int)Open.DayOfWeek;
+            var todayInt = (int)open.DayOfWeek;
             var todayOpenHours =BusinessHours?.FirstOrDefault(a => a.Day == todayInt);
 
             if (todayOpenHours == null)
                 return false;
 
-            if (todayOpenHours.OpenTine < Open.TimeOfDay && todayOpenHours.CloseTime < Open.TimeOfDay)
+            if (todayOpenHours.OpenTine < open.TimeOfDay && todayOpenHours.CloseTime < open.TimeOfDay)
                 return true;
 
             // Is before open, check day before close time
-            if (todayOpenHours.OpenTine < Open.TimeOfDay)
+            if (todayOpenHours.OpenTine < open.TimeOfDay)
             {
-                var lastDayint = (int)Open.AddDays(-1).DayOfWeek;
-               var lastDayOpenHour = this.BusinessHours.FirstOrDefault(a => a.Day == todayInt);
-
-                if (lastDayOpenHour == null)
-                    return false;
-
-                if (lastDayOpenHour.CloseTime > Open.TimeOfDay)
-                    return true;
-            }
-
-            if (todayOpenHours.CloseTime > Open.TimeOfDay)
-            {
-                var lastDayint = (int)Open.AddDays(1).DayOfWeek;
                 var lastDayOpenHour = this.BusinessHours.FirstOrDefault(a => a.Day == todayInt);
 
                 if (lastDayOpenHour == null)
                     return false;
 
-                if (lastDayOpenHour.OpenTine > Open.TimeOfDay)
+                if (lastDayOpenHour.CloseTime > open.TimeOfDay)
+                    return true;
+            }
+
+            if (todayOpenHours.CloseTime > open.TimeOfDay)
+            {
+                var lastDayOpenHour = this.BusinessHours.FirstOrDefault(a => a.Day == todayInt);
+
+                if (lastDayOpenHour == null)
+                    return false;
+
+                if (lastDayOpenHour.OpenTine > open.TimeOfDay)
                     return true;
             }
 
@@ -119,6 +117,17 @@ namespace smartHookah.Models
 
     }
 
+    public class PlaceFlag
+    {
+        public int Id { get; set; }
+
+        public virtual ICollection<Place> Places { get; set; }
+
+        public string Code { get; set; }
+
+        public string DisplayName { get; set; }
+
+    }
 
     public class Seat
     {

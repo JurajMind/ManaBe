@@ -74,7 +74,7 @@ namespace smartHookah
                 "~/Scripts/bootstrap-modalmanager.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
-                "~/Scripts/jquery.signalR-2.2.2.min.js"));
+                "~/Scripts/jquery.signalR-2.4.0.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
                 "~/Scripts/moment-with-locales.js",

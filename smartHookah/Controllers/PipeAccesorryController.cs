@@ -335,8 +335,9 @@ namespace smartHookah.Controllers
                 csv.Configuration.MissingFieldFound = null;
                 csv.Configuration.Delimiter = ",";
                 csv.Configuration.TrimOptions = TrimOptions.Trim;
+            
                 var records = csv.GetRecords<ImportPipeAccesory>();
-
+               
                 foreach (var record in records)
                 {
                     try

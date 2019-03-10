@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -53,6 +54,12 @@ namespace smartHookah.Models.Dto
             Medias = MediaDto.FromModelList(model.Medias).ToList(),
             PhoneNumber = model.PhoneNumber,
             Facebook = model.Facebook,
+            BusinessHours = model.BusinessHours.Select(a => new OpeningDay
+            {
+                Day = a.Day,
+                OpenTime = a.OpenTine,
+                CloseTime = a.CloseTime
+            }).ToList()
         };
 
         public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR.Hubs;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Person;
 
@@ -22,7 +23,7 @@ namespace smartHookah.Services.Statistics
             this.db = db;
         }
 
-        public List<Models.SmokeSession> GetPersonSessions(DateTime? from, DateTime? to)
+        public List<Models.Db.SmokeSession> GetPersonSessions(DateTime? from, DateTime? to)
         {
             var person = personService.GetCurentPerson();
             if (person == null)
@@ -38,7 +39,7 @@ namespace smartHookah.Services.Statistics
                 .ToList();
         }
 
-        public SmokeSessionTimeStatisticsDto GetSessionTimeStatistics(IEnumerable<Models.SmokeSession> sessions)
+        public SmokeSessionTimeStatisticsDto GetSessionTimeStatistics(IEnumerable<Models.Db.SmokeSession> sessions)
         {
             var result = new SmokeSessionTimeStatisticsDto();
             foreach (var session in sessions)
@@ -63,7 +64,7 @@ namespace smartHookah.Services.Statistics
             return result;
         }
 
-        public List<PipeAccessoryUsageDto> GetAccessoriesUsage(IEnumerable<Models.SmokeSession> sessions)
+        public List<PipeAccessoryUsageDto> GetAccessoriesUsage(IEnumerable<Models.Db.SmokeSession> sessions)
         {
             var person = personService.GetCurentPerson();
             if (person == null)
@@ -84,7 +85,7 @@ namespace smartHookah.Services.Statistics
             return result;
         }
 
-        private static void AddAccessoryToUsage(Models.Person person, List<PipeAccessoryUsageDto> result, Models.SmokeSession session, Func<Models.SmokeSession, PipeAccesory> getTypedAccesory)
+        private static void AddAccessoryToUsage(Models.Db.Person person, List<PipeAccessoryUsageDto> result, Models.Db.SmokeSession session, Func<Models.Db.SmokeSession, PipeAccesory> getTypedAccesory)
         {
             if (getTypedAccesory(session) == null) return;
             if (result.All(a => a.Id != getTypedAccesory(session).Id))

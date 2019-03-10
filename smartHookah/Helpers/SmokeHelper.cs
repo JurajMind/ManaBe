@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 
 namespace smartHookah.Controllers

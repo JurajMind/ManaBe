@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Redis
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Redis
 {
     using System;
     using System.Collections.Generic;
@@ -22,8 +24,8 @@
 
         IList<Puf> GetPufs(string sessionId);
 
-        void SetReservationUsage(int placeId, DateTime date, ReservationUsageDto reservationUsage);
+        void SetReservationUsage(int placeId, DateTime date, ReservationUsage reservationUsage);
 
-        ReservationUsageDto GetReservationUsage(int placeId, DateTime date);
+        ReservationUsage GetReservationUsage(int placeId, DateTime date);
     }
 }

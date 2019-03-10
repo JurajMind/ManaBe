@@ -1,6 +1,7 @@
 ﻿using System;
+using Newtonsoft.Json;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class Puf
     {
@@ -25,14 +26,19 @@ namespace smartHookah.Models
             Milis = milis;
             Presure = presure;
         }
+        [JsonProperty(PropertyName = "SId")]
         public string SmokeSessionId { get; set; }
 
+        [JsonProperty(PropertyName = "T")]
         public PufType Type { get; set; }
 
+        [JsonProperty(PropertyName = "D")]
         public DateTime DateTime { get; set; }
 
+        [JsonProperty(PropertyName = "M")]
         public long Milis { get; set; }
 
+        [JsonProperty(PropertyName = "P")]
         public int Presure { get; set; } = 0;
     }
 

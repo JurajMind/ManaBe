@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using smartHookah.Models.Db;
+
 namespace smartHookah.Models
 {
     using System.Collections.Generic;

@@ -10,7 +10,9 @@ using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
 using smartHookah.Hubs;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using smartHookah.Services.Messages;
 using smartHookah.Support;
 using smartHookahCommon;
 
@@ -31,14 +33,15 @@ namespace smartHookah.Controllers
         private TimeSpan _slotDuration = new TimeSpan(0, 30, 0);
         private readonly SmartHookahContext db;
         private EmailService emailService;
-        public ReservationController(SmartHookahContext db, IReservationService reservationService)
+        private readonly INotificationService notificationService;
+        public ReservationController(SmartHookahContext db, IReservationService reservationService,INotificationService notificationService)
         {
             this.db = db;
             this.reservationService = reservationService;
             this.emailService = new EmailService();
+            this.notificationService = notificationService;
         }
 
-        private static IHubContext ReservationContext => GlobalHost.ConnectionManager.GetHubContext<ReservationHub>();
 
         // GET: Reservation
         public ActionResult Index()
@@ -59,7 +62,7 @@ namespace smartHookah.Controllers
 
         public void Ping(int id)
         {
-            ReservationContext.Clients.Group(id.ToString()).reload();
+            this.notificationService.ReservationChanged(id);
         }
 
         public ActionResult Details(int id)
@@ -200,7 +203,7 @@ namespace smartHookah.Controllers
                     }
 
                     scope.Commit();
-                    ReservationContext.Clients.Group(id.ToString()).reload();
+                    this.notificationService.ReservationChanged(newReservation);
                     await reservationService.UpdateReservationUsage(place.Id, parseDate.Date);
                     return Json(new {success = !conflict, id = newReservation.Id});
                 }
@@ -363,7 +366,9 @@ namespace smartHookah.Controllers
                 model.Canceled = todayReservation
                     .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied || a.Status == ReservationState.NonVisited)
                     .Select(a => new ReservationDto(a, _slotDuration));
-            }
+
+                model.ConfirmationRequired = todayActiveReservation.Where(a => a.Status == ReservationState.ConfirmationRequired).Select(a => new ReservationDto(a, _slotDuration));
+                }
 
 
             model.Reservations = new Dictionary<string, List<TimeSlot>>();
@@ -388,60 +393,6 @@ namespace smartHookah.Controllers
             model.TimeSlots = timeSlot;
             }
             return model;
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> CancelReservation(int id)
-        {
-            return await UpdateStatus(id, ReservationState.Canceled);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> UpdateStatus(int id, ReservationState state)
-        {
-            var reservation = db.Reservations.Where(a => a.Id == id).Include(r => r.Place).Include(r => r.Person).Include(r => r.Place.Address).FirstOrDefault();
-
-            if (reservation == null)
-                return Json(new {success = true});
-
-            var person = UserHelper.GetCurentPerson(db);
-
-            if (reservation.Place.Managers.Contains(person))
-            {
-               
-
-                if (state == ReservationState.Confirmed)
-                {
-                    RedisHelper.SetReservationToTable(reservation.PlaceId.ToString(), reservation.Id);
-                    if(reservation.Status == ReservationState.ConfirmationRequired)
-                    {
-                        SendReservationConfirmMail(reservation);
-                    }
-                }
-                   
-                if(state == ReservationState.Canceled && reservation.Status == ReservationState.ConfirmationRequired)
-                {
-                    SendReservationDeniedMail(reservation);
-                }
-                reservation.Status = state;
-                db.Reservations.AddOrUpdate(reservation);
-                await db.SaveChangesAsync();
-                ReservationContext.Clients.Group(reservation.PlaceId.ToString()).reload();
-                return Json(new {success = true});
-            }
-
-
-            if (reservation.PersonId == person.Id && state == ReservationState.Canceled)
-            {
-                reservation.Status = state;
-                db.Reservations.AddOrUpdate(reservation);
-                await db.SaveChangesAsync();
-                ReservationContext.Clients.Group(id.ToString()).reload();
-                SendReservationDeniedMail(reservation);
-                return Json(new {success = true});
-            }
-
-            return Json(new {success = true});
         }
 
         public async Task<JsonResult> ChangeReservation(int id, PostReservationModel model, int tableId)
@@ -496,35 +447,11 @@ namespace smartHookah.Controllers
 
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
-            ReservationContext.Clients.Group(reservation.PlaceId.ToString()).reload();
+            this.notificationService.ReservationChanged(reservation);
             return Json(new {oldRes= oldReservation,
                             newRes = new ReservationDto(reservation,this._slotDuration),success = true});
         }
 
-        public async Task<JsonResult> AddTable(int id, int tableId)
-        {
-            var reservation = await db.Reservations.FindAsync(id);
-
-            if (reservation == null)
-                return Json(new {success = false, msg = "Reservation not found"});
-
-            var table = await db.Seats.FindAsync(tableId);
-
-            if (table == null)
-                return Json(new {success = false, msg = "Table not found"});
-
-
-            var tableReservations = table.Reservations.Where(a => a.Time.Date == reservation.Time.Date && a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied);
-
-            foreach (var tableReservation in tableReservations)
-                if (Colide(reservation, tableReservation))
-                    return Json(new {success = false, msg = "Reservation conflict"});
-
-            reservation.Seats.Add(table);
-            await db.SaveChangesAsync();
-            ReservationContext.Clients.Group(reservation.PlaceId.ToString()).reload();
-            return Json(new {success = true});
-        }
 
         private bool Colide(Reservation reservation, Reservation tableReservation)
         {
@@ -714,6 +641,7 @@ namespace smartHookah.Controllers
         public List<KeyValuePair<int, string>> Times { get; set; }
 
         public int MinimumReservationTime { get; set; }
+        public IEnumerable<ReservationDto> ConfirmationRequired { get; set; }
     }
 
     }

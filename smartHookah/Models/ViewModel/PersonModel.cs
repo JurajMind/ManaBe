@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using smartHookah.Helpers;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Controllers
@@ -25,7 +26,7 @@ namespace smartHookah.Controllers
 
         public Person Person { get; set; }
 
-        public async Task Fill(Models.Person person, SmartHookahContext db)
+        public async Task Fill(Person person, SmartHookahContext db)
         {
             var sessions = person.SmokeSessions.Where(a => a.Statistics != null).OrderByDescending(a => a.Statistics.Start).Take(5);
             

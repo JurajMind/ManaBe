@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Hubs
 {
@@ -53,6 +54,11 @@ namespace smartHookah.Hubs
         public Task JoinHookah(string hookahId)
         {
             return this.Groups.Add(this.Context.ConnectionId, hookahId);
+        }
+
+        public async Task JoinPlace(int id)
+        {
+            await this.Groups.Add(this.Context.ConnectionId, $"place_{id.ToString()}");
         }
     }
 

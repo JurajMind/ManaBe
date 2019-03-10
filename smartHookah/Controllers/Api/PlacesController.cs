@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
@@ -36,8 +37,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("{id}/Menu")]
         public async Task<PlaceMenuDto> GetPlaceMenu(int id)
         {
-            try
-            {
+           
                 var place = await placeService.GetPlace(id);
                 var accessories = placeService.GetPlaceAccessories(place);
                 var mixes = await placeService.GetPlaceTobaccoMixes(place);
@@ -70,12 +70,6 @@ namespace smartHookah.Controllers.Api
                     Currency = place.Currency
                 };
             }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
-            }
-        }
 
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)
@@ -107,7 +101,7 @@ namespace smartHookah.Controllers.Api
             if (pageSize < 0) pageSize = 10;
 
             var result = new NearbyPlacesDto();
-            result.NearbyPlaces = new List<PlaceSimpleDto>();
+            
 
             IQueryable<Place> closestPlaces;
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
@@ -122,33 +116,8 @@ namespace smartHookah.Controllers.Api
                 closestPlaces = places.OrderBy(a => a.Id).Skip(pageSize * page).Take(pageSize);
             }
 
-            foreach (var place in closestPlaces)
-            {
-                var p = new PlaceSimpleDto
-                {
-                    Id = place.Id,
-                    Address = place.Address,
-                    FriendlyUrl = place.FriendlyUrl,
-                    LogoPath = place.LogoPath,
-                    Name = place.Name
-                };
-                foreach (var item in place.PlaceDays)
-                {
-                    var h = new OpeningDay
-                    {
-                        Day = (int) item.Day.DayOfWeek,
-                        OpenTime = item.OpenHour,
-                        CloseTime = item.CloseHour
-                    };
-                    p.BusinessHours.Add(h);
-                }
-
-                foreach (var media in place.Medias)
-                {
-                    p.Medias.Add(MediaDto.FromModel(media));
-                }
-                result.NearbyPlaces.Add(p);
-            }
+            result.NearbyPlaces = PlaceSimpleDto.FromModelList(closestPlaces.ToList()).ToList();
+          
 
             result.Message = result.NearbyPlaces.Count > 0
                 ? $"{result.NearbyPlaces.Count} places found nearby."
