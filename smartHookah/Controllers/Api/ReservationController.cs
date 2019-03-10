@@ -49,6 +49,12 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("Create")]
         public async Task<ReservationDto> Create(ReservationDto reservation)
         {
+            DateTime convertedDate = DateTime.SpecifyKind(
+              reservation.Time,
+                DateTimeKind.Utc);
+            var kind = convertedDate.Kind;
+            DateTime dt = convertedDate.ToLocalTime();
+            reservation.Time = dt;
             return await this.reservationService.CreateReservation(reservation);
         }
 
