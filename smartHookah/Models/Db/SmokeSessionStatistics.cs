@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using smartHookah.Support;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class SmokeSessionStatistics
     {

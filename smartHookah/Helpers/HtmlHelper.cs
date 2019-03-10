@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Support;
 using Westwind.Globalization;
 

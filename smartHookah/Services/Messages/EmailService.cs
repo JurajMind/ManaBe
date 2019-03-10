@@ -8,6 +8,8 @@ using System.Web.Hosting;
 using log4net;
 using Mailzory;
 using Microsoft.AspNet.Identity;
+using smartHookah.Helpers;
+using Westwind.Globalization;
 
 namespace smartHookah
 {
@@ -20,6 +22,13 @@ namespace smartHookah
             {
                 return;
             }
+
+            if (!template.EndsWith(".cshtml"))
+            {
+                template = template + ".cshtml";
+            }
+
+            var translatedSubject =  DbRes.T(subject, "Email");
 
             // template path
             var viewPath = Path.Combine("~/Views/Emails", template);
@@ -39,7 +48,7 @@ namespace smartHookah
          
             var email = new Email(string.Join("", compile));
             email.ViewBag.Model = model;
-            email.SetFrom("app@manapipes.com", "App smoke-o-bot");
+            email.SetFrom("app@manapipes.com", "Manapipes");
             HostingEnvironment.QueueBackgroundWorkItem(async ct =>
             {
                 try
@@ -73,7 +82,7 @@ namespace smartHookah
             //email.Attachments.Add(new Attachment("Attachments/attach2.docx"));
 
             // set your desired display name (Optional)
-            email.SetFrom("app@manapipes.com", "App smoke-o-bot");
+            email.SetFrom("app@manapipes.com", "Manapipes");
 
             // send email with BCC
             return email.SendAsync(message.Destination,message.Subject);

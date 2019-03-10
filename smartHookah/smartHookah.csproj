@@ -850,10 +850,22 @@
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
+    <Compile Include="Filters\ApiExceptionFilter.cs" />
+    <Compile Include="Helpers\Formaters\ShortIsoDateFormatConverter.cs" />
+    <Compile Include="Helpers\ModelExtensions\SmokeSessionPufExtension.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.Designer.cs">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902282353102_storedSession.cs" />
+    <Compile Include="Migrations\201902282353102_storedSession.Designer.cs">
+      <DependentUpon>201902282353102_storedSession.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903010936534_placeFlag.cs" />
+    <Compile Include="Migrations\201903010936534_placeFlag.Designer.cs">
+      <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dto\IMessageDto.cs" />
     <Compile Include="Models\Dto\ReservationDetailDto.cs" />
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
@@ -1029,6 +1041,12 @@
     <EmbeddedResource Include="Migrations\201902031613008_mixPart.resx">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902282353102_storedSession.resx">
+      <DependentUpon>201902282353102_storedSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903010936534_placeFlag.resx">
+      <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1039,8 +1057,12 @@
     <Compile Include="Models\Dto\SearchPipeAccesory.cs" />
     <Compile Include="Services\Gear\ITobaccoService.cs" />
     <Compile Include="Services\Gear\TobaccoService.cs" />
+    <Compile Include="Services\Messages\IMessageLogService.cs" />
     <Compile Include="Services\Messages\INotificationService.cs" />
+    <Compile Include="Services\Messages\IReservationEmailService.cs" />
+    <Compile Include="Services\Messages\MessageLogService.cs" />
     <Compile Include="Services\Messages\NotificationService.cs" />
+    <Compile Include="Services\Messages\ReservationEmailService.cs" />
     <Compile Include="Services\Person\AccountService.cs" />
     <Compile Include="Services\Device\DeviceSettingsPresetService.cs" />
     <Compile Include="Services\Device\IDeviceSettingsPresetService.cs" />
@@ -1608,7 +1630,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ViewModel\AccountViewModels.cs" />
-    <Compile Include="Models\Db\ApplicationRole.cs" />
     <Compile Include="Models\ViewModel\DataModule.cs" />
     <Compile Include="Models\Db\DbPuf.cs" />
     <Compile Include="Models\Db\Hookah.cs" />
@@ -2368,21 +2389,31 @@
     <Content Include="Views\Game\GameResult.cshtml" />
     <Content Include="Views\DeviceControl\DefaultMetadata.cshtml" />
     <Content Include="Views\Game\Halloween.cshtml" />
-    <Content Include="Views\Emails\hello.cshtml" />
+    <None Include="Views\Emails\hello.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Views\Home\VueTest.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\CleanEmptySmokeSession.cshtml" />
-    <Content Include="Views\Emails\_EmailLayout.cshtml">
+    <None Include="Views\Emails\_EmailLayout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Emails\test.cshtml">
+    </None>
+    <None Include="Views\Emails\test.cshtml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Emails\reservationDenied.cshtml" />
-    <Content Include="Views\Emails\reservationConfirmManual.cshtml" />
-    <Content Include="Views\Emails\reservationConfirm.cshtml" />
-    <Content Include="Views\Emails\reservationWaitForConfirm.cshtml" />
+    </None>
+    <None Include="Views\Emails\reservationDenied.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationConfirmManual.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationConfirm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Emails\reservationWaitForConfirm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Assets\_PrivacyPolicy.cshtml" />
@@ -2883,6 +2914,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\smartHookahCommon\smartHookahCommon.csproj">
+      <Project>{061DC37C-368A-4E33-9552-55E461335A9B}</Project>
+      <Name>smartHookahCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

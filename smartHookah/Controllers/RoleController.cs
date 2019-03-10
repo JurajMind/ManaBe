@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {

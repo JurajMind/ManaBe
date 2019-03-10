@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.ApplicationInsights;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api

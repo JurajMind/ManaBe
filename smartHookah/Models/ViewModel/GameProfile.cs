@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using smartHookah.Controllers;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {

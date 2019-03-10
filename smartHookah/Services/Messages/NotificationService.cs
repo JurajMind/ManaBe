@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Messages
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Services.Messages
 {
     using System.Data.Entity;
     using System.Linq;
@@ -18,11 +20,13 @@
         private readonly SmartHookahContext db;
 
         private readonly IRedisService redisService;
+        private readonly IEmailService emailService;
 
-        public NotificationService(SmartHookahContext db, IRedisService redisService)
+        public NotificationService(SmartHookahContext db, IRedisService redisService, IEmailService emailService)
         {
             this.db = db;
             this.redisService = redisService;
+            this.emailService = emailService;
         }
 
         public void OnlineDevice(string code)
@@ -34,6 +38,45 @@
             {
                 this.ClientContext.Clients.Group(emails).deviceOnline(sessionCode,  device.Name);
             }
+        }
+
+        public void ReservationChanged(Reservation reservation)
+        {
+            this.ReservationChanged(reservation,null);
+        }
+
+        private  void ReservationChanged(Reservation reservation, string emailTemplate)
+        {
+            var dBreservation = this.db.Reservations.Include(r => r.Customers).Include(r => r.Person.User)
+                .FirstOrDefault(r => r.Id == reservation.Id);
+
+            this.ReservationChanged(reservation.PlaceId);
+            foreach (var customerEmails in dBreservation.Customers.SelectMany(s => s.User.Select(u => u.Email)))
+            {
+                this.ClientContext.Clients.Group(customerEmails).ReservationChanged(ReservationDto.FromModel(reservation));
+            }
+
+            foreach (var personEmail in dBreservation.Person.User.Select(s => s.Email))
+            {
+                this.ClientContext.Clients.Group(personEmail).ReservationChanged(ReservationDto.FromModel(reservation));
+            }
+
+
+        }
+
+        public void ReservationStateChanged(Reservation reservation)
+        {
+                this.ReservationChanged(reservation);
+        }
+
+        public void ReservationCreated(Reservation reservation)
+        {
+            this.ReservationChanged(reservation);
+        }
+
+        public void ReservationChanged(int PlaceId)
+        {
+            ClientContext.Clients.Group($"place_{PlaceId.ToString()}").reloadReservations();
         }
     }
 }

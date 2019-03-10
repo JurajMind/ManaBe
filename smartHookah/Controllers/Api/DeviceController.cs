@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-
-using Microsoft.TeamFoundation.VersionControl.Client;
-
-using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
@@ -41,7 +36,7 @@ namespace smartHookah.Controllers.Api
                 var animation = this.deviceService.GetAnimation(model.AnimationId);
                 await this.deviceService.SetAnimation(id, animation, model.Type);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -60,7 +55,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.SetBrightness(id, model.Brightness, model.Type);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -78,7 +73,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.SetColor(id, model.Color, model.Type);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -97,7 +92,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.SetSpeed(id, model.Speed, model.Type);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -114,7 +109,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.Sleep(id);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -131,7 +126,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.Restart(id);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -148,7 +143,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.SetMode(id, mode);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
@@ -165,7 +160,7 @@ namespace smartHookah.Controllers.Api
             {
                 await this.deviceService.ShowQrCode(id);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 return this.Request.CreateResponse(HttpStatusCode.NotFound, err);

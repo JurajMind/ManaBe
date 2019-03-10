@@ -8,6 +8,7 @@ using System.Web.Http;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
@@ -38,7 +39,7 @@ namespace smartHookah.Services.Gear
         public async Task<Tobacco> GetTobacco(int id)
         {
             var tobacco = await db.Tobaccos.FirstOrDefaultAsync(a => a.Id == id);
-            if(tobacco == null) throw new ItemNotFoundException($"Tobacco with id {id} not found.");
+            if(tobacco == null) throw new KeyNotFoundException($"Tobacco with id {id} not found.");
             return tobacco;
         }
 
@@ -69,7 +70,7 @@ namespace smartHookah.Services.Gear
             return tobacco.Tastes.ToList();
         }
 
-        public async Task<List<Models.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0)
+        public async Task<List<Models.Db.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0)
         {
             return await db.SmokeSessions
                 .Where(a => a.MetaData.TobaccoId == tobacco.Id)
@@ -143,7 +144,7 @@ namespace smartHookah.Services.Gear
         public async Task<TobaccoMix> GetTobaccoMix(int id)
         {
             var mix = await db.TobaccoMixs.FirstOrDefaultAsync(a => a.Id == id);
-            if (mix == null) throw new ItemNotFoundException($"Tobacco mix with id {id} not found.");
+            if (mix == null) throw new KeyNotFoundException($"Tobacco mix with id {id} not found.");
             return mix;
         }
 
@@ -180,7 +181,7 @@ namespace smartHookah.Services.Gear
             return tobaccos.ToDictionary(tobacco => tobacco.Id, GetTobaccoTastes);
         }
 
-        public Task<List<Models.SmokeSession>> GetTobaccoMixSessions(TobaccoMix mix, int count = 10)
+        public Task<List<Models.Db.SmokeSession>> GetTobaccoMixSessions(TobaccoMix mix, int count = 10)
         {
             throw new NotImplementedException();
         }
@@ -255,17 +256,17 @@ namespace smartHookah.Services.Gear
         #endregion
 
 
-        private PipeAccesoryStatistics CalculateStatistics(IEnumerable<Models.SmokeSession> session)
+        private PipeAccesoryStatistics CalculateStatistics(IEnumerable<Models.Db.SmokeSession> session)
         {
             var result = new PipeAccesoryStatistics();
             
-            var smokeSessions = session as Models.SmokeSession[] ?? session.ToArray();
+            var smokeSessions = session as Models.Db.SmokeSession[] ?? session.ToArray();
 
             if (!smokeSessions.Any())
                 return null;
             result.PufCount = smokeSessions.Average(a => a.Statistics.PufCount);
             result.PackType = smokeSessions.GroupBy(i => i.MetaData.PackType).OrderByDescending(j => j.Count()).Select(a => a.Key).First();
-            result.BlowCount = smokeSessions.Average(b => b.Pufs.Count(puf => puf.Type == PufType.Out));
+            result.BlowCount = smokeSessions.Average(b => b.DbPufs.Count(puf => puf.Type == PufType.Out));
             result.SessionDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SessionDuration.TotalSeconds));
             result.SmokeDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SmokeDuration.TotalSeconds));
             result.Used = smokeSessions.Count();

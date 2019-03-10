@@ -6,6 +6,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using smartHookah.Migrations;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Support;
 

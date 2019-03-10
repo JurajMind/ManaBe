@@ -85,7 +85,7 @@ namespace smartHookah.Controllers.Api
 
                 return DevicePresetDto.FromModel(preset);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));
@@ -100,7 +100,7 @@ namespace smartHookah.Controllers.Api
                 var preset = this.deviceSettingsPresetService.SaveDevicePreset(deviceId, name, addToPerson);
                 if (preset == null)
                 {
-                    throw new ItemNotFoundException("Device not found.");
+                    throw new KeyNotFoundException("Device not found.");
                 }
                 if (addToPerson && setDefault)
                 {
@@ -109,7 +109,7 @@ namespace smartHookah.Controllers.Api
 
                 return DevicePresetDto.FromModel(preset);
             }
-            catch (ItemNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 var err = new HttpError(e.Message);
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, err));

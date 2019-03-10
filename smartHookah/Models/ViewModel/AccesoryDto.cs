@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Controllers
+﻿using smartHookah.Models.Db;
+
+namespace smartHookah.Controllers
 {
     using System.Resources;
 

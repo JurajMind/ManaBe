@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
     public class Tag
     {

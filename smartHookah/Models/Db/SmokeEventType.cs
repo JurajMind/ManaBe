@@ -1,4 +1,4 @@
-﻿namespace smartHookah.Models
+﻿namespace smartHookah.Models.Db
 {
     public enum SmokeEventType
     {

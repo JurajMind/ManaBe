@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
-using Microsoft.Azure.Mobile.Server.Tables;
-using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
 using smartHookah.Support;
 
-namespace smartHookah.Models
+namespace smartHookah.Models.Db
 {
-    using smartHookah.Models.Dto;
-
     public class PipeAccesory
     {
         [Key]

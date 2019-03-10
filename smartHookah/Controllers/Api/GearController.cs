@@ -8,6 +8,7 @@ using System.Web.Http;
 using Microsoft.VisualStudio.Services.WebApi;
 using smartHookah.ErrorHandler;
 using smartHookah.Models;
+using smartHookah.Models.Db;
 using smartHookah.Services.Gear;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
