@@ -217,7 +217,7 @@ namespace smartHookah.Services.Place
             }
 
             var continuoseSlot = continuoseSlotLeft.Max(a => a.Value.Count);
-            return continuoseSlotLeft.SingleOrDefault(a => a.Value.Count == continuoseSlot).Key;
+            return continuoseSlotLeft.FirstOrDefault(a => a.Value.Count == continuoseSlot).Key;
         }
 
         private IEnumerable<Reservation> TodayReservation(DateTime date, Models.Db.Place place,
