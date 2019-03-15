@@ -8,6 +8,8 @@ namespace smartHookah.Services.Messages
 
         void ReservationChanged(Reservation reservation);
 
-        void ReservationChanged(int PlaceId);
+        void ReservationChanged(int placeId);
+
+        void SessionSettingsChanged(string deviceCode, DeviceSetting setting);
     }
 }

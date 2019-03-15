@@ -78,5 +78,11 @@ namespace smartHookah.Services.Messages
         {
             ClientContext.Clients.Group($"place_{PlaceId.ToString()}").reloadReservations();
         }
+
+        public void SessionSettingsChanged(string deviceId, DeviceSetting setting)
+        {
+            var sessionCode = this.redisService.GetSessionId(deviceId);
+            ClientContext.Clients.Group(sessionCode).settingChanged(DeviceSettingDto.FromModel(setting));
+        }
     }
 }

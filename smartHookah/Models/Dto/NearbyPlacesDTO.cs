@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
@@ -29,8 +28,8 @@ namespace smartHookah.Models.Dto
         public string Name { get; set; }
         public string FriendlyUrl { get; set; }
         public string LogoPath { get; set; }
-        public Address Address { get; set; }
-        public ICollection<OpeningDay> BusinessHours { get; set; }
+        public AddressDto Address { get; set; }
+        public ICollection<BusinessHoursDto> BusinessHours { get; set; }
         public int Rating { get; set; }
         public ICollection<MediaDto> Medias { get; set; }
 
@@ -39,8 +38,8 @@ namespace smartHookah.Models.Dto
 
         public PlaceSimpleDto()
         {
-            Address = new Address();
-            BusinessHours = new List<OpeningDay>();
+            Address = new AddressDto();
+            BusinessHours = new List<BusinessHoursDto>();
             Medias = new List<MediaDto>();
         }
 
@@ -50,16 +49,11 @@ namespace smartHookah.Models.Dto
             Name = model.Name,
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
-            Address = model.Address,
+            Address = AddressDto.FromModel(model.Address),
             Medias = MediaDto.FromModelList(model.Medias).ToList(),
             PhoneNumber = model.PhoneNumber,
             Facebook = model.Facebook,
-            BusinessHours = model.BusinessHours.Select(a => new OpeningDay
-            {
-                Day = a.Day,
-                OpenTime = a.OpenTine,
-                CloseTime = a.CloseTime
-            }).ToList()
+            BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours).ToList()
         };
 
         public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)
