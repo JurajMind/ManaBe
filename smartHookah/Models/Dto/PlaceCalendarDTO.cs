@@ -6,17 +6,17 @@ using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
-    public class PlaceCalendarDTO : DTO
+    public class PlaceCalendarDto
     {
-        public ICollection<PlaceDayDTO> PlaceDays { get; set; }
+        public ICollection<PlaceDay> PlaceDays { get; set; }
 
-        public PlaceCalendarDTO()
+        public PlaceCalendarDto()
         {
-            this.PlaceDays = new List<PlaceDayDTO>();
+            this.PlaceDays = new List<PlaceDay>();
         }
     }
 
-    public class PlaceDayDTO : DTO
+    public class PlaceDay
     {
         public int Id { get; set; }
         public int PlaceId { get; set; }
@@ -25,7 +25,7 @@ namespace smartHookah.Models.Dto
         public TimeSpan CloseHour { get; set; }
         public ICollection<PlaceEventDTO> PlaceEvents { get; set; }
 
-        public PlaceDayDTO()
+        public PlaceDay()
         {
             this.PlaceEvents = new List<PlaceEventDTO>();
         }
