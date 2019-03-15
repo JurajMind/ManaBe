@@ -1,5 +1,6 @@
 ﻿using System;
 using smartHookah.Models.Db;
+using smartHookah.Services.Messages;
 
 namespace smartHookah.Services.Device
 {
@@ -8,11 +9,7 @@ namespace smartHookah.Services.Device
     using System.Data.Entity.Migrations;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     using smartHookah.Helpers;
-    using smartHookah.Models;
     using smartHookah.Services.Redis;
 
     public class DeviceService : IDeviceService
@@ -22,13 +19,16 @@ namespace smartHookah.Services.Device
         private readonly IIotService iotService;
 
         private readonly IRedisService redisService;
+
+        private readonly INotificationService notificationService;
         
 
-        public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService)
+        public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService, INotificationService notificationService)
         {
             this.db = db;
             this.iotService = iotService;
             this.redisService = redisService;
+            this.notificationService = notificationService;
         }
 
         public async Task SetAnimation(string deviceId, Animation animation, PufType state)
@@ -45,6 +45,7 @@ namespace smartHookah.Services.Device
 
             this.SetAnimation(hookah.Setting, (int)state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
+            this.notificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 
@@ -58,6 +59,7 @@ namespace smartHookah.Services.Device
 
             this.SetBrightness(hookah.Setting, (int)state, brightness);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
+            this.notificationService.SessionSettingsChanged(deviceId,hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 
@@ -78,6 +80,7 @@ namespace smartHookah.Services.Device
 
             this.SetSpeed(hookah.Setting, (int)state, speed);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
+            this.notificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 
@@ -91,6 +94,7 @@ namespace smartHookah.Services.Device
 
             this.SetColor(hookah.Setting, (int)state, color);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
+            this.notificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 

@@ -12,8 +12,7 @@ namespace smartHookah.Controllers
 
     using Newtonsoft.Json.Linq;
 
-    using smartHookah.Helpers;
-    using smartHookah.Models;
+    using Helpers;
     using smartHookah.Services.Device;
     using smartHookah.Services.Person;
 
@@ -199,34 +198,13 @@ namespace smartHookah.Controllers
             int speedIndex = 0;
             int speedValue = 0;
 
+
             if (!int.TryParse(dataChunk[0], out speedIndex) || !int.TryParse(dataChunk[1], out speedValue))
             {
                 return new JsonResult();
             }
 
-            if (hookah.Version == 0)
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"spd:{dataChunk[0]}{dataChunk[1]}");
-            }
-            else
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"spd:{speedIndex},{speedValue},");
-            }
-
-            var setting = hookah.Setting;
-
-
-            if (setting == null)
-            {
-                setting = new DeviceSetting();
-                hookah.Setting = setting;
-                this.db.Hookahs.AddOrUpdate(hookah);
-            }
-
-            setting.SetSpeed(speedIndex, speedValue);
-
-            this.db.HookahSettings.AddOrUpdate(setting);
-            await this.db.SaveChangesAsync();
+            await this.deviceService.SetSpeed(deviceId, speedValue,(PufType) speedIndex);
 
             return new JsonResult();
         }
@@ -234,32 +212,16 @@ namespace smartHookah.Controllers
         private async Task ChangeColor(string data, string deviceId)
         {
             JObject jObject = JObject.Parse(data);
-
-            var hookah = this.db.Hookahs.First(a => a.Code == deviceId);
-
-            if (hookah.Version < 1000002)
+            
+            var h = (byte)(jObject["h"].Value<double>() * 255);
+            var s = (byte)(jObject["s"].Value<double>() * 255);
+            var v = (byte)(jObject["v"].Value<double>() * 255);
+            await this.deviceService.SetColor(deviceId, new Color()
             {
-                var red = jObject["r"].Value<int>().ToString("000");
-                var green = jObject["g"].Value<int>().ToString("000");
-                var blue = jObject["b"].Value<int>().ToString("000");
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"clr:{red},{green},{blue}");
-            }
-
-            if (hookah.Version >= 1000002)
-            {
-                var h = (int) (jObject["h"].Value<double>()*255);
-                var s = (int) (jObject["s"].Value<double>()*255);
-                var v = (int) (jObject["v"].Value<double>()*255);
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"clr:{h:000},{s:000},{v:000}");
-                hookah.Setting.Color.Hue = (byte) h;
-                hookah.Setting.Color.Saturation = (byte) s;
-                hookah.Setting.Color.Value = (byte) v;
-
-                this.db.HookahSettings.AddOrUpdate(hookah.Setting);
-                await this.db.SaveChangesAsync();
-            }
-
-
+                Hue = h,
+                Saturation = s,
+                Value = v,
+            }, PufType.Idle);
         }
 
         private async Task<JsonResult> ChangeAnimaton(string data, string deviceId)
@@ -282,30 +244,9 @@ namespace smartHookah.Controllers
                 return new JsonResult();
             }
 
-            if (hookah.Version == 0)
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"led:{dataChunk[0]}{dataChunk[1]}");
-            }
-            else
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"led:{AnimationIndex},{AnimationValue},");
-            }
-
-            var setting = hookah.Setting;
-
-
-            if (setting == null)
-            {
-                setting = new DeviceSetting();
-                hookah.Setting = setting;
-                this.db.Hookahs.AddOrUpdate(hookah);
-            }
-
-
-            setting.SetAnimation(AnimationIndex, AnimationValue);
-
-            this.db.HookahSettings.AddOrUpdate(setting);
-            await this.db.SaveChangesAsync();
+            var animation = this.deviceService.GetAnimation(AnimationValue);
+            await this.deviceService.SetAnimation(deviceId, animation, (PufType) AnimationIndex);
+            
 
             return new JsonResult();
         }
@@ -330,73 +271,11 @@ namespace smartHookah.Controllers
                 return new JsonResult();
             }
 
-            if (hookah.Version == 0)
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"br:{dataChunk[0]}{dataChunk[1]}");
-            }
-            else
-            {
-                await IotDeviceHelper.SendMsgToDevice(deviceId, $"br:{brIndex},{brValue},");
-            }
-
-            var setting = hookah.Setting;
-
-
-            if (setting == null)
-            {
-                setting = new DeviceSetting();
-                hookah.Setting = setting;
-                this.db.Hookahs.AddOrUpdate(hookah);
-            }
-            
-            setting.SetBrightness(brIndex, brValue);
-
-            this.db.HookahSettings.AddOrUpdate(setting);
-            await this.db.SaveChangesAsync();
+            await this.deviceService.SetBrightness(deviceId, brValue, (PufType)brIndex);
 
             return new JsonResult();
         }
 
-        
-
-        public enum Animation
-        {
-            Off = 0,
-            SmokeBar = 1,
-            Flicker = 2,
-            OneColor = 3,
-            Rainbow = 4,
-            PresureBar = 5,
-            PresureBreath = 6,
-            SelectedColor = 7,
-            RainbowFade = 8,
-            RainbowLoop = 9,
-            RandomBurst = 10,
-            ColorBounce = 11,
-            ColorBounceFade = 12,
-            EmsLightOne = 13,
-            EmsLightAll = 14,
-            Flicker2 = 15,
-            Breath = 16,
-            BreathInverse = 17,
-            FadeVertical = 18,
-            Rule30 = 19,
-            RandomMarch = 20,
-            RwbMarch = 21,
-            Radiation = 22,
-            ColorLoop = 23,
-            Pop = 24,
-            PresureColor = 25,
-            Flame = 26,
-            RainbowVertica = 27,
-            Pacman = 28,
-            RandomColorPop = 29,
-            EmsStrobo = 30,
-            RgbPropeller = 31,
-            Kitt = 32,
-            Matrix = 33,
-            NewRainbow = 34,
-        }
 
         public async Task<ActionResult> GetDeviceSetting(string id)
         {
@@ -449,84 +328,6 @@ namespace smartHookah.Controllers
 
             return model;
         }
-
-
-
-        public static async Task InitDevice(string id, string version)
-        {
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
-
-            var pufs = RedisHelper.GetPufs(sessionId);
-
-            var intake = pufs.Count(a => a.Type == PufType.In);
-
-            var setting = new DeviceSetting();
-            var versionInt = Helper.UpdateVersionToInt(version);
-            using (var db = new SmartHookahContext())
-            {
-                var hookah = db.Hookahs.FirstOrDefault(a => a.Code == id);
-
-                if (hookah?.Setting != null)
-                    setting = hookah.Setting;
-                var msg = string.Empty;
-                if (versionInt <= 1000002)
-                    msg = $"init:{setting.GetInitString()}{intake},150";
-                else
-                {
-                    msg = $"init:{setting.GetInitStringWithColor(intake)}";
-                }
-
-                if(versionInt < 1000003)
-                await IotDeviceHelper.SendMsgToDevice(id, msg);
-
-                if (hookah.Version != versionInt)
-                {
-                    hookah.Version = versionInt;
-                    db.Hookahs.AddOrUpdate(hookah);
-                    await db.SaveChangesAsync();
-                }
-
-            }
-        }
-
-        public static string GetDeviceInitString(string id, int hookahVersion, SmartHookahContext context)
-        {
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
-
-            var pufs = RedisHelper.GetPufs(sessionId);
-
-            var intake = pufs.Count(a => a.Type == PufType.In);
-            var setting = new DeviceSetting();
-
-            var hookah = context.Hookahs.FirstOrDefault(a => a.Code == id);
-
-            if (hookah?.Setting != null)
-                setting = hookah.Setting;
-
-            var percentage = 300;
-            var dbSession = context.SmokeSessions.FirstOrDefault(a => a.SessionId == sessionId);
-
-            if (dbSession != null && dbSession.MetaData != null && dbSession.MetaData.Tobacco != null &&
-                dbSession.MetaData.Tobacco.Statistics != null)
-            {
-                percentage = (int) dbSession.MetaData.Tobacco.Statistics.PufCount;
-            }
-
-            if(hookahVersion < 1000011)
-            return setting.GetInitStringWithColor(intake);
-
-            if(hookahVersion < 1000017)
-            return setting.GetInitStringWithPercentage(intake, percentage);
-
-            if(hookahVersion < 1000024)
-            return setting.GetInitStringWithBrightness(intake, percentage);
-
-            if (hookahVersion < 1000025)
-                return setting.GetInitStringWithSessionId(intake, percentage, sessionId);
-
-            return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
-        }
-
         public class DeviceSettingViewModel
         {
             public int HookahVersion { get; set; }

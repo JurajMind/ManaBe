@@ -851,6 +851,7 @@
     <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
     <Compile Include="Filters\ApiExceptionFilter.cs" />
+    <Compile Include="Filters\ClientIdFilter.cs" />
     <Compile Include="Helpers\Formaters\ShortIsoDateFormatConverter.cs" />
     <Compile Include="Helpers\ModelExtensions\SmokeSessionPufExtension.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.cs" />
@@ -865,6 +866,7 @@
     <Compile Include="Migrations\201903010936534_placeFlag.Designer.cs">
       <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
     <Compile Include="Models\Dto\ReservationDetailDto.cs" />
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
@@ -1101,7 +1103,7 @@
     <Compile Include="Models\Dto\AnimationsDTO.cs" />
     <Compile Include="Models\Dto\MixologyDTO.cs" />
     <Compile Include="Models\Dto\NearbyPlacesDto.cs" />
-    <Compile Include="Models\Dto\PlaceCalendarDTO.cs" />
+    <Compile Include="Models\Dto\PlaceCalendarDto.cs" />
     <Compile Include="Models\ViewModel\AccesoryDto.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -1199,7 +1201,6 @@
     <Compile Include="Migrations\201803252005595_locations.Designer.cs">
       <DependentUpon>201803252005595_locations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\TobaccoReviewDTO.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\ActiveSessionListItemViewModel.cs" />
     <Compile Include="Models\Db\SessionReport.cs" />

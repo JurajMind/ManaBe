@@ -1,35 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using smartHookah.Models.Db;
 using smartHookah.Support;
 
 namespace smartHookah.Models.Dto
 {
-    public class PlaceDto
+    public class PlaceDto : PlaceSimpleDto
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string LogoPath { get; set; }
 
         public string ShortDescriptions { get; set; }
 
         public string Descriptions { get; set; }
-
-        public string FriendlyUrl { get; set; }
-
-        public int AddressId { get; set; }
-
-        public AddressDto Address { get; set; }
-
-        public IEnumerable<BusinessHoursDto> BusinessHours { get; set; }
-        
-        public string PhoneNumber { get; set; }
-
-        public string Facebook { get; set; }
 
         public decimal BaseHookahPrice { get; set; }
 
@@ -51,7 +33,7 @@ namespace smartHookah.Models.Dto
 
         public List<string> Flags { get; set; }
 
-        public static PlaceDto FromModel(Place model) => model == null
+        public new static PlaceDto FromModel(Place model) => model == null
             ? null
             : new PlaceDto()
             {
@@ -61,9 +43,8 @@ namespace smartHookah.Models.Dto
                 ShortDescriptions = model.ShortDescriptions,
                 Descriptions = model.Descriptions,
                 FriendlyUrl = model.FriendlyUrl,
-                AddressId = model.AddressId,
                 Address = AddressDto.FromModel(model.Address),
-                BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours),
+                BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours).ToList(),
                 PhoneNumber = model.PhoneNumber,
                 Facebook = model.Facebook,
                 BaseHookahPrice = model.BaseHookahPrice,
@@ -88,7 +69,6 @@ namespace smartHookah.Models.Dto
                 ShortDescriptions = this.ShortDescriptions,
                 Descriptions = this.Descriptions,
                 FriendlyUrl = this.FriendlyUrl,
-                AddressId = this.AddressId,
                 Address = this.Address.ToModel(),
                 PhoneNumber = this.PhoneNumber,
                 Facebook = this.Facebook,
@@ -443,7 +423,7 @@ namespace smartHookah.Models.Dto
 
         public string FileName { get; private set; }
 
-        public string GetDirectory { get; private set; }
+
 
         public static MediaDto FromModel(Media model) => model == null
             ? null
@@ -455,8 +435,7 @@ namespace smartHookah.Models.Dto
                 Type = model.Type,
                 IsDefault = model.IsDefault,
                 Extension = model.Extension,
-                FileName = model.FileName,
-                GetDirectory = model.GetDirectory,
+                FileName = model.FileName
             };
 
         public Media ToModel()
