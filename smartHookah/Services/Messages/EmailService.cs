@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +7,9 @@ using System.Web.Hosting;
 using log4net;
 using Mailzory;
 using Microsoft.AspNet.Identity;
-using smartHookah.Helpers;
 using Westwind.Globalization;
 
-namespace smartHookah
+namespace smartHookah.Services.Messages
 {
     public class EmailService : IEmailService, IIdentityMessageService
     {
@@ -25,7 +23,7 @@ namespace smartHookah
 
             if (!template.EndsWith(".cshtml"))
             {
-                template = template + ".cshtml";
+                template = template + ".txt";
             }
 
             var translatedSubject =  DbRes.T(subject, "Email");
@@ -34,7 +32,7 @@ namespace smartHookah
             var viewPath = Path.Combine("~/Views/Emails", template);
             viewPath = HostingEnvironment.MapPath(viewPath);
             // read the content of template and pass it to the Email constructor
-            var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.cshtml");
+            var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.txt");
             var layout = File.ReadAllLines(layoutPath);
 
             var index = Array.FindIndex(layout,a => a.Contains("#BODY#"));
@@ -67,7 +65,7 @@ namespace smartHookah
         public Task SendAsync(IdentityMessage message)
         {
             // template path
-            var viewPath = Path.Combine("~/Views/Emails", "hello.cshtml");
+            var viewPath = Path.Combine("~/Views/Emails", "hello.txt");
             viewPath = HttpContext.Current.Server.MapPath(viewPath);
             // read the content of template and pass it to the Email constructor
             var template = File.ReadAllText(viewPath);
