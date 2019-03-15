@@ -1740,7 +1740,6 @@
     <Compile Include="Support\Support.cs" />
     <Compile Include="SwaggerExtensions\SwaggerAccesMessegeHandler.cs" />
     <Compile Include="TagHelpers\ScriptTagHelper.cs" />
-    <Compile Include="WebSocketServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\app.js" />
@@ -2049,6 +2048,27 @@
     <Content Include="Scripts\slim\slim.kickstart.min.js" />
     <Compile Include="Services\Redis\ICacheService.cs" />
     <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="Views\Emails\hello.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\reservationConfirm.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\reservationConfirmManual.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\reservationDenied.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\reservationWaitForConfirm.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Emails\_EmailLayout.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />
     <Content Include="ClientApp\components\nav-bottom.vue" />
