@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
-
+using Microsoft.Azure.Amqp.Framing;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Gear;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Controllers.Api
 {
@@ -106,7 +108,7 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixCreators")]
-        public MixCreatorsDTO GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
+        public MixCreatorsDto GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
             var query = from b in this.db.Brands
                         where b.TobaccoMixBrand
@@ -121,7 +123,7 @@ namespace smartHookah.Controllers.Api
                     query = order.ToLower() == "asc" ? from a in query orderby a.PipeAccesories.Count(x => x is TobaccoMix) ascending select a : from a in query orderby a.PipeAccesories.Count(x => x is TobaccoMix) descending select a;
                     break;
                 default:
-                    return new MixCreatorsDTO() { Success = false, Message = "Invalid OrderBy value, select \"name\" or \"count\"." };
+                    throw new ManaException(ErrorCodes.WrongOrderField, "Invalid OrderBy value, select \"name\" or \"count\".");
             }
 
             query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
@@ -130,7 +132,7 @@ namespace smartHookah.Controllers.Api
 
             if (res.Any())
             {
-                var result = new MixCreatorsDTO() { Success = true, Message = $"{res.Count()} mix creators found." };
+                var result = new MixCreatorsDto();
                 foreach (var m in res)
                 {
                     var creator = new MixCreator()
@@ -146,7 +148,7 @@ namespace smartHookah.Controllers.Api
                 return result;
             }
 
-            return new MixCreatorsDTO() { Success = false, Message = "No mix creators found." };
+            return new MixCreatorsDto();
         }
 
         [System.Web.Http.HttpGet, System.Web.Http.Route("{id}/GetMix")]

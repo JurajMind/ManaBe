@@ -10,6 +10,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.Messages;
 
 namespace smartHookah
 {

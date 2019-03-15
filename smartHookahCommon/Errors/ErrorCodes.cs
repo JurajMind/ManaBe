@@ -17,5 +17,11 @@ namespace smartHookahCommon.Errors
         public static string ReservationConflict = "RESERVATION_CONFLICT";
 
         public static string ReservationStateRole = "RESERVATION_STATE_ROLE";
+
+        public static string WrongOrderField = "WRONG_ORDER_FIELD";
+
+        public static string InvalidPrivacyType = "INVALID_PRIVACY_TYPE";
+
+        public static string WrongDay = "WRONG_DATE";
     }
 }

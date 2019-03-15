@@ -1,20 +1,16 @@
-﻿using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
-using Accord;
-using AutoMapper;
-using Microsoft.VisualStudio.Services.Common;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
+using PlaceDay = smartHookah.Models.Dto.PlaceDay;
 
 namespace smartHookah.Controllers.Api
 {
@@ -32,7 +28,7 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.AcceptVerbs("POST")]
         [System.Web.Http.Route("SavePlaceDay")]
-        public async Task<DTO> SavePlaceDay([Bind(Include = "Id,PlaceId,Day,OpenHour,CloseHour")] PlaceDayDTO placeDay)
+        public async Task<DTO> SavePlaceDay([Bind(Include = "Id,PlaceId,Day,OpenHour,CloseHour")] PlaceDay placeDay)
         {
             if (placeDay == null) return new DTO(){Success = false, Message = "PlaceDay is null."};
 
@@ -43,7 +39,7 @@ namespace smartHookah.Controllers.Api
 
             try
             {
-                day = new PlaceDay() { Id = placeDay.Id > 0 ? placeDay.Id : 0, Day = placeDay.Day, PlaceId = placeDay.PlaceId, OpenHour = placeDay.OpenHour, CloseHour = placeDay.CloseHour };
+                day = new Models.Db.PlaceDay() { Id = placeDay.Id > 0 ? placeDay.Id : 0, Day = placeDay.Day, PlaceId = placeDay.PlaceId, OpenHour = placeDay.OpenHour, CloseHour = placeDay.CloseHour };
                 
                 _db.PlaceDays.AddOrUpdate(day);
                 _db.SaveChanges();
@@ -108,18 +104,21 @@ namespace smartHookah.Controllers.Api
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetCalendar")]
-        public async Task<PlaceCalendarDTO> GetPlaceCalendar(int placeId, string privacyType = "public")
+        public async Task<PlaceCalendarDto> GetPlaceCalendar(int placeId, string privacyType = "public")
         {
-            if(placeId < 0) return new PlaceCalendarDTO() {Success = false, Message = "Please provide correct Place id."};
+            if(placeId < 0)
+                throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
             var place = _db.Places.Find(placeId);
-            if (place == null) return new PlaceCalendarDTO() { Success = false, Message = "Place not found." };
+            if (place == null)
+                throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
 
-            if (!FacebookHelper.ValidateEventPrivacyType(privacyType)) return new PlaceCalendarDTO() { Success = false, Message = "Event privacy type not valid." };
+            if (!FacebookHelper.ValidateEventPrivacyType(privacyType))
+                throw new ManaException(ErrorCodes.InvalidPrivacyType, "Invalid privaci type");
 
-            var result = new PlaceCalendarDTO();
+            var result = new PlaceCalendarDto();
             foreach (var day in place.PlaceDays)
             {
-                var d = new PlaceDayDTO(){Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour};
+                var d = new PlaceDay(){Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour};
                 foreach (var e in day.PlaceEvents)
                 {
                     if (e.PrivacyType.ToLower() == privacyType.ToLower() && FacebookHelper.ValidateEventPrivacyType(privacyType))
@@ -141,20 +140,22 @@ namespace smartHookah.Controllers.Api
                 result.PlaceDays.Add(d);
             }
 
-            result.Success = true;
             return result;
         }
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetPlaceDay")]
-        public async Task<PlaceDayDTO> GetPlaceDay(int placeId, int? dayId, DateTime? dayDate, string privacyType = "public")
+        public async Task<PlaceDay> GetPlaceDay(int placeId, int? dayId, DateTime? dayDate, string privacyType = "public")
         {
-            if (placeId < 1) return new PlaceDayDTO(){Success = false, Message = "Please provide corret Place id."};
+            if (placeId < 1)  
+                throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
             var place = _db.Places.Find(placeId);
-            if (place == null) return new PlaceDayDTO() { Success = false, Message = "Place not found." };
-            if (!FacebookHelper.ValidateEventPrivacyType(privacyType)) return new PlaceDayDTO() { Success = false, Message = "Event privacy type not valid." };
+            if (place == null)
+                throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
+            if (!FacebookHelper.ValidateEventPrivacyType(privacyType))
+                throw new ManaException(ErrorCodes.InvalidPrivacyType, "Invalid privaci type");
 
-            var day = new PlaceDay();
+            var day = new Models.Db.PlaceDay();
 
             if (dayId.HasValue)
             {
@@ -165,12 +166,12 @@ namespace smartHookah.Controllers.Api
             }
             else
             {
-                return new PlaceDayDTO(){Success = false, Message = "Please provide PlaceDay Id or Date."};
+                throw new ManaException(ErrorCodes.WrongDay, "Wrong date");
             }
 
             if (day != null)
             {
-                var result = new PlaceDayDTO() { Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour };
+                var result = new PlaceDay() { Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour };
 
                 foreach (var e in day.PlaceEvents)
                 {
@@ -192,7 +193,7 @@ namespace smartHookah.Controllers.Api
                 }
                 return result;
             }
-            return new PlaceDayDTO(){Success = false, Message = "PlaceDay not found."};
+            throw new ManaException(ErrorCodes.WrongDay, "Wrong date");
         }
 
         [System.Web.Http.HttpGet]
