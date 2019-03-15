@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Device
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using smartHookah.Helpers;
-    using smartHookah.Models;
+    using Helpers;
 
     public interface IDeviceService
     {
@@ -21,6 +19,8 @@ namespace smartHookah.Services.Device
         Task ShowQrCode(string deviceId);
         Task SetPreset(string deviceId, int settingId);
         Task SetPreset(string deviceId, DeviceSetting setting);
+
+        Task UpdateSettingFromDevice(string deviceId, byte[] rawData);
         
         List<Animation> GetAnimations();
         Animation GetAnimation(int id);

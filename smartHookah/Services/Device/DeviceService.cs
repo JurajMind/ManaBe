@@ -158,6 +158,38 @@ namespace smartHookah.Services.Device
             await this.iotService.SendMsgToDevice(deviceId, $"pres:{settingString}");
         }
 
+        public async Task UpdateSettingFromDevice(string deviceId, byte[] rawData)
+        {
+            int _idleAnimation = rawData[3];
+            int _pufAnimation = rawData[4];
+            int _blowAnimation = rawData[5];
+            int _idleBr = rawData[6];
+            int _pufBr = rawData[7];
+            byte _hue = rawData[8];
+            byte _sat = rawData[9];
+
+          
+                var hookah = db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+
+                var hookahSetting = hookah?.Setting;
+
+                if (hookahSetting == null)
+                    return;
+
+                hookahSetting.IdleAnimation = _idleAnimation;
+                hookahSetting.BlowAnimation = _blowAnimation;
+                hookahSetting.PufAnimation = _pufAnimation;
+                hookahSetting.IdleBrightness = _idleBr;
+                hookahSetting.PufBrightness = _pufBr;
+                hookahSetting.Color.Hue = _hue;
+                hookahSetting.Color.Saturation = _sat;
+
+                hookah.Setting = hookahSetting;
+                db.Hookahs.AddOrUpdate(hookah);
+                this.notificationService.SessionSettingsChanged(deviceId,hookahSetting);
+                await db.SaveChangesAsync();
+        }
+
         public string GetDeviceInitString(string id, int hookahVersion)
         {
             var sessionId = this.redisService.GetSessionId(id);
