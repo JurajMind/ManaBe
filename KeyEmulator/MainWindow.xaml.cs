@@ -23,28 +23,30 @@ namespace KeyEmulator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IHubProxy hubProxy;
+        private HubConnection hubConnection;
         public MainWindow()
         {
             InitializeComponent();
             MainAsync();
         }
 
-        static async Task MainAsync()
+        async Task MainAsync()
         {
             try
             {
 
-                var hubConnection = new HubConnection("http://app.manapipes.com/");
+                hubConnection = new HubConnection("http://app.manapipes.com/");
                 //hubConnection.TraceLevel = TraceLevels.All;
                 //hubConnection.TraceWriter = Console.Out;
-                IHubProxy hubProxy = hubConnection.CreateHubProxy("SmokeSessionHub");
+                hubProxy = hubConnection.CreateHubProxy("SmokeSessionHub");
                 hubProxy.On("pufChange", data =>
                 {
-                    Console.WriteLine("Incoming data: {0} {1}", data.name, data.message);
+                    SendKeys.Send("1");
                 });
                 ServicePointManager.DefaultConnectionLimit = 10;
                 await hubConnection.Start();
-                await hubProxy.Invoke("joinSession", "6O1HT");
+              
 
             }
             catch (Exception ex)
@@ -53,5 +55,21 @@ namespace KeyEmulator
             }
         }
 
+        async Task JoinSession(string smokeSessionId)
+        {
+            await this.Dispatcher.Invoke(async () =>
+            {
+                await hubProxy.Invoke("joinSession", smokeSessionId);
+            });
+           
+        }
+
+        private async void JoinSession_Click(object sender, RoutedEventArgs e)
+        {
+            await hubProxy.Invoke("joinSession", sessionId.Text);
+        }
+
     }
+
+
 }

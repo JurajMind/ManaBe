@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
-using DocumentFormat.OpenXml.Math;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
-    using Accord.Statistics;
-
     using smartHookah.Support;
 
-    public class MixCreatorsDTO : DTO
+    public class MixCreatorsDto
     {
         public ICollection<MixCreator> MixCreatorsList { get; set; }
 
-        public MixCreatorsDTO()
+        public MixCreatorsDto()
         {
             this.MixCreatorsList = new List<MixCreator>();
         }
