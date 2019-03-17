@@ -1,6 +1,10 @@
 ﻿using System;
+using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
+using smartHookah.Services.Person;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Device
 {
@@ -227,7 +231,59 @@ namespace smartHookah.Services.Device
 
             return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
         }
-        
+
+        public async Task<bool> UpdateDevice(int deviceId, int updateId,Models.Db.Person user,bool isAdmin)
+        {
+            try
+            {
+
+                if (isAdmin)
+                {
+                    var canUpdate = user.Hookahs.Any(a => a.Id == deviceId);
+                    if (!canUpdate)
+                        return false;
+                }
+
+                var hookah = await db.Hookahs.FindAsync(deviceId);
+                var update = await db.Updates.FindAsync(updateId);
+                var updateToken = Support.Support.RandomString(5);
+
+                var updatePath = update.Path;
+
+                var updateRedis = new UpdateController.UpdateRedis()
+                {
+                    FilePath = updatePath,
+                    HookahCode = hookah.Code
+                };
+
+               this.redisService.StoreUpdate(updateToken,updateRedis);
+
+                var msg = $"update:{updateToken}";
+
+                await IotDeviceHelper.SendMsgToDevice(hookah.Code, msg);
+            }
+            catch (Exception e)
+            {
+
+               throw  new ManaException(ErrorCodes.UpdateError, "Update was not successful", e);
+            }
+
+
+            return true;
+        }
+
+        public string GetUpdatePath(string deviceId, string token)
+        {
+            var updateRedis = this.redisService.GetUpdate(token);
+
+            if (updateRedis.HookahCode != deviceId)
+            {
+                throw new ManaException(ErrorCodes.UpdateError, $"Device id:{deviceId} not match with token");
+            }
+
+            return updateRedis.FilePath;
+        }
+
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
         {
             return this.iotService.GetOnlineStates(deviceIds);

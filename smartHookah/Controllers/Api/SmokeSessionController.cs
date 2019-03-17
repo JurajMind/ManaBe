@@ -47,7 +47,7 @@ namespace smartHookah.Controllers.Api
             if (id == null || id.Length != 5)
                 return new ValidationDTO() { Success = false, Message = "Session id is not valid." };
             id = id.ToUpper();
-            var redisSessionId = RedisHelper.GetHookahId(id);
+            var redisSessionId = this.redisService.GetHookahId(id);
             var dbSession = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
             if (dbSession == null) return new ValidationDTO() { Success = false, Message = "Session not found." };

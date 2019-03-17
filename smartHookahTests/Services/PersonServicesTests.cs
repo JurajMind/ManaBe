@@ -20,8 +20,6 @@ namespace smartHookahTests.Services
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
-    using smartHookahCommon;
-
     [TestFixture]
     internal class PersonServicesTests
     {

@@ -12,6 +12,7 @@ using smartHookah.Helpers;
 using smartHookah.Hubs;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
 using smartHookah.Support;
 using smartHookahCommon;
 
@@ -28,10 +29,13 @@ namespace smartHookah.Controllers
 
         private readonly INotificationService notificationService;
 
-        public QRCodeController(IDeviceService deviceService, INotificationService notificationService)
+        private readonly IRedisService redisService;
+
+        public QRCodeController(IDeviceService deviceService, INotificationService notificationService, IRedisService redisService)
         {
             this.deviceService = deviceService;
             this.notificationService = notificationService;
+            this.redisService = redisService;
         }
 
         [HttpGet]
@@ -60,7 +64,7 @@ namespace smartHookah.Controllers
                   
                 }
 
-            var sessionId = RedisHelper.GetSmokeSessionId(id);
+            var sessionId = redisService.GetSessionId(id);
             //var request = GetBaseUrl();
             var request = "http://app.manapipes.com/";
             var url = request + "smoke/"+ sessionId;

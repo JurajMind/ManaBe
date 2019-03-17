@@ -1,5 +1,7 @@
 ﻿
+using smartHookah.Mappers.ViewModelMappers.Smoke;
 using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Controllers
 {
@@ -26,11 +28,17 @@ namespace smartHookah.Controllers
 
         private readonly IDeviceSettingsPresetService devicePresetService;
 
-        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService, IDeviceSettingsPresetService devicePresetService)
+        private readonly IRedisService redisService;
+
+        private readonly IMetadataModalViewModelMapper metadataModalMapper;
+
+        public DeviceControlController(SmartHookahContext db, IDeviceService deviceService, IDeviceSettingsPresetService devicePresetService, IRedisService redisService, IMetadataModalViewModelMapper metadataModalMapper)
         {
             this.db = db;
             this.deviceService = deviceService;
             this.devicePresetService = devicePresetService;
+            this.redisService = redisService;
+            this.metadataModalMapper = metadataModalMapper;
         }
 
         public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
@@ -132,7 +140,7 @@ namespace smartHookah.Controllers
             }
             else
             {
-                deviceId = RedisHelper.GetHookahId(id);
+                deviceId = this.redisService.GetHookahId(id);
             }
        
             switch (command)
@@ -279,7 +287,7 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> GetDeviceSetting(string id)
         {
-            var hookahId = RedisHelper.GetHookahId(id);
+            var hookahId = this.redisService.GetHookahId(id);
 
 
             var model = GetDeviceSettingViewModel(this.db, hookahId);
