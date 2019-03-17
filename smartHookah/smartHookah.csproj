@@ -854,6 +854,14 @@
     <Compile Include="Filters\ClientIdFilter.cs" />
     <Compile Include="Helpers\Formaters\ShortIsoDateFormatConverter.cs" />
     <Compile Include="Helpers\ModelExtensions\SmokeSessionPufExtension.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Person\IPersonIndexViewModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Person\PersonIndexViewModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\IMetadataModalViewModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\ISmokeSessionStatisticModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\ISmokeViewMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\MetadataModalViewModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\SmokeSessionStatisticModelMapper.cs" />
+    <Compile Include="Mappers\ViewModelMappers\Smoke\SmokeViewMapper.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.cs" />
     <Compile Include="Migrations\201902031613008_mixPart.Designer.cs">
       <DependentUpon>201902031613008_mixPart.cs</DependentUpon>
@@ -865,6 +873,10 @@
     <Compile Include="Migrations\201903010936534_placeFlag.cs" />
     <Compile Include="Migrations\201903010936534_placeFlag.Designer.cs">
       <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903171128474_personStats.cs" />
+    <Compile Include="Migrations\201903171128474_personStats.Designer.cs">
+      <DependentUpon>201903171128474_personStats.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
@@ -934,6 +946,7 @@
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
     <Compile Include="Models\Factory\BrandFactory.cs" />
     <Compile Include="Models\Factory\PipeAccesoryFactory.cs" />
+    <Compile Include="Models\Db\PersonStatistic.cs" />
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
@@ -1049,6 +1062,9 @@
     <EmbeddedResource Include="Migrations\201903010936534_placeFlag.resx">
       <DependentUpon>201903010936534_placeFlag.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903171128474_personStats.resx">
+      <DependentUpon>201903171128474_personStats.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1073,6 +1089,8 @@
     <Compile Include="Services\Place\PlaceService.cs" />
     <Compile Include="Services\Place\ReservationService.cs" />
     <Compile Include="Services\Redis\CacheService.cs" />
+    <Compile Include="Services\SmokeSession\ISmokeSessionBgService.cs" />
+    <Compile Include="Services\SmokeSession\SmokeSessionBgService.cs" />
     <Compile Include="Services\Statistics\IPersonStatisticsService.cs" />
     <Compile Include="Services\Statistics\PersonStatisticsService.cs" />
     <Compile Include="Services\Wrappers\IOwinContextExtensionsWrapper.cs" />
@@ -1112,8 +1130,6 @@
     <Compile Include="Controllers\Api\CleanAllController.cs" />
     <Compile Include="Controllers\Api\EndSessionController.cs" />
     <Compile Include="Controllers\Api\TobaccoReviewsController.cs" />
-    <Compile Include="Controllers\Api\WearablesController.cs" />
-    <Compile Include="Controllers\Api\MsBandController.cs" />
     <Compile Include="Controllers\Api\Ping.cs" />
     <Compile Include="Controllers\Api\PufController.cs" />
     <Compile Include="Controllers\Api\SentToDeviceController.cs" />
@@ -1543,8 +1559,6 @@
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Hubs\AllertHub.cs" />
     <Compile Include="Hubs\SmokeSessionHub.cs" />
-    <Compile Include="Jobs\IotProcessor.cs" />
-    <Compile Include="Jobs\StoreEventProcessor.cs" />
     <Compile Include="Migrations\201610272006544_puf.cs" />
     <Compile Include="Migrations\201610272006544_puf.Designer.cs">
       <DependentUpon>201610272006544_puf.cs</DependentUpon>
@@ -1631,7 +1645,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ViewModel\AccountViewModels.cs" />
-    <Compile Include="Models\ViewModel\DataModule.cs" />
+    <Compile Include="App_Start\DataModule.cs" />
     <Compile Include="Models\Db\DbPuf.cs" />
     <Compile Include="Models\Db\Hookah.cs" />
     <Compile Include="Models\Db\DeviceSetting.cs" />

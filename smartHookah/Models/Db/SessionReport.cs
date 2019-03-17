@@ -7,6 +7,7 @@
         NoTaste = 2,
         Burn = 3,
         TechnicalError = 4,
-        AutomaticEnd = 5
+        AutomaticEnd = 5,
+        FromDevice = 6,
     }
 }

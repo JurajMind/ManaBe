@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-
-using ServiceStack.Redis;
-
 using smartHookah.Hubs;
 using smartHookah.Models.Db;
 using smartHookah.Support;
-
-using smartHookahCommon;
 
 namespace smartHookah.Models.Redis
 {
@@ -17,23 +11,6 @@ namespace smartHookah.Models.Redis
 
     public class DynamicSmokeStatistic
     {
-        public static DynamicSmokeStatistic GetStatistic(string sessionId)
-        {
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var ds = redis.As<DynamicSmokeStatistic>()["DS:" + sessionId];
-                if (ds == null)
-                {
-                    ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(redis, sessionId);
-                    ds.LastPufs = new List<Puf>();
-                }
-              
-                return ds;
-            }
-
-        }
-
         public int PufCount { get; set; }
 
         public DateTime LastBlow { get; set; }
@@ -56,10 +33,8 @@ namespace smartHookah.Models.Redis
 
         public List<Puf> LastPufs { get; set; } 
 
-        public void FullUpdate(IRedisClient redis, string sessionId)
+        public void FullUpdate(List<Puf> pufs, string sessionId)
         {
-
-            var pufs = redis.As<Puf>().Lists["pufs:" + sessionId].GetAll();
             var inTimeSpan = pufs.GetDuration(puf => puf.Type == PufType.In);
             PufCount = pufs.Count(a => a.Type == PufType.In);
             var timeSpans = inTimeSpan as TimeSpan[] ?? inTimeSpan.ToArray();

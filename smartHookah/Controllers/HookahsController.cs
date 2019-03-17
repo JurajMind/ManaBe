@@ -138,7 +138,7 @@ namespace smartHookah.Controllers
             model.Updates = db.Updates.ToList()
                 .ToSelectedList(a => a.Id.ToString(), a => $"{a.ReleseDate:dd.MM.yyyy}\t{ @Helper.UpdateVersionToString(a.Version)}\t:RN:{a.ReleseNote}");
             model.DeviceSetting = DeviceControlController.GetDeviceSettingViewModel(hookah.Setting,hookah.Version);
-            model.DeviceSetting.SessionId = RedisHelper.GetSmokeSessionId(hookah.Code);
+            model.DeviceSetting.SessionId = this.redisService.GetSessionId(hookah.Code);
             model.Pictures = new SelectList(db.StandPictures, "id", "id", model.Hookah.Setting.Picture);
             return View(model);
         }
