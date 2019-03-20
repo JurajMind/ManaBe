@@ -261,6 +261,7 @@ namespace smartHookah.Services.Place
             reservation.Late = reservation.Late + time;
 
             this.db.Reservations.AddOrUpdate(reservation);
+            this.notificationService.ReservationChanged(reservation);
 
             await this.db.SaveChangesAsync();
         }
