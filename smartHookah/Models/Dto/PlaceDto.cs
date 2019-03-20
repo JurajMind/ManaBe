@@ -24,6 +24,7 @@ namespace smartHookah.Models.Dto
         public IEnumerable<MediaDto> Medias { get; set; }
         
         public bool AllowReservation { get; set; }
+        public bool HaveMenu { get; set; }
 
         public int MinimumReservationTime { get; set; }
         

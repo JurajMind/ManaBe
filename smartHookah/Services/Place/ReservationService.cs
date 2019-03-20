@@ -248,6 +248,23 @@ namespace smartHookah.Services.Place
                                               DbFunctions.TruncateTime(a.Time) <= to);
         }
 
+        public async Task AddLateTime(int id, int time)
+        {
+            var reservation = await db.Reservations.FindAsync(id);
+
+            if (reservation == null)
+            {
+                // Bad reservation
+                throw new ManaException(ErrorCodes.ReservationNotFound, $"Reservation with id {id} was not found");
+            }
+
+            reservation.Late = reservation.Late + time;
+
+            this.db.Reservations.AddOrUpdate(reservation);
+
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<Reservation> GetReservation(int id)
         {
             return await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);

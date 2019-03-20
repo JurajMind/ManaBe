@@ -31,7 +31,7 @@ namespace smartHookah.Models.Dto
         public AddressDto Address { get; set; }
         public ICollection<BusinessHoursDto> BusinessHours { get; set; }
         public int Rating { get; set; }
-        public ICollection<MediaDto> Medias { get; set; }
+        public MediaDto Media { get; set; }
 
         public string PhoneNumber { get; set; }
         public string Facebook { get; set; }
@@ -40,7 +40,7 @@ namespace smartHookah.Models.Dto
         {
             Address = new AddressDto();
             BusinessHours = new List<BusinessHoursDto>();
-            Medias = new List<MediaDto>();
+            Media = new MediaDto();
         }
 
         public static PlaceSimpleDto FromModel(Place model) => model == null ? null : new PlaceSimpleDto
@@ -50,7 +50,7 @@ namespace smartHookah.Models.Dto
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
             Address = AddressDto.FromModel(model.Address),
-            Medias = MediaDto.FromModelList(model.Medias).ToList(),
+            Media = MediaDto.FromModelList(model.Medias).FirstOrDefault(),
             PhoneNumber = model.PhoneNumber,
             Facebook = model.Facebook,
             BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours).ToList()
