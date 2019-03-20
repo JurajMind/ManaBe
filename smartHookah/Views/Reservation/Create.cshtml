@@ -94,7 +94,6 @@
                 </div>
                 <hr />
                 <h4 style="text-align: center">@LocalizationHelper.Translate("selectSeat", "Reservation")</h4>
-                @Html.Raw(Model.place.Map)
                 <h4 v-if="canReserved">{{this.Specification}}</h4>
             </div>
 
@@ -124,25 +123,6 @@
                     v.dateChanged();
                 }
             });
-
-            $('.place-table').click(function() {
-
-                if ($(this).hasClass('taken')) {
-                    return true;
-                }
-
-                if ($(this).hasClass('selected')) {
-                    $('.place-table').removeClass('selected');
-                    v.Selected.Table = null;
-                } else {
-                    $('.place-table').removeClass('selected');
-                    $(this).addClass('selected');
-                    v.Selected.Table = $(this).data('id');
-                }
-
-                return true;
-            });
-
         });
 
         var placeId = @Model.place.Id;
@@ -158,7 +138,6 @@
                 Specification : null,
                 PlaceId: placeId,
                 Selected: {
-                    Table: null,
                     format:'dd.mm.yyyy',
                     Date: moment().format('DD.MM.YYYY'),
                     Time: '',

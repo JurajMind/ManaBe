@@ -878,6 +878,11 @@
     <Compile Include="Migrations\201903171128474_personStats.Designer.cs">
       <DependentUpon>201903171128474_personStats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903200859013_multicolor.cs" />
+    <Compile Include="Migrations\201903200859013_multicolor.Designer.cs">
+      <DependentUpon>201903200859013_multicolor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\Reservation.cs" />
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
     <Compile Include="Models\Dto\ReservationDetailDto.cs" />
@@ -1064,6 +1069,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903171128474_personStats.resx">
       <DependentUpon>201903171128474_personStats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903200859013_multicolor.resx">
+      <DependentUpon>201903200859013_multicolor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
