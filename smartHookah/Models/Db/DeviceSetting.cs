@@ -76,6 +76,10 @@
 
         public Color Color { get; set; } = new Color();
 
+        public Color PufColor { get; set; } = new Color();
+
+        public Color BlowColor { get; set; } = new Color();
+
         public virtual DevicePreset DevicePreset { get; set; }
 
         public string GetInitString()

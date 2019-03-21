@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Hangfire.Console;
 using Hangfire.Server;
 using log4net;
-using smartHookah.Controllers;
-using smartHookah.Helpers;
-using smartHookah.Models;
 using smartHookah.Models.Db;
-using smartHookah.Models.Redis;
-using smartHookahCommon;
+using smartHookah.Services.Config;
+using smartHookah.Services.Messages;
+using smartHookah.Services.Redis;
+using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Jobs
 {
@@ -22,20 +21,29 @@ namespace smartHookah.Jobs
     {
 
         private readonly IIotService iotService;
-
+        private readonly ISmokeSessionBgService smokeSessionService;
+        private readonly IRedisService redisService;
         private readonly SmartHookahContext db;
         private readonly ILog logger = LogManager.GetLogger(typeof(SessionAutoEnd));
 
         private readonly int offlineMulti = 2;
 
-        public SessionAutoEnd() : this(new IotService(), new SmartHookahContext())
+        public SessionAutoEnd() 
         {
+            this.iotService = new IotService();
+            this.db = new SmartHookahContext();
+            var configService = new ConfigService();
+            redisService = new RedisService(configService);
+            var emailService = new EmailService();
+            var notificationService = new NotificationService(db, redisService, emailService);
+            this.smokeSessionService = new SmokeSessionBgService(this.db, redisService, this.iotService);
         }
 
-        public SessionAutoEnd(IIotService iotService, SmartHookahContext db)
+        public SessionAutoEnd(IIotService iotService, SmartHookahContext db, ISmokeSessionBgService sessionService)
         {
             this.iotService = iotService;
             this.db = db;
+            this.smokeSessionService = sessionService;
         }
 
         private async Task CleanSleep(string hookahCode, bool online, bool autoSleep)
@@ -47,14 +55,14 @@ namespace smartHookah.Jobs
                 return;
 
 
-            var connectionTime = RedisHelper.GetConnectionTime(hookahCode);
+            var connectionTime = this.redisService.GetConnectionTime(hookahCode);
             if (connectionTime == null)
                 return;
 
             if (connectionTime.Value.AddMinutes(30) > DateTime.UtcNow)
             {
-                logger.Info($"Device{hookahCode} is fall asleap");
-                await IotDeviceHelper.SendMsgToDevice(hookahCode, "slp:");
+                logger.Info($"Device {hookahCode} is fall asleep");
+                await this.iotService.SendMsgToDevice(hookahCode, "slp:");
             }
         }
 
@@ -84,7 +92,7 @@ namespace smartHookah.Jobs
         private async Task ProceedDevice(PerformContext context, bool debug, Hookah hookah, Dictionary<string, bool> onlineStates)
         {
             var stand = hookah.Code;
-            var redisSession = RedisHelper.GetSmokeSessionId(stand);
+            var redisSession = this.redisService.GetSessionId(stand);
             var stateExist = onlineStates.TryGetValue(hookah.Code, out var online);
 
             if (!stateExist)
@@ -97,7 +105,7 @@ namespace smartHookah.Jobs
             if (hookah.AutoSessionEndTime == -1) return;
 
             // Get curent smoke statistic
-            var ds = DynamicSmokeStatistic.GetStatistic(redisSession);
+            var ds = this.smokeSessionService.GetDynamicStatistic(redisSession,null);
 
             // No puf was made
             if (ds?.LastPuf == null)
@@ -114,23 +122,23 @@ namespace smartHookah.Jobs
 
             if (!debug)
             {
-                var sessionId = await SmokeSessionController.EndSmokeSession(redisSession, this.db, true);
+                var sessionId = await this.smokeSessionService.EndSmokeSession(redisSession, SessionReport.AutomaticEnd);
                 if (online)
                     if (hookah.AutoSleep)
                     {
                         context.WriteLine($"Autosleep {stand}:{sessionId}");
-                        await IotDeviceHelper.SendMsgToDevice(stand, "slp:");
+                        await this.iotService.SendMsgToDevice(stand, "slp:");
                     }
 
                     else
                     {
-                        context.WriteLine($"Autosleep {stand}:{sessionId}");
-                        await IotDeviceHelper.SendMsgToDevice(stand, "restart:");
+                        context.WriteLine($"Restart {stand}:{sessionId}");
+                        await this.iotService.SendMsgToDevice(stand, "restart:");
                     }
             }
             else
             {
-                context.WriteLine($"Autoend debug {stand}:{redisSession}");
+                context.WriteLine($"Auto end debug debug {stand}:{redisSession}");
             }
             return;
         }

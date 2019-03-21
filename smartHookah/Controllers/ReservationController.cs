@@ -13,6 +13,7 @@ using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Messages;
+using smartHookah.Services.Redis;
 using smartHookah.Support;
 using smartHookahCommon;
 
@@ -34,6 +35,7 @@ namespace smartHookah.Controllers
         private readonly SmartHookahContext db;
         private EmailService emailService;
         private readonly INotificationService notificationService;
+        private readonly IRedisService redisService;
         public ReservationController(SmartHookahContext db, IReservationService reservationService,INotificationService notificationService)
         {
             this.db = db;
@@ -93,7 +95,7 @@ namespace smartHookah.Controllers
                     reservation.Orders.Where(a => a.State == OrderState.Open || a.State == OrderState.Processing);
 
                 model.DynamicSmokeSession = activeSessions.ToDictionary(a => a.SessionId,
-                    a => RedisHelper.GetSmokeStatistic(sessionId: a.SessionId));
+                    a => this.redisService.GetDynamicSmokeStatistic(sessionId: a.SessionId));
             }
             return View(model);
         }

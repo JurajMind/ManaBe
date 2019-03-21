@@ -36,6 +36,12 @@ namespace smartHookah.Models.Db
 
         public int DisLikeCount { get; set; }
 
+        public virtual ICollection<ImportInformation> ImportInformations { get; set; }
+
+        public bool Valid { get; set; }
+
+        public int? ControlSearch { get; set; }
+
 
         [MaxLength(128)]
         public string Picture { get; set; }
@@ -84,6 +90,20 @@ namespace smartHookah.Models.Db
             this.BrandName = accesory.BrandName;
         }
 
+
+    }
+
+    public class ImportInformation
+    {
+        public int Id { get; set; }
+
+        public DateTime DateTimeCreatedAt { get; set; }
+
+        public string DataSource { get; set; }
+
+        public string DataPath { get; set; }
+
+        public virtual ICollection<PipeAccesory> ImportedAccesories { get; set; }
     }
 
     public class PipeAccesoryLike

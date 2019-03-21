@@ -1,22 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
 using smartHookah.Models.Db;
-using smartHookahCommon;
+using smartHookah.Services.Device;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers
 {
     public class UpdateController : Controller
     {
-        private SmartHookahContext db = new SmartHookahContext();
+        private readonly SmartHookahContext db;
+        private readonly IDeviceService deviceService;
+        private readonly IPersonService personService;
+
+        public UpdateController(IDeviceService deviceService, SmartHookahContext db, IPersonService personService)
+        {
+            this.deviceService = deviceService;
+            this.db = db;
+            this.personService = personService;
+        }
 
         // GET: Update
         public async Task<ActionResult> Index()
@@ -46,9 +51,6 @@ namespace smartHookah.Controllers
             return View();
         }
 
-        // POST: Update/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -95,10 +97,7 @@ namespace smartHookah.Controllers
             }
             return View(update);
         }
-
-        // POST: Update/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -144,17 +143,7 @@ namespace smartHookah.Controllers
         [OptionalHttps(true)]
         public FileResult Download(string id,string token)
         {
-            var path = "";
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                var updateRedis = redis.As<UpdateRedis>()["Update:" + token];
-
-                if (updateRedis.HookahCode != id)
-                    throw new HttpException(404, "File not found");
-
-                path = updateRedis.FilePath;
-            }
-
+           var path = this.deviceService.GetUpdatePath(id, token);
 
             var filePath = Server.MapPath(path);
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -164,54 +153,10 @@ namespace smartHookah.Controllers
         [Authorize]
         public async Task<JsonResult> PromptUpdate(int hookahId, int updateId )
         {
-            var user = UserHelper.GetCurentPerson(db);
-
-
             
-
-            try
-            {
-
-                if (!User.IsInRole("Admin"))
-                {
-                    var canUpdate = user.Hookahs.Any(a => a.Id == hookahId);
-                    if (!canUpdate)
-                        return Json(new { succes = false });
-                }
-
-                var hookah = await db.Hookahs.FindAsync(hookahId);
-                var update = await db.Updates.FindAsync(updateId);
-                var updateToken = Support.Support.RandomString(5);
-
-                var updatePath = update.Path;
-            
-                var updateRedis = new UpdateRedis()
-                {
-                    FilePath = updatePath,
-                    HookahCode = hookah.Code
-                };
-
-                using (var redis = RedisHelper.redisManager.GetClient())
-                {
-                    redis.As<UpdateRedis>()["Update:" + updateToken] = updateRedis;
-                    redis.ExpireEntryAt("Update:" + updateToken, DateTime.Now.AddMinutes(20));
-
-                }
-
-                var msg = $"update:{updateToken}";
-
-                await IotDeviceHelper.SendMsgToDevice(hookah.Code, msg);
-            }
-            catch (Exception e)
-            {
-
-                return Json(new {succes = false, msg = e.Message});
-            }
-
+            await this.deviceService.UpdateDevice(hookahId, updateId,this.personService.GetCurentPerson(), User.IsInRole("Admin"));
 
             return Json(new {succes = true, msg = "Update was sent"});
-        
-
     }
 
         public class UpdateRedis
@@ -221,15 +166,6 @@ namespace smartHookah.Controllers
             public string HookahCode { get; set; }
 
             
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

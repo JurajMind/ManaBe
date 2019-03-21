@@ -40,4 +40,5 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Price")]
         public Dictionary<int, decimal> Prices { get; set; }
     }
+    
 }

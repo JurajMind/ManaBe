@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Controllers
@@ -23,12 +24,16 @@ namespace smartHookah.Controllers
     {
         private SmartHookahContext db;
         private readonly ISmokeSessionService smokeSessionService;
+        private readonly ISmokeSessionBgService smokeSessionBg;
+        private readonly IRedisService redisService;
 
         private IMailChimpManager manager;
-        public AdminController(SmartHookahContext context, ISmokeSessionService smokeSessionService)
+        public AdminController(SmartHookahContext context, ISmokeSessionService smokeSessionService, IRedisService redisService, ISmokeSessionBgService smokeSessionBg)
         {
             this.db = context;
             this.smokeSessionService = smokeSessionService;
+            this.redisService = redisService;
+            this.smokeSessionBg = smokeSessionBg;
             this.manager = new MailChimpManager(ConfigurationManager.AppSettings["MailChimpApiKey"]);
         }
         // GET: Admin
@@ -41,7 +46,7 @@ namespace smartHookah.Controllers
         {
             var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
 
-            var smokeSessionToDelete = smokeSession.Where(a => a.Hookah.SessionCode != a.SessionId && a.Review == null);
+            var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
 
             var sessionToDelete = smokeSessionToDelete as SmokeSession[] ?? smokeSessionToDelete.ToArray();
             db.SmokeSessions.RemoveRange(sessionToDelete);
@@ -66,6 +71,12 @@ namespace smartHookah.Controllers
         public ActionResult StoreOldSessions()
         {
             smokeSessionService.StoreOldPufs();
+            return null;
+        }
+
+        public ActionResult InitNewSessions()
+        {
+            smokeSessionBg.IntNewSessions();
             return null;
         }
 

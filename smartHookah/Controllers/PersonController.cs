@@ -11,9 +11,12 @@ using System.Web.Mvc;
 using Accord.Statistics.Kernels;
 using Microsoft.AspNet.Identity.Owin;
 using smartHookah.Helpers;
+using smartHookah.Mappers.ViewModelMappers.Person;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using smartHookah.Services.Redis;
+using smartHookah.Services.SmokeSession;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers
@@ -27,10 +30,19 @@ namespace smartHookah.Controllers
 
         private readonly IPersonService personService;
 
-        public PersonController(SmartHookahContext db, IPersonService personService)
+        private readonly ISmokeSessionService sessionService;
+
+        private readonly IPersonIndexViewModelMapper personIndexViewModelMapper;
+
+        private readonly IRedisService redisService;
+
+        public PersonController(SmartHookahContext db, IPersonService personService, ISmokeSessionService sessionService, IPersonIndexViewModelMapper personIndexViewModelMapper, IRedisService redisService)
         {
             this.db = db;
             this.personService = personService;
+            this.sessionService = sessionService;
+            this.personIndexViewModelMapper = personIndexViewModelMapper;
+            this.redisService = redisService;
         }
 
     
@@ -42,8 +54,8 @@ namespace smartHookah.Controllers
             var person = persons.Include(a => a.SmokeSessions.Select(b => b.MetaData))
                                .Include(a => a.SmokeSessions.Select(b => b.Statistics)).FirstOrDefault();
 
-            var model = new PersonIndexViewModel();
-            await model.Fill(person, db);
+            var model = await this.personIndexViewModelMapper.Map(person);
+         
             //var sessions = person.SmokeSessions.Where(a => a.Statistics != null).OrderByDescending(a => a.Statistics.Start).Take(5);
            
 
@@ -158,7 +170,7 @@ namespace smartHookah.Controllers
             var personHookahId = person.Hookahs.Select(h => h.Code).ToList();
             var onlienHookah = await IotDeviceHelper.GetState(personHookahId);
 
-            var liveSeesionId = person.Hookahs.Where(h => onlienHookah.Contains(h.Code)).Select(h => RedisHelper.GetSmokeSessionId(h.Code)).ToList();
+            var liveSeesionId = person.Hookahs.Where(h => onlienHookah.Contains(h.Code)).Select(h => this.redisService.GetSessionId(h.Code)).ToList();
 
             var liveSessions = session.Where(s => liveSeesionId.Contains(s.SessionId));
 

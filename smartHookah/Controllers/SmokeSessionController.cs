@@ -14,9 +14,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
 using smartHookah.Hubs;
+using smartHookah.Mappers.ViewModelMappers.Smoke;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using smartHookah.Services.SmokeSession;
 using smartHookah.Support;
 using smartHookahCommon;
 using static System.Threading.Tasks.Task;
@@ -35,22 +37,30 @@ namespace smartHookah.Controllers
     {
         private readonly SmartHookahContext _db;
         private readonly IHubContext hubContext;
-
+        private readonly ISmokeSessionService sessionService;
+        private readonly ISmokeViewMapper smokeViewMapper;
+        private readonly ISmokeSessionStatisticModelMapper smokeSessionStatisticModelMapper;
         private readonly IPersonService personService;
 
         private TelemetryClient telemetry = new TelemetryClient();
 
-        private IRedisService redisService;
+        private readonly IRedisService redisService;
 
-        public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService)
+        public SmokeSessionController(SmartHookahContext db, IRedisService redisService, IPersonService personService, ISmokeViewMapper smokeViewMapper, ISmokeSessionService sessionService, ISmokeSessionStatisticModelMapper smokeSessionStatisticModelMapper)
         {
             _db = db;
             this.redisService = redisService;
             this.personService = personService;
+            this.smokeViewMapper = smokeViewMapper;
+            this.sessionService = sessionService;
+            this.smokeSessionStatisticModelMapper = smokeSessionStatisticModelMapper;
         }
 
-        public SmokeSessionController()
+        public SmokeSessionController(ISmokeViewMapper smokeViewMapper, ISmokeSessionService sessionService, ISmokeSessionStatisticModelMapper smokeSessionStatisticModelMapper)
         {
+            this.smokeViewMapper = smokeViewMapper;
+            this.sessionService = sessionService;
+            this.smokeSessionStatisticModelMapper = smokeSessionStatisticModelMapper;
             hubContext = GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
         }
 
@@ -58,72 +68,15 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> EndSmokeSession(string id)
         {
-            var sessionId = await EndSmokeSession(id, _db);
+            var sessionId = await sessionService.EndSmokeSession(id, SessionReport.Good);
 
-            if (sessionId == 0)
+            if (sessionId?.Id == 0)
                 return RedirectToAction("Index", "Home");
 
-            return RedirectToAction("GetStatistics", new {id = sessionId});
+            return RedirectToAction("GetStatistics", new {id = sessionId.Id});
         }
 
         // End smoke session
-        public static async Task<int> EndSmokeSession(string id, SmartHookahContext db, bool autoEnd = false)
-        {
-            // Get hookah code from session Id
-            var hookahId = RedisHelper.GetHookahId(id);
-            var rawPufs = RedisHelper.GetPufs(id);
-
-            if (!rawPufs.Any())
-                return 0;
-
-            var smokeSession = new SmokeSession();
-
-            var dbSmokeSession = db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
-            if (dbSmokeSession != null)
-                smokeSession = dbSmokeSession;
-
-            smokeSession.SessionId = id;
-            var hookahCode = RedisHelper.GetHookahId(id);
-            smokeSession.Hookah = db.Hookahs.FirstOrDefault(a => a.Code == hookahCode);
-            smokeSession.Statistics = new SmokeSessionStatistics(rawPufs);
-
-            smokeSession.Report = autoEnd ? SessionReport.AutomaticEnd : SessionReport.Good;
-
-            // ReSharper disable once UseNullPropagation
-            if (smokeSession.Hookah != null)
-            {
-                var defaultAnimation = smokeSession.Hookah.Owners.Where(a => a.DefaultSetting != null)
-                    .Select(a => a.DefaultSetting).FirstOrDefault();
-                if (defaultAnimation != null)
-                {
-                    smokeSession.Hookah.Setting.Change(defaultAnimation);
-                    db.HookahSettings.AddOrUpdate(smokeSession.Hookah.Setting);
-                }
-            }
-
-            db.SmokeSessions.AddOrUpdate(smokeSession);
-            db.SaveChanges();
-
-            var pufs = rawPufs.Select(a => new DbPuf(a) {SmokeSession_Id = smokeSession.Id}).ToList();
-            var options = new BulkInsertOptions {BatchSize = 1000};
-            // Default is 5000
-            db.BulkInsert(pufs, options);
-
-
-            db.SaveChanges();
-            RedisHelper.EndSmokeSession(id);
-            if (smokeSession.MetaData != null && smokeSession.MetaData.TobaccoId.HasValue)
-                TobaccoController.CalculateStatistic(smokeSession.MetaData.TobaccoId.Value, db);
-
-
-            await IotDeviceHelper.SendMsgToDevice(hookahId, "restart:");
-
-            GamificationController.Engine.ManualValidateSession(smokeSession.Id);
-
-
-            return smokeSession.Id;
-        }
-
 
         public void GetRawData(int id)
         {
@@ -209,7 +162,7 @@ namespace smartHookah.Controllers
 
             foreach (var smokeSession in ss)
             {
-                if (RedisHelper.GetHookahId(smokeSession.SessionId) != null)
+                if (this.redisService.GetHookahId(smokeSession.SessionId) != null)
                     continue;
 
                 CreateSmokeStats(smokeSession.Id);
@@ -219,7 +172,7 @@ namespace smartHookah.Controllers
 
         public ActionResult EndSmokeSessionSilent(string id)
         {
-            RedisHelper.EndSmokeSession(id);
+            this.redisService.CleanSmokeSession(id);
             return RedirectToAction("Index", "Home");
         }
 
@@ -238,11 +191,8 @@ namespace smartHookah.Controllers
 
         public ActionResult GetStatistics(int id, int? PersonId = null)
         {
-            var model = new SmokeSessionGetStaticsticsModel();
-
-
-            model.Create(_db, id);
-
+            var model = this.smokeSessionStatisticModelMapper.Map(id);
+            
             if (PersonId.HasValue)
                 model.Share = !model.SmokeSession.IsPersonAssign(PersonId.Value);
 
@@ -258,7 +208,7 @@ namespace smartHookah.Controllers
             {
                 var model = new SmokeStatisticViewModel();
 
-                var dynamic = DynamicSmokeStatistic.GetStatistic(sessionId);
+                var dynamic = this.sessionService.GetDynamicStatistic(sessionId,null);
 
                 if (dynamic.LastPuf == null)
                     return PartialView("NoLiveStatistic");
@@ -296,53 +246,6 @@ namespace smartHookah.Controllers
         }
 
 
-        public static SmokeSession InitSmokeSession(SmartHookahContext db, string deviceId = null,
-            string sessionId = null)
-        {
-            var newSessionId = "";
-            if (string.IsNullOrEmpty(sessionId))
-                newSessionId = RedisHelper.GetSmokeSessionId(deviceId);
-            else
-                newSessionId = sessionId;
-
-
-            var session = db.SmokeSessions.FirstOrDefault(s => s.SessionId == newSessionId);
-
-
-            if (session != null) return session;
-
-            var dbSession = new SmokeSession();
-            dbSession.SessionId = newSessionId;
-
-            dbSession.MetaData = new SmokeSessionMetaData();
-            dbSession.Token = Support.Support.RandomString(10);
-            var hookah = db.Hookahs.Where(a => a.Code == deviceId).Include(a => a.Owners).FirstOrDefault();
-
-            if (hookah != null)
-            {
-                dbSession.Hookah = hookah;
-
-                if (hookah.DefaultMetaData != null)
-                    dbSession.MetaData.Copy(hookah.DefaultMetaData);
-
-                foreach (var hookahOwner in hookah.Owners.Where(a => a.AutoAssign))
-                {
-                    if (hookahOwner.SmokeSessions.Any(a => a.SessionId == dbSession.SessionId))
-                        continue;
-
-                    hookahOwner.SmokeSessions.Add(dbSession);
-                    db.Persons.AddOrUpdate(hookahOwner);
-                }
-
-                foreach (var placeOwner in hookah.Owners.Where(a => a.Place != null))
-                    dbSession.PlaceId = placeOwner.Place.Id;
-            }
-
-            db.SmokeSessions.Add(dbSession);
-            db.SaveChanges();
-            return dbSession;
-        }
-
         public void InitOldSmokeSession(int hookahId, string sessionId)
         {
             using (var db = new SmartHookahContext())
@@ -366,8 +269,8 @@ namespace smartHookah.Controllers
         [System.Web.Mvc.Authorize]
         public async Task<ActionResult> Hookah(string id)
         {
-            var model = new SmokeViewModel();
-            await model.CreateModel(_db, reddisHookahId: id);
+            var sessionId = this.redisService.GetSessionId(id);
+            var model = await this.smokeViewMapper.Map(sessionId);
 
             await AssignToSmokeSession(model.Session, true);
             return View("Smoke", model);
@@ -377,7 +280,7 @@ namespace smartHookah.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SmokeSession(string id)
         {
-            var model = new SmokeViewModel();
+        
 
             var session = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
@@ -386,13 +289,12 @@ namespace smartHookah.Controllers
 
             if (session?.StatisticsId != null)
             {
-                var statmodel = new SmokeSessionGetStaticsticsModel();
-                statmodel.Create(_db, session.Id);
+                var statmodel = this.smokeSessionStatisticModelMapper.Map(session.Id);
                 await AssignToSmokeSession(session, true);
                 return View("GetStatistics", statmodel);
             }
 
-            await model.CreateModel(_db, redisSessionId: id);
+            var model = await this.smokeViewMapper.Map(id);
 
             return View("Smoke", model);
         }
@@ -593,25 +495,6 @@ namespace smartHookah.Controllers
                 return Json(new {success = true});
 
             return Json(new {success = false});
-        }
-
-
-        public static Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistic(List<Hookah> hookah,
-            Func<Hookah, string> getCode)
-        {
-            var result = new Dictionary<string, DynamicSmokeStatistic>();
-            using (var redis = RedisHelper.redisManager.GetClient())
-            {
-                foreach (var hookah1 in hookah)
-                {
-                    var session = RedisHelper.GetSmokeSessionId(hookah1.Code, redis);
-                    var ds = redis.As<DynamicSmokeStatistic>()["DS:" + session];
-
-                    if (ds != null)
-                        result.Add(getCode(hookah1), ds);
-                }
-            }
-            return result;
         }
     }
 }

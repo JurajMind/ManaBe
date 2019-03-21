@@ -93,12 +93,6 @@ namespace smartHookah.Models.Db
         public virtual SmokeSessionMetaData DefaultMetaData { get; set; }
 
         [NotMapped]
-        public string SessionCode
-        {
-            get { return RedisHelper.GetSmokeSessionId(this.Code); }
-        }
-
-        [NotMapped]
         public bool OnlineState { get; set; }
 
 
