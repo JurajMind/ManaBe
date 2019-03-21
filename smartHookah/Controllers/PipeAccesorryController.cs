@@ -329,6 +329,12 @@ namespace smartHookah.Controllers
         {
             var model = new ImportResultModel();
             var preview = save == "save";
+            var importInformation = new ImportInformation
+            {
+                DataSource = file.FileName,
+                DateTimeCreatedAt = DateTime.UtcNow,
+                ImportedAccesories = new List<PipeAccesory>()
+            };
             using (var reader = new StreamReader(file.InputStream))
             using (var csv = new CsvReader(reader))
             {
@@ -375,6 +381,7 @@ namespace smartHookah.Controllers
                         var pipeAccesory = brand.PipeAccesories.EmptyIfNull().FirstOrDefault(a => a.AccName != null && a.AccName.ToUpper() == record.Name.ToUpper());
                         if (pipeAccesory != null)
                         {
+                            importInformation.ImportedAccesories.Add(pipeAccesory);
                             pipeAccesory.UpdatedAt = DateTimeOffset.UtcNow;
                             this.db.PipeAccesories.AddOrUpdate(pipeAccesory);
                             model.updateImport.Add(pipeAccesory);
@@ -382,6 +389,7 @@ namespace smartHookah.Controllers
                         else
                         {
                             PipeAccesory newPipeAccesory = PipeAccesoryFactory.CreateFromRecort(record, brand, type);
+                            importInformation.ImportedAccesories.Add(newPipeAccesory);
                             model.newImport.Add(newPipeAccesory);
                             if (!preview)
                             {
@@ -434,7 +442,7 @@ namespace smartHookah.Controllers
 
         public ActionResult GoogleCheck(string id = "Tobacco")
         {
-            var accesory = this.db.PipeAccesories.Where(a => a is Tobacco);
+            var accesory = this.db.PipeAccesories.Where(a => a is Tobacco && a.ControlSearch == null && a.CreatedAt == null && a.UpdatedAt == null).Take(100);
             string apiKey = "AIzaSyCf57DrGRdV3LwOGkPfiW0ahi-N2LNyZjQ";
             string cx = "014066877753874603507:loehrtgydoe";
 
@@ -447,7 +455,12 @@ namespace smartHookah.Controllers
                 listRequest.Cx = cx;
                 var search = listRequest.Execute();
                 var searchResultCount = search.SearchInformation.TotalResults;
+                pipeAccesory.ControlSearch = Convert.ToInt32(searchResultCount);
+                db.PipeAccesories.AddOrUpdate(pipeAccesory);
+
             }
+
+            db.SaveChanges();
             return null;
         }
 
