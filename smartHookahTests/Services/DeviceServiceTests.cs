@@ -18,9 +18,6 @@ namespace smartHookahTests.Services
     using smartHookah.Models;
     using smartHookah.Services.Device;
     using smartHookah.Services.Redis;
-
-    using smartHookahCommon;
-
     using smartHookahTests.Common;
 
     [TestFixture]

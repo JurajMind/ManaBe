@@ -2,7 +2,7 @@
 @using smartHookah.Models
 @using smartHookah.Models.Db
 @using smartHookah.Support
-@model smartHookah.Controllers.SmokeSessionGetStaticsticsModel
+@model smartHookah.Models.ViewModel.SmokeSession.SmokeSessionGetStaticsticsModel
 
 @{
     ViewBag.Title = $"{@Model.SmokeSession.Hookah.Name} {@LocalizationHelper.Translate("On", "Common")} { @Model.LiveStatistic.Start.ToString("dd.MM.yyyy")}"; 

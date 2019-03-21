@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using smartHookah.Models;
 using smartHookah.Models.Db;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
@@ -63,7 +59,7 @@ namespace smartHookah.Controllers.Api
             
                 }
 
-                RedisHelper.SetConnectionTime(id);
+                redisService.SetConnectionTime(id);
 
                 var versionInt = Helper.UpdateVersionToInt(version);
 

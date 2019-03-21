@@ -1,22 +1,16 @@
-﻿using Autofac;
+﻿using System.Linq;
+using System.Reflection;
+using System.Security.Principal;
+using System.Web;
+using System.Web.Compilation;
+using Autofac;
+using Microsoft.Owin;
 using smartHookah.Models.Db;
+using smartHookah.Services.Config;
+using smartHookah.Services.Redis;
 
-namespace smartHookah.Models
+namespace smartHookah
 {
-    using System.Linq;
-    using System.Reflection;
-    using System.Security.Principal;
-    using System.Web;
-    using System.Web.Compilation;
-
-    using Microsoft.Owin;
-
-    using smartHookah.Services.Config;
-    using smartHookah.Services.Person;
-    using smartHookah.Services.Redis;
-
-    using smartHookahCommon;
-
     using Module = Autofac.Module;
 
     public class DataModule : Module
@@ -39,7 +33,7 @@ namespace smartHookah.Models
                     .Except<OwinContext>()
                     .Except<IPrincipal>()
                     .Except<OwinContextExtensionsWrapper>()
-                    .Where(t => t.Name.EndsWith("Service"))
+                    .Where(t => (t.Name.EndsWith("Service") || t.Name.EndsWith("Mapper")))
                     .AsImplementedInterfaces();
             }
    

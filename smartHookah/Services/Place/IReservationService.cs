@@ -25,6 +25,8 @@ namespace smartHookah.Services.Place
 
         Task<bool> UpdateReservationState(int id, ReservationState state);
 
+        Task AddLateTime(int id, int time); 
+
         Task<Reservation> GetReservation(int id);
 
         Task<Reservation> AddTable(int id, int tableId);

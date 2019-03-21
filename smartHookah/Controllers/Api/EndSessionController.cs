@@ -8,6 +8,8 @@ using System.Web.Http;
 using Microsoft.ApplicationInsights;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
+using smartHookah.Services.SmokeSession;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
@@ -15,10 +17,14 @@ namespace smartHookah.Controllers.Api
     public class EndSessionController : ApiController
     {
         private readonly SmartHookahContext db;
+        private readonly ISmokeSessionService sessionService;
+        private readonly IRedisService redisService;
         private TelemetryClient telemetry = new TelemetryClient();
-        public EndSessionController(SmartHookahContext db)
+        public EndSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService)
         {
             this.db = db;
+            this.sessionService = sessionService;
+            this.redisService = redisService;
         }
 
         [HttpPost]
@@ -27,12 +33,8 @@ namespace smartHookah.Controllers.Api
         {
             try
             {
-                var reddisSession = RedisHelper.GetSmokeSessionId(id);
-
-                var stats = RedisHelper.GetSmokeStatistic(hookahId: id);
-
-                if (stats != null && stats.PufCount > 0)
-                    await Controllers.SmokeSessionController.EndSmokeSession(reddisSession, db);
+                var sessionId = this.redisService.GetSessionId(id);
+                await this.sessionService.EndSmokeSession(sessionId, SessionReport.FromDevice);
             }
             catch (Exception e)
             {

@@ -23,5 +23,7 @@ namespace smartHookahCommon.Errors
         public static string InvalidPrivacyType = "INVALID_PRIVACY_TYPE";
 
         public static string WrongDay = "WRONG_DATE";
+
+        public static string UpdateError = "UPDATE_ERROR";
     }
 }

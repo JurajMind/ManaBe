@@ -299,13 +299,13 @@ namespace smartHookah.Controllers
 
         public void ManualValidateSession(int smokeSessionId)
         {
-            var sessin = _db.SmokeSessions.Where(a => a.Id == smokeSessionId).Include(a => a.MetaData)
+            var sessions = _db.SmokeSessions.Where(a => a.Id == smokeSessionId).Include(a => a.MetaData)
                 .Include(b => b.Statistics).FirstOrDefault();
 
-            if(sessin == null)
+            if(sessions == null)
                 return;
             
-            ManualValidateSession(sessin);
+            ManualValidateSession(sessions);
         }
         public void ManualValidateSession(SmokeSession smokeSession)
         {
