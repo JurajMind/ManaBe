@@ -37,8 +37,9 @@ namespace smartHookah.Support.Config
             if (ConfigSettings.AppInsights.IsEnabled)
             {
                 TelemetryConfiguration.Active.InstrumentationKey = ConfigSettings.AppInsights.InstrumentationKey;
+                log4net.Config.XmlConfigurator.Configure();
             }
-            log4net.Config.XmlConfigurator.Configure();
+
 
         }
     }

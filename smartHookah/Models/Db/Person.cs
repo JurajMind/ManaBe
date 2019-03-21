@@ -79,6 +79,8 @@ namespace smartHookah.Models.Db
 
         public virtual ICollection<ApplicationUser> User { get; set; }
 
+        public virtual PersonStatistic Statistic { get; set; }
+
         public bool Gdpr { get; set; }
 
         public int PersonRating { get; set; }

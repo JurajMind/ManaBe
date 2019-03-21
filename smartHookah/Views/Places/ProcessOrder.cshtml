@@ -25,7 +25,7 @@
             <select name="hookahId" class="form-control">
                 @foreach (var hookah in Model.Hookahs)
                 {
-                    <option value="@hookah.Id">@hookah.Name - @hookah.SessionCode</option>
+                    <option value="@hookah.Id">@hookah.Name - @hookah.Code</option>
                 }
             </select>
         </div>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using smartHookah.Mappers.ViewModelMappers.Smoke;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 
@@ -15,10 +16,14 @@ namespace smartHookah.Controllers
     {
 
         private readonly SmartHookahContext db;
+        private readonly ISmokeViewMapper smokeViewMapper;
+        private readonly ISmokeSessionStatisticModelMapper statisticModelMapper;
 
-        public ShareController(SmartHookahContext db)
+        public ShareController(SmartHookahContext db, ISmokeViewMapper smokeViewMapper, ISmokeSessionStatisticModelMapper statisticModelMapper)
         {
             this.db = db;
+            this.smokeViewMapper = smokeViewMapper;
+            this.statisticModelMapper = statisticModelMapper;
         }
         [AllowAnonymous]
         public async Task<ActionResult> Index(string id)
@@ -30,14 +35,12 @@ namespace smartHookah.Controllers
 
                 if (session.DbPufs.Any())
                 {
-                    var statsModel = new SmokeSessionGetStaticsticsModel();
-                    statsModel.Create(db, session.Id);
+                    var statsModel = this.statisticModelMapper.Map(session.Id);
                     statsModel.Share = true;
                     return View("~/Views/SmokeSession/GetStatistics.cshtml", statsModel);
                 }
 
-                var model = new SmokeViewModel();
-               await model.CreateModel(db, session.Id);
+                var model = await this.smokeViewMapper.Map(id);
                 model.Share = true;
                 return View("Smoke", model);;
             }

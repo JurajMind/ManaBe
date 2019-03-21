@@ -231,6 +231,14 @@ namespace smartHookah.Models.Db
                     cs.ToTable("PlaceFlagMapping");
                 });
 
+            modelBuilder.Entity<PipeAccesory>().HasMany(s => s.ImportInformations).WithMany(h => h.ImportedAccesories).Map(
+                cs =>
+                {
+                    cs.MapLeftKey("AccessoryRefId");
+                    cs.MapRightKey("ImportRefId");
+                    cs.ToTable("AccessoryImportMapping");
+                });
+
             modelBuilder.Entity<OwnPipeAccesories>().HasMany(s => s.Prices).WithRequired(a => a.PipeAccesorie);
 
             modelBuilder.Entity<PipeAccesory>().HasMany(s => s.SimilarAccesories).WithRequired(h => h.Original)

@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Reflection;
-using System.Web;
-using smartHookah.Models;
-using ServiceStack.Common;
 using smartHookah.Models.Redis;
-using smartHookahCommon;
 using System.Threading.Tasks;
-using Microsoft.TeamFoundation.VersionControl.Client;
 using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Models.Db;
-using smartHookah.Services.Gear;
-using ServiceStack.Common.Utils;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -24,17 +17,33 @@ namespace smartHookah.Services.SmokeSession
     public class SmokeSessionService : ISmokeSessionService
     {
         private readonly SmartHookahContext db;
-        private readonly IGearService gearService;
+        private readonly IRedisService redisService;
+        private readonly IDeviceService deviceService;
+        private readonly ISmokeSessionBgService smokeSessionBgService;
 
-        public SmokeSessionService(SmartHookahContext db, IGearService gearService)
+        public SmokeSessionService(SmartHookahContext db, IRedisService redisService, IDeviceService deviceService, ISmokeSessionBgService smokeSessionBgService)
         {
             this.db = db;
-            this.gearService = gearService;
+            this.redisService = redisService;
+            this.deviceService = deviceService;
+            this.smokeSessionBgService = smokeSessionBgService;
         }
 
-        public DynamicSmokeStatistic GetRedisData(string id)
+        public DynamicSmokeStatistic GetDynamicStatistic(string sessionId,string deviceId)
         {
-            var result = RedisHelper.GetSmokeStatistic(null, id);
+           return this.smokeSessionBgService.GetDynamicStatistic(sessionId, deviceId);
+        }
+
+        public Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistics(List<Hookah> hookah, Func<Hookah, string> getCode)
+        {
+            var result = new Dictionary<string, DynamicSmokeStatistic>();
+            foreach (var hookah1 in hookah)
+            {
+                var ds = this.GetDynamicStatistic(null, hookah1.Code);
+
+                if (ds != null)
+                    result.Add(getCode(hookah1), ds);
+            }
             return result;
         }
 
@@ -74,13 +83,13 @@ namespace smartHookah.Services.SmokeSession
             return result;
         }
 
-        public SmokeSession GetLiveSmokeSession(string id)
+        public SmokeSession GetLiveSmokeSession(string sessionId)
         {
-            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == id);
+            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == sessionId);
             if (session != null)
             {
-                session.DynamicSmokeStatistic = this.GetRedisData(id);
-                
+                session.DynamicSmokeStatistic = this.GetDynamicStatistic(sessionId,null);
+
             }
             return session;
         }
@@ -109,6 +118,11 @@ namespace smartHookah.Services.SmokeSession
             }
 
             return this.db.SessionMetaDatas.Where(a => a.Id == model.Id).Include(a => a.Tobacco).FirstOrDefault();
+        }
+
+        public Task<SmokeSession> EndSmokeSession(string id, SessionReport source)
+        {
+            return this.smokeSessionBgService.EndSmokeSession(id, source);
         }
 
         public void StoreOldPufs()

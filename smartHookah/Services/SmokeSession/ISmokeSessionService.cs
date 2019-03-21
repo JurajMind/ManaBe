@@ -13,14 +13,20 @@ namespace smartHookah.Services.SmokeSession
 
     public interface ISmokeSessionService
     {
-        DynamicSmokeStatistic GetRedisData(string id);
+        DynamicSmokeStatistic GetDynamicStatistic(string sessionId,string deviceId);
+
+        Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistics(List<Hookah> hookah,
+            Func<Hookah, string> getCode);
+
         SmokeSessionStatistics GetStatistics(string id);
         SmokeSessionMetaData GetMetaData(int id);
         SmokeSessionMetaData GetSessionMetaData(string id);
         DeviceSetting GetStandSettings(string id);
-        SmokeSession GetLiveSmokeSession(string id);
+        SmokeSession GetLiveSmokeSession(string sessionId);
         Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model);
 
+        Task<SmokeSession> EndSmokeSession(string id, SessionReport source);
+        
         void StoreOldPufs();
     }
 }
