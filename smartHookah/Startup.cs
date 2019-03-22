@@ -65,8 +65,8 @@ namespace smartHookah
             var isDebug = false;
 
             // Debug.Assert(isDebug = true);
-            var onDev = ConfigurationManager.AppSettings["Enviroment"] == "Prod";
-            if (onDev)
+            var onProduction = ConfigurationManager.AppSettings["Enviroment"] == "Production";
+            if (onProduction)
                 manager.AddOrUpdate(
                     "AutoEnd",
                     Job.FromExpression(() => AutoEnd.EndSmokeSessions(null, isDebug)),
