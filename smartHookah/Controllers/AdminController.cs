@@ -51,8 +51,15 @@ namespace smartHookah.Controllers
             var sessionToDelete = smokeSessionToDelete as SmokeSession[] ?? smokeSessionToDelete.ToArray();
             db.SmokeSessions.RemoveRange(sessionToDelete);
             db.SessionMetaDatas.RemoveRange(sessionToDelete.Where(a => a.MetaData != null).Select(a => a.MetaData));
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
 
-            db.SaveChanges();
+            }
+
             return View(sessionToDelete.Count());
         }
 
