@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Person;
+using smartHookah.Services.Search;
 
 namespace smartHookah.Services.Gear
 {
@@ -153,7 +154,7 @@ namespace smartHookah.Services.Gear
 
         }
 
-        public List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(
+        public List<SearchPipeAccessory> SearchAccesories(
             string search,
             AccesoryType type,
             SearchType searchType,
@@ -163,7 +164,7 @@ namespace smartHookah.Services.Gear
             page = page + 1;
             var query = searchType == SearchType.All ? ResourceHelper.ReadResources("smartHookah.Queries.searchType.sql") : ResourceHelper.ReadResources("smartHookah.Queries.searchByBrand.sql");
             var userId = this.personService.GetCurentPerson().Id;
-            var result = this.db.Database.SqlQuery<Models.Dto.GearService.SearchPipeAccesory>(
+            var result = this.db.Database.SqlQuery<SearchPipeAccessory>(
                 query
                 , new SqlParameter("personId", userId)
                 , new SqlParameter("sp", search)

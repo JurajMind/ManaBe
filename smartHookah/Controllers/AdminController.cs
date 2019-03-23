@@ -87,6 +87,13 @@ namespace smartHookah.Controllers
             return null;
         }
 
+        public ActionResult StoreBrands()
+        {
+            var brands = this.db.Brands.Select(a => a.DisplayName).ToList();
+            this.redisService.StoreBrands(brands);
+            return null;
+        }
+
         public async Task<ActionResult> UpdateMailChimp()
         {
             var listId = "5ec4bd2f5a";

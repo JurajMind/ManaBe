@@ -19,6 +19,7 @@ namespace smartHookah.Services.Redis
         public const string DynamicSmokeSessionKey = "DS:{0}";
         public const string PufKey = "pufs:{0}";
         public const string UpdateKey = "update:{0}";
+        public const string BrandKey = "brand:{0}";
     }
 
     public class RedisService : IRedisService
@@ -224,6 +225,33 @@ namespace smartHookah.Services.Redis
             using (var redis = redisManager.GetClient())
             {
                 return redis.As<UpdateController.UpdateRedis>()[GetNamespacedKey(string.Format(RedisKeys.UpdateKey,token))];
+            }
+        }
+
+        public IList<string> GetBrands(string prefix)
+        {
+            var key = String.Format(RedisKeys.DeviceKey, $"{prefix}*");
+            using (var redis = redisManager.GetClient())
+            {
+               
+            }
+
+            return null;
+        }
+
+        public void StoreBrands(IList<string> brands)
+        {
+            var key = String.Format(RedisKeys.BrandKey, $"");
+            using (var redis = redisManager.GetClient())
+            {
+                var allBrands =  redis.SearchKeys(GetNamespacedKey(key));
+                redis.RemoveAll(allBrands);
+                foreach (var brand in brands)
+                {
+                    var brandKey = String.Format(RedisKeys.BrandKey, brand);
+                    redis.Set(GetNamespacedKey(brandKey),brand);
+                }
+
             }
         }
 
