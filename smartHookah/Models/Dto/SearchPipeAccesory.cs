@@ -1,19 +1,26 @@
 ﻿namespace smartHookah.Models.Dto
 {
-    public partial class GearService
+    public class SearchPipeAccessory
     {
-        public class SearchPipeAccesory
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public string Brand { get; set; }
+
+        public string Type { get; set; }
+
+        public SearchPipeAccessory()
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
 
-            public string Brand { get; set; }
-
-            public string Type { get; set; }
-
-            public int Owned { get; set; }
         }
-        
+
+        public SearchPipeAccessory(Services.Search.SearchService.SearchPipeAccessory accessory)
+        {
+            this.Id = accessory.Id;
+            this.Brand = accessory.Brand;
+            this.Type = accessory.Type;
+            this.Name = accessory.Name;
+        }
     }
 
 }
