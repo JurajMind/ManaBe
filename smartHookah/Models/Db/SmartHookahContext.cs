@@ -107,6 +107,8 @@ namespace smartHookah.Models.Db
 
         public DbSet<PlaceFlag> PlaceFlags { get; set; }
 
+        public DbSet<Franchise> Franchises { get; set; }
+
         public static SmartHookahContext Create()
         {
             return new SmartHookahContext();
@@ -254,6 +256,8 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<DevicePreset>().HasOptional(a => a.Person).WithMany(a => a.Presets)
                 .HasForeignKey(a => a.PersonId);
+
+            modelBuilder.Entity<Franchise>().HasMany(a => a.Places).WithOptional(a => a.Franchise);
 
         }
 
