@@ -875,6 +875,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
+    <Compile Include="Controllers\Api\PlaceImportModel.cs" />
     <Compile Include="Controllers\Api\ReservationController.cs" />
     <Compile Include="Controllers\Api\StatisticsController.cs" />
     <Compile Include="Filters\ApiExceptionFilter.cs" />
