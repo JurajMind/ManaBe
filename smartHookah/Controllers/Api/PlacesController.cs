@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Data.Entity.Migrations;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -107,8 +108,27 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet]
+        [Route("FixLocation")]
+        public void FixLocation()
+        {
+            var addresses = this.db.Addresses.ToList();
+            foreach (var address in addresses)
+            {
+                if(address.Lat == null)
+                    continue;
+
+               var location =  DbGeography.FromText($"POINT({address.Lat} {address.Lng})");
+               address.Location = location;
+               this.db.Addresses.AddOrUpdate(address);
+            }
+
+            this.db.SaveChanges();
+
+        }
+
+        [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lng = null, float? lat = null)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lat = null, float? lng = null)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
@@ -122,9 +142,10 @@ namespace smartHookah.Controllers.Api
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
-                var myLocation = DbGeography.FromText($"POINT({lng} {lat})");
+                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
 
-                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
+                closestPlaces = this.db.Places.OrderBy(a => a.Address.Location.Distance(myLocation))
+                    .Skip(page * pageSize).Take(pageSize);
             }
             else
             {
