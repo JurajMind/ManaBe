@@ -30,7 +30,7 @@ namespace smartHookah.Services.Search
             {
                 if (type == null)
                     return true;
-                return r.Document.Type == type;
+                return String.Equals(r.Document.Type, type, StringComparison.CurrentCultureIgnoreCase);
             }).Select(r => r.Document).ToList();
 
         }
