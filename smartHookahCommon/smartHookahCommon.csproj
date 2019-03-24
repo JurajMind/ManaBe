@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Errors\ErrorCodes.cs" />
     <Compile Include="Exceptions\ManaException.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\Random.cs" />
   </ItemGroup>

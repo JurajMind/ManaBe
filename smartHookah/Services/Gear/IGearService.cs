@@ -21,7 +21,7 @@ namespace smartHookah.Services.Gear
 
         Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
 
-        List<Models.Dto.GearService.SearchPipeAccesory> SearchAccesories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
+        List<SearchPipeAccessory> SearchAccesories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
         
         int UsedByPerson(PipeAccesory accessory, int personId);
 
@@ -38,6 +38,7 @@ namespace smartHookah.Services.Gear
         Task<bool> DeleteMyGear(int id, int? count, int? personId);
 
         ICollection<PipeAccesory> GetRecentAccessories(int count);
+
     }
 
     public class GearFilter
