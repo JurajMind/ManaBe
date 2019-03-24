@@ -10,6 +10,8 @@ using smartHookah.ErrorHandler;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Gear;
+using smartHookah.Services.Redis;
+using smartHookah.Services.Search;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 
@@ -23,26 +25,36 @@ namespace smartHookah.Controllers.Api
     public class GearController : ApiController
     {
         private readonly IGearService gearService;
+        private readonly IRedisService redisService;
+        private readonly ISearchService searchService;
 
-        public GearController(IGearService gearService)
+        public GearController(IGearService gearService, IRedisService redisService, ISearchService searchService)
         {
             this.gearService = gearService;
+            this.redisService = redisService;
+            this.searchService = searchService;
         }
 
         #region Getters
 
-        [HttpGet, ApiAuthorize, System.Web.Http.Route("{type}/Search/{search}")]
-        public List<GearService.SearchPipeAccesory> Search(string search, string type, int page = 0, int pageSize = 50, string searchType = "All")
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("Search/{search}")]
+        public async Task<List<SearchPipeAccessory>> Search(string search, string type = null, int page = 0, int pageSize = 50, string searchType = "All")
         {
-            if (Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
+           
+            if (!string.IsNullOrEmpty(type) &&Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
             {
                 if(Enum.TryParse<SearchType>(searchType.FirstLetterToUpper(), out var searchTypeType))
-                return this.gearService.SearchAccesories(search, result, searchTypeType, page, pageSize);
-            }
+                    if(searchTypeType == SearchType.Brand)
 
-            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                $"Type:{type} was not recognize"));
-        }
+                return this.gearService.SearchAccesories(search, result, searchTypeType, page, pageSize);
+
+                var azureSearchType = await searchService.Search(search, type);
+                return azureSearchType.Select(s => new SearchPipeAccessory(s)).ToList();
+            }
+            var azureSearch = await searchService.Search(search, type);
+            return azureSearch.Select(s => new SearchPipeAccessory(s)).ToList();
+
+         }
 
         [HttpGet, ApiAuthorize, System.Web.Http.Route("Brands/")]
         public Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands()
@@ -83,6 +95,11 @@ namespace smartHookah.Controllers.Api
                 throw new HttpResponseException(
                     this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
             }
+        }
+        [HttpGet, System.Web.Http.Route("Brands/{prefix}")]
+        public List<string> GetBrands(string prefix)
+        {
+            return this.redisService.GetBrands(prefix).ToList();
         }
 
         #endregion

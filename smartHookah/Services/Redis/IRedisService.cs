@@ -45,5 +45,9 @@ namespace smartHookah.Services.Redis
         void StoreUpdate(string token,UpdateController.UpdateRedis update);
 
         UpdateController.UpdateRedis GetUpdate(string token);
+
+        IList<string> GetBrands(string prefix);
+
+        void StoreBrands(IList<string> brands);
     }
 }

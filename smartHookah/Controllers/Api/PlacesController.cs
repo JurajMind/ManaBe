@@ -1,6 +1,22 @@
-﻿using System.Net;
+﻿using System.Collections;
+using System.Data.Entity.Migrations;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
+using System.Web;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.VisualStudio.Services.Common;
+using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
+using smartHookahCommon.Extensions;
 
 namespace smartHookah.Controllers.Api
 {
@@ -92,8 +108,27 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet]
+        [Route("FixLocation")]
+        public void FixLocation()
+        {
+            var addresses = this.db.Addresses.ToList();
+            foreach (var address in addresses)
+            {
+                if(address.Lat == null)
+                    continue;
+
+               var location =  DbGeography.FromText($"POINT({address.Lat} {address.Lng})");
+               address.Location = location;
+               this.db.Addresses.AddOrUpdate(address);
+            }
+
+            this.db.SaveChanges();
+
+        }
+
+        [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lng = null, float? lat = null)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lat = null, float? lng = null)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
@@ -107,9 +142,10 @@ namespace smartHookah.Controllers.Api
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
-                var myLocation = DbGeography.FromText($"POINT({lng} {lat})");
+                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
 
-                closestPlaces = (from u in places orderby u.Address.Location.Distance(myLocation) select u).Skip(pageSize * page).Take(pageSize);
+                closestPlaces = this.db.Places.OrderBy(a => a.Address.Location.Distance(myLocation))
+                    .Skip(page * pageSize).Take(pageSize);
             }
             else
             {
@@ -137,8 +173,102 @@ namespace smartHookah.Controllers.Api
         #endregion
 
         #region Reservations
-            
 
+
+
+        #endregion
+
+        #region Setters
+        
+        [HttpPost, Route("Import")]
+        public async Task<IHttpActionResult> ImportPlaces()
+        {
+            var stream = await Request.Content.ReadAsStreamAsync();
+            
+            using (var reader = new StreamReader(stream))
+            using (var csv = new CsvReader(reader))
+            {
+                csv.Configuration.HasHeaderRecord = false;
+                csv.Configuration.Delimiter = ",";
+                csv.Configuration.TrimOptions = TrimOptions.Trim;
+                
+                var records = csv.GetRecords<PlaceImportModel>();
+
+                foreach (var record in records)
+                {
+                    var place = PlaceImportModel.ToModel(record);
+                    await placeService.AddPlace(place);
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost, Route("ImportMap")]
+        public async Task<IHttpActionResult> ImportPlacesFromMap()
+        {
+            var stream = await Request.Content.ReadAsStreamAsync();
+
+            using (var reader = new StreamReader(stream))
+            using (var csv = new CsvReader(reader))
+            {
+                csv.Configuration.HasHeaderRecord = true;
+                csv.Configuration.Delimiter = ",";
+                csv.Configuration.TrimOptions = TrimOptions.Trim;
+
+                var records = csv.GetRecords<PlaceImportModelMap>();
+
+                foreach (var record in records)
+                {
+                    var place = PlaceImportModelMapToPlace(record);
+                    await placeService.AddPlace(place);
+                }
+            }
+
+            return Ok();
+        }
+
+        public  Place PlaceImportModelMapToPlace (PlaceImportModelMap model)
+        {
+
+            return new Place()
+            {
+                Name = model.Name,
+                FriendlyUrl = getFriendlyUr(model.Name),
+                Address = new Address()
+                {
+                    Lat = model.Lat,
+                    Lng = model.Lng,
+                    ZIP = model.PosibleAdress,
+                },
+                Facebook = model.Url
+            };
+        }
+
+        public string getFriendlyUr(string name)
+        {
+
+            var clean = name.RemoveDiacritics();
+            var friendlyUrl = string.Concat(clean.ToLower().Replace(' ', '_').Where(char.IsLetterOrDigit));
+            var match = this.db.Places.FirstOrDefault(a => a.FriendlyUrl == friendlyUrl);
+            if (match != null)
+            {
+                var count = 1;
+                friendlyUrl = $"{friendlyUrl}_{count.ToString()}";
+                while (match != null)
+                {
+                    match = this.db.Places.FirstOrDefault(a => a.FriendlyUrl == friendlyUrl);
+                    count++;
+                }
+              
+            }
+
+            if (friendlyUrl.Length > 25)
+            {
+                return friendlyUrl.Substring(0, 25);
+            }
+            return friendlyUrl;
+        }
 
         #endregion
 
