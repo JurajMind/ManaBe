@@ -61,13 +61,13 @@
             </dl>
             <div class="row">
                 <div class="col-md-6">
-                    @if (User.Identity.IsAuthenticated && @Model.Place.AllowReservation)
+                    @if (User.Identity.IsAuthenticated && @Model.Place.HaveReservation)
                     {
                         <a class="btn btn-success btn-raised" href="@Url.Action("Create","Reservation",new {id = Model.Place.FriendlyUrl})">Vytvorit rezervaci&nbsp;<i class="fa fa-shopping-basket"></i></a>
                     }
                 </div>
                 <div class="col-md-6">
-                    @if (User.Identity.IsAuthenticated && @Model.Place.AllowReservation)
+                    @if (User.Identity.IsAuthenticated && @Model.Place.HaveOrders)
                     {
                         <a class="btn btn-success" href="@Url.Action("Order","Places",new {id = Model.Place.FriendlyUrl})">Prezriet menu&nbsp;<i class="fa fa-shopping-basket"></i></a>
                     }

@@ -918,6 +918,10 @@
     <Compile Include="Migrations\201903211724106_controllSeach.Designer.cs">
       <DependentUpon>201903211724106_controllSeach.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903252024145_placeimprovments.cs" />
+    <Compile Include="Migrations\201903252024145_placeimprovments.Designer.cs">
+      <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Db\Reservation.cs" />
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
@@ -992,6 +996,8 @@
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
+    <Compile Include="Services\Messages\FirebaseNotificationService.cs" />
+    <Compile Include="Services\Messages\IFirebaseNotificationService.cs" />
     <Compile Include="Services\Search\ISearchService.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -1116,6 +1122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903211724106_controllSeach.resx">
       <DependentUpon>201903211724106_controllSeach.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903252024145_placeimprovments.resx">
+      <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
