@@ -20,6 +20,7 @@ namespace smartHookah.Services.Redis
         public const string PufKey = "pufs:{0}";
         public const string UpdateKey = "update:{0}";
         public const string BrandKey = "brand:{0}";
+        public const string PersonNotificationKey = "person_notification:{0}";
     }
 
     public class RedisService : IRedisService
@@ -252,6 +253,33 @@ namespace smartHookah.Services.Redis
                     redis.Set(GetNamespacedKey(brandKey),brand);
                 }
 
+            }
+        }
+
+        public void AddNotificationToken(int personId, string token)
+        {
+            using (var redis = redisManager.GetClient())
+            {
+                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
+                redis.AddItemToSet(key,token);
+            }
+        }
+
+        public HashSet<string> GetNotificationToken(int personId)
+        {
+            using (var redis = redisManager.GetClient())
+            {
+                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
+                return redis.GetAllItemsFromSet(key);
+            }
+        }
+
+        public void RemoveNotificationToken(int personId,string token)
+        {
+            using (var redis = redisManager.GetClient())
+            {
+                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
+                redis.RemoveItemFromSet(key,token);
             }
         }
 

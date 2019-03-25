@@ -13,7 +13,7 @@ namespace smartHookah.Services.Messages
     using smartHookah.Models.Dto;
     using smartHookah.Services.Redis;
 
-    public class NotificationService : INotificationService
+    public class SignalNotificationService : ISignalNotificationService
     {
         private IHubContext ClientContext => GlobalHost.ConnectionManager.GetHubContext<SmokeSessionHub>();
 
@@ -22,7 +22,8 @@ namespace smartHookah.Services.Messages
         private readonly IRedisService redisService;
         private readonly IEmailService emailService;
 
-        public NotificationService(SmartHookahContext db, IRedisService redisService, IEmailService emailService)
+
+        public SignalNotificationService(SmartHookahContext db, IRedisService redisService, IEmailService emailService)
         {
             this.db = db;
             this.redisService = redisService;
@@ -40,12 +41,12 @@ namespace smartHookah.Services.Messages
             }
         }
 
-        public void ReservationChanged(Reservation reservation)
+        public async void ReservationChanged(Reservation reservation)
         {
-            this.ReservationChanged(reservation,null);
+           this.ReservationChanged(reservation,null);
         }
 
-        private  void ReservationChanged(Reservation reservation, string emailTemplate)
+        private  async void ReservationChanged(Reservation reservation, string emailTemplate)
         {
             var dBreservation = this.db.Reservations.Include(r => r.Customers).Include(r => r.Person.User)
                 .FirstOrDefault(r => r.Id == reservation.Id);
@@ -60,8 +61,6 @@ namespace smartHookah.Services.Messages
             {
                 this.ClientContext.Clients.Group(personEmail).ReservationChanged(ReservationDto.FromModel(reservation));
             }
-
-
         }
 
         public void ReservationStateChanged(Reservation reservation)

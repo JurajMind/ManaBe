@@ -221,6 +221,12 @@ namespace smartHookah.Services.Person
             return person.Manage.Any(a => a.Id == placeId);
         }
 
+        public void AddNotificationToken(string token)
+        {
+            var person = this.GetCurentPerson();
+            this.redisService.AddNotificationToken(person.Id, token);
+        }
+
         private string UserId()
         {
             var userIdentity = this.user.Identity.GetUserId();

@@ -7,6 +7,7 @@ using System.Web.Http;
 
 using smartHookah.Models.Dto;
 using smartHookah.Services.Gear;
+using smartHookah.Services.Messages;
 
 namespace smartHookah.Controllers.Api
 {
@@ -20,11 +21,13 @@ namespace smartHookah.Controllers.Api
     {
         private readonly IPersonService personService;
         private readonly IGearService gearService;
+        private readonly IFirebaseNotificationService firebaseNotificationService;
 
-        public PersonController(IPersonService personService, IGearService gearService)
+        public PersonController(IPersonService personService, IGearService gearService, IFirebaseNotificationService firebaseNotificationService)
         {
             this.personService = personService;
             this.gearService = gearService;
+            this.firebaseNotificationService = firebaseNotificationService;
         }
 
         #region Getters
@@ -91,7 +94,9 @@ namespace smartHookah.Controllers.Api
                     DisplayName = user.Person.DisplayName,
                     Email = user.Email,
                     ManagedPlaces = PlaceSimpleDto.FromModelList(user.Person.Manage).ToList(),
-                    Roles = personService.GetUserRoles(user.Id)
+                    Roles = personService.GetUserRoles(user.Id),
+                    PersonId = personService.GetCurentPerson().ToString()
+
                 };
             }
             catch (Exception e)
@@ -100,6 +105,28 @@ namespace smartHookah.Controllers.Api
                     this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
             }
         }
+
+        [ApiAuthorize, HttpPut, Route("NotificationToken")]
+        public void AddNotificationToken(string token)
+        {
+            try
+            {
+                this.personService.AddNotificationToken(token);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        [ApiAuthorize, HttpPost, Route("TestNotification")]
+        public void TestNotification()
+        {
+            this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
+                $"Test notification {DateTime.Now.ToString("g")}", null);
+        }
+
+
 
         [HttpGet, ApiAuthorize, Route("MyGear")]
         public IEnumerable<PipeAccesorySimpleDto> MyGear(string type = "All")
