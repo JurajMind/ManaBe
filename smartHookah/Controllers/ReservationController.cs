@@ -6,24 +6,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
-using smartHookah.Hubs;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Redis;
 using smartHookah.Support;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
-    using System.Data.Entity.Core.Objects;
-
-    using Accord.IO;
-    using System.Web.Hosting;
-
     using smartHookah.Models.Dto.Reservations;
     using smartHookah.Services.Place;
 
@@ -48,7 +39,7 @@ namespace smartHookah.Controllers
         // GET: Reservation
         public ActionResult Index()
         {
-            var places = db.Places.Where(a => a.AllowReservation);
+            var places = db.Places.Where(a => a.HaveReservation);
             return View(places);
         }
 

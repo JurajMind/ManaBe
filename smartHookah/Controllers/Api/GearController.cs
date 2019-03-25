@@ -97,7 +97,7 @@ namespace smartHookah.Controllers.Api
             }
         }
         [HttpGet, System.Web.Http.Route("Brands/{prefix}")]
-        public List<string> GetBrands(string prefix)
+        public List<string> GetBrandsPrefix(string prefix)
         {
             return this.redisService.GetBrands(prefix).ToList();
         }
