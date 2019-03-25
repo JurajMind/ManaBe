@@ -1,64 +1,78 @@
 ﻿using System;
-using System.Net.Http;
-using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using FcmSharp;
+using FcmSharp.Requests;
+using FcmSharp.Settings;
 using log4net;
-using Newtonsoft.Json;
-using smartHookah.Services.Gear;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Messages
 {
+
     public class FirebaseNotificationService : IFirebaseNotificationService
     {
-        private readonly ILog logger = LogManager.GetLogger(typeof(FirebaseNotificationService));
-        private string FireBase_URL = "https://fcm.googleapis.com/fcm/send";
-        private string key_server;
+        private static FcmClientSettings settings;
 
-        FirebaseNotificationService()
+        private readonly ILog logger = LogManager.GetLogger(typeof(FirebaseNotificationService));
+        private readonly IRedisService redisService;
+
+
+        public FirebaseNotificationService(IRedisService redisService)
         {
+            this.redisService = redisService;
+            if (settings == null)
+            {
+                var mappedPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Configs/manapipes-firebase-adminsdk-lkavm-60a4682f46.json");
+                settings = FileBasedFcmClientSettings.CreateFromFile(mappedPath);
+            }
 
         }
 
-        public async Task<bool> NotifyAsync(string to, string title, string body)
+        public async Task<bool> NotifyAsync(int personId, string title, string body,Dictionary<string,string> data)
         {
             try
             {
-                // Get the server key from FCM console
-                var serverKey = string.Format("key={0}", "Your server key - use app config");
-
-                // Get the sender id from FCM console
-                var senderId = string.Format("id={0}", "Your sender id - use app config");
-
-                var data = new
+                if (data == null)
                 {
-                    to, // Recipient device token
-                    notification = new { title, body }
-                };
-
-                // Using Newtonsoft.Json
-                var jsonBody = JsonConvert.SerializeObject(data);
-
-                using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, "https://fcm.googleapis.com/fcm/send"))
+                    data = new Dictionary<string, string>();
+                }
+                data.Add("click_action", "FLUTTER_NOTIFICATION_CLICK");
+                using (var client = new FcmClient(settings))
                 {
-                    httpRequest.Headers.TryAddWithoutValidation("Authorization", serverKey);
-                    httpRequest.Headers.TryAddWithoutValidation("Sender", senderId);
-                    httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-                    using (var httpClient = new HttpClient())
+                    var notification = new Notification
                     {
-                        var result = await httpClient.SendAsync(httpRequest);
+                        Title = title,
+                        Body = body
+                    };
 
-                        if (result.IsSuccessStatusCode)
+                    var tokens = this.redisService.GetNotificationToken(personId);
+
+                    var messages = tokens.Select(t => new FcmMessage
+                    {
+                        ValidateOnly = false,
+                        Message = new Message
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            // Use result.StatusCode to handle failure
-                            // Your custom error handler here
-                            logger.Error($"Error sending notification. Status Code: {result.StatusCode}");
-                        }
-                    }
+                            Token = t,
+                            Notification = notification,
+                            Data = new Dictionary<string, string>()
+                            {
+
+                            }
+                        },
+
+                    }).ToList();
+                 
+
+                    // Finally send the Message and wait for the Result:
+                    CancellationTokenSource cts = new CancellationTokenSource();
+                    Task[] tasks = messages.Select(m => client.SendAsync(m, cts.Token)).ToArray();
+
+                    await Task.WhenAll(tasks);
+                    // Send the Message and wait synchronously:
+
                 }
             }
             catch (Exception ex)
@@ -67,82 +81,6 @@ namespace smartHookah.Services.Messages
             }
 
             return false;
-        }
-    }
-
-    public class PushMessage
-    {
-        private string _to;
-        private PushMessageData _notification;
-
-        private dynamic _data;
-        private dynamic _click_action;
-        public dynamic data
-        {
-            get { return _data; }
-            set { _data = value; }
-        }
-
-        public string to
-        {
-            get { return _to; }
-            set { _to = value; }
-        }
-        public PushMessageData notification
-        {
-            get { return _notification; }
-            set { _notification = value; }
-        }
-
-        public dynamic click_action
-        {
-            get
-            {
-                return _click_action;
-            }
-
-            set
-            {
-                _click_action = value;
-            }
-        }
-    }
-
-    public class PushMessageData
-    {
-        private string _title;
-        private string _text;
-        private string _sound = "default";
-        //private dynamic _content_available;
-        private string _click_action;
-        public string sound
-        {
-            get { return _sound; }
-            set { _sound = value; }
-        }
-
-        public string title
-        {
-            get { return _title; }
-            set { _title = value; }
-        }
-        public string text
-        {
-            get { return _text; }
-            set { _text = value; }
-        }
-
-        public string click_action
-        {
-            get
-            {
-                return _click_action;
-            }
-
-            set
-            {
-                _click_action = value;
-            }
         }
     }
 }

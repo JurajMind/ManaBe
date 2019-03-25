@@ -56,7 +56,7 @@ namespace smartHookahTests.Services
             // On iotService, SendToMsg shoud be called with given params, returning task
             iotMock.Setup(a => a.SendMsgToDevice(deviceId, $"led:{(int)state}{1}")).Returns(Task.FromResult(false));
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
-            var notificationMock = new Mock<INotificationService>(MockBehavior.Strict);
+            var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
 
             // Initialize new service with mock services
             var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
@@ -106,7 +106,7 @@ namespace smartHookahTests.Services
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // On iotService, SendToMsg shoud be called with given params, returning task
-            var notificationMock = new Mock<INotificationService>(MockBehavior.Strict);
+            var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
             // Initialize new service with mock services
             var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
 
@@ -166,7 +166,7 @@ namespace smartHookahTests.Services
 
             // On iotService, SendToMsg shoud be called with given params, returning task
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
-            var notificationMock = new Mock<INotificationService>(MockBehavior.Strict);
+            var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
             // Initialize new service with mock services
             var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
 

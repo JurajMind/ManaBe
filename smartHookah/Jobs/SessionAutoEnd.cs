@@ -35,7 +35,7 @@ namespace smartHookah.Jobs
             var configService = new ConfigService();
             redisService = new RedisService(configService);
             var emailService = new EmailService();
-            var notificationService = new NotificationService(db, redisService, emailService);
+            var notificationService = new SignalNotificationService(db, redisService, emailService);
             this.smokeSessionService = new SmokeSessionBgService(this.db, redisService, this.iotService);
         }
 
