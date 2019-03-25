@@ -57,10 +57,7 @@ namespace smartHookah.Services.Messages
                         {
                             Token = t,
                             Notification = notification,
-                            Data = new Dictionary<string, string>()
-                            {
-
-                            }
+                            Data = data
                         },
 
                     }).ToList();

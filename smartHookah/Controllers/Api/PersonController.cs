@@ -120,9 +120,9 @@ namespace smartHookah.Controllers.Api
         }
 
         [ApiAuthorize, HttpPost, Route("TestNotification")]
-        public void TestNotification()
+        public async Task TestNotification()
         {
-            this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
+           await this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
                 $"Test notification {DateTime.Now.ToString("g")}", null);
         }
 
