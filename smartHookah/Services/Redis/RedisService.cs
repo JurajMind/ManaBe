@@ -25,14 +25,24 @@ namespace smartHookah.Services.Redis
 
     public class RedisService : IRedisService
     {
+        private static PooledRedisClientManager _redisManager;
+
         private readonly PooledRedisClientManager redisManager;
 
         private readonly IConfigService configService;
 
-        public RedisService(IConfigService configService)
+        private readonly SmartHookahContext db;
+
+        public RedisService(IConfigService configService, SmartHookahContext db)
         {
             this.configService = configService;
-            this.redisManager = new PooledRedisClientManager(ConfigurationManager.AppSettings["RedisConnectionString"]);
+            this.db = db;
+            if (_redisManager == null)
+            {
+                _redisManager = new PooledRedisClientManager(ConfigurationManager.AppSettings["RedisConnectionString"]);
+            }
+
+            this.redisManager = _redisManager;
         }
 
         public string GetHookahId(string sessionId)
@@ -40,7 +50,17 @@ namespace smartHookah.Services.Redis
             using (var redis = this.redisManager.GetClient())
             {
                 var key = String.Format(RedisKeys.SessionKey, sessionId);
-                return TryGetNamespaced<string>(key, redis);
+                var value =  TryGetNamespaced<string>(key, redis);
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    var newDeviceId = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == sessionId);
+                    this.CreateSmokeSession(sessionId, newDeviceId?.Hookah.Code);
+                    return newDeviceId?.Hookah.Code;
+                }
+
+                return value;
+
             }
         }
 
@@ -60,7 +80,21 @@ namespace smartHookah.Services.Redis
             using (var redis = this.redisManager.GetClient())
             {
                 var key = String.Format(RedisKeys.DeviceKey, hookahId);
-                return TryGetNamespaced<string>(key, redis);
+                var value =  TryGetNamespaced<string>(key, redis);
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    var device = this.db.Hookahs.FirstOrDefault(a => a.Code == hookahId);
+                    if (device == null)
+                        return "";
+                    var sessionId = this.db.SmokeSessions.FirstOrDefault(a => a.HookahId == device.Id && a.StatisticsId == null);
+                    if (sessionId == null)
+                        return "";
+                    this.CreateSmokeSession(sessionId.SessionId, hookahId);
+                    return sessionId.SessionId;
+                }
+
+                return value;
             }
         }
 
