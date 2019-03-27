@@ -33,7 +33,7 @@ namespace smartHookah.Jobs
             this.iotService = new IotService();
             this.db = new SmartHookahContext();
             var configService = new ConfigService();
-            redisService = new RedisService(configService);
+            redisService = new RedisService(configService,this.db);
             var emailService = new EmailService();
             var notificationService = new SignalNotificationService(db, redisService, emailService);
             this.smokeSessionService = new SmokeSessionBgService(this.db, redisService, this.iotService);
