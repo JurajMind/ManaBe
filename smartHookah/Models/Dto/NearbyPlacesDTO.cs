@@ -26,6 +26,7 @@ namespace smartHookah.Models.Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string ShortDescriptions { get; set; }
         public string FriendlyUrl { get; set; }
         public string LogoPath { get; set; }
         public AddressDto Address { get; set; }
@@ -36,6 +37,12 @@ namespace smartHookah.Models.Dto
         public string PhoneNumber { get; set; }
         public string Facebook { get; set; }
 
+        public bool HaveMenu { get; set; }
+
+        public bool HaveOrders { get; set; }
+
+        public bool HaveMana { get; set; }
+        
         public PlaceSimpleDto()
         {
             Address = new AddressDto();
@@ -47,13 +54,18 @@ namespace smartHookah.Models.Dto
         {
             Id = model.Id,
             Name = model.Name,
+            ShortDescriptions = model.ShortDescriptions,
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
             Address = AddressDto.FromModel(model.Address),
             Media = MediaDto.FromModelList(model.Medias).FirstOrDefault(),
             PhoneNumber = model.PhoneNumber,
             Facebook = model.Facebook,
-            BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours).ToList()
+            BusinessHours = BusinessHoursDto.FromModelList(model.BusinessHours).ToList(),
+            HaveMenu = model.HaveMenu,
+            HaveOrders = model.HaveOrders,
+            HaveMana = model.HaveMana,
+            Rating = model.Rating
         };
 
         public static IEnumerable<PlaceSimpleDto> FromModelList(ICollection<Place> model)

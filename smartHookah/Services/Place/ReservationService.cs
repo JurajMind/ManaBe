@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using smartHookah.Models.Dto;
@@ -29,17 +30,20 @@ namespace smartHookah.Services.Place
 
         private readonly IPlaceService placeService;
 
-        private readonly INotificationService notificationService;
+        private readonly ISignalNotificationService _signalNotificationService;
+
+        private readonly IFirebaseNotificationService firebaseNotificationService;
 
         public ReservationService(SmartHookahContext db, IReservationEmailService emailService, IPlaceService placeService,
-            IPersonService personService, IRedisService redisService, INotificationService notificationService)
+            IPersonService personService, IRedisService redisService, ISignalNotificationService signalNotificationService, IFirebaseNotificationService firebaseNotificationService)
         {
             this.db = db;
             this.emailService = emailService;
             this.placeService = placeService;
             this.personService = personService;
             this.redisService = redisService;
-            this.notificationService = notificationService;
+            this._signalNotificationService = signalNotificationService;
+            this.firebaseNotificationService = firebaseNotificationService;
         }
 
         public async Task<ReservationManageDto> GetReservationManage(int id, DateTime date)
@@ -87,7 +91,7 @@ namespace smartHookah.Services.Place
             db.Reservations.Add(modelReservation);
             await db.SaveChangesAsync();
             var dbReservation = await this.db.Reservations.FindAsync(modelReservation.Id);
-            this.notificationService.ReservationChanged(dbReservation);
+            this._signalNotificationService.ReservationChanged(dbReservation);
             this.emailService.CreatedReservation(dbReservation);
             return ReservationDto.FromModel(dbReservation);
         }
@@ -261,7 +265,7 @@ namespace smartHookah.Services.Place
             reservation.Late = reservation.Late + time;
 
             this.db.Reservations.AddOrUpdate(reservation);
-            this.notificationService.ReservationChanged(reservation);
+            this._signalNotificationService.ReservationChanged(reservation);
 
             await this.db.SaveChangesAsync();
         }
@@ -310,7 +314,7 @@ namespace smartHookah.Services.Place
             reservation.Seats.Add(table);
 
             await db.SaveChangesAsync();
-            notificationService.ReservationChanged(reservation);
+            _signalNotificationService.ReservationChanged(reservation);
             return reservation;
         }
 
@@ -389,7 +393,7 @@ namespace smartHookah.Services.Place
             }
             
             await db.SaveChangesAsync();
-            notificationService.ReservationChanged(reservation);
+            _signalNotificationService.ReservationChanged(reservation);
             return reservation;
         }
 
@@ -419,8 +423,22 @@ namespace smartHookah.Services.Place
 
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
-            this.notificationService.ReservationChanged(reservation);
+            this._signalNotificationService.ReservationChanged(reservation);
             this.emailService.StateChanged(reservation);
+            if (state == ReservationState.Canceled)
+            {
+                // todo textace
+                await firebaseNotificationService.NotifyAsync(reservation.PersonId.Value, "Reservation canceled",
+                    $"Your reservation in ${reservation.Place.Name} on ${reservation.Time.ToString("dd.MM.yyyy hh:mm",CultureInfo.CurrentCulture)} was canceled", new Dictionary<string, string>{{"RESERVATION_ID",reservation.Id.ToString()}});
+            }
+
+            if (state == ReservationState.Confirmed)
+            {
+                // todo textace
+                await firebaseNotificationService.NotifyAsync(reservation.PersonId.Value, "Reservation confirmed",
+                    $"Your reservation in ${reservation.Place.Name} on ${reservation.Time.ToString("dd.MM.yyyy hh:mm", CultureInfo.CurrentCulture)} was confirmed", new Dictionary<string, string> { { "RESERVATION_ID", reservation.Id.ToString() } });
+            }
+            
             return true;
         }
 

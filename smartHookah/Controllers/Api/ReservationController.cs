@@ -82,7 +82,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{id}/AddLateTime")]
-        public async Task UpdateReservationState(int id, [FromBody]int time)
+        public async Task AddLateTime(int id, [FromBody]int time)
         {
             await reservationService.AddLateTime(id, time);
         }

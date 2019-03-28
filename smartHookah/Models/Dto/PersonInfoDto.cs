@@ -22,6 +22,10 @@ namespace smartHookah.Models.Dto
         public ICollection<PlaceSimpleDto> ManagedPlaces { get; set; }
 
         [DataMember, JsonProperty("Roles")]
-        public List<string> Roles { get; set; }   
+        public List<string> Roles { get; set; }
+
+        [DataMember, JsonProperty("PersonId")]
+        public string PersonId { get; set; }
+
     }
 }
