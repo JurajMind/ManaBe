@@ -41,5 +41,6 @@ namespace smartHookah.Services.Person
         GameProfile GetUserGameProfile(int? personId);
         
         bool IsPlaceManager(int placeId);
+        void AddNotificationToken(string token);
     }
 }

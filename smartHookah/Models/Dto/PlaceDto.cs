@@ -8,8 +8,11 @@ namespace smartHookah.Models.Dto
 {
     public class PlaceDto : PlaceSimpleDto
     {
+        public string Instagram { get; set; }
 
-        public string ShortDescriptions { get; set; }
+        public string Url { get; set; }
+
+
 
         public string Descriptions { get; set; }
 
@@ -23,8 +26,7 @@ namespace smartHookah.Models.Dto
 
         public IEnumerable<MediaDto> Medias { get; set; }
         
-        public bool AllowReservation { get; set; }
-        public bool HaveMenu { get; set; }
+        public bool HaveReservation { get; set; }
 
         public int MinimumReservationTime { get; set; }
         
@@ -52,7 +54,10 @@ namespace smartHookah.Models.Dto
                 Currency = model.Currency,
                 Seats = SeatDto.FromModelList(model.Seats),
                 Medias = MediaDto.FromModelList(model.Medias),
-                AllowReservation = model.AllowReservation,
+                HaveReservation = model.HaveReservation,
+                HaveMana = model.HaveMana,
+                HaveOrders = model.HaveOrders,
+                Rating = model.Rating,
                 MinimumReservationTime = model.MinimumReservationTime,
                 FranchiseId = model.FranchiseId,
                 Franchise = FranchiseDto.FromModel(model.Franchise),
@@ -75,7 +80,7 @@ namespace smartHookah.Models.Dto
                 Facebook = this.Facebook,
                 BaseHookahPrice = this.BaseHookahPrice,
                 Currency = this.Currency,
-                AllowReservation = this.AllowReservation,
+                HaveReservation = this.HaveReservation,
                 MinimumReservationTime = this.MinimumReservationTime,
                 FranchiseId = this.FranchiseId,
                 Franchise = this.Franchise.ToModel(),
