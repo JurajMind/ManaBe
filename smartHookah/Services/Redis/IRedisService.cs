@@ -5,11 +5,8 @@ namespace smartHookah.Services.Redis
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using smartHookah.Models;
     using smartHookah.Models.Redis;
-    using smartHookah.Services.Place;
+    using Place;
 
     public interface IRedisService
     {
@@ -49,5 +46,10 @@ namespace smartHookah.Services.Redis
         IList<string> GetBrands(string prefix);
 
         void StoreBrands(IList<string> brands);
+        void AddNotificationToken(int personId, string token);
+
+        HashSet<string> GetNotificationToken(int personId);
+
+        void RemoveNotificationToken(int personId, string token);
     }
 }

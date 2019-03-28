@@ -9,23 +9,19 @@ namespace smartHookah.Models.Db
 {
     public class Place
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
 
-        [Required]
-        [MaxLength(255)]
-        public string Name { get; set; }
+        [Required] [MaxLength(255)] public string Name { get; set; }
 
         public string LogoPath { get; set; }
 
-        [MaxLength(255)]
-        public string ShortDescriptions { get; set; }
+        [MaxLength(255)] public string ShortDescriptions { get; set; }
 
         public string Descriptions { get; set; }
 
         [Required]
         [MaxLength(25)]
-        [Index(IsUnique =true)]        
+        [Index(IsUnique = true)]
         public string FriendlyUrl { get; set; }
 
         public int AddressId { get; set; }
@@ -44,10 +40,13 @@ namespace smartHookah.Models.Db
 
         public string Facebook { get; set; }
 
+        public string Instagram { get; set; }
+
+        public string Url { get; set; }
+
         public decimal BaseHookahPrice { get; set; }
-        [MaxLength(3)]
-        public string Currency { get; set; }
-        
+        [MaxLength(3)] public string Currency { get; set; }
+
         public virtual ICollection<HookahOrder> Orders { get; set; }
 
         public virtual ICollection<OrderExtra> OrderExtras { get; set; }
@@ -62,12 +61,22 @@ namespace smartHookah.Models.Db
 
         public virtual ICollection<Reservation> Reservations { get; set; }
 
-        public  bool AllowReservation { get; set; }
+        public bool HaveReservation { get; set; }
 
-        public int MinimumReservationTime { get; set; } 
+        public bool HaveMenu { get; set; }
+
+        public bool HaveOrders { get; set; }
+
+        public bool HaveMana { get; set; }
+
+        public int Rating { get; set; }
+
+        public int MinimumReservationTime { get; set; }
         public string Map { get; set; }
 
         public bool Public { get; set; }
+
+        public PlaceSrc Src { get; set; }
 
         public virtual ICollection<PlaceFlag> PlaceFlags { get; set; }
 
@@ -79,8 +88,8 @@ namespace smartHookah.Models.Db
 
         public bool IsOpen(DateTime open)
         {
-            var todayInt = (int)open.DayOfWeek;
-            var todayOpenHours =BusinessHours?.FirstOrDefault(a => a.Day == todayInt);
+            var todayInt = (int) open.DayOfWeek;
+            var todayOpenHours = BusinessHours?.FirstOrDefault(a => a.Day == todayInt);
 
             if (todayOpenHours == null)
                 return false;
@@ -113,8 +122,13 @@ namespace smartHookah.Models.Db
 
             return false;
         }
+    }
 
-
+    public enum PlaceSrc
+    {
+        Import,
+        Person,
+        Place
     }
 
     public class PlaceFlag
@@ -124,21 +138,16 @@ namespace smartHookah.Models.Db
         public virtual ICollection<Place> Places { get; set; }
 
         public string Code { get; set; }
-
-        public string DisplayName { get; set; }
-
     }
 
     public class Seat
     {
         public int Id { get; set; }
-        [MaxLength(64)]
-        public string Name { get; set; }
+        [MaxLength(64)] public string Name { get; set; }
         public int? PlaceId { get; set; }
         public virtual Place Place { get; set; }
 
-        [MaxLength(5)]
-        public string Code { get; set; } 
+        [MaxLength(5)] public string Code { get; set; }
 
         public int Capacity { get; set; }
 
@@ -160,19 +169,17 @@ namespace smartHookah.Models.Db
 
         public virtual SmokeSessionMetaData SmokeSessionMetaData { get; set; }
 
-        
+
         public int? SmokeSessionId { get; set; }
         public virtual SmokeSession SmokeSession { get; set; }
-        
-        [MaxLength(255)]
-        public string ExtraInfo { get; set; }
-        
+
+        [MaxLength(255)] public string ExtraInfo { get; set; }
+
         public OrderState State { get; set; }
 
         public decimal Price { get; set; }
 
-        [MaxLength(3)]
-        public string Currency { get; set; } = "CZK";
+        [MaxLength(3)] public string Currency { get; set; } = "CZK";
 
         public int? SeatId { get; set; }
 
@@ -186,9 +193,9 @@ namespace smartHookah.Models.Db
 
     public enum HookahOrderType
     {
-       Before = 0,
-       InPlace = 1,
-       Staff = 2,
+        Before = 0,
+        InPlace = 1,
+        Staff = 2,
     }
 
     public enum ReservationState
@@ -211,20 +218,19 @@ namespace smartHookah.Models.Db
     }
 
 
-
     public enum OrderState
     {
         Open = 0,
         Processing = 1,
         Ready = 2,
         Delivered = 3,
-        Canceled =4,
+        Canceled = 4,
     }
 
     public class BusinessHours
     {
         public int Id { get; set; }
-        
+
         public int PlaceId { get; set; }
         public virtual Place Place { get; set; }
 
@@ -238,17 +244,18 @@ namespace smartHookah.Models.Db
 
     public class Address
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
+
+        public int AddressId { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string Number { get; set; }
 
         public string ZIP { get; set; }
-        [MaxLength(10)]
-        public  string Lat { get; set; }
-        [MaxLength(10)]
-       public string Lng { get; set; }
+        public string Country { get; set; }
+
+        [MaxLength(10)] public string Lat { get; set; }
+        [MaxLength(10)] public string Lng { get; set; }
 
         public DbGeography Location { get; set; }
 
@@ -266,22 +273,19 @@ namespace smartHookah.Models.Db
         public string Path { get; set; }
         public MediaType Type { get; set; }
         public bool IsDefault { get; set; }
-        
-        [NotMapped]
-        public string Extension => System.IO.Path.GetExtension(Path);
 
-        [NotMapped]
-        public string FileName => System.IO.Path.GetFileNameWithoutExtension(Path);
+        [NotMapped] public string Extension => System.IO.Path.GetExtension(Path);
 
-        [NotMapped]
-        public string GetDirectory => System.IO.Path.GetDirectoryName(Path);
+        [NotMapped] public string FileName => System.IO.Path.GetFileNameWithoutExtension(Path);
+
+        [NotMapped] public string GetDirectory => System.IO.Path.GetDirectoryName(Path);
 
         public string Sized(int i = 0)
         {
             if (i == 0) return Path + "original.jpg";
             else return Path + $"{i}.jpg";
         }
-        
+
         public string GetSize(int i)
         {
             return this.Sized(i);

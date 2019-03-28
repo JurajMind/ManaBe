@@ -27,14 +27,14 @@ namespace smartHookah.Controllers
 
         private readonly IDeviceService deviceService;
 
-        private readonly INotificationService notificationService;
+        private readonly ISignalNotificationService _signalNotificationService;
 
         private readonly IRedisService redisService;
 
-        public QRCodeController(IDeviceService deviceService, INotificationService notificationService, IRedisService redisService)
+        public QRCodeController(IDeviceService deviceService, ISignalNotificationService signalNotificationService, IRedisService redisService)
         {
             this.deviceService = deviceService;
-            this.notificationService = notificationService;
+            this._signalNotificationService = signalNotificationService;
             this.redisService = redisService;
         }
 
@@ -53,7 +53,7 @@ namespace smartHookah.Controllers
                 try
                 {
                     ClientContext.Clients.Group(hookah.Code).online(hookah.Code);
-                    Task.Factory.StartNew(() => this.notificationService.OnlineDevice(hookah.Code));
+                    Task.Factory.StartNew(() => this._signalNotificationService.OnlineDevice(hookah.Code));
                     Task.Factory.StartNew(() => IFFTHelper.PushToMakerConnect(id)
                     );
 

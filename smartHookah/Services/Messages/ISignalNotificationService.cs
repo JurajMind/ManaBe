@@ -2,7 +2,7 @@
 
 namespace smartHookah.Services.Messages
 {
-    public interface INotificationService
+    public interface ISignalNotificationService
     {
         void OnlineDevice(string code);
 

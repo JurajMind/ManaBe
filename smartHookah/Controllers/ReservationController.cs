@@ -6,24 +6,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
-using smartHookah.Hubs;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Redis;
 using smartHookah.Support;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
-    using System.Data.Entity.Core.Objects;
-
-    using Accord.IO;
-    using System.Web.Hosting;
-
     using smartHookah.Models.Dto.Reservations;
     using smartHookah.Services.Place;
 
@@ -34,21 +25,21 @@ namespace smartHookah.Controllers
         private TimeSpan _slotDuration = new TimeSpan(0, 30, 0);
         private readonly SmartHookahContext db;
         private EmailService emailService;
-        private readonly INotificationService notificationService;
+        private readonly ISignalNotificationService _signalNotificationService;
         private readonly IRedisService redisService;
-        public ReservationController(SmartHookahContext db, IReservationService reservationService,INotificationService notificationService)
+        public ReservationController(SmartHookahContext db, IReservationService reservationService,ISignalNotificationService signalNotificationService)
         {
             this.db = db;
             this.reservationService = reservationService;
             this.emailService = new EmailService();
-            this.notificationService = notificationService;
+            this._signalNotificationService = signalNotificationService;
         }
 
 
         // GET: Reservation
         public ActionResult Index()
         {
-            var places = db.Places.Where(a => a.AllowReservation);
+            var places = db.Places.Where(a => a.HaveReservation);
             return View(places);
         }
 
@@ -64,7 +55,7 @@ namespace smartHookah.Controllers
 
         public void Ping(int id)
         {
-            this.notificationService.ReservationChanged(id);
+            this._signalNotificationService.ReservationChanged(id);
         }
 
         public ActionResult Details(int id)
@@ -205,7 +196,7 @@ namespace smartHookah.Controllers
                     }
 
                     scope.Commit();
-                    this.notificationService.ReservationChanged(newReservation);
+                    this._signalNotificationService.ReservationChanged(newReservation);
                     await reservationService.UpdateReservationUsage(place.Id, parseDate.Date);
                     return Json(new {success = !conflict, id = newReservation.Id});
                 }
@@ -449,7 +440,7 @@ namespace smartHookah.Controllers
 
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
-            this.notificationService.ReservationChanged(reservation);
+            this._signalNotificationService.ReservationChanged(reservation);
             return Json(new {oldRes= oldReservation,
                             newRes = new ReservationDto(reservation,this._slotDuration),success = true});
         }

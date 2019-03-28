@@ -150,11 +150,20 @@
     <Reference Include="FastMember.Signed, Version=1.4.1.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.4.1\lib\net461\FastMember.Signed.dll</HintPath>
     </Reference>
+    <Reference Include="FcmSharp, Version=2.8.4.0, Culture=neutral, PublicKeyToken=8e0f0ee9939f2b89, processorArchitecture=MSIL">
+      <HintPath>..\packages\FcmSharp.2.8.4\lib\net46\FcmSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Fleck, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fleck.1.0.3\lib\net45\Fleck.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.37.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.37.0\lib\net45\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.32.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.32.2\lib\net45\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.32.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.32.2\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Core, Version=1.37.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.Core.1.37.0\lib\net45\Google.Apis.Core.dll</HintPath>
@@ -918,6 +927,10 @@
     <Compile Include="Migrations\201903211724106_controllSeach.Designer.cs">
       <DependentUpon>201903211724106_controllSeach.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903252024145_placeimprovments.cs" />
+    <Compile Include="Migrations\201903252024145_placeimprovments.Designer.cs">
+      <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Db\Reservation.cs" />
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
@@ -992,6 +1005,8 @@
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
+    <Compile Include="Services\Messages\FirebaseNotificationService.cs" />
+    <Compile Include="Services\Messages\IFirebaseNotificationService.cs" />
     <Compile Include="Services\Search\ISearchService.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -1117,6 +1132,9 @@
     <EmbeddedResource Include="Migrations\201903211724106_controllSeach.resx">
       <DependentUpon>201903211724106_controllSeach.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903252024145_placeimprovments.resx">
+      <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1128,10 +1146,10 @@
     <Compile Include="Services\Gear\ITobaccoService.cs" />
     <Compile Include="Services\Gear\TobaccoService.cs" />
     <Compile Include="Services\Messages\IMessageLogService.cs" />
-    <Compile Include="Services\Messages\INotificationService.cs" />
+    <Compile Include="Services\Messages\ISignalNotificationService.cs" />
     <Compile Include="Services\Messages\IReservationEmailService.cs" />
     <Compile Include="Services\Messages\MessageLogService.cs" />
-    <Compile Include="Services\Messages\NotificationService.cs" />
+    <Compile Include="Services\Messages\SignalNotificationService.cs" />
     <Compile Include="Services\Messages\ReservationEmailService.cs" />
     <Compile Include="Services\Person\AccountService.cs" />
     <Compile Include="Services\Device\DeviceSettingsPresetService.cs" />
@@ -1829,6 +1847,9 @@
     <Content Include="Content\bootstrap-material-design.min.css" />
     <Content Include="Content\bootstrap-material-design.css" />
     <Content Include="Content\bootstrap-fs-modal.css.map" />
+    <Content Include="Configs\manapipes-firebase-adminsdk-lkavm-60a4682f46.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\bootstrap-material-design.css.new" />
     <None Include="Content\bootstrap-material-design.min.css.new" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -1913,11 +1934,6 @@
     <Content Include="Content\tether\tether.css" />
     <Content Include="Content\tether\tether.min.css" />
     <Content Include="Content\wheelcolorpicker.css" />
-    <Content Include="dist\89889688147bd7575d6327160d64e760.svg" />
-    <Content Include="dist\main.js" />
-    <Content Include="dist\site.css" />
-    <Content Include="dist\vendor.css" />
-    <Content Include="dist\vendor.js" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="LocalizationAdmin\app\app.js" />
@@ -2139,8 +2155,6 @@
     <Content Include="webpack.config.js" />
     <Content Include=".babelrc" />
     <Content Include="ClientApp\components\nav-bottom.vue" />
-    <Content Include="dist\main.js.map" />
-    <Content Include="dist\vendor-manifest.json" />
     <Content Include="Content\range-slider.css.map" />
     <Content Include="Content\range-slider.scss" />
     <None Include="LocalizationAdmin\scripts\_references.js" />

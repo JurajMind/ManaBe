@@ -197,7 +197,7 @@ namespace smartHookah.Controllers.Api
             var result = new Place()
             {
                 Address = address,
-                AllowReservation = false,
+                HaveReservation = false,
                 BusinessHours = hours,
                 Facebook = model.Facebook,
                 FranchiseId = int.Parse(model.FranchiseId),
