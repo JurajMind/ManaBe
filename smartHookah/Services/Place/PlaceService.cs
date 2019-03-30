@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.Spatial;
 using System.Data.Entity.Validation;
 using System.Globalization;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 using System.Web;
 using GuigleAPI;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.VisualStudio.Services.Common;
+using smartHookah.Controllers.Mobile;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookahCommon.Errors;
@@ -142,6 +145,29 @@ namespace smartHookah.Services.Place
             }
 
             return address;
+        }
+
+        public async Task<Place> AddFlags(int placeId, List<string> flags)
+        {
+            var place = this.db.Places.Find(placeId);
+
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound,$"Place {placeId} was not found");
+            }
+
+
+            
+            place.PlaceFlags.AddRange(flags.Select(f => new PlaceFlag
+            {
+                Code = f
+            }));
+            
+            this.db.Places.AddOrUpdate(place);
+            await this.db.SaveChangesAsync();
+
+            return this.db.Places.Find(placeId);
+
         }
 
         public Address ParseGoogleResult(GuigleAPI.Model.Address googleAddress)
