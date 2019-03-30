@@ -14,6 +14,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.Services.Common;
+using smartHookah.Controllers.Mobile;
 using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
 using smartHookahCommon.Extensions;
@@ -226,6 +227,13 @@ namespace smartHookah.Controllers.Api
             }
 
             return Ok();
+        }
+
+        [HttpPut,Route("{placeId}/AddFlags")]
+        public async Task<PlaceDto> AddFlags(int placeId,[FromBody]List<string> flags)
+        {
+            var result = await this.placeService.AddFlags(placeId, flags);
+            return PlaceDto.FromModel(result);
         }
 
         public  Place PlaceImportModelMapToPlace (PlaceImportModelMap model)
