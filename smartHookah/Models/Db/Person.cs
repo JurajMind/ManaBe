@@ -81,6 +81,8 @@ namespace smartHookah.Models.Db
 
         public virtual PersonStatistic Statistic { get; set; }
 
+        public virtual ICollection<NotificationToken> NotificationTokens { get; set; }
+
         public bool Gdpr { get; set; }
 
         public int PersonRating { get; set; }
@@ -183,6 +185,16 @@ namespace smartHookah.Models.Db
  
 
 
+    }
+
+    public class NotificationToken
+    {
+        [Key]
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        [Required]
+        public virtual Person  Person { get; set; }
+        public string Token { get; set; }
     }
 
     public class GamePerson

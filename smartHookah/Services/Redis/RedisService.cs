@@ -290,33 +290,6 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public void AddNotificationToken(int personId, string token)
-        {
-            using (var redis = redisManager.GetClient())
-            {
-                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
-                redis.AddItemToSet(key,token);
-            }
-        }
-
-        public HashSet<string> GetNotificationToken(int personId)
-        {
-            using (var redis = redisManager.GetClient())
-            {
-                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
-                return redis.GetAllItemsFromSet(key);
-            }
-        }
-
-        public void RemoveNotificationToken(int personId,string token)
-        {
-            using (var redis = redisManager.GetClient())
-            {
-                var key = GetNamespacedKey(string.Format(RedisKeys.PersonNotificationKey, personId.ToString()));
-                redis.RemoveItemFromSet(key,token);
-            }
-        }
-
         private string GetNamespacedKey(string key)
         {
             return $"{this.configService.Enviroment}:{key}";

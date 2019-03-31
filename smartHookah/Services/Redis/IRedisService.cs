@@ -46,10 +46,5 @@ namespace smartHookah.Services.Redis
         IList<string> GetBrands(string prefix);
 
         void StoreBrands(IList<string> brands);
-        void AddNotificationToken(int personId, string token);
-
-        HashSet<string> GetNotificationToken(int personId);
-
-        void RemoveNotificationToken(int personId, string token);
     }
 }

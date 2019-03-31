@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using FcmSharp;
 using FcmSharp.Requests;
 using FcmSharp.Settings;
 using log4net;
-using smartHookah.Services.Redis;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Messages
 {
@@ -17,18 +18,18 @@ namespace smartHookah.Services.Messages
         private static FcmClientSettings settings;
 
         private readonly ILog logger = LogManager.GetLogger(typeof(FirebaseNotificationService));
-        private readonly IRedisService redisService;
+        private readonly SmartHookahContext db;
 
 
-        public FirebaseNotificationService(IRedisService redisService)
+        public FirebaseNotificationService( SmartHookahContext db)
         {
-            this.redisService = redisService;
+            this.db = db;
+
             if (settings == null)
             {
                 var mappedPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Configs/manapipes-firebase-adminsdk-lkavm-60a4682f46.json");
                 settings = FileBasedFcmClientSettings.CreateFromFile(mappedPath);
             }
-
         }
 
         public async Task<bool> NotifyAsync(int personId, string title, string body,Dictionary<string,string> data)
@@ -48,7 +49,8 @@ namespace smartHookah.Services.Messages
                         Body = body
                     };
 
-                    var tokens = this.redisService.GetNotificationToken(personId);
+                    var tokens = await this.db.NotificationTokens.Where(a => a.PersonId == personId).Select(s => s.Token)
+                        .ToListAsync();
 
                     var messages = tokens.Select(t => new FcmMessage
                     {
@@ -63,12 +65,12 @@ namespace smartHookah.Services.Messages
                     }).ToList();
                  
 
-                    // Finally send the Message and wait for the Result:
+              
                     CancellationTokenSource cts = new CancellationTokenSource();
                     Task[] tasks = messages.Select(m => client.SendAsync(m, cts.Token)).ToArray();
 
                     await Task.WhenAll(tasks);
-                    // Send the Message and wait synchronously:
+
 
                 }
             }

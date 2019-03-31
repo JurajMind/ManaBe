@@ -1,4 +1,5 @@
-﻿using smartHookah.Models.Db;
+﻿using System.Data.Entity.Migrations;
+using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Person
 {
@@ -224,7 +225,12 @@ namespace smartHookah.Services.Person
         public void AddNotificationToken(string token)
         {
             var person = this.GetCurentPerson();
-            this.redisService.AddNotificationToken(person.Id, token);
+            person.NotificationTokens.Add(new NotificationToken
+            {
+                Token = token
+            });
+            this.db.Persons.AddOrUpdate(person);
+            this.db.SaveChanges();
         }
 
         private string UserId()

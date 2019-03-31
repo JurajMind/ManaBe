@@ -931,9 +931,14 @@
     <Compile Include="Migrations\201903252024145_placeimprovments.Designer.cs">
       <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903310737489_notificationTokens.cs" />
+    <Compile Include="Migrations\201903310737489_notificationTokens.Designer.cs">
+      <DependentUpon>201903310737489_notificationTokens.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Db\Reservation.cs" />
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
+    <Compile Include="Models\Dto\Places\PlaceDashboardDto.cs" />
     <Compile Include="Models\Dto\ReservationDetailDto.cs" />
     <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
@@ -1134,6 +1139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903252024145_placeimprovments.resx">
       <DependentUpon>201903252024145_placeimprovments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903310737489_notificationTokens.resx">
+      <DependentUpon>201903310737489_notificationTokens.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

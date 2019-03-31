@@ -39,6 +39,8 @@ namespace smartHookah.Services.Gear
 
         ICollection<PipeAccesory> GetRecentAccessories(int count);
 
+        Task<decimal> TobaccoEstimate(int sessionId);
+
     }
 
     public class GearFilter
