@@ -87,6 +87,33 @@ namespace smartHookah.Controllers
             return null;
         }
 
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> FixSessions()
+        {
+            var devices = this.db.Hookahs.Select(s => s.Code).ToList();
+
+            
+            foreach (var device in devices)
+            {
+                var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == device);
+
+                if(hookah == null)
+                    continue;
+
+                var sessionCount = this.db.SmokeSessions.Count(s => s.HookahId == hookah.Id);
+                
+                if(sessionCount != 0)
+                    continue;
+                
+
+                await this.smokeSessionBg.InitSmokeSession(device);
+            }
+
+            return null;
+        }
+
         public ActionResult StoreBrands()
         {
             var brands = this.db.Brands.Select(a => a.DisplayName).ToList();
