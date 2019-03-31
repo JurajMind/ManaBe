@@ -109,6 +109,8 @@ namespace smartHookah.Models.Db
 
         public DbSet<Franchise> Franchises { get; set; }
 
+        public DbSet<NotificationToken> NotificationTokens { get; set; }
+
         public static SmartHookahContext Create()
         {
             return new SmartHookahContext();
@@ -258,6 +260,8 @@ namespace smartHookah.Models.Db
                 .HasForeignKey(a => a.PersonId);
 
             modelBuilder.Entity<Franchise>().HasMany(a => a.Places).WithOptional(a => a.Franchise);
+
+            modelBuilder.Entity<Person>().HasMany(a => a.NotificationTokens).WithRequired(a => a.Person).HasForeignKey(x => x.PersonId);
 
         }
 
