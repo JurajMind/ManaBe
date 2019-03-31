@@ -8,13 +8,13 @@ using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using GuigleAPI;
-using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Common;
-using smartHookah.Controllers.Mobile;
-using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Places;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 
@@ -30,10 +30,16 @@ namespace smartHookah.Services.Place
 
         private readonly IPersonService personService;
 
-        public PlaceService(SmartHookahContext db, IPersonService personService)
+        private readonly IRedisService redisService;
+
+        private readonly IDeviceService deviceService;
+
+        public PlaceService(SmartHookahContext db, IPersonService personService, IRedisService redisService, IDeviceService deviceService)
         {
             this.db = db;
             this.personService = personService;
+            this.redisService = redisService;
+            this.deviceService = deviceService;
         }
 
         public async Task<Place> GetPlace(int id)
@@ -168,6 +174,36 @@ namespace smartHookah.Services.Place
 
             return this.db.Places.Find(placeId);
 
+        }
+
+        public async Task<PlaceDashboardDto> PlaceDashboard(int placeId)
+        {
+            var place = await this.db.Places.FindAsync(placeId);
+
+            var devices = place.Person.Hookahs.ToList();
+
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound,"$Place not found");
+            }
+
+            var result = new PlaceDashboardDto();
+            var deviceStatus = await this.deviceService.GetOnlineStates(devices.Select(s => s.Code));
+            foreach (var device in devices)
+            {
+                var devicePart = new DevicePlaceDashboardDto {Device = DeviceSimpleDto.FromModel(device)};
+                if (deviceStatus.TryGetValue(device.Code, out var deviceState))
+                {
+                    devicePart.Device.IsOnline = deviceState;
+                }
+                var sessionId = this.redisService.GetSessionId(device.Code);
+                devicePart.Statistic = new DynamicSmokeStatisticRawDto(this.redisService.GetDynamicSmokeStatistic(sessionId));
+                var session = this.db.SmokeSessions.FirstOrDefault(s => s.SessionId == sessionId);
+                devicePart.MetaData = SmokeSessionMetaDataDto.FromModel(session?.MetaData);
+                result.PlaceDevices.Add(devicePart);
+            }
+
+            return result;
         }
 
         public Address ParseGoogleResult(GuigleAPI.Model.Address googleAddress)
