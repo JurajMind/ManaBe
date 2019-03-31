@@ -48,7 +48,7 @@ namespace smartHookah.Services.Place
                 .Include(a => a.Person)
                 .Include(a => a.OrderExtras)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if (place == null) throw new ManaException(ErrorCodes.PlaceNotFound, "Place with id 33 not found.");
+            if (place == null) throw new ManaException(ErrorCodes.PlaceNotFound, $"Place with id {id} not found.");
             return place;
         }
 

@@ -130,7 +130,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lat = null, float? lng = null)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lat = null, float? lng = null,float radius = 50)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
@@ -146,7 +146,7 @@ namespace smartHookah.Controllers.Api
             {
                 var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
 
-                closestPlaces = this.db.Places.OrderBy(a => a.Address.Location.Distance(myLocation))
+                closestPlaces = this.db.Places.Where(a => (a.Address.Location.Distance(myLocation) / 1000) < radius).OrderBy(a => a.Address.Location.Distance(myLocation))
                     .Skip(page * pageSize).Take(pageSize);
             }
             else
