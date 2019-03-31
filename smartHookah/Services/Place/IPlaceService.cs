@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using smartHookah.Controllers.Mobile;
-using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Places;
 
 namespace smartHookah.Services.Place
 {
@@ -24,5 +23,7 @@ namespace smartHookah.Services.Place
 
         Task<Address> GetLocation(Address address);
         Task<Place> AddFlags(int placeId, List<string> flags);
+
+        Task<PlaceDashboardDto> PlaceDashboard(int placeId);
     }
 }

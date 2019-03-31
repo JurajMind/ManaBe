@@ -339,6 +339,11 @@ namespace smartHookah.Services.Gear
 
             return result.GroupBy(a => a.Id).Select(a => a.First()).ToList();
         }
+
+        public Task<decimal> TobaccoEstimate(int sessionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

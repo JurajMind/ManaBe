@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Controllers.Mobile;
 using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Places;
 using smartHookahCommon.Extensions;
 
 namespace smartHookah.Controllers.Api
@@ -234,6 +235,13 @@ namespace smartHookah.Controllers.Api
         {
             var result = await this.placeService.AddFlags(placeId, flags);
             return PlaceDto.FromModel(result);
+        }
+
+        [HttpGet,Route("{placeId}/DashboardData")]
+        public async Task<PlaceDashboardDto> GetDashboardData(int placeId)
+        {
+            var result = await this.placeService.PlaceDashboard(placeId);
+            return result;
         }
 
         public  Place PlaceImportModelMapToPlace (PlaceImportModelMap model)
