@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.Spatial;
 using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using GuigleAPI;
-using Microsoft.TeamFoundation.VersionControl.Client;
-using smartHookah.Models;
+using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Places;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 
@@ -27,10 +30,16 @@ namespace smartHookah.Services.Place
 
         private readonly IPersonService personService;
 
-        public PlaceService(SmartHookahContext db, IPersonService personService)
+        private readonly IRedisService redisService;
+
+        private readonly IDeviceService deviceService;
+
+        public PlaceService(SmartHookahContext db, IPersonService personService, IRedisService redisService, IDeviceService deviceService)
         {
             this.db = db;
             this.personService = personService;
+            this.redisService = redisService;
+            this.deviceService = deviceService;
         }
 
         public async Task<Place> GetPlace(int id)
@@ -39,7 +48,7 @@ namespace smartHookah.Services.Place
                 .Include(a => a.Person)
                 .Include(a => a.OrderExtras)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            if (place == null) throw new ManaException(ErrorCodes.PlaceNotFound, "Place with id 33 not found.");
+            if (place == null) throw new ManaException(ErrorCodes.PlaceNotFound, $"Place with id {id} not found.");
             return place;
         }
 
@@ -142,6 +151,59 @@ namespace smartHookah.Services.Place
             }
 
             return address;
+        }
+
+        public async Task<Place> AddFlags(int placeId, List<string> flags)
+        {
+            var place = this.db.Places.Find(placeId);
+
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound,$"Place {placeId} was not found");
+            }
+
+
+            
+            place.PlaceFlags.AddRange(flags.Select(f => new PlaceFlag
+            {
+                Code = f
+            }));
+            
+            this.db.Places.AddOrUpdate(place);
+            await this.db.SaveChangesAsync();
+
+            return this.db.Places.Find(placeId);
+
+        }
+
+        public async Task<PlaceDashboardDto> PlaceDashboard(int placeId)
+        {
+            var place = await this.db.Places.FindAsync(placeId);
+
+            var devices = place.Person.Hookahs.ToList();
+
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound,"$Place not found");
+            }
+
+            var result = new PlaceDashboardDto();
+            var deviceStatus = await this.deviceService.GetOnlineStates(devices.Select(s => s.Code));
+            foreach (var device in devices)
+            {
+                var devicePart = new DevicePlaceDashboardDto {Device = DeviceSimpleDto.FromModel(device)};
+                if (deviceStatus.TryGetValue(device.Code, out var deviceState))
+                {
+                    devicePart.Device.IsOnline = deviceState;
+                }
+                var sessionId = this.redisService.GetSessionId(device.Code);
+                devicePart.Statistic = new DynamicSmokeStatisticRawDto(this.redisService.GetDynamicSmokeStatistic(sessionId));
+                var session = this.db.SmokeSessions.FirstOrDefault(s => s.SessionId == sessionId);
+                devicePart.MetaData = SmokeSessionMetaDataDto.FromModel(session?.MetaData);
+                result.PlaceDevices.Add(devicePart);
+            }
+
+            return result;
         }
 
         public Address ParseGoogleResult(GuigleAPI.Model.Address googleAddress)

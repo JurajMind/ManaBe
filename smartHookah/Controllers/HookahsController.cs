@@ -9,6 +9,7 @@ using Accord;
 using smartHookah.Helpers;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.SmokeSession;
 using smartHookahCommon;
 using smartHookah.Support;
 
@@ -22,11 +23,13 @@ namespace smartHookah.Controllers
         private readonly SmartHookahContext db;
 
         private readonly IRedisService redisService;
+        private readonly ISmokeSessionBgService smokeSessionBgService;
 
-        public HookahsController(SmartHookahContext db, IRedisService redisService)
+        public HookahsController(SmartHookahContext db, IRedisService redisService, ISmokeSessionBgService smokeSessionBgService)
         {
             this.db = db;
             this.redisService = redisService;
+            this.smokeSessionBgService = smokeSessionBgService;
         }
 
         // GET: Hookahs
@@ -176,7 +179,7 @@ namespace smartHookah.Controllers
         [HttpPost]
         [ActionName("CreateBatch")]
         [Authorize(Roles = "Admin")]
-        public ActionResult CreateBatchPost(CreateBatchModel model)
+        public async Task<ActionResult> CreateBatchPost(CreateBatchModel model)
         {
             var person = db.Persons.Find(model.PersonId);
 
@@ -184,7 +187,7 @@ namespace smartHookah.Controllers
 
             if (person == null || modelStand == null || model.StartIndex > model.EndIndex)
                 return RedirectToAction("CreateBatch");
-
+            var deviceCodes = new List<string>();
             for (int i = model.StartIndex; i < model.EndIndex +1; i++)
             {
                 var hookah = new Hookah(modelStand);
@@ -194,9 +197,16 @@ namespace smartHookah.Controllers
                 hookah.Owners.Add(person);
 
                 db.Hookahs.Add(hookah);
+                deviceCodes.Add(hookah.Code);
             }
 
             db.SaveChanges();
+
+
+            foreach (var device in deviceCodes)
+            {
+                await this.smokeSessionBgService.InitSmokeSession(device);
+            }
 
             return RedirectToAction("ShowGear","Person",new {id = person.Id});
         }
