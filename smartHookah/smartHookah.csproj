@@ -890,6 +890,7 @@
     <Compile Include="Filters\ApiExceptionFilter.cs" />
     <Compile Include="Filters\ClientIdFilter.cs" />
     <Compile Include="Helpers\Formaters\ShortIsoDateFormatConverter.cs" />
+    <Compile Include="Helpers\GeographyExtensions.cs" />
     <Compile Include="Helpers\ModelExtensions\SmokeSessionPufExtension.cs" />
     <Compile Include="Mappers\ViewModelMappers\Person\IPersonIndexViewModelMapper.cs" />
     <Compile Include="Mappers\ViewModelMappers\Person\PersonIndexViewModelMapper.cs" />
