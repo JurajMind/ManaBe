@@ -28,7 +28,7 @@ namespace smartHookah.Controllers.Api
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
-
+    using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Models.Dto;
     using smartHookah.Services.Place;
@@ -119,7 +119,7 @@ namespace smartHookah.Controllers.Api
                 if(address.Lat == null)
                     continue;
 
-               var location =  DbGeography.FromText($"POINT({address.Lat} {address.Lng})");
+               var location = GeographyExtensions.CreatePoint(address.Lat, address.Lng);
                address.Location = location;
                this.db.Addresses.AddOrUpdate(address);
             }
@@ -130,7 +130,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, float? lat = null, float? lng = null,float radius = 50)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, double? lat = null, double? lng = null,float radius = 50)
         {
             var validate = this.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
@@ -139,12 +139,12 @@ namespace smartHookah.Controllers.Api
 
             var result = new NearbyPlacesDto();
             
-
+            
             IQueryable<Place> closestPlaces;
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
             if (validate.HasValue)
             {
-                var myLocation = DbGeography.FromText($"POINT({lat} {lng})");
+                var myLocation = GeographyExtensions.CreatePoint(lat.Value, lng.Value);
 
                 closestPlaces = this.db.Places.Where(a => (a.Address.Location.Distance(myLocation) / 1000) < radius).OrderBy(a => a.Address.Location.Distance(myLocation))
                     .Skip(page * pageSize).Take(pageSize);
@@ -164,7 +164,7 @@ namespace smartHookah.Controllers.Api
             return result;
         }
 
-        private bool? ValidateCoordinates(float? lng, float? lat)
+        private bool? ValidateCoordinates(double? lng, double? lat)
         {
             if (!lat.HasValue && !lng.HasValue) return null;
 
