@@ -19,11 +19,15 @@ namespace smartHookah.Services.SmokeSession
             Func<Hookah, string> getCode);
 
         SmokeSessionStatistics GetStatistics(string id);
+
+        Task<ICollection<DbPuf>> GetSmokeSessionPufs(int id);
+
         SmokeSessionMetaData GetMetaData(int id);
         SmokeSessionMetaData GetSessionMetaData(string id);
         DeviceSetting GetStandSettings(string id);
         SmokeSession GetLiveSmokeSession(string sessionId);
         Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model);
+
 
         Task<SmokeSession> EndSmokeSession(string id, SessionReport source);
         

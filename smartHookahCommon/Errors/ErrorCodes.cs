@@ -25,5 +25,7 @@ namespace smartHookahCommon.Errors
         public static string WrongDay = "WRONG_DATE";
 
         public static string UpdateError = "UPDATE_ERROR";
+
+        public static string SessionNotFound = "SESSION_NOT_FOUND";
     }
 }

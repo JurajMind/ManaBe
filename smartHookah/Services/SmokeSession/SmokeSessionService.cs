@@ -9,6 +9,8 @@ using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Models.Db;
 using smartHookah.Services.Device;
 using smartHookah.Services.Redis;
+using smartHookahCommon.Exceptions;
+using smartHookahCommon.Errors;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -140,6 +142,18 @@ namespace smartHookah.Services.SmokeSession
                 this.db.Database.ExecuteSqlCommand("update SmokeSession set StorePath = @p0 where id = @p1", storePath, smokeSession.Id);
        
             }
+        }
+
+        public async Task<ICollection<DbPuf>> GetSmokeSessionPufs(int id)
+        {
+            var session = await this.db.SmokeSessions.FindAsync(id);
+
+            if(session == null)
+            {
+                throw new ManaException(ErrorCodes.SessionNotFound, $"Session with id {id} not found");
+            }
+
+            return session.DbPufs;
         }
     }
 }

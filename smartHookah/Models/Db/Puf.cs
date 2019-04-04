@@ -14,6 +14,14 @@ namespace smartHookah.Models.Db
         { }
 
 
+        public Puf(DbPuf s)
+        {
+            DateTime = s.DateTime;
+            Milis = s.Milis;
+            Presure = s.Presure;
+            Type = s.Type;
+        }
+
         public Puf(string smokeSessionId, PufType s, DateTime pufTime)
         {
             DateTime = pufTime;
