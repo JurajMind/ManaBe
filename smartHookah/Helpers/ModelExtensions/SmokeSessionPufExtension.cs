@@ -51,12 +51,9 @@ namespace smartHookah.Helpers.ModelExtensions
                 {
                     sessionDbPuf.SmokeSession = null;
                 }
-                List<Puf> pufs = session.DbPufs.ToList().Select(s =>new Puf()
+                List<Puf> pufs = session.DbPufs.ToList().Select(s =>new Puf(s)
                 {
-                    DateTime = s.DateTime,
-                    Milis =  s.Milis,
-                    Presure = s.Presure,
-                    Type = s.Type
+                   
                 }).ToList();
 
                 var json = JsonConvert.SerializeObject(pufs,new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });

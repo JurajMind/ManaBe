@@ -18,6 +18,7 @@ namespace smartHookah.Controllers.Api
     using smartHookah.ErrorHandler;
     using smartHookah.Services.Gear;
     using smartHookah.Services.Redis;
+    using System.Collections.Generic;
 
     [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController
@@ -119,6 +120,14 @@ namespace smartHookah.Controllers.Api
                 var err = new HttpError(e.Message);
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
             }
+        }
+
+        [HttpGet, Route("GetPufs")]
+        public async Task<IList<Puf>> GetPufs(int id)
+        {
+            var pufs = await this.sessionService.GetSmokeSessionPufs(id);
+
+            return pufs.Select(p => new Puf(p)).ToList();
         }
 
         #endregion
