@@ -104,7 +104,7 @@
                                 vm.$data.disabled = false;
                             } else {
                                 vm.$data.disabled = true;
-                                alert("Fill tobacco in metadata section first.\nNejdříve vyplňte tabák v informacích.");
+                              //  alert("Fill tobacco in metadata section first.\nNejdříve vyplňte tabák v informacích.");
                             }
                         }
                     });
@@ -156,7 +156,7 @@
             },
 
             getSessionId: function () {
-                return $("input[name='smokeSessionId']").val();
+                return $("input[name='sessionId']").val();
             }
         }
     });

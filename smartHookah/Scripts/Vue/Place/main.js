@@ -33,12 +33,12 @@ Vue.component('hookah-componet-public',
 
 Vue.component('stats-componet',
     {
-        props: ['stats', 'item', 'now'],
+        props: ['item', 'now'],
         computed: {
             // a computed getter
             sessionDuration: function() {
                 // `this` points to the vm instance
-                var start = moment.utc(this.stats.Start, 'DD-MM-YYYY HH:mm').local();
+                var start = moment.utc(this.item.DynamicSmokeStatisticDto.Start, 'DD-MM-YYYY HH:mm').local();
 
                 if (start.year() === 1)
                     return "";
@@ -50,11 +50,14 @@ Vue.component('stats-componet',
             },
             lastPuf: function() {
                 // `this` points to the vm instance
-                var lastPuf = moment.utc(this.stats.LastPufTime, 'DD-MM-YYYY HH:mm:ss').local();
+                var lastPuf = moment.utc(this.item.DynamicSmokeStatisticDto.LastPufTime, 'DD-MM-YYYY HH:mm:ss').local();
 
                 if (lastPuf.year() === 1)
                     return "";
                 return lastPuf.from(this.now);
+            },
+            stats: function() {
+                return this.item.DynamicSmokeStatisticDto;
             }
         },
         template: `
@@ -63,7 +66,7 @@ Vue.component('stats-componet',
         <tr>
             <td><strong># of pufs</strong></td>
             <td class="pufCount">
-                {{ stats.PufCount }} /   {{ item.EstPufCount - stats.PufCount }}
+                {{ stats.PufCount }} /   {{ item.EstPufCount  }}
             </td>
         </tr>
         <tr>
