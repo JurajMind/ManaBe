@@ -249,5 +249,14 @@ namespace smartHookah.Services.Person
             var userId = this.user.Identity.GetUserIdUni(this.db);
             return userId;
         }
+
+        public string GetCode()
+        {
+            var code = smartHookahCommon.Support.Random.RandomString(20);
+            var userIdentity = this.user.Identity.GetUserId();     
+
+            this.redisService.StorePersonCode(userIdentity, code);
+            return code;
+        }
     }
 }

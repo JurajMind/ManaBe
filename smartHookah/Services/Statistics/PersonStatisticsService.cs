@@ -79,7 +79,7 @@ namespace smartHookah.Services.Statistics
                 AddAccessoryToUsage(person, result, session, smokeSession => smokeSession.MetaData.Coal);
                 AddAccessoryToUsage(person, result, session, smokeSession => smokeSession.MetaData.HeatManagement);
                 AddAccessoryToUsage(person, result, session, smokeSession => smokeSession.MetaData.Pipe);
-                AddAccessoryToUsage(person, result, session, smokeSession => smokeSession.MetaData.Tobacco);
+                AddTobaccoUssage(person, result, session);
             }
 
             return result;
@@ -105,6 +105,54 @@ namespace smartHookah.Services.Statistics
             else
             {
                 result.Find(a => a.Id == getTypedAccesory(session).Id).Used++;
+            }
+        }
+
+        private static void AddTobaccoUssage(Models.Db.Person person, List<PipeAccessoryUsageDto> result, Models.Db.SmokeSession session)
+        {
+            List<Tobacco> usedTobaccos = new List<Tobacco>();
+            var inMix = false;
+            if (session.MetaData.Tobacco is TobaccoMix mix)
+            {
+                usedTobaccos.AddRange(mix.Tobaccos.Select(s => s.Tobacco));
+                inMix = true;
+            }
+            else
+            {
+                if (session.MetaData.Tobacco != null)
+                {
+                    usedTobaccos.Add(session.MetaData.Tobacco);
+                }
+            }
+
+            foreach (var usedTobacco in usedTobaccos)
+            {
+
+                if (result.All(a => a.Id != usedTobacco.Id))
+                {
+                    var ownedAccessories = person.OwnedPipeAccesories.ToList();
+                    var bowl = new PipeAccessoryUsageDto()
+                    {
+                        Id = usedTobacco.Id,
+                        Type = usedTobacco.GetTypeName(),
+                        AccName = usedTobacco.AccName,
+                        BrandName = usedTobacco.Brand.DisplayName,
+                        Used = 1,
+                        Owned = ownedAccessories.Any(a => a.PipeAccesoryId == usedTobacco.Id),
+                        InMix = inMix ? 1 : 0
+
+                    };
+                    result.Add(bowl);
+                }
+                else
+                {
+                    var match = result.Find(a => a.Id == usedTobacco.Id);
+                    match.Used++;
+                    if (inMix)
+                    {
+                        match.InMix++;
+                    }
+                }
             }
         }
 
