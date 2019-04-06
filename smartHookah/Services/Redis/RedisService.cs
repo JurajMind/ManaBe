@@ -21,6 +21,7 @@ namespace smartHookah.Services.Redis
         public const string UpdateKey = "update:{0}";
         public const string BrandKey = "brand:{0}";
         public const string PersonNotificationKey = "person_notification:{0}";
+        public const string PersonCodeKey = "person:code:{0}";
     }
 
     public class RedisService : IRedisService
@@ -293,6 +294,31 @@ namespace smartHookah.Services.Redis
         private string GetNamespacedKey(string key)
         {
             return $"{this.configService.Enviroment}:{key}";
+        }
+
+        private string GetNamespacedKey(string key, params string[] values)
+        {
+            var formated = String.Format(key, values);
+            return this.GetNamespacedKey(formated);
+        }
+
+        public void StorePersonCode(string userId, string code)
+        {
+            var key = GetNamespacedKey(RedisKeys.PersonCodeKey, code);
+            using (var redis = redisManager.GetClient())
+            {
+                redis.Add<string>(key, userId);
+                redis.ExpireEntryAt(key, DateTime.Now.AddMinutes(20));
+            }
+        }
+
+        public string GetPerson(string code)
+        {
+            var key = GetNamespacedKey(RedisKeys.PersonCodeKey, code);
+            using (var redis = redisManager.GetClient())
+            {
+               return redis.Get<string>(key);
+            }
         }
     }
 }

@@ -684,6 +684,9 @@ namespace smartHookah.Controllers
 
             if (person == null || !place.Managers.Contains(person)) return this.RedirectToAction("Index");
 
+            var externalCode = this.personService.GetCode();
+            ViewBag.ExternalCode = externalCode;
+
             return this.View(place);
         }
 

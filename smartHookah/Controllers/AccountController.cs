@@ -22,6 +22,7 @@ namespace smartHookah.Controllers
     using Newtonsoft.Json.Linq;
 
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     [Authorize]
     public class AccountController : Controller
@@ -34,15 +35,18 @@ namespace smartHookah.Controllers
 
         private readonly IPersonService personService;
 
+        private readonly IRedisService redisService;
+
         private readonly IAccountService accountService;
 
         private readonly SmartHookahContext db;
 
-        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService, SmartHookahContext db)
+        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService,IRedisService redisService, SmartHookahContext db)
         {
             this.owinContext = owinContext;
             this.personService = personService;
             this.accountService = accountService;
+            this.redisService = redisService;
             this.db = db;
         }
 
@@ -539,7 +543,7 @@ namespace smartHookah.Controllers
                 verifyTokenEndPoint = string.Format(
                     "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}",
                     accessToken);
-            }
+            }            
             else
             {
                 return null;
@@ -598,6 +602,15 @@ namespace smartHookah.Controllers
                 return null;
 
                 // return BadRequest("Provider or external access token is not sent");
+            }
+
+            if(provider == "Manapipes")
+            {
+                var userId = this.redisService.GetPerson(externalAccessToken);
+                var manaUser = this.UserManager.FindById(userId);
+                var accessTokenResponseMana = this.accountService.GenerateLocalAccessTokenResponse(manaUser, this.UserManager);
+
+                return await accessTokenResponseMana;
             }
 
             var verifiedAccessToken = await this.VerifyExternalAccessToken(provider, externalAccessToken);
