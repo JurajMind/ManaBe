@@ -28,24 +28,27 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Owned")]
         public bool Owned { get; set; }
 
-/*        public static PipeAccessoryUsageDto FromModel(PipeAccesory model) => model == null
-            ? null
-            : new PipeAccessoryUsageDto
-            {
-                Id = model.Id,
-                AccName = model.AccName,
-                Type = model.GetTypeName(),
-                Used = model.Statistics.Used,
-                BrandName = model.Brand.DisplayName
-            };
+        [DataMember, JsonProperty("InMix")]
+        public int InMix { get; set; }
 
-        public static IEnumerable<PipeAccessoryUsageDto> FromModelList(IEnumerable<PipeAccesory> model)
-        {
-            if (model == null) yield break;
-            foreach (var item in model)
-            {
-                yield return FromModel(item);
-            }
-        } */
+        /*        public static PipeAccessoryUsageDto FromModel(PipeAccesory model) => model == null
+                    ? null
+                    : new PipeAccessoryUsageDto
+                    {
+                        Id = model.Id,
+                        AccName = model.AccName,
+                        Type = model.GetTypeName(),
+                        Used = model.Statistics.Used,
+                        BrandName = model.Brand.DisplayName
+                    };
+
+                public static IEnumerable<PipeAccessoryUsageDto> FromModelList(IEnumerable<PipeAccesory> model)
+                {
+                    if (model == null) yield break;
+                    foreach (var item in model)
+                    {
+                        yield return FromModel(item);
+                    }
+                } */
     }
 }
