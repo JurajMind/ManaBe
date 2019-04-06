@@ -52,11 +52,12 @@ namespace smartHookah.Controllers
         /// <param name="db">
         ///     The db.
         /// </param>
-        public PlacesController(SmartHookahContext db, IPersonService personService, ISmokeSessionService sessionService)
+        public PlacesController(SmartHookahContext db, IPersonService personService, ISmokeSessionService sessionService, IRedisService redisService)
         {
             this.db = db;
             this.personService = personService;
             this.sessionService = sessionService;
+            this.redisService = redisService;
         }
 
         public ActionResult AddMedia(int id)
