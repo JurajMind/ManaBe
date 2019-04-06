@@ -22,6 +22,7 @@ namespace smartHookah.Controllers
     using Newtonsoft.Json.Linq;
 
     using smartHookah.Services.Person;
+    using smartHookah.Services.Redis;
 
     [Authorize]
     public class AccountController : Controller
@@ -33,6 +34,8 @@ namespace smartHookah.Controllers
         private readonly IOwinContext owinContext;
 
         private readonly IPersonService personService;
+
+        private readonly IRedisService redisService;
 
         private readonly IAccountService accountService;
 
@@ -539,7 +542,7 @@ namespace smartHookah.Controllers
                 verifyTokenEndPoint = string.Format(
                     "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}",
                     accessToken);
-            }
+            }            
             else
             {
                 return null;
@@ -600,6 +603,15 @@ namespace smartHookah.Controllers
                 // return BadRequest("Provider or external access token is not sent");
             }
 
+            if(provider == "Manapipes")
+            {
+                var userId = this.redisService.GetPerson(externalAccessToken);
+                var manaUser = this.UserManager.FindById(userId);
+                var accessTokenResponseMana = this.accountService.GenerateLocalAccessTokenResponse(manaUser, this.UserManager);
+
+                return await accessTokenResponseMana;
+            }
+
             var verifiedAccessToken = await this.VerifyExternalAccessToken(provider, externalAccessToken);
             if (verifiedAccessToken == null)
             {
@@ -626,6 +638,11 @@ namespace smartHookah.Controllers
             return await accessTokenResponse;
         }
 
+
+        private ApplicationUser GetManaUser(string externalAccessToken)
+        {
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
