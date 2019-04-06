@@ -140,7 +140,15 @@ namespace smartHookah.Services.Person
 
             foreach (var device in devices)
             {
-                device.OnlineState = onlineState[device.Code];
+                if (onlineState.TryGetValue(device.Code, out var state))
+                {
+                    device.OnlineState = state;
+                }
+                else
+                {
+
+                }
+              
             }
 
             return devices;
