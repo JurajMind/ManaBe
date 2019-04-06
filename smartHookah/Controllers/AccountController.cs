@@ -41,11 +41,12 @@ namespace smartHookah.Controllers
 
         private readonly SmartHookahContext db;
 
-        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService, SmartHookahContext db)
+        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService,IRedisService redisService, SmartHookahContext db)
         {
             this.owinContext = owinContext;
             this.personService = personService;
             this.accountService = accountService;
+            this.redisService = redisService;
             this.db = db;
         }
 
@@ -638,11 +639,6 @@ namespace smartHookah.Controllers
             return await accessTokenResponse;
         }
 
-
-        private ApplicationUser GetManaUser(string externalAccessToken)
-        {
-
-        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
