@@ -5,10 +5,6 @@ namespace smartHookah.Services.Person
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
-
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
 
     using smartHookah.Models;
 
@@ -42,5 +38,8 @@ namespace smartHookah.Services.Person
         
         bool IsPlaceManager(int placeId);
         void AddNotificationToken(string token);
+
+        string GetCode();
+        
     }
 }

@@ -20,8 +20,11 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("MetaData")]
         public SmokeSessionMetaDataDto MetaData { get; set; }
 
-        [DataMember, JsonProperty("Place")]
-        public PlaceSimpleDto Place { get; set; }
+        [DataMember, JsonProperty("PlaceId")]
+        public int? PlaceId { get; set; }
+
+        [DataMember, JsonProperty("PlaceName")]
+        public string PlaceName { get; set; }
 
         public static SmokeSessionSimpleDto FromModel(SmokeSession model)
         {
@@ -42,7 +45,8 @@ namespace smartHookah.Models.Dto
                 SessionId = model.SessionId,
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
-                Place = PlaceSimpleDto.FromModel(model.Place),
+                PlaceId = model.Place?.Id,
+                PlaceName = model.Place?.Name,
                 Statistic = statistic
             };
         }

@@ -46,5 +46,9 @@ namespace smartHookah.Services.Redis
         IList<string> GetBrands(string prefix);
 
         void StoreBrands(IList<string> brands);
+
+        void StorePersonCode(string userId, string code);
+
+        string GetPerson(string code);
     }
 }
