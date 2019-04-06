@@ -253,10 +253,9 @@ namespace smartHookah.Services.Person
         public string GetCode()
         {
             var code = smartHookahCommon.Support.Random.RandomString(20);
-            var userIdentity = this.user.Identity.GetUserId();
-            var userId = this.user.Identity.GetUserIdUni(this.db);
+            var userIdentity = this.user.Identity.GetUserId();     
 
-            this.redisService.StorePersonCode(userId, code);
+            this.redisService.StorePersonCode(userIdentity, code);
             return code;
         }
     }
