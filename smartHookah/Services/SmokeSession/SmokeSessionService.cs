@@ -77,6 +77,19 @@ namespace smartHookah.Services.SmokeSession
             return session.MetaData;
         }
 
+        public (SmokeSessionStatistics,SmokeSessionMetaData) GetFinishedData(int id)
+        {
+            var session = db.SmokeSessions
+                .Include(a => a.MetaData).Include(a => a.Statistics)
+                .FirstOrDefault(a => a.Id == id);
+            if (session == null)
+            {
+                throw new ManaException(ErrorCodes.SessionNotFound,$"Session id {id} not found or it has no metadata.");
+            }
+
+            return (session?.Statistics, session?.MetaData);
+        }
+
 
         public DeviceSetting GetStandSettings(string id)
         {
@@ -153,7 +166,7 @@ namespace smartHookah.Services.SmokeSession
                 throw new ManaException(ErrorCodes.SessionNotFound, $"Session with id {id} not found");
             }
 
-            return session.DbPufs;
+            return session.Pufs;
         }
     }
 }
