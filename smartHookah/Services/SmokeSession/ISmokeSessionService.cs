@@ -32,5 +32,7 @@ namespace smartHookah.Services.SmokeSession
         Task<SmokeSession> EndSmokeSession(string id, SessionReport source);
         
         void StoreOldPufs();
+
+        (SmokeSessionStatistics, SmokeSessionMetaData) GetFinishedData(int id);
     }
 }
