@@ -57,6 +57,7 @@ namespace smartHookah.Models.Dto
                 HaveReservation = model.HaveReservation,
                 HaveMana = model.HaveMana,
                 HaveOrders = model.HaveOrders,
+                HaveMenu = model.HaveMenu,
                 Rating = model.Rating,
                 MinimumReservationTime = model.MinimumReservationTime,
                 FranchiseId = model.FranchiseId,
