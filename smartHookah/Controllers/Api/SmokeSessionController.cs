@@ -3,15 +3,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.SmokeSession;
-
-using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
@@ -120,6 +115,18 @@ namespace smartHookah.Controllers.Api
                 var err = new HttpError(e.Message);
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, err));
             }
+        }
+
+        [HttpGet, Route("GetFinishedData")]
+        public FinishedSessionDataDto GetFinishedData(int id)
+        {
+            var data = this.sessionService.GetFinishedData(id);
+
+            return new FinishedSessionDataDto()
+            {
+                MetaData = SmokeSessionMetaDataDto.FromModel(data.Item2),
+                Statistics = SmokeSessionStatisticsDto.FromModel(data.Item1)
+            };
         }
 
         [HttpGet, Route("GetPufs")]

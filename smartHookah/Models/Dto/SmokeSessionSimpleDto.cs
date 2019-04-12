@@ -8,6 +8,9 @@ namespace smartHookah.Models.Dto
     [DataContract]
     public class SmokeSessionSimpleDto
     {
+        [DataMember, JsonProperty("Id")]
+        public int Id { get; set; }
+
         [DataMember, JsonProperty("SessionId")]
         public string SessionId { get; set; }
 
@@ -42,6 +45,7 @@ namespace smartHookah.Models.Dto
             }
             return new SmokeSessionSimpleDto()
             {
+                Id = model.Id,
                 SessionId = model.SessionId,
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),

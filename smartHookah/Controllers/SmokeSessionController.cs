@@ -395,8 +395,14 @@ namespace smartHookah.Controllers
 
 
             SetMetadata(model, dbSession.MetaData);
+            var personCount = 0;
+            try
+            {
+                personCount = dbSession?.Persons.Count ?? 0;
+            }
+            catch { }
 
-            dbSession.MetaData.AnonymPeopleCount = model.PersonCount - dbSession.Persons.Count;
+            dbSession.MetaData.AnonymPeopleCount = model.PersonCount - personCount;
 
             //Online Session
             if (!dbSession.DbPufs.Any() && dbSession.MetaData.Tobacco != null && dbSession.Hookah != null)
