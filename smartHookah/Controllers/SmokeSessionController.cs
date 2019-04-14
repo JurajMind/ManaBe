@@ -305,10 +305,10 @@ namespace smartHookah.Controllers
                 return false;
 
             var person = this.personService.GetCurentPerson();
-
+          
             if (person == null)
                 return false;
-
+            var cotnextPersson = this._db.Persons.Find(person.Id);
             if (User.IsInRole("Admin") && !manual)
                 return false;
 
@@ -317,8 +317,9 @@ namespace smartHookah.Controllers
                 if (session.IsPersonAssign(person.Id))
                     return false;
 
-                session.Persons.Add(person);
-
+                session.Persons.Add(cotnextPersson);
+             
+                
                 _db.SmokeSessions.AddOrUpdate(session);
                 await _db.SaveChangesAsync();
 
@@ -327,7 +328,7 @@ namespace smartHookah.Controllers
             if (!session.IsPersonAssign(person.Id))
                 return false;
 
-            session.Persons.Remove(person);
+            session.Persons.Remove(cotnextPersson);
 
             _db.SmokeSessions.AddOrUpdate(session);
             await _db.SaveChangesAsync();
