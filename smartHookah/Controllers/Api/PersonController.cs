@@ -66,6 +66,26 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet]
+        [ApiAuthorize, Route("Sessions")]
+        public async Task<ICollection<SmokeSessionSimpleDto>> GetPersonSessions()
+        {
+            var person = this.personService.GetCurentPerson();
+
+            if (person == null)
+            {
+                throw new HttpResponseException(
+                    this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Person not logged"));
+            }
+
+            var personId = person.Id;
+            var sessions = this.personService.GetUserActiveSessions(personId)
+                .Select(SmokeSessionSimpleDto.FromModel)
+                .ToList();
+
+            return sessions;
+        }
+
+        [HttpGet]
         [ApiAuthorize, Route("Devices")]
         public async Task<List<DeviceSimpleDto>> GetPersonDevices()
         {
