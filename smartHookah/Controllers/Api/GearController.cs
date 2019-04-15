@@ -102,6 +102,14 @@ namespace smartHookah.Controllers.Api
             return this.redisService.GetBrands(prefix).ToList();
         }
 
+        [HttpGet, System.Web.Http.Route("{id}/Sessions")]
+        [ApiAuthorize]
+        public List<SmokeSessionSimpleDto> Sessions(int id,int pageSize = 100,int page = 0)
+        {
+            return this.gearService.UsedInSession(id, pageSize, 0).Select(SmokeSessionSimpleDto.FromModel)
+                .ToList();
+        }
+
         #endregion
 
         [HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]

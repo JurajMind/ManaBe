@@ -13,6 +13,8 @@ using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 using smartHookah.Services.Search;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Gear
 {
@@ -173,6 +175,27 @@ namespace smartHookah.Services.Gear
                 new SqlParameter("RowspPage", pageSize)).ToList();
 
             return result;
+        }
+
+        public ICollection<Models.Db.SmokeSession> UsedInSession(int accessoryId, int pageSize, int page)
+        {
+            var accessory = this.db.PipeAccesories.Find(accessoryId);
+
+            if (accessory == null)
+                throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory with id {accessoryId} was not found");
+
+            var person = this.personService.GetCurentPerson();
+
+            var sessions = this.db.SmokeSessions.Include(a => a.MetaData).Include(a => a.Persons).Where(a =>
+                a.MetaData != null &&
+                (a.MetaData.TobaccoId == accessoryId
+                 || a.MetaData.BowlId == accessoryId
+                 || a.MetaData.TobaccoId == accessoryId
+                 || a.MetaData.PipeId == accessoryId
+                 || a.MetaData.HeatManagementId == accessoryId
+                 || a.MetaData.CoalId == accessoryId)).Where(a => a.Persons.Any(p => p.Id == person.Id)).OrderByDescending(a => a.Id).Skip(pageSize * page).Take(pageSize);
+
+            return sessions.ToList();
         }
 
         public int UsedByPerson(PipeAccesory accessory, int personId)
