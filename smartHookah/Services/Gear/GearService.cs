@@ -4,15 +4,11 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using Accord.Math;
-using ClosedXML.Excel;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using Microsoft.VisualStudio.Services.Common;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Person;
-using smartHookah.Services.Search;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 
@@ -75,7 +71,8 @@ namespace smartHookah.Services.Gear
         public PipeAccesory GetPipeAccessory(int id)
         {
             var accessory = db.PipeAccesories.Find(id);
-            if(accessory == null) throw new KeyNotFoundException($"Accessory with id {id} not found.");
+            if (accessory == null)
+                throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory with id {id} was not found");
             return accessory;
         }
         
@@ -179,10 +176,7 @@ namespace smartHookah.Services.Gear
 
         public ICollection<Models.Db.SmokeSession> UsedInSession(int accessoryId, int pageSize, int page)
         {
-            var accessory = this.db.PipeAccesories.Find(accessoryId);
-
-            if (accessory == null)
-                throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory with id {accessoryId} was not found");
+            var accessory = this.GetPipeAccessory(accessoryId);
 
             var person = this.personService.GetCurentPerson();
 
@@ -261,6 +255,7 @@ namespace smartHookah.Services.Gear
 
             return result;
         }
+
 
         public int OwnedByPersons(PipeAccesory accessory)
         {

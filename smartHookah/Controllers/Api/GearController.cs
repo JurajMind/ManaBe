@@ -110,6 +110,13 @@ namespace smartHookah.Controllers.Api
                 .ToList();
         }
 
+        [HttpGet, System.Web.Http.Route("{id}/Info")]
+        [ApiAuthorize]
+        public PipeAccesorySimpleDto Info(int id)
+        {
+            return PipeAccesorySimpleDto.FromModel(this.gearService.GetPipeAccessory(id));
+        }
+
         #endregion
 
         [HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
