@@ -50,5 +50,7 @@ namespace smartHookah.Services.Redis
         void StorePersonCode(string userId, string code);
 
         string GetPerson(string code);
+
+        void RemoveSession(string sessionId);
     }
 }

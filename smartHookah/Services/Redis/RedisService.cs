@@ -99,6 +99,16 @@ namespace smartHookah.Services.Redis
             }
         }
 
+        public void RemoveSession(string sessionId)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                var key = String.Format(RedisKeys.SessionKey, sessionId);
+                var value = GetNamespacedKey(key);
+                redis.Remove(value);
+            }
+        }
+
         public DynamicSmokeStatistic GetDynamicSmokeStatistic(string sessionId)
         {
             using (var redis = this.redisManager.GetClient())
