@@ -111,6 +111,8 @@ namespace smartHookah.Models.Db
 
         public DbSet<NotificationToken> NotificationTokens { get; set; }
 
+        public DbSet<FeatureMixCreator> FeatureMixCreators { get; set; }
+
         public static SmartHookahContext Create()
         {
             return new SmartHookahContext();
@@ -179,11 +181,24 @@ namespace smartHookah.Models.Db
                     });
 
 
+            modelBuilder.Entity<FeatureMixCreator>().HasMany(s => s.Followers).WithMany(h => h.FollowedMixCreators).Map(
+                cs =>
+                {
+                    cs.MapLeftKey("FeatureMixCreatorRefId");
+                    cs.MapRightKey("PersonRefId");
+                    cs.ToTable("FeatureMixCreatorFollow");
+                });
+            
+            modelBuilder.Entity<Person>().HasMany(s => s.Friends).WithRequired(s => s.A).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Person>().HasMany(s => s.Friends).WithRequired(s => s.B).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FeatureMixCreator>().HasRequired(a => a.Person).WithOptional(a => a.FeatureMixCreator);
+
             modelBuilder.Entity<Person>().HasOptional(a => a.GameProfile).WithRequired(a => a.Person);
 
             modelBuilder.Entity<Person>().HasMany(s => s.OwnedPipeAccesories).WithRequired(a => a.Person);
 
-            modelBuilder.Entity<Brand>().HasMany(s => s.PipeAccesories).WithRequired(a => a.Brand);
+            modelBuilder.Entity<Brand>().HasMany(s => s.PipeAccessories).WithRequired(a => a.Brand);
 
             modelBuilder.Entity<SmokeSession>().HasOptional(a => a.Review).WithOptionalDependent();
 

@@ -32,6 +32,8 @@ namespace smartHookah.Models.Db
 
         public virtual ICollection<PlaceDay> PlaceDays { get; set; }
 
+        public virtual ICollection<SocialMedia> SocialMedias { get; set; }
+
         public int? PersonId { get; set; }
 
         public virtual Person Person { get; set; }

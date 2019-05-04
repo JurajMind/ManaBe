@@ -120,7 +120,7 @@ namespace smartHookah.Controllers.Api
                     query = order.ToLower() == "asc" ? from a in query orderby a.DisplayName ascending select a : from a in query orderby a.DisplayName descending select a;
                     break;
                 case "count":
-                    query = order.ToLower() == "asc" ? from a in query orderby a.PipeAccesories.Count(x => x is TobaccoMix) ascending select a : from a in query orderby a.PipeAccesories.Count(x => x is TobaccoMix) descending select a;
+                    query = order.ToLower() == "asc" ? from a in query orderby a.PipeAccessories.Count(x => x is TobaccoMix) ascending select a : from a in query orderby a.PipeAccessories.Count(x => x is TobaccoMix) descending select a;
                     break;
                 default:
                     throw new ManaException(ErrorCodes.WrongOrderField, "Invalid OrderBy value, select \"name\" or \"count\".");
@@ -140,7 +140,7 @@ namespace smartHookah.Controllers.Api
                         Name = m.Name,
                         DisplayName = m.DisplayName,
                         Picture = m.Picture,
-                        MixCount = m.PipeAccesories.Count(a => a is TobaccoMix)
+                        MixCount = m.PipeAccessories.Count(a => a is TobaccoMix)
                     };
 
                     result.MixCreatorsList.Add(creator);

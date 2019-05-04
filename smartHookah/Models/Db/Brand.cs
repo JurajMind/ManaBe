@@ -24,7 +24,11 @@ namespace smartHookah.Models.Db
 
         public bool TobaccoMixBrand { get; set; }
 
-        public virtual ICollection<PipeAccesory> PipeAccesories { get; set; }
+        public virtual ICollection<PipeAccesory> PipeAccessories { get; set; }
+
+        public virtual ICollection<SocialMedia> SocialMedias { get; set; }
+        public virtual ICollection<Media> Medias { get; set; }
+
 
         public string DisplayName { get; set; }
 

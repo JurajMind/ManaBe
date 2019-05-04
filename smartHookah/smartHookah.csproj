@@ -884,6 +884,20 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
+    <Compile Include="Controllers\Api\FeatureMixController.cs" />
+    <Compile Include="Migrations\201905041206426_features.cs" />
+    <Compile Include="Migrations\201905041206426_features.Designer.cs">
+      <DependentUpon>201905041206426_features.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905041218487_brand-media.cs" />
+    <Compile Include="Migrations\201905041218487_brand-media.Designer.cs">
+      <DependentUpon>201905041218487_brand-media.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\FeatureMixCreator.cs" />
+    <Compile Include="Models\Db\Friendship.cs" />
+    <Compile Include="Models\Db\SocialMedia.cs" />
+    <Compile Include="Models\Dto\BrandDto.cs" />
+    <Compile Include="Models\Dto\FeatureMixCreatorDto.cs" />
     <Compile Include="Models\Dto\FinishedSessionDataDto.cs" />
     <Compile Include="Controllers\Api\PlaceImportModel.cs" />
     <Compile Include="Controllers\Api\ReservationController.cs" />
@@ -941,8 +955,8 @@
     <Compile Include="Models\Dto\DTO.cs" />
     <Compile Include="Models\Dto\IMessageDto.cs" />
     <Compile Include="Models\Dto\Places\PlaceDashboardDto.cs" />
-    <Compile Include="Models\Dto\ReservationDetailDto.cs" />
-    <Compile Include="Models\Dto\Reservations\TimeSlot.cs" />
+    <Compile Include="Models\Dto\Places\Reservations\ReservationDetailDto.cs" />
+    <Compile Include="Models\Dto\Places\Reservations\TimeSlot.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.cs" />
     <Compile Include="Migrations\201810292025307_namedSetting.Designer.cs">
       <DependentUpon>201810292025307_namedSetting.cs</DependentUpon>
@@ -1002,8 +1016,8 @@
     <Compile Include="Models\Dto\PersonStatisticsOverallDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryDetailsDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryUsageDto.cs" />
-    <Compile Include="Models\Dto\PlaceMenuDto.cs" />
-    <Compile Include="Models\Dto\ReservationDto.cs" />
+    <Compile Include="Models\Dto\Places\PlaceMenuDto.cs" />
+    <Compile Include="Models\Dto\Places\Reservations\ReservationDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionStatisticsDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionTimeStatisticsDto.cs" />
     <Compile Include="Models\Factory\BrandFactory.cs" />
@@ -1013,6 +1027,8 @@
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
+    <Compile Include="Services\FeatureMix\FeatureMixService.cs" />
+    <Compile Include="Services\FeatureMix\IFeatureMixService.cs" />
     <Compile Include="Services\Messages\FirebaseNotificationService.cs" />
     <Compile Include="Services\Messages\IFirebaseNotificationService.cs" />
     <Compile Include="Services\Search\ISearchService.cs" />
@@ -1060,7 +1076,7 @@
     <Compile Include="Models\Dto\InitDataDto.cs" />
     <Compile Include="Models\Dto\PipeAccesorySimpleDto.cs" />
     <Compile Include="Models\Dto\PipeAccessoryStatisticsDto.cs" />
-    <Compile Include="Models\Dto\PlaceDto.cs" />
+    <Compile Include="Models\Dto\Places\PlaceDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionMetaDataDto.cs" />
     <Compile Include="Models\Dto\TobaccoSimpleDto.cs" />
     <Compile Include="Models\Dto\SmokeSessionSimpleDto.cs" />
@@ -1145,6 +1161,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903310737489_notificationTokens.resx">
       <DependentUpon>201903310737489_notificationTokens.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905041206426_features.resx">
+      <DependentUpon>201905041206426_features.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905041218487_brand-media.resx">
+      <DependentUpon>201905041218487_brand-media.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

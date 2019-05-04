@@ -192,6 +192,13 @@ namespace smartHookah.Services.Gear
             return sessions.ToList();
         }
 
+        public async Task<Brand> GetBrand(string brandName)
+        {
+            var brand = await this.db.Brands.FindAsync(brandName);
+
+            return brand;
+        }
+
         public int UsedByPerson(PipeAccesory accessory, int personId)
         {
             var person = personService.GetCurentPerson(personId);

@@ -62,6 +62,13 @@ namespace smartHookah.Controllers.Api
             return this.gearService.GetBrands();
         }
 
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("Brand/{brandName}")]
+        public async Task<BrandDto> GetBrand(string brandName)
+        {
+            var brand = await this.gearService.GetBrand(brandName);
+            return BrandDto.FromModel(brand);
+        }
+
         [HttpGet, ApiAuthorize, System.Web.Http.Route("{id}/Detail")]
         public PipeAccessoryDetailsDto GetDetails(int id)
         {

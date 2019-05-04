@@ -235,12 +235,12 @@ namespace smartHookah.Controllers
             switch (type)
             {
                 case "bowl":
-                    return Json(new { names = brans.PipeAccesories.Where(a => a is Bowl).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
+                    return Json(new { names = brans.PipeAccessories.Where(a => a is Bowl).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
 
                 case "pipe":
-                    return Json(new { names = brans.PipeAccesories.Where(a => a is Pipe).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
+                    return Json(new { names = brans.PipeAccessories.Where(a => a is Pipe).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
                 case "tobacco":
-                    return Json(new { names = brans.PipeAccesories.Where(a => a is Tobacco).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
+                    return Json(new { names = brans.PipeAccessories.Where(a => a is Tobacco).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { names = new List<string>() {"None"} }, JsonRequestBehavior.AllowGet);
@@ -255,22 +255,22 @@ namespace smartHookah.Controllers
             switch (type)
             {
                 case "bowl":
-                    items = brans.PipeAccesories.Where(a => a is Bowl).OrderBy(a => a.AccName).ToList();
+                    items = brans.PipeAccessories.Where(a => a is Bowl).OrderBy(a => a.AccName).ToList();
                     break;
 
                 case "pipe":
-                    items = brans.PipeAccesories.Where(a => a is Pipe).OrderBy(a => a.AccName).ToList();
+                    items = brans.PipeAccessories.Where(a => a is Pipe).OrderBy(a => a.AccName).ToList();
                     break;
                 case "tobacco":
-                    items = brans.PipeAccesories.Where(a => a is Tobacco).OrderBy(a => a.AccName).ToList();
+                    items = brans.PipeAccessories.Where(a => a is Tobacco).OrderBy(a => a.AccName).ToList();
                     break;
 
                 case "heatmanagement":
-                    items = brans.PipeAccesories.Where(a => a is HeatManagment).OrderBy(a => a.AccName).ToList();
+                    items = brans.PipeAccessories.Where(a => a is HeatManagment).OrderBy(a => a.AccName).ToList();
                     break;
 
                 case "coal":
-                    items = brans.PipeAccesories.Where(a => a is Coal).OrderBy(a => a.AccName).ToList();
+                    items = brans.PipeAccessories.Where(a => a is Coal).OrderBy(a => a.AccName).ToList();
                     break;
             }
 
@@ -378,7 +378,7 @@ namespace smartHookah.Controllers
                         {
                             continue;
                         }
-                        var pipeAccesory = brand.PipeAccesories.EmptyIfNull().FirstOrDefault(a => a.AccName != null && a.AccName.ToUpper() == record.Name.ToUpper());
+                        var pipeAccesory = brand.PipeAccessories.EmptyIfNull().FirstOrDefault(a => a.AccName != null && a.AccName.ToUpper() == record.Name.ToUpper());
                         if (pipeAccesory != null)
                         {
                             importInformation.ImportedAccesories.Add(pipeAccesory);

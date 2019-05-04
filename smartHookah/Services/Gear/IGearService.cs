@@ -43,6 +43,8 @@ namespace smartHookah.Services.Gear
 
         ICollection<Models.Db.SmokeSession> UsedInSession(int accessoryId, int pageSize, int page);
 
+        Task<Brand> GetBrand(string brandName);
+
     }
 
     public class GearFilter
