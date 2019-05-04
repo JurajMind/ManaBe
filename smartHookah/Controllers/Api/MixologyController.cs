@@ -206,6 +206,23 @@ namespace smartHookah.Controllers.Api
             return TobaccoMixSimpleDto.FromModel(result);
         }
 
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("RenameMix/{id}")]
+        public async Task<TobaccoMixSimpleDto> RenameMix(int id, string newName)
+        {
+            var mix = await this.db.PipeAccesories.FindAsync(id);
+            if (mix == null)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    "Mix is null"));
+            }
+
+            mix.AccName = newName;
+            this.db.PipeAccesories.AddOrUpdate(mix);
+            await this.db.SaveChangesAsync();
+            return TobaccoMixSimpleDto.FromModel(mix as TobaccoMix);
+        }
+
         [System.Web.Http.HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
         public HttpResponseMessage Vote(int id, [FromBody] int value)
         {

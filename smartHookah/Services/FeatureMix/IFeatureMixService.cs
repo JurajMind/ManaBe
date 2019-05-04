@@ -7,7 +7,7 @@ namespace smartHookah.Services.FeatureMix
     {
         FeatureMixCreator GetFeatureMixCreator(int id);
 
-        IList<FeatureMixCreator> GetFeatureMixCreators();
+        IList<FeatureMixCreator> GetFeatureMixCreators(int page, int pageSize , string orderBy, string order);
 
         IList<FeatureMixCreator> GetFollowedMixCreators();
 
@@ -16,5 +16,7 @@ namespace smartHookah.Services.FeatureMix
         void RemoveFollow(int creatorId);
 
         void CreateFeatureMixCreatorFromOld();
+
+        IList<PipeAccesory> GetCreatorMixes(int creatorId, int page, int pageSize, string orderBy, string order);
     }
 }

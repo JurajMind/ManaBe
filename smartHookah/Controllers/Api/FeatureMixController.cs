@@ -20,9 +20,9 @@ namespace smartHookah.Controllers.Api
 
 
         [Route("FeatureCreators")]
-        public List<FeatureMixCreatorDto> GetFeatureMixCreators()
+        public List<FeatureMixCreatorSimpleDto> GetFeatureMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
-            return FeatureMixCreatorDto.FromModelList(this.featureMixService.GetFeatureMixCreators()).ToList();
+            return FeatureMixCreatorSimpleDto.FromModelList(this.featureMixService.GetFeatureMixCreators(page,pageSize,orderBy,order)).ToList();
         }
 
         [Route("FeatureCreator/{id}")]
@@ -31,10 +31,16 @@ namespace smartHookah.Controllers.Api
             return FeatureMixCreatorDto.FromModel(this.featureMixService.GetFeatureMixCreator(id));
         }
 
-        [Route("FollowedCreators")]
-        public List<FeatureMixCreatorDto> GetFollowedCreators()
+        [Route("Mixes/{id}")]
+        public List<PipeAccesorySimpleDto> GetMixes(int id,int page,int pageSize,string orderBy,string order)
         {
-            return FeatureMixCreatorDto.FromModelList(this.featureMixService.GetFollowedMixCreators()).ToList();
+            return PipeAccesorySimpleDto.FromModelList(this.featureMixService.GetCreatorMixes(id,page,pageSize,orderBy,order)).ToList();
+        }
+
+        [Route("FollowedCreators")]
+        public List<FeatureMixCreatorSimpleDto> GetFollowedCreators()
+        {
+            return FeatureMixCreatorSimpleDto.FromModelList(this.featureMixService.GetFollowedMixCreators()).ToList();
         }
 
         [Route("Follow/{id}")]
