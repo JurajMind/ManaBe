@@ -25,21 +25,23 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Tobaccos")]
         public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
+        public bool MyMix { get; set; }
+
         public TobaccoMixSimpleDto()
         {
             this.Tobaccos = new List<TobaccoInMix>();
         }
 
-        public static IEnumerable<TobaccoMixSimpleDto> FromModelList(ICollection<TobaccoMix> model)
+        public static IEnumerable<TobaccoMixSimpleDto> FromModelList(ICollection<TobaccoMix> model, int? personId)
         {
             if (model == null) yield break;
             foreach (var item in model)
             {
-                yield return FromModel(item);
+                yield return FromModel(item, personId);
             }
         }
 
-        public static TobaccoMixSimpleDto FromModel(TobaccoMix model)
+        public static TobaccoMixSimpleDto FromModel(TobaccoMix model, int? personId)
         {
             return model == null
                 ? null
@@ -50,6 +52,7 @@ namespace smartHookah.Models.Dto
                     BrandName = model.Brand.Name,
                     BrandId = model.BrandName,
                     Type = "TobaccoMix",
+                    MyMix = personId != null && model.AuthorId == personId,
                     Tobaccos = model.Tobaccos.Select(
                         a => new TobaccoInMix()
                         {

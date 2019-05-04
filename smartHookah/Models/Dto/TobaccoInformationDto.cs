@@ -90,7 +90,7 @@ namespace smartHookah.Models.Dto
 
             return new TobaccoMixInformationDto()
             {
-                TobaccoMix = TobaccoMixSimpleDto.FromModel(tobaccoMix),
+                TobaccoMix = TobaccoMixSimpleDto.FromModel(tobaccoMix, null),
                 TobaccosTastes = tastes,
                 AllTobaccoMixStats = PipeAccessoryStatisticsDto.FromModel(allStats),
                 PersonTobaccoMixStats = PipeAccessoryStatisticsDto.FromModel(personStats)

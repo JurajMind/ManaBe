@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
-using Microsoft.Azure.Amqp.Framing;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Gear;
@@ -18,15 +16,8 @@ namespace smartHookah.Controllers.Api
     using System.Data.Entity;
     using System.Net;
     using System.Net.Http;
-
-    using DocumentFormat.OpenXml.Office2010.Excel;
-
     using log4net;
-
-    using MaxMind.GeoIP2.Exceptions;
-
     using smartHookah.ErrorHandler;
-    using smartHookah.Migrations;
     using smartHookah.Services.Person;
 
     [System.Web.Http.RoutePrefix("api/Mixology")]
@@ -102,8 +93,8 @@ namespace smartHookah.Controllers.Api
             query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
 
             var res = query.ToList();
-
-            return TobaccoMixSimpleDto.FromModelList(res);
+            var person = this.personService.GetCurentPerson();
+            return TobaccoMixSimpleDto.FromModelList(res,person.Id);
         }
 
         [System.Web.Http.HttpGet]
@@ -157,7 +148,7 @@ namespace smartHookah.Controllers.Api
             try
             {
                 var mix = await tobaccoService.GetTobaccoMix(id);
-                return TobaccoMixSimpleDto.FromModel(mix);
+                return TobaccoMixSimpleDto.FromModel(mix,this.personService.GetCurentPerson()?.Id);
             }
             catch (Exception e)
             {
@@ -203,24 +194,30 @@ namespace smartHookah.Controllers.Api
             }
             TobaccoMix newMixModel = TobaccoMixSimpleDto.ToModel(newMix);
             var result = await this.tobaccoService.AddOrUpdateMix(newMixModel);
-            return TobaccoMixSimpleDto.FromModel(result);
+            return TobaccoMixSimpleDto.FromModel(result, this.personService.GetCurentPerson()?.Id);
         }
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("RenameMix/{id}")]
         public async Task<TobaccoMixSimpleDto> RenameMix(int id, string newName)
         {
-            var mix = await this.db.PipeAccesories.FindAsync(id);
+            var mix = await this.db.PipeAccesories.FindAsync(id) as TobaccoMix;
             if (mix == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
                     "Mix is null"));
             }
 
+            var person = this.personService.GetCurentPerson();
+            if(mix.AuthorId != person.Id)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                    "Only author can rename mix"));
+            }
             mix.AccName = newName;
             this.db.PipeAccesories.AddOrUpdate(mix);
             await this.db.SaveChangesAsync();
-            return TobaccoMixSimpleDto.FromModel(mix as TobaccoMix);
+            return TobaccoMixSimpleDto.FromModel(mix as TobaccoMix, this.personService.GetCurentPerson()?.Id);
         }
 
         [System.Web.Http.HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
@@ -249,6 +246,13 @@ namespace smartHookah.Controllers.Api
         {
             var mix = this.db.TobaccoMixs.Find(mixId);
             if(mix == null) return new DTO(){ Success = false, Message = $"Mix with id {mixId} not found." };
+            var person = this.personService.GetCurentPerson();
+            if (mix.AuthorId != person.Id)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                    "Only author can remove  mix"));
+            }
+
             try
             {
                 if (mix.Statistics != null && mix.Statistics.Used > 0)
