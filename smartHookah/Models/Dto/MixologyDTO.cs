@@ -25,6 +25,7 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Tobaccos")]
         public ICollection<TobaccoInMix> Tobaccos { get; set; }
 
+        [DataMember, JsonProperty("MyMix")]
         public bool MyMix { get; set; }
 
         public TobaccoMixSimpleDto()
