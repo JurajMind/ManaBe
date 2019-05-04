@@ -81,7 +81,7 @@ namespace smartHookah.Controllers.Api
                 {
                     OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
                     Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
-                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes).ToList(),
+                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes,null).ToList(),
                     PriceGroup = priceGroups,
                     BasePrice = place.BaseHookahPrice,
                     PriceMatrix = priceMatrix.Select(s => new PriceGroupItems{GroupId = s.Key,Prices = s.Value}).ToList(),

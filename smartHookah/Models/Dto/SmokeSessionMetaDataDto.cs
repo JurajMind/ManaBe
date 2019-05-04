@@ -63,7 +63,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 TobaccoId = model.TobaccoId,
                 Tobacco = model.Tobacco == null ? null : PipeAccesorySimpleDto.FromModel(model.Tobacco),
-                TobaccoMix = TobaccoMixSimpleDto.FromModel(model.Tobacco as TobaccoMix),
+                TobaccoMix = TobaccoMixSimpleDto.FromModel(model.Tobacco as TobaccoMix,null),
                 TobaccoWeight = model.TobaccoWeight,
                 AnonymPeopleCount = model.AnonymPeopleCount,
                 BowlId = model.BowlId,
