@@ -44,6 +44,9 @@ namespace smartHookah.Models.Db
             get { return Places.FirstOrDefault(); }
         }
 
+        public virtual  int? FeatureMixCreatorId { get; set; }
+        public virtual FeatureMixCreator FeatureMixCreator { get; set; }
+
         [NotMapped]
         public bool IsPlace
         {
@@ -82,6 +85,10 @@ namespace smartHookah.Models.Db
         public virtual PersonStatistic Statistic { get; set; }
 
         public virtual ICollection<NotificationToken> NotificationTokens { get; set; }
+
+        public virtual ICollection<FeatureMixCreator> FollowedMixCreators { get; set; }
+
+        public virtual ICollection<Friendship> Friends { get; set; }
 
         public bool Gdpr { get; set; }
 
