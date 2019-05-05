@@ -42,7 +42,9 @@ namespace smartHookah.Models.Dto
         public bool HaveOrders { get; set; }
 
         public bool HaveMana { get; set; }
-        
+
+        public bool HaveReservation { get; set; }
+
         public PlaceSimpleDto()
         {
             Address = new AddressDto();
@@ -65,6 +67,7 @@ namespace smartHookah.Models.Dto
             HaveMenu = model.HaveMenu,
             HaveOrders = model.HaveOrders,
             HaveMana = model.HaveMana,
+            HaveReservation = model.HaveReservation,
             Rating = model.Rating
         };
 
