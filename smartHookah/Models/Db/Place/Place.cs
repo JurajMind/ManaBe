@@ -42,8 +42,6 @@ namespace smartHookah.Models.Db
 
         public string Facebook { get; set; }
 
-        public string Instagram { get; set; }
-
         public string Url { get; set; }
 
         public decimal BaseHookahPrice { get; set; }
@@ -79,6 +77,8 @@ namespace smartHookah.Models.Db
         public bool Public { get; set; }
 
         public PlaceSrc Src { get; set; }
+
+        public PlaceState State { get; set; }
 
         public virtual ICollection<PlaceFlag> PlaceFlags { get; set; }
 
@@ -131,6 +131,13 @@ namespace smartHookah.Models.Db
         Import,
         Person,
         Place
+    }
+
+    public enum PlaceState
+    {
+        Active = 1,
+        Blocked  = 2,
+        Waiting  = 0,
     }
 
     public class PlaceFlag

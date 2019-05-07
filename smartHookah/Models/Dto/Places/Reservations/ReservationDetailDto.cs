@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using Newtonsoft.Json;
 
-namespace smartHookah.Models.Dto
+namespace smartHookah.Models.Dto.Places.Reservations
 {
     [DataContract]
     public class ReservationDetailDto
