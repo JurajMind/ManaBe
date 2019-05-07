@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using smartHookah.Models.Dto.Places.Reservations;
 
 namespace smartHookah.Models.Dto
 {

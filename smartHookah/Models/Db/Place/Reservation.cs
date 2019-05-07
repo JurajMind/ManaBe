@@ -28,7 +28,7 @@ namespace smartHookah.Models.Db
 
         public DateTime Time { get; set; }
 
-        public int? Late { get; set; }
+        public int? LateDuration { get; set; }
 
         public ReservationSrc Src { get; set; }
 
