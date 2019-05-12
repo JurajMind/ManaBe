@@ -233,11 +233,16 @@ namespace smartHookah.Services.Person
         public void AddNotificationToken(string token)
         {
             var person = this.GetCurentPerson();
-            person.NotificationTokens.Add(new NotificationToken
+            if (person.NotificationTokens.Count(s => s.Token == token) > 0)
             {
-                Token = token
+                return;
+            }
+
+            this.db.NotificationTokens.Add(new NotificationToken
+            {
+                Token = token,
+                PersonId = person.Id
             });
-            this.db.Persons.AddOrUpdate(person);
             this.db.SaveChanges();
         }
 

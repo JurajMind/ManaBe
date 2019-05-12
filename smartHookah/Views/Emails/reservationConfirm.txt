@@ -22,7 +22,7 @@
                                     Jméno:
                                 </td>
                                 <td>
-                                    @reservation.Person.Name
+                                  @reservation.Person.Name ?? @reservation.Name
                                 </td>
                             </tr>
                             <tr>

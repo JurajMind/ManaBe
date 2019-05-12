@@ -77,7 +77,7 @@ namespace smartHookah.Models.Dto.Places.Reservations
                 PlaceId = dto.PlaceId,
                 Status = (ReservationState)dto.Status,
                 Seats = new List<Seat>(),
-                LateDuration = dto.LateDuration
+                LateDuration = dto.LateDuration,
             };
         }
 
