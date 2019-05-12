@@ -897,6 +897,10 @@
     <Compile Include="Migrations\201905071226284_reservation-late-fix.Designer.cs">
       <DependentUpon>201905071226284_reservation-late-fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905121317595_cleanToken.cs" />
+    <Compile Include="Migrations\201905121317595_cleanToken.Designer.cs">
+      <DependentUpon>201905121317595_cleanToken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Db\Person\FeatureMixCreator.cs" />
     <Compile Include="Models\Db\Person\Friendship.cs" />
     <Compile Include="Models\Db\NotificationToken.cs" />
@@ -1180,6 +1184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905071226284_reservation-late-fix.resx">
       <DependentUpon>201905071226284_reservation-late-fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905121317595_cleanToken.resx">
+      <DependentUpon>201905121317595_cleanToken.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

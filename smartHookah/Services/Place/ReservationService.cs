@@ -74,13 +74,18 @@ namespace smartHookah.Services.Place
 
         public async Task<ReservationDto> CreateReservation(ReservationDto reservation)
         {
+            var person = personService.GetCurentPerson();
             reservation.PersonId = personService.GetCurentPerson().Id;
             reservation.Created = DateTime.UtcNow;
             reservation.Started = null;
             var modelReservation = ReservationDto.ToModel(reservation);
             modelReservation.Status = ReservationState.ConfirmationRequired;
-
-
+            modelReservation.Customers = new List<Models.Db.Person>();
+            if (person.Place?.Id != person.Id || person.Id == 1)
+            {
+                modelReservation.Customers = new List<Models.Db.Person>(){person};
+            }
+            modelReservation.Customers.Add(personService.GetCurentPerson());
             var check = await AllocateSeat(modelReservation);
             if (check != null)
             {

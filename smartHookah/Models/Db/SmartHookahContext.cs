@@ -109,9 +109,9 @@ namespace smartHookah.Models.Db
 
         public DbSet<Franchise> Franchises { get; set; }
 
-        public DbSet<NotificationToken> NotificationTokens { get; set; }
-
         public DbSet<FeatureMixCreator> FeatureMixCreators { get; set; }
+
+        public DbSet<NotificationToken> NotificationTokens { get; set; }
 
         public static SmartHookahContext Create()
         {
