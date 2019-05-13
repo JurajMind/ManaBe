@@ -27,5 +27,7 @@ namespace smartHookahCommon.Errors
         public static string UpdateError = "UPDATE_ERROR";
 
         public static string SessionNotFound = "SESSION_NOT_FOUND";
+
+        public static string AccessoryNotFound = "ACCESORY_NOT_FOUND";
     }
 }

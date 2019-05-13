@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Models.Dto.Reservations;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Person;
@@ -73,13 +74,17 @@ namespace smartHookah.Services.Place
 
         public async Task<ReservationDto> CreateReservation(ReservationDto reservation)
         {
+            var person = personService.GetCurentPerson(this.db);
             reservation.PersonId = personService.GetCurentPerson().Id;
             reservation.Created = DateTime.UtcNow;
             reservation.Started = null;
             var modelReservation = ReservationDto.ToModel(reservation);
             modelReservation.Status = ReservationState.ConfirmationRequired;
-
-
+            modelReservation.Customers = new List<Models.Db.Person>();
+            if (person.Place?.Id != person.Id || person.Id == 1)
+            {
+                modelReservation.Customers = new List<Models.Db.Person>(){ person };
+            }
             var check = await AllocateSeat(modelReservation);
             if (check != null)
             {
@@ -252,7 +257,7 @@ namespace smartHookah.Services.Place
                                               DbFunctions.TruncateTime(a.Time) <= to);
         }
 
-        public async Task AddLateTime(int id, int time)
+        public async Task<Reservation> AddLateTime(int id, int time)
         {
             var reservation = await db.Reservations.FindAsync(id);
 
@@ -262,12 +267,13 @@ namespace smartHookah.Services.Place
                 throw new ManaException(ErrorCodes.ReservationNotFound, $"Reservation with id {id} was not found");
             }
 
-            reservation.Late = reservation.Late + time;
+            reservation.LateDuration = time;
 
             this.db.Reservations.AddOrUpdate(reservation);
             this._signalNotificationService.ReservationChanged(reservation);
 
             await this.db.SaveChangesAsync();
+            return reservation;
         }
 
         public async Task<Reservation> GetReservation(int id)
@@ -394,6 +400,22 @@ namespace smartHookah.Services.Place
             
             await db.SaveChangesAsync();
             _signalNotificationService.ReservationChanged(reservation);
+            return reservation;
+        }
+
+        public async Task<Reservation> UpdateLateDuration(int id, int lateDuration)
+        {
+            var reservation = await this.db.Reservations.FindAsync(id);
+
+            if (reservation == null)
+            {
+                // Bad reservation
+                throw new ManaException(ErrorCodes.ReservationNotFound, $"Reservation with id {id} was not found");
+            }
+
+            reservation.LateDuration = lateDuration;
+            this.db.Reservations.AddOrUpdate(reservation);
+            await this.db.SaveChangesAsync();
             return reservation;
         }
 

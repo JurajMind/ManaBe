@@ -1,4 +1,5 @@
 ﻿using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Places.Reservations;
 
 namespace smartHookah.Services.Messages
 {

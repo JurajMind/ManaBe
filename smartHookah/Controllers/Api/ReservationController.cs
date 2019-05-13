@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Models.Dto.Reservations;
 using smartHookah.Support;
 
@@ -32,22 +33,22 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet, Route("Person")]
-        public IEnumerable<ReservationDto> GetPersonReservations()
+        public IEnumerable<Models.Dto.Places.Reservations.ReservationDto> GetPersonReservations()
         {
             var reservations = this.reservationService.GetPersonReservations();
-            foreach (var item in reservations) yield return ReservationDto.FromModel(item);
+            foreach (var item in reservations) yield return Models.Dto.Places.Reservations.ReservationDto.FromModel(item);
         }
 
         [HttpGet, Route("Reservations")]
         [ApiAuthorize]
-        public IEnumerable<ReservationDto> GetReservations(DateTime from, DateTime to)
+        public IEnumerable<Models.Dto.Places.Reservations.ReservationDto> GetReservations(DateTime from, DateTime to)
         {
             var reservations = this.reservationService.GetReservations(from,to);
-            foreach (var item in reservations) yield return ReservationDto.FromModel(item);
+            foreach (var item in reservations) yield return Models.Dto.Places.Reservations.ReservationDto.FromModel(item);
         }
 
         [HttpPost, Route("Create")]
-        public async Task<ReservationDto> Create(ReservationDto reservation)
+        public async Task<Models.Dto.Places.Reservations.ReservationDto> Create(Models.Dto.Places.Reservations.ReservationDto reservation)
         {
             DateTime convertedDate = DateTime.SpecifyKind(
               reservation.Time,
@@ -82,9 +83,9 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{id}/AddLateTime")]
-        public async Task AddLateTime(int id, [FromBody]int time)
+        public async Task<smartHookah.Models.Dto.Places.Reservations.ReservationDto> AddLateTime(int id, [FromBody]int time)
         {
-            await reservationService.AddLateTime(id, time);
+           return Models.Dto.Places.Reservations.ReservationDto.FromModel( await reservationService.AddLateTime(id, time));
         }
 
         [HttpPost, Route("{id}/Cancel")]
@@ -99,7 +100,7 @@ namespace smartHookah.Controllers.Api
             var reservation = await reservationService.GetReservation(id);
             return new ReservationDetailDto()
             {
-                Reservation = ReservationDto.FromModel(reservation),
+                Reservation = Models.Dto.Places.Reservations.ReservationDto.FromModel(reservation),
                 Orders = HookahOrderDto.FromModelList(reservation.Orders).ToList(),
                 Place = PlaceDto.FromModel(reservation.Place),
                 SmokeSessions = SmokeSessionSimpleDto.FromModelList(reservation.Orders.Select(a => a.SmokeSession).ToList()).ToList()
@@ -107,17 +108,17 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{id}/AddTable")]
-        public async Task<ReservationDto> AddTable(int id,[FromBody] int tableId)
+        public async Task<Models.Dto.Places.Reservations.ReservationDto> AddTable(int id,[FromBody] int tableId)
         {
             var reservation = await reservationService.AddTable(id,tableId);
-            return ReservationDto.FromModel(reservation);
+            return Models.Dto.Places.Reservations.ReservationDto.FromModel(reservation);
         }
 
         [HttpDelete, Route("{id}/RemoveTable")]
-        public async Task<ReservationDto> RemoveTable(int id, [FromBody]int tableId)
+        public async Task<Models.Dto.Places.Reservations.ReservationDto> RemoveTable(int id, [FromBody]int tableId)
         {
             var reservation = await reservationService.RemoveTable(id, tableId);
-            return ReservationDto.FromModel(reservation);
+            return Models.Dto.Places.Reservations.ReservationDto.FromModel(reservation);
         }
     }
 }
