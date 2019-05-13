@@ -50,6 +50,12 @@ namespace smartHookah.Services.Person
             return user?.Person;
         }
 
+        public Models.Db.Person GetCurentPerson(SmartHookahContext context)
+        {
+            var person = this.GetCurentPerson();
+            return context.Persons.Find(person.Id);
+        }
+
         public Models.Db.Person GetCurentPerson(int? personId, bool manage = false)
         {
             var userId = this.UserId();
@@ -233,11 +239,16 @@ namespace smartHookah.Services.Person
         public void AddNotificationToken(string token)
         {
             var person = this.GetCurentPerson();
-            person.NotificationTokens.Add(new NotificationToken
+            if (person.NotificationTokens.Count(s => s.Token == token) > 0)
             {
-                Token = token
+                return;
+            }
+
+            this.db.NotificationTokens.Add(new NotificationToken
+            {
+                Token = token,
+                PersonId = person.Id
             });
-            this.db.Persons.AddOrUpdate(person);
             this.db.SaveChanges();
         }
 

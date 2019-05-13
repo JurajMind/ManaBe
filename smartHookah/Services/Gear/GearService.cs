@@ -4,15 +4,13 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using Accord.Math;
-using ClosedXML.Excel;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using Microsoft.VisualStudio.Services.Common;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Person;
-using smartHookah.Services.Search;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Gear
 {
@@ -73,7 +71,8 @@ namespace smartHookah.Services.Gear
         public PipeAccesory GetPipeAccessory(int id)
         {
             var accessory = db.PipeAccesories.Find(id);
-            if(accessory == null) throw new KeyNotFoundException($"Accessory with id {id} not found.");
+            if (accessory == null)
+                throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory with id {id} was not found");
             return accessory;
         }
         
@@ -175,6 +174,31 @@ namespace smartHookah.Services.Gear
             return result;
         }
 
+        public ICollection<Models.Db.SmokeSession> UsedInSession(int accessoryId, int pageSize, int page)
+        {
+            var accessory = this.GetPipeAccessory(accessoryId);
+
+            var person = this.personService.GetCurentPerson();
+
+            var sessions = this.db.SmokeSessions.Include(a => a.MetaData).Include(a => a.Persons).Where(a =>
+                a.MetaData != null &&
+                (a.MetaData.TobaccoId == accessoryId
+                 || a.MetaData.BowlId == accessoryId
+                 || a.MetaData.TobaccoId == accessoryId
+                 || a.MetaData.PipeId == accessoryId
+                 || a.MetaData.HeatManagementId == accessoryId
+                 || a.MetaData.CoalId == accessoryId)).Where(a => a.Persons.Any(p => p.Id == person.Id)).OrderByDescending(a => a.Id).Skip(pageSize * page).Take(pageSize);
+
+            return sessions.ToList();
+        }
+
+        public async Task<Brand> GetBrand(string brandName)
+        {
+            var brand = await this.db.Brands.FindAsync(brandName);
+
+            return brand;
+        }
+
         public int UsedByPerson(PipeAccesory accessory, int personId)
         {
             var person = personService.GetCurentPerson(personId);
@@ -238,6 +262,7 @@ namespace smartHookah.Services.Gear
 
             return result;
         }
+
 
         public int OwnedByPersons(PipeAccesory accessory)
         {

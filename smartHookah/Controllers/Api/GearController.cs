@@ -62,6 +62,13 @@ namespace smartHookah.Controllers.Api
             return this.gearService.GetBrands();
         }
 
+        [HttpGet, ApiAuthorize, System.Web.Http.Route("Brand/{brandName}")]
+        public async Task<BrandDto> GetBrand(string brandName)
+        {
+            var brand = await this.gearService.GetBrand(brandName);
+            return BrandDto.FromModel(brand);
+        }
+
         [HttpGet, ApiAuthorize, System.Web.Http.Route("{id}/Detail")]
         public PipeAccessoryDetailsDto GetDetails(int id)
         {
@@ -100,6 +107,21 @@ namespace smartHookah.Controllers.Api
         public List<string> GetBrandsPrefix(string prefix)
         {
             return this.redisService.GetBrands(prefix).ToList();
+        }
+
+        [HttpGet, System.Web.Http.Route("{id}/Sessions")]
+        [ApiAuthorize]
+        public List<SmokeSessionSimpleDto> Sessions(int id,int pageSize = 100,int page = 0)
+        {
+            return this.gearService.UsedInSession(id, pageSize, 0).Select(SmokeSessionSimpleDto.FromModel)
+                .ToList();
+        }
+
+        [HttpGet, System.Web.Http.Route("{id}/Info")]
+        [ApiAuthorize]
+        public PipeAccesorySimpleDto Info(int id)
+        {
+            return PipeAccesorySimpleDto.FromModel(this.gearService.GetPipeAccessory(id));
         }
 
         #endregion
