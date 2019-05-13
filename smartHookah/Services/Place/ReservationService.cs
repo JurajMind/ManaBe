@@ -85,7 +85,6 @@ namespace smartHookah.Services.Place
             {
                 modelReservation.Customers = new List<Models.Db.Person>(){ person };
             }
-            modelReservation.Customers.Add(personService.GetCurentPerson());
             var check = await AllocateSeat(modelReservation);
             if (check != null)
             {
