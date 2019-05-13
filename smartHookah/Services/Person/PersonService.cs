@@ -50,6 +50,12 @@ namespace smartHookah.Services.Person
             return user?.Person;
         }
 
+        public Models.Db.Person GetCurentPerson(SmartHookahContext context)
+        {
+            var person = this.GetCurentPerson();
+            return context.Persons.Find(person.Id);
+        }
+
         public Models.Db.Person GetCurentPerson(int? personId, bool manage = false)
         {
             var userId = this.UserId();
