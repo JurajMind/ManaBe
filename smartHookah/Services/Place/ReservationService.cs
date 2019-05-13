@@ -74,7 +74,7 @@ namespace smartHookah.Services.Place
 
         public async Task<ReservationDto> CreateReservation(ReservationDto reservation)
         {
-            var person = personService.GetCurentPerson();
+            var person = personService.GetCurentPerson(this.db);
             reservation.PersonId = personService.GetCurentPerson().Id;
             reservation.Created = DateTime.UtcNow;
             reservation.Started = null;
@@ -83,7 +83,7 @@ namespace smartHookah.Services.Place
             modelReservation.Customers = new List<Models.Db.Person>();
             if (person.Place?.Id != person.Id || person.Id == 1)
             {
-                modelReservation.Customers = new List<Models.Db.Person>(){person};
+                modelReservation.Customers = new List<Models.Db.Person>(){ person };
             }
             modelReservation.Customers.Add(personService.GetCurentPerson());
             var check = await AllocateSeat(modelReservation);
