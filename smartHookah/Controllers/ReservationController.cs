@@ -571,6 +571,7 @@ namespace smartHookah.Controllers
             this.State = res.Status;
             this.Message = res.Text;
             this.TimeText = res.Time.TimeOfDay.ToString(@"hh\:mm");
+            this.LateText = (res.LateDuration != null ? "+ "+res.LateDuration.ToString()+" min" : "");
             this.StateText = res.Status.ToString().ToLower();
         }
 
@@ -583,6 +584,8 @@ namespace smartHookah.Controllers
         /// Gets or sets the time text.
         /// </summary>
         public string TimeText { get; set; }
+
+        public string LateText { get; set; }
 
         /// <summary>
         /// Gets or sets  reservation message
