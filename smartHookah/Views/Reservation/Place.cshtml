@@ -351,7 +351,7 @@
                 props: ["reservation", "selected", "selection"],
                 template:
                     `<div  v-on:click="onClick()" class="reservation" v-bind:class="[reservation.StateText,check ? 'selected' : '']">
-                                                            <div> <i class="fa fa-time"></i><b>{{reservation.TimeText}}&nbsp;{{duration }}.hod</b> &nbsp;
+                                                            <div> <i class="fa fa-time"></i><b>{{reservation.TimeText}}&nbsp;{{reservation.LateText}}&nbsp;{{duration }}.hod</b> &nbsp;
                                 {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}}
                                     <i v-if="reservation.Message" class="fa fa-comment"  data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
                                     </div>
@@ -360,7 +360,7 @@
                     `,
                 methods: {
                     onClick: function() {
-                     
+
                         this.selected.Reservation = this.reservation.Id;
                         this.selected.Persons = this.reservation.Persons;
                         this.selected.Name = this.reservation.Name;
@@ -370,17 +370,17 @@
                     }
                 },
                 computed: {
-                    check: function () {
-                      
+                    check: function() {
+
                         return this.selected.Reservation == this.reservation.Id;
 
                     },
                     duration: function() {
-                        return this.reservation.TimeSlots / 2;
-                    }
+                        return this.reservation.TimeSlots / 2.;
+                    },
+
                 },
 
-      
 
             });
 
@@ -391,7 +391,7 @@
                     `
             <td v-on:dragstart="dragStart($event)" v-on:dragend="dragEnd()" :draggable="check" v-bind:colspan="colSpan" v-if="display" class="timeSlot reservation taken" v-on:click="onTakenClick()" v-bind:class="[stateText,check ? 'selected' : '']">
                                  <div v-if="colSpan !== 0">
-                                {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} )
+                                {{reservation.Name}}&nbsp;<i class="fa fa-user"></i>{{reservation.Persons}} ({{table.Capacity - reservation.Persons}} ) {{reservation.LateText}}
                                     <i v-if="reservation.Message" class="fa fa-comment"  data-toggle="tooltip" data-placement="bottom" :title="reservation.Message"> </i>
                                         <div class="controlls" v-if="check && unconfirmed" >
                                         <i style="cursor:pointer" class="fa fa-check" v-on:click="confirmReservation()"></i>
@@ -655,7 +655,7 @@
 
                         }
                     });
-                   
+
                 },
                 addTable: function() {
                     this.AddTableMode = false;
