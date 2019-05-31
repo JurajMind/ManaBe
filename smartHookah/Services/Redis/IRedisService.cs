@@ -52,5 +52,11 @@ namespace smartHookah.Services.Redis
         string GetPerson(string code);
 
         void RemoveSession(string sessionId);
+
+        void AddCompetitionEntry(CompetitionEntry entry);
+
+        IList<CompetitionEntry> GetCompetitionEntries();
+
+        void CleanCompetition();
     }
 }

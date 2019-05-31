@@ -883,6 +883,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Controllers\Api\CompetitionController.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\FeatureMixController.cs" />
     <Compile Include="Migrations\201905041206426_features.cs" />
@@ -1036,6 +1037,7 @@
     <Compile Include="Models\Factory\BrandFactory.cs" />
     <Compile Include="Models\Factory\PipeAccesoryFactory.cs" />
     <Compile Include="Models\Db\Person\PersonStatistic.cs" />
+    <Compile Include="Models\Redis\CompetitionEntry.cs" />
     <Compile Include="Models\Redis\PipeAccessoryRedis.cs" />
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
