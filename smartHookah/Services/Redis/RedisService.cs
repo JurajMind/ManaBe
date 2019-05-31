@@ -22,6 +22,7 @@ namespace smartHookah.Services.Redis
         public const string BrandKey = "brand:{0}";
         public const string PersonNotificationKey = "person_notification:{0}";
         public const string PersonCodeKey = "person:code:{0}";
+        public const string CompetitionKey = "competition";
     }
 
     public class RedisService : IRedisService
@@ -106,6 +107,33 @@ namespace smartHookah.Services.Redis
                 var key = String.Format(RedisKeys.SessionKey, sessionId);
                 var value = GetNamespacedKey(key);
                 redis.Remove(value);
+            }
+        }
+
+        public void AddCompetitionEntry(CompetitionEntry entry)
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                var value = GetNamespacedKey(RedisKeys.CompetitionKey);
+                redis.As<CompetitionEntry>().Lists[value].Add(entry);
+            }
+        }
+
+        public void CleanCompetition()
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                var value = GetNamespacedKey(RedisKeys.CompetitionKey);
+                redis.As<CompetitionEntry>().Lists[value].RemoveAll();
+            }
+        }
+
+        public IList<CompetitionEntry> GetCompetitionEntries()
+        {
+            using (var redis = this.redisManager.GetClient())
+            {
+                var value = GetNamespacedKey(RedisKeys.CompetitionKey);
+                return redis.As<CompetitionEntry>().Lists[value];
             }
         }
 

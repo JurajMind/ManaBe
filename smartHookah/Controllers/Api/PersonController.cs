@@ -143,7 +143,10 @@ namespace smartHookah.Controllers.Api
         public async Task TestNotification()
         {
            await this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
-                $"Test notification {DateTime.Now.ToString("g")}", null);
+                $"Test notification", new Dictionary<string, string>()
+                {
+                    { "Date", DateTime.UtcNow.ToString() }
+                });
         }
 
 

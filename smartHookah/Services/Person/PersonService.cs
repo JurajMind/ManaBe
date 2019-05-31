@@ -175,6 +175,9 @@ namespace smartHookah.Services.Person
 
             foreach (var session in sessions)
             {
+                var hookahSessionCode = redisService.GetSessionId(session.Hookah.Code);
+                if(session.SessionId != hookahSessionCode)
+                    continue;
                 var ds = this.redisService.GetDynamicSmokeStatistic(session.SessionId);
                 var code = redisService.GetHookahId(session.SessionId);
                 if (code == null) continue;
