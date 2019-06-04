@@ -36,8 +36,5 @@ namespace smartHookah.Services.Device
 
         string GetUpdatePath(string deviceId, string token);
 
-        Task<Hookah> AddDevice(string deviceId);
-
-        Task<Hookah> RemoveDevice(string deviceId);
     }
 }
