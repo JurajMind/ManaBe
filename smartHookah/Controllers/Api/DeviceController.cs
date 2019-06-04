@@ -184,6 +184,22 @@ namespace smartHookah.Controllers.Api
             }
         }
 
+        [HttpPost, Route("{id}/Add")]
+        public async Task<DeviceSimpleDto> AddDevice(string id)
+        {
+            var added = await this.deviceService.AddDevice(id);
+            return DeviceSimpleDto.FromModel(added);
+        }
+
+        [HttpDelete, Route("{id}/Remove")]
+        public async Task<DeviceSimpleDto> RemoveDevice(string id)
+        {
+            var added = await this.deviceService.RemoveDevice(id);
+            return DeviceSimpleDto.FromModel(added);
+        }
+
+
+
 
     }
 }

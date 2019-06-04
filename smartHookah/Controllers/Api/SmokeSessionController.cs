@@ -161,6 +161,13 @@ namespace smartHookah.Controllers.Api
                 throw new HttpRequestException(e.Message);
             }
         }
+        
+        [HttpPost, Route("{id}/End")]
+        public async Task<int> EndSmokeSession(string id)
+        {
+            var endedESession =  await this.sessionService.EndSmokeSession(id,SessionReport.Good);
+            return endedESession.Id;
+        }
 
         #endregion
     }

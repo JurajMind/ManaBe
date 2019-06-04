@@ -28,7 +28,7 @@ namespace smartHookah.Services.Person
 
         Task<ICollection<Hookah>> GetUserDevices(int? personId);
 
-        ICollection<Models.Db.SmokeSession> GetUserActiveSessions(int? personId);
+        Task<ICollection<Models.Db.SmokeSession>> GetUserActiveSessions(int? personId);
 
         ICollection<Reservation> GetUserActiveReservations(int? personId);
 

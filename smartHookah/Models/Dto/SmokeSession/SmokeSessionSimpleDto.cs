@@ -11,6 +11,9 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("Id")]
         public int Id { get; set; }
 
+        [DataMember, JsonProperty("Live")]
+        public bool Live { get; set; }
+
         [DataMember, JsonProperty("SessionId")]
         public string SessionId { get; set; }
 
@@ -47,6 +50,7 @@ namespace smartHookah.Models.Dto
             {
                 Id = model.Id,
                 SessionId = model.SessionId,
+                Live =  model.StatisticsId == null,
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
                 PlaceId = model.Place?.Id,
