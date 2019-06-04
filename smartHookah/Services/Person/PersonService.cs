@@ -160,7 +160,7 @@ namespace smartHookah.Services.Person
             return devices;
         }
 
-        public ICollection<Models.Db.SmokeSession> GetUserActiveSessions(int? personId)
+        public async Task<ICollection<Models.Db.SmokeSession>> GetUserActiveSessions(int? personId)
         {
             if (personId == null)
             {
@@ -168,13 +168,17 @@ namespace smartHookah.Services.Person
                 personId = user.Id;
             }
 
-            var sessions = db.SmokeSessions.Where(a => a.Statistics == null)
+            var sessions = db.SmokeSessions.Include(h => h.Hookah).Include(a => a.Persons).Where(a => a.StatisticsId == null)
                 .Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
 
             var result = new List<Models.Db.SmokeSession>();
+            var devices = sessions.Select(d => d.Hookah.Code);
+
+            var onlineDevices = await this.deviceService.GetOnlineStates(devices);
 
             foreach (var session in sessions)
             {
+                var state = onlineDevices.TryGetValue(session.Hookah.Code, out var onlineState);
                 var hookahSessionCode = redisService.GetSessionId(session.Hookah.Code);
                 if(session.SessionId != hookahSessionCode)
                     continue;
@@ -182,6 +186,7 @@ namespace smartHookah.Services.Person
                 var code = redisService.GetHookahId(session.SessionId);
                 if (code == null) continue;
                 session.DynamicSmokeStatistic = ds;
+                session.Hookah.OnlineState = onlineState;
                 result.Add(session);
             }
 

@@ -35,5 +35,9 @@ namespace smartHookah.Services.Device
         Task<bool> UpdateDevice(int deviceId, int updateId, Models.Db.Person user, bool isAdmin);
 
         string GetUpdatePath(string deviceId, string token);
+
+        Task<Hookah> AddDevice(string deviceId);
+
+        Task<Hookah> RemoveDevice(string deviceId);
     }
 }

@@ -47,7 +47,7 @@ namespace smartHookah.Controllers.Api
             var personId = person.Id;
             var standTask = await this.personService.GetUserDevices(personId);
             var devices = standTask.Select(DeviceSimpleDto.FromModel).ToList();
-            var sessions = this.personService.GetUserActiveSessions(personId)
+            var sessions = (await this.personService.GetUserActiveSessions(personId))
                 .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
             var reservations = this.personService.GetUpcomingReservation(personId)
@@ -78,7 +78,7 @@ namespace smartHookah.Controllers.Api
             }
 
             var personId = person.Id;
-            var sessions = this.personService.GetUserActiveSessions(personId)
+            var sessions = (await this.personService.GetUserActiveSessions(personId))
                 .Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
 
