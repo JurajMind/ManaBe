@@ -88,12 +88,12 @@ namespace smartHookah.Helpers
     public struct Animation
     {
         public Animation(int id, string dispayName, AnimationUsage usage, int versionFrom = 1000000,
-            int versionto = 2000000)
+            int versionTo = 2000000)
         {
             Id = id;
             DisplayName = dispayName;
             VersionFrom = versionFrom;
-            VersionTo = versionto;
+            VersionTo = versionTo;
             Usage = usage;
         }
 

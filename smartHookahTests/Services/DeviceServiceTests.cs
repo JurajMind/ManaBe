@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
+using smartHookah.Services.Person;
 
 namespace smartHookahTests.Services
 {
@@ -54,14 +55,16 @@ namespace smartHookahTests.Services
             var iotMock = new Mock<IIotService>(MockBehavior.Strict);
 
             // On iotService, SendToMsg shoud be called with given params, returning task
-            iotMock.Setup(a => a.SendMsgToDevice(deviceId, $"led:{(int)state}{1}")).Returns(Task.FromResult(false));
+            iotMock.Setup(a => a.SendMsgToDevice(deviceId, $"led:{(int)state},{1},")).Returns(Task.FromResult(false));
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
+            notificationMock.Setup(s => s.SessionSettingsChanged(deviceId, It.IsAny<DeviceSetting>()));
+            var personMock = new Mock<IPersonService>(MockBehavior.Loose);
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
 
-            // Execute
+            // Executese
             await service.SetAnimation(deviceId, animation, state);
 
             // get "stored" setting value
@@ -107,8 +110,10 @@ namespace smartHookahTests.Services
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             // On iotService, SendToMsg shoud be called with given params, returning task
             var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
+            var personMock = new Mock<IPersonService>(MockBehavior.Loose);
+
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<NotSupportedException>(() => service.SetAnimation(deviceId, animation, state));
@@ -167,8 +172,9 @@ namespace smartHookahTests.Services
             // On iotService, SendToMsg shoud be called with given params, returning task
             var redisMock = new Mock<IRedisService>(MockBehavior.Strict);
             var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
+            var personMock = new Mock<IPersonService>(MockBehavior.Loose);
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => service.SetAnimation(deviceId, animation, state));
