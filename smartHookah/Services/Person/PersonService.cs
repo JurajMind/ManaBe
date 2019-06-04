@@ -1,5 +1,7 @@
 ﻿using System.Data.Entity.Migrations;
 using smartHookah.Models.Db;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Person
 {
@@ -276,6 +278,52 @@ namespace smartHookah.Services.Person
 
             this.redisService.StorePersonCode(userIdentity, code);
             return code;
+        }
+
+        public async Task<Hookah> AddDevice(string deviceId)
+        {
+            var person = this.GetCurentPerson();
+            var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+
+            if (device == null)
+            {
+                throw new ManaException(ErrorCodes.DeviceNotFound, $"Device id:{deviceId} was not found");
+            }
+
+            var owned = device.Owners.Count(a => a.Id == person.Id);
+
+            if (owned != 0)
+            {
+                throw new ManaException(ErrorCodes.DeviceAlreadyAdded, $"Device id:{deviceId} was already Added");
+            }
+
+            device.Owners.Add(person);
+            this.db.Hookahs.AddOrUpdate(device);
+            await this.db.SaveChangesAsync();
+            return device;
+        }
+
+        public async Task<Hookah> RemoveDevice(string deviceId)
+        {
+            var person = this.GetCurentPerson();
+            var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+
+            if (device == null)
+            {
+                throw new ManaException(ErrorCodes.DeviceNotFound, $"Device id:{deviceId} was not found");
+            }
+
+            var owned = device.Owners.Count(a => a.Id == person.Id);
+
+            if (owned == 0)
+            {
+                throw new ManaException(ErrorCodes.DeviceAlreadyAdded, $"Device id:{deviceId} not found on user");
+            }
+
+            device.Owners.Remove(person);
+            this.db.Hookahs.AddOrUpdate(device);
+            await this.db.SaveChangesAsync();
+            return device;
         }
     }
 }

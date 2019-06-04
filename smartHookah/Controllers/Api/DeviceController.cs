@@ -20,6 +20,8 @@ namespace smartHookah.Controllers.Api
 
         private readonly IDeviceSettingsPresetService deviceSettingsPresetService;
 
+        private readonly IPersonService personService;
+
         public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService)
         {
             this.deviceService = deviceService;
@@ -187,14 +189,14 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Add")]
         public async Task<DeviceSimpleDto> AddDevice(string id)
         {
-            var added = await this.deviceService.AddDevice(id);
+            var added = await this.personService.AddDevice(id);
             return DeviceSimpleDto.FromModel(added);
         }
 
         [HttpDelete, Route("{id}/Remove")]
         public async Task<DeviceSimpleDto> RemoveDevice(string id)
         {
-            var added = await this.deviceService.RemoveDevice(id);
+            var added = await this.personService.RemoveDevice(id);
             return DeviceSimpleDto.FromModel(added);
         }
 

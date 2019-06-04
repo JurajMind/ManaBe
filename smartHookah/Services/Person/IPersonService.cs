@@ -42,6 +42,11 @@ namespace smartHookah.Services.Person
         void AddNotificationToken(string token);
 
         string GetCode();
-        
+
+
+        Task<Hookah> AddDevice(string deviceId);
+
+        Task<Hookah> RemoveDevice(string deviceId);
+
     }
 }

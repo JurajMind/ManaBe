@@ -62,7 +62,7 @@ namespace smartHookahTests.Services
             var personMock = new Mock<IPersonService>(MockBehavior.Loose);
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
 
             // Executese
             await service.SetAnimation(deviceId, animation, state);
@@ -113,7 +113,7 @@ namespace smartHookahTests.Services
             var personMock = new Mock<IPersonService>(MockBehavior.Loose);
 
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<NotSupportedException>(() => service.SetAnimation(deviceId, animation, state));
@@ -174,7 +174,7 @@ namespace smartHookahTests.Services
             var notificationMock = new Mock<ISignalNotificationService>(MockBehavior.Strict);
             var personMock = new Mock<IPersonService>(MockBehavior.Loose);
             // Initialize new service with mock services
-            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object,personMock.Object);
+            var service = new DeviceService(db.Object, iotMock.Object, redisMock.Object, notificationMock.Object);
 
             // Execute
             var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => service.SetAnimation(deviceId, animation, state));
