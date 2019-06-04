@@ -26,8 +26,12 @@ namespace smartHookahCommon.Errors
 
         public static string UpdateError = "UPDATE_ERROR";
 
+        public static string DeviceNotFound = "DEVICE_NOT_FOUND";
+
+        public static string DeviceAlreadyAdded = "DEVICE_ALREADY_ADDED";
+
         public static string SessionNotFound = "SESSION_NOT_FOUND";
 
-        public static string AccessoryNotFound = "ACCESORY_NOT_FOUND";
+        public static string AccessoryNotFound = "ACCESSORY_NOT_FOUND";
     }
 }

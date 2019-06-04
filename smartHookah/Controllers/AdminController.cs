@@ -107,9 +107,15 @@ namespace smartHookah.Controllers
                 if(hookah == null)
                     continue;
 
-                var sessionCount = this.db.SmokeSessions.Count(s => s.HookahId == hookah.Id);
-                
-                if(sessionCount != 0)
+                var sessions =  this.db.SmokeSessions.Where(s => s.HookahId == hookah.Id);
+
+                if (sessions.Count(s => s.StatisticsId == null) == 0)
+                {
+                    await this.smokeSessionBg.InitSmokeSession(device);
+                    continue;
+                }
+
+                if(sessions.Count() != 0)
                     continue;
                 
 

@@ -25,7 +25,7 @@ namespace smartHookah.Services.Device
         private readonly IRedisService redisService;
 
         private readonly ISignalNotificationService _signalNotificationService;
-        
+
 
         public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService, ISignalNotificationService signalNotificationService)
         {
