@@ -93,8 +93,13 @@ namespace smartHookah.Services.Device
             var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
-
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"clr:{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+            Task sendTask;
+            if (hookah.Version < 1000035)
+              sendTask = this.iotService.SendMsgToDevice(deviceId, $"clr:{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+            else
+            {
+                sendTask = this.iotService.SendMsgToDevice(deviceId, $"clr:{(int) state},{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+            }
 
             this.SetColor(hookah.Setting, (int)state, color);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
@@ -229,7 +234,11 @@ namespace smartHookah.Services.Device
             if (hookahVersion < 1000025)
                 return setting.GetInitStringWithSessionId(intake, percentage, sessionId);
 
-            return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
+
+            if (hookahVersion < 1000035)
+                return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
+
+            return setting.GetInitMultipleColor(intake, percentage, sessionId);
         }
 
         public async Task<bool> UpdateDevice(int deviceId, int updateId,Models.Db.Person user,bool isAdmin)
