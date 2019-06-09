@@ -27,7 +27,8 @@ namespace smartHookah.Services.Device
         private readonly ISignalNotificationService _signalNotificationService;
 
 
-        public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService, ISignalNotificationService signalNotificationService)
+        public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService,
+            ISignalNotificationService signalNotificationService)
         {
             this.db = db;
             this.iotService = iotService;
@@ -42,12 +43,13 @@ namespace smartHookah.Services.Device
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
             if (animation.VersionFrom != 0 && animation.VersionTo != 0)
-              if (animation.VersionFrom >= hookah.Version || animation.VersionTo <= hookah.Version)
-                    throw new NotSupportedException($"Animation {animation.DisplayName} not supported by your Hookah OS version.");
+                if (animation.VersionFrom >= hookah.Version || animation.VersionTo <= hookah.Version)
+                    throw new NotSupportedException(
+                        $"Animation {animation.DisplayName} not supported by your Hookah OS version.");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int)state},{animation.Id},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int) state},{animation.Id},");
 
-            this.SetAnimation(hookah.Setting, (int)state, animation.Id);
+            this.SetAnimation(hookah.Setting, (int) state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -59,11 +61,11 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int)state},{brightness},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int) state},{brightness},");
 
-            this.SetBrightness(hookah.Setting, (int)state, brightness);
+            this.SetBrightness(hookah.Setting, (int) state, brightness);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
-            this._signalNotificationService.SessionSettingsChanged(deviceId,hookah.Setting);
+            this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
         }
 
@@ -80,9 +82,9 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int)state},{speed},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int) state},{speed},");
 
-            this.SetSpeed(hookah.Setting, (int)state, speed);
+            this.SetSpeed(hookah.Setting, (int) state, speed);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -93,10 +95,17 @@ namespace smartHookah.Services.Device
             var hookah = this.getDevice(deviceId);
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
+            Task sendTask;
+            if (hookah.Version < 1000035)
+                sendTask = this.iotService.SendMsgToDevice(deviceId,
+                    $"clr:{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+            else
+            {
+                sendTask = this.iotService.SendMsgToDevice(deviceId,
+                    $"clr:{(int) state},{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+            }
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"clr:{color.Hue:000},{color.Saturation:000},{color.Value:000}");
-
-            this.SetColor(hookah.Setting, (int)state, color);
+            this.SetColor(hookah.Setting, (int) state, color);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -148,7 +157,6 @@ namespace smartHookah.Services.Device
 
             if (setting == null) throw new KeyNotFoundException($"Person setting with id {settingId} not found");
             await this.SetPreset(deviceId, setting.DeviceSetting);
-           
         }
 
         public async Task SetPreset(string deviceId, DeviceSetting setting)
@@ -169,29 +177,24 @@ namespace smartHookah.Services.Device
             int _blowAnimation = rawData[5];
             int _idleBr = rawData[6];
             int _pufBr = rawData[7];
-            byte _hue = rawData[8];
-            byte _sat = rawData[9];
 
-          
-                var hookah = db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+            var hookah = db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
 
-                var hookahSetting = hookah?.Setting;
+            var hookahSetting = hookah?.Setting;
 
-                if (hookahSetting == null)
-                    return;
+            if (hookahSetting == null)
+                return;
 
-                hookahSetting.IdleAnimation = _idleAnimation;
-                hookahSetting.BlowAnimation = _blowAnimation;
-                hookahSetting.PufAnimation = _pufAnimation;
-                hookahSetting.IdleBrightness = _idleBr;
-                hookahSetting.PufBrightness = _pufBr;
-                hookahSetting.Color.Hue = _hue;
-                hookahSetting.Color.Saturation = _sat;
+            hookahSetting.IdleAnimation = _idleAnimation;
+            hookahSetting.BlowAnimation = _blowAnimation;
+            hookahSetting.PufAnimation = _pufAnimation;
+            hookahSetting.IdleBrightness = _idleBr;
+            hookahSetting.PufBrightness = _pufBr;
 
-                hookah.Setting = hookahSetting;
-                db.Hookahs.AddOrUpdate(hookah);
-                this._signalNotificationService.SessionSettingsChanged(deviceId,hookahSetting);
-                await db.SaveChangesAsync();
+            hookah.Setting = hookahSetting;
+            db.Hookahs.AddOrUpdate(hookah);
+            this._signalNotificationService.SessionSettingsChanged(deviceId, hookahSetting);
+            await db.SaveChangesAsync();
         }
 
         public string GetDeviceInitString(string id, int hookahVersion)
@@ -214,7 +217,7 @@ namespace smartHookah.Services.Device
             if (dbSession != null && dbSession.MetaData != null && dbSession.MetaData.Tobacco != null &&
                 dbSession.MetaData.Tobacco.Statistics != null)
             {
-                percentage = (int)dbSession.MetaData.Tobacco.Statistics.PufCount;
+                percentage = (int) dbSession.MetaData.Tobacco.Statistics.PufCount;
             }
 
             if (hookahVersion < 1000011)
@@ -229,14 +232,17 @@ namespace smartHookah.Services.Device
             if (hookahVersion < 1000025)
                 return setting.GetInitStringWithSessionId(intake, percentage, sessionId);
 
-            return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
+
+            if (hookahVersion < 1000035)
+                return setting.GetInitStringWithSpeed(intake, percentage, sessionId);
+
+            return setting.GetInitMultipleColor(intake, percentage, sessionId);
         }
 
-        public async Task<bool> UpdateDevice(int deviceId, int updateId,Models.Db.Person user,bool isAdmin)
+        public async Task<bool> UpdateDevice(int deviceId, int updateId, Models.Db.Person user, bool isAdmin)
         {
             try
             {
-
                 if (isAdmin)
                 {
                     var canUpdate = user.Hookahs.Any(a => a.Id == deviceId);
@@ -256,7 +262,7 @@ namespace smartHookah.Services.Device
                     HookahCode = hookah.Code
                 };
 
-               this.redisService.StoreUpdate(updateToken,updateRedis);
+                this.redisService.StoreUpdate(updateToken, updateRedis);
 
                 var msg = $"update:{updateToken}";
 
@@ -264,8 +270,7 @@ namespace smartHookah.Services.Device
             }
             catch (Exception e)
             {
-
-               throw  new ManaException(ErrorCodes.UpdateError, "Update was not successful", e);
+                throw new ManaException(ErrorCodes.UpdateError, "Update was not successful", e);
             }
 
 
@@ -371,8 +376,20 @@ namespace smartHookah.Services.Device
 
         private void SetColor(DeviceSetting setting, int state, Color color)
         {
-            //TODO color change for other states
-            setting.Color = color;
+            switch (state)
+            {
+                case 0:
+                    setting.Color = color;
+                    break;
+
+                case 1:
+                    setting.PufColor = color;
+                    break;
+
+                case 2:
+                    setting.BlowColor = color;
+                    break;
+            }
         }
     }
 }

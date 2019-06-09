@@ -152,6 +152,16 @@
             this.PufSpeed = defaultAnimation.PufSpeed;
             this.PufBrightness = defaultAnimation.PufBrightness;
         }
+
+        public string GetInitMultipleColor(int intake, int percentage, string sessionId)
+        {
+            return $"{PufAnimation},{BlowAnimation},{IdleAnimation},{intake},{percentage}," +
+                   $"{Color.Hue:000},{Color.Saturation:000},{Color.Value:000}," +
+                   $"{PufColor.Hue:000},{PufColor.Saturation:000},{PufColor.Value:000}," +
+                   $"{BlowColor.Hue:000},{BlowColor.Saturation:000},{BlowColor.Value:000}," +
+                   $"{IdleBrightness},{PufBrightness},{GetBtStateInit()}," +
+                   $"{IdleSpeed},{PufSpeed},{sessionId},";
+        }
     }
 
     public enum BtState

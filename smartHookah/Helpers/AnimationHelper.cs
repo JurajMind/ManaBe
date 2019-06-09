@@ -14,16 +14,16 @@ namespace smartHookah.Helpers
         private static List<Animation> CreateAnimations()
         {
             var result = new List<Animation>();
-            result.Add(new Animation(0, "Off", AnimationUsage.All));
-            result.Add(new Animation(1, "Puff Bar", AnimationUsage.All));
+            result.Add(new Animation(0, "Off", AnimationUsage.All,haveColor:false));
+            result.Add(new Animation(1, "Puff Bar", AnimationUsage.All, haveColor: false));
             result.Add(new Animation(2, "Flicker", AnimationUsage.All));
-            result.Add(new Animation(3, "OneColor", AnimationUsage.All));
-            result.Add(new Animation(4, "Rainbow", AnimationUsage.All));
-            result.Add(new Animation(5, "Intense Bar", AnimationUsage.Action));
+            result.Add(new Animation(3, "OneColor", AnimationUsage.All, haveColor: false));
+            result.Add(new Animation(4, "Rainbow", AnimationUsage.All, haveColor: false));
+            result.Add(new Animation(5, "Intense Bar", AnimationUsage.Action, haveColor: false));
             result.Add(new Animation(6, "Intense Breathe", AnimationUsage.Action));
             result.Add(new Animation(7, "Selected Color", AnimationUsage.All));
             result.Add(new Animation(8, "Fade", AnimationUsage.All));
-            result.Add(new Animation(9, "Mood Circles", AnimationUsage.All));
+            result.Add(new Animation(9, "Mood Circles", AnimationUsage.All, haveColor: false));
             result.Add(new Animation(10, "Random Burst", AnimationUsage.All));
             result.Add(new Animation(11, "Bounce", AnimationUsage.All));
             result.Add(new Animation(12, "Bounce Fade", AnimationUsage.All));
@@ -41,14 +41,14 @@ namespace smartHookah.Helpers
             result.Add(new Animation(24, "Pop", AnimationUsage.All));
             result.Add(new Animation(25, "Intense Color", AnimationUsage.Action));
             result.Add(new Animation(26, "Flame", AnimationUsage.All));
-            result.Add(new Animation(27, "Rainbow March", AnimationUsage.All));
-            result.Add(new Animation(28, "Pac-man", AnimationUsage.All));
+            result.Add(new Animation(27, "Rainbow March", AnimationUsage.All, haveColor: false));
+            result.Add(new Animation(28, "Pac-man", AnimationUsage.All, haveColor: false));
             result.Add(new Animation(29, "Random Pop", AnimationUsage.All));
             result.Add(new Animation(30, "Strobo", AnimationUsage.All));
             result.Add(new Animation(31, "Three way", AnimationUsage.All));
             result.Add(new Animation(32, "Kitt", AnimationUsage.All));
             result.Add(new Animation(33, "Matrix", AnimationUsage.Action));
-            result.Add(new Animation(34, "Different rainbow", AnimationUsage.Action));
+            result.Add(new Animation(34, "Different rainbow", AnimationUsage.Action, haveColor: false));
 
             result.Add(new Animation(35, "Session Progress", AnimationUsage.Idle, versionFrom: 1000020));
             result.Add(new Animation(36, "Puff Time", AnimationUsage.Action,versionFrom: 1000020));
@@ -88,13 +88,14 @@ namespace smartHookah.Helpers
     public struct Animation
     {
         public Animation(int id, string dispayName, AnimationUsage usage, int versionFrom = 1000000,
-            int versionTo = 2000000)
+            int versionTo = 2000000, bool haveColor = true)
         {
             Id = id;
             DisplayName = dispayName;
             VersionFrom = versionFrom;
             VersionTo = versionTo;
             Usage = usage;
+            HaveColor = haveColor;
         }
 
         public int Id { get; set; }
@@ -105,6 +106,8 @@ namespace smartHookah.Helpers
         public int VersionTo { get; set; }
 
         public AnimationUsage Usage { get; set; }
+
+        public bool HaveColor { get; set; }
     }
 
     [Flags]
