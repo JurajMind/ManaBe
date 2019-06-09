@@ -16,7 +16,7 @@ namespace smartHookah.Models.Dto
                 PuffSettings =
                     new ActionSettings()
                     {
-                        Color = settings.Color,
+                        Color = settings.PufColor,
                         AnimationId = settings.PufAnimation,
                         Brightness = settings.PufBrightness,
                         Speed = settings.PufSpeed
@@ -24,7 +24,7 @@ namespace smartHookah.Models.Dto
                 BlowSettings =
                     new ActionSettings()
                     {
-                        Color = settings.Color,
+                        Color = settings.BlowColor,
                         AnimationId = settings.BlowAnimation,
                         Brightness = settings.PufBrightness,
                         Speed = settings.PufSpeed
