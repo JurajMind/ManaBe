@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Device;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
@@ -13,6 +16,7 @@ namespace smartHookah.Controllers.Api
 {
     using smartHookah.Models.Dto;
 
+    [ApiAuthorize]
     [RoutePrefix("api/Device")]
     public class DeviceController : ApiController
     {
@@ -22,10 +26,16 @@ namespace smartHookah.Controllers.Api
 
         private readonly IPersonService personService;
 
-        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService)
+        private readonly IUpdateService updateService;
+
+        private readonly IDevicePictureService devicePictureService;
+
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService)
         {
             this.deviceService = deviceService;
             this.deviceSettingsPresetService = deviceSettingsPresetService;
+            this.updateService = updateService;
+            this.devicePictureService = devicePictureService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -200,8 +210,49 @@ namespace smartHookah.Controllers.Api
             return DeviceSimpleDto.FromModel(added);
         }
 
+        [HttpPost, Route("{id}/Update/{updateId}")]
+        public async Task<bool> PromptUpdate(int id, int updateId)
+        {
+           return await this.deviceService.UpdateDevice(id, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
+        }
+
+        [HttpGet, Route("Updates")]
+        public async Task<ICollection<UpdateDto>> Updates()
+        {
+            var updates = await this.updateService.GetUpdates();
+            return updates.Select(UpdateDto.FromModel).ToList();
+        }
+
+        [HttpGet, Route("{id}/Info")]
+        public async Task<DeviceInfoResponse> Info(int id)
+        {
+            var picture = await devicePictureService.FindStandPicture(id);
+
+            var response = new DeviceInfoResponse {Picture = DevicePictureDto.FromModel(picture)};
+
+            return response;
+        }
+
+        [HttpPost, Route("{id}/SetPicture")]
+        public async Task<bool> SetPicture(int id, [FromBody]int pictureId)
+        {
+             return await devicePictureService.SetStandPicture(id,pictureId);
+        }
+
+        [HttpGet, Route("Pictures")]
+        public async Task<ICollection<DevicePictureDto>> GetPictures()
+        {
+            var pictures = await devicePictureService.GetAllPictures(null);
+
+            return pictures.Select(DevicePictureDto.FromModel).ToList();
+        }
 
 
+    }
+
+    public class DeviceInfoResponse
+    {
+        public DevicePictureDto Picture { get; set; }
 
     }
 }

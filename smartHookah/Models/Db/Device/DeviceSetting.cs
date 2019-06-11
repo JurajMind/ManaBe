@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Models.Db
+﻿using smartHookah.Models.Db.Device;
+
+namespace smartHookah.Models.Db
 {
     public class DeviceSetting
     {
