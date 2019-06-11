@@ -157,7 +157,7 @@ namespace smartHookah.Controllers
             await this.deviceService.UpdateDevice(hookahId, updateId,this.personService.GetCurentPerson(), User.IsInRole("Admin"));
 
             return Json(new {succes = true, msg = "Update was sent"});
-    }
+        }
 
         public class UpdateRedis
         {
