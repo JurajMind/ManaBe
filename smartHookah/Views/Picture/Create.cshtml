@@ -1,4 +1,4 @@
-﻿@model smartHookah.Models.Db.StandPicture
+﻿@model smartHookah.Models.Db.Device.StandPicture
 
 @{
     ViewBag.Title = "Create";
@@ -10,13 +10,13 @@
 @using (Html.BeginForm("Create", "Picture", FormMethod.Post, new { enctype = "multipart/form-data", id = "createForm" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>StandPicture</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-          <label> Picture, bmp max size 64 x 50</label>
+            <label> Picture, bmp max size 64 x 50</label>
             <div class="col-md-10">
                 <label class="btn btn-primary">
                     <input name="file" type="file" style="display:none;" onchange="$('#upload-file-file').html(this.files[0].name);">

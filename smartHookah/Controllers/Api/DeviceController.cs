@@ -28,11 +28,14 @@ namespace smartHookah.Controllers.Api
 
         private readonly IUpdateService updateService;
 
-        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService)
+        private readonly IDevicePictureService devicePictureService;
+
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService)
         {
             this.deviceService = deviceService;
             this.deviceSettingsPresetService = deviceSettingsPresetService;
             this.updateService = updateService;
+            this.devicePictureService = devicePictureService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -219,5 +222,37 @@ namespace smartHookah.Controllers.Api
             var updates = await this.updateService.GetUpdates();
             return updates.Select(UpdateDto.FromModel).ToList();
         }
+
+        [HttpGet, Route("{id}/Info")]
+        public async Task<DeviceInfoResponse> Info(int id)
+        {
+            var picture = await devicePictureService.FindStandPicture(id);
+
+            var response = new DeviceInfoResponse {Picture = DevicePictureDto.FromModel(picture)};
+
+            return response;
+        }
+
+        [HttpPost, Route("{id}/SetPicture")]
+        public async Task<bool> SetPicture(int id, [FromBody]int pictureId)
+        {
+             return await devicePictureService.SetStandPicture(id,pictureId);
+        }
+
+        [HttpGet, Route("Pictures")]
+        public async Task<ICollection<DevicePictureDto>> GetPictures()
+        {
+            var pictures = await devicePictureService.GetAllPictures(null);
+
+            return pictures.Select(DevicePictureDto.FromModel).ToList();
+        }
+
+
+    }
+
+    public class DeviceInfoResponse
+    {
+        public DevicePictureDto Picture { get; set; }
+
     }
 }

@@ -6,12 +6,16 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Azure.Amqp.Framing;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Messages;
+using smartHookah.Services.Person;
 using smartHookah.Services.Redis;
 using smartHookah.Support;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Controllers
 {
@@ -27,12 +31,14 @@ namespace smartHookah.Controllers
         private EmailService emailService;
         private readonly ISignalNotificationService _signalNotificationService;
         private readonly IRedisService redisService;
-        public ReservationController(SmartHookahContext db, IReservationService reservationService,ISignalNotificationService signalNotificationService)
+        private readonly IPlaceService placeService;
+        public ReservationController(SmartHookahContext db, IReservationService reservationService,ISignalNotificationService signalNotificationService, IPlaceService placeService)
         {
             this.db = db;
             this.reservationService = reservationService;
             this.emailService = new EmailService();
             this._signalNotificationService = signalNotificationService;
+            this.placeService = placeService;
         }
 
 
@@ -91,9 +97,16 @@ namespace smartHookah.Controllers
             return View(model);
         }
 
-        public ActionResult Place(string id)
+        public async Task<ActionResult> Place(string id)
         {
+
             var place = db.Places.Where(a => a.FriendlyUrl == id).Include(a => a.Seats).FirstOrDefault();
+            var canManage = await this.placeService.CanManagePlace(place.Id);
+
+            if (!canManage)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound, "Place cannot be managed");
+            }
 
             var model = new CreateReservationModel();
             model.place = place;

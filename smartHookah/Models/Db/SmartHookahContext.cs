@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
+using smartHookah.Models.Db.Device;
 
 namespace smartHookah.Models.Db
 {
