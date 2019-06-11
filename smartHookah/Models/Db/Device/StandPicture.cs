@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using smartHookah.Helpers;
 
-namespace smartHookah.Models.Db
+namespace smartHookah.Models.Db.Device
 {
     public class StandPicture
     {
@@ -15,6 +15,7 @@ namespace smartHookah.Models.Db
        public int Width { get; set; }
 
         public int Height { get; set; }
+        
 
         [NotMapped]
         public string HtmlString

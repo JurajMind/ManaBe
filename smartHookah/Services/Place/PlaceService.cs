@@ -61,6 +61,12 @@ namespace smartHookah.Services.Place
             return null;
         }
 
+        public async Task<bool> CanManagePlace(int id)
+        {
+            var result = await this.GetManagedPlace(id);
+            return result != null;
+        }
+
         public async Task<IEnumerable<TobaccoReview>> GetPlaceTobaccoReviews(int id, int pageSize = 10, int page = 0) =>
             await this.db.TobaccoReviews
                 .Where(a => a.SmokeSession.PlaceId != null && a.SmokeSession.PlaceId == id)
