@@ -243,7 +243,7 @@ namespace smartHookah.Services.Device
         {
             try
             {
-                if (isAdmin)
+                if (!isAdmin)
                 {
                     var canUpdate = user.Hookahs.Any(a => a.Id == deviceId);
                     if (!canUpdate)

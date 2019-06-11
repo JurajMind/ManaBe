@@ -902,6 +902,7 @@
     <Compile Include="Migrations\201905121317595_cleanToken.Designer.cs">
       <DependentUpon>201905121317595_cleanToken.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dto\Device\UpdateDto.cs" />
     <Compile Include="Models\Db\Person\FeatureMixCreator.cs" />
     <Compile Include="Models\Db\Person\Friendship.cs" />
     <Compile Include="Models\Db\NotificationToken.cs" />
@@ -1042,6 +1043,8 @@
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
+    <Compile Include="Services\Device\IUpdateService.cs" />
+    <Compile Include="Services\Device\UpdateService.cs" />
     <Compile Include="Services\FeatureMix\FeatureMixService.cs" />
     <Compile Include="Services\FeatureMix\IFeatureMixService.cs" />
     <Compile Include="Services\Messages\FirebaseNotificationService.cs" />
