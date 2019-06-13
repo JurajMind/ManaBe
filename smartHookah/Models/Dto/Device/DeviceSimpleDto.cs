@@ -1,16 +1,14 @@
-using System;
-using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
-    using System.Collections.Generic;
-
     [DataContract]
     public class DeviceSimpleDto
     {
+        [DataMember, JsonProperty("Id")]
+        public int Id { get; set; }
         [DataMember, JsonProperty("Name")]
         public string Name { get; set; }
 
@@ -30,6 +28,7 @@ namespace smartHookah.Models.Dto
             ? null
             : new DeviceSimpleDto()
             {
+                Id = model.Id,
                 Code = model.Code,
                 Name = model.Name,
                 IsOnline = model.OnlineState,

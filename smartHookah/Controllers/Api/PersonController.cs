@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 
 using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Device;
+using smartHookah.Services.Device;
 using smartHookah.Services.Gear;
 using smartHookah.Services.Messages;
 
@@ -22,12 +24,14 @@ namespace smartHookah.Controllers.Api
         private readonly IPersonService personService;
         private readonly IGearService gearService;
         private readonly IFirebaseNotificationService firebaseNotificationService;
+        private readonly IUpdateService updateService;
 
-        public PersonController(IPersonService personService, IGearService gearService, IFirebaseNotificationService firebaseNotificationService)
+        public PersonController(IPersonService personService, IGearService gearService, IFirebaseNotificationService firebaseNotificationService, IUpdateService updateService)
         {
             this.personService = personService;
             this.gearService = gearService;
             this.firebaseNotificationService = firebaseNotificationService;
+            this.updateService = updateService;
         }
 
         #region Getters
@@ -54,14 +58,19 @@ namespace smartHookah.Controllers.Api
                 .Select(Models.Dto.Places.Reservations.ReservationDto.FromModel).ToList();
             var orders = this.personService.GetUserHookahOrders(personId).Select(HookahOrderDto.FromModel).ToList();
             var gameProfile = GameProfileSimpleDto.FromModel(this.personService.GetUserGameProfile(personId));
-
+            var updateInfo = await this.updateService.GetUpdateInitInfo();
             return new PersonActiveDataDto()
             {
                 ActiveSmokeSessions = sessions,
                 Devices = devices,
                 ActiveReservations = reservations,
                 ActiveHookahOrders = orders,
-                GameProfile = gameProfile
+                GameProfile = gameProfile,
+                UpdateInfo = new DeviceUpdateInfoDto
+                {
+                    StableVersion = UpdateDto.FromModel(updateInfo.stable),
+                    BetaVersion = UpdateDto.FromModel(updateInfo.beta),
+                }
             };
         }
 
