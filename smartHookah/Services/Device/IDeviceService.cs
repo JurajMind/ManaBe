@@ -32,8 +32,6 @@ namespace smartHookah.Services.Device
 
         string GetDeviceInitString(string id, int hookahVersion);
 
-        Task<bool> UpdateDevice(int deviceId, int updateId, Models.Db.Person user, bool isAdmin);
-
         string GetUpdatePath(string deviceId, string token);
 
     }
