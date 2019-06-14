@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using System.Threading.Tasks;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Device;
@@ -21,7 +22,8 @@ namespace smartHookah.Services.Device
 
         public async Task<StandPicture> FindStandPicture(int id)
         {
-            var picture = await this.db.StandPictures.FindAsync(id);
+            var picture = await this.db.Hookahs.Include(b => b.Setting.Picture).Where(a => a.Id == id)
+                .Select(a => a.Setting.Picture).FirstOrDefaultAsync();
             return picture;
         }
 
@@ -39,15 +41,14 @@ namespace smartHookah.Services.Device
 
         public async Task<bool> SetStandPicture(int deviceId, int pictureId)
         {
-            var pictureTask = this.db.StandPictures.FindAsync(pictureId);
+            var picture = await this.db.StandPictures.FindAsync(pictureId);
             var device = await this.db.Hookahs.FindAsync(deviceId);
 
             if (device == null)
             {
                 throw new ManaException(ErrorCodes.DeviceNotFound, $"Device with id {deviceId} was not found");
             }
-
-            var picture = await pictureTask;
+        
             if (picture == null)
             {
                 return false;

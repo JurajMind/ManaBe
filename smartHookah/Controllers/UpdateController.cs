@@ -15,12 +15,14 @@ namespace smartHookah.Controllers
         private readonly SmartHookahContext db;
         private readonly IDeviceService deviceService;
         private readonly IPersonService personService;
+        private readonly IUpdateService updateService;
 
-        public UpdateController(IDeviceService deviceService, SmartHookahContext db, IPersonService personService)
+        public UpdateController(IDeviceService deviceService, SmartHookahContext db, IPersonService personService, IUpdateService updateService)
         {
             this.deviceService = deviceService;
             this.db = db;
             this.personService = personService;
+            this.updateService = updateService;
         }
 
         // GET: Update
@@ -154,7 +156,7 @@ namespace smartHookah.Controllers
         public async Task<JsonResult> PromptUpdate(int hookahId, int updateId )
         {
             
-            await this.deviceService.UpdateDevice(hookahId, updateId,this.personService.GetCurentPerson(), User.IsInRole("Admin"));
+            await this.updateService.UpdateDevice(hookahId, updateId,this.personService.GetCurentPerson(), User.IsInRole("Admin"));
 
             return Json(new {succes = true, msg = "Update was sent"});
         }

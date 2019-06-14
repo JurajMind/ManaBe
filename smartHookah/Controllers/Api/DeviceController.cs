@@ -30,12 +30,14 @@ namespace smartHookah.Controllers.Api
 
         private readonly IDevicePictureService devicePictureService;
 
-        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService)
+
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService, IPersonService personService)
         {
             this.deviceService = deviceService;
             this.deviceSettingsPresetService = deviceSettingsPresetService;
             this.updateService = updateService;
             this.devicePictureService = devicePictureService;
+            this.personService = personService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -213,7 +215,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Update/{updateId}")]
         public async Task<bool> PromptUpdate(int id, int updateId)
         {
-           return await this.deviceService.UpdateDevice(id, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
+           return await this.updateService.UpdateDevice(id, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
         }
 
         [HttpGet, Route("Updates")]
