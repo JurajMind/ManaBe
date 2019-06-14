@@ -31,12 +31,13 @@ namespace smartHookah.Controllers.Api
         private readonly IDevicePictureService devicePictureService;
 
 
-        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService)
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService, IPersonService personService)
         {
             this.deviceService = deviceService;
             this.deviceSettingsPresetService = deviceSettingsPresetService;
             this.updateService = updateService;
             this.devicePictureService = devicePictureService;
+            this.personService = personService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
