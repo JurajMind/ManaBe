@@ -64,12 +64,14 @@ namespace smartHookah.Models.Dto
                 SocialMedias = model.SocialMedias.ToList()
             };
 
-        public Place ToModel()
+        public Place ToModel(int? creator)
         {
             return new Place()
             {
                 Id = this.Id,
                 Name = this.Name,
+                CreatorId = creator,
+                CreatedAt =  DateTime.UtcNow,
                 LogoPath = this.LogoPath,
                 ShortDescriptions = this.ShortDescriptions,
                 Descriptions = this.Descriptions,
