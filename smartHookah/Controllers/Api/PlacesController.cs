@@ -18,6 +18,7 @@ using smartHookah.Controllers.Mobile;
 using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto.Places;
+using smartHookah.Services.Person;
 using smartHookahCommon.Extensions;
 
 namespace smartHookah.Controllers.Api
@@ -42,11 +43,14 @@ namespace smartHookah.Controllers.Api
 
         private readonly IPlaceService placeService;
 
-        public PlacesController(SmartHookahContext db, IReservationService reservationService, IPlaceService placeService)
+        private readonly IPersonService personService;
+
+        public PlacesController(SmartHookahContext db, IReservationService reservationService, IPlaceService placeService, IPersonService personService)
         {
             this.db = db;
             this.reservationService = reservationService;
             this.placeService = placeService;
+            this.personService = personService;
         }
 
 
@@ -227,7 +231,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("Add")]
         public async Task<PlaceDto> AddPlace([FromBody] PlaceDto importedPlace)
         {
-            var placeModel = importedPlace.ToModel();
+            var placeModel = importedPlace.ToModel(this.personService.GetCurentPerson()?.Id);
             placeModel.Src = PlaceSrc.Import;
             placeModel.State = PlaceState.Waiting;
             var imported = await placeService.AddPlace(placeModel);

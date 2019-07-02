@@ -38,6 +38,12 @@ namespace smartHookah.Models.Db
 
         public virtual Person Person { get; set; }
 
+        public int? CreatorId { get; set; }
+
+        public virtual Person Creator { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public string Facebook { get; set; }
