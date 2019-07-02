@@ -67,6 +67,7 @@ namespace smartHookah.Services.Place
             return result != null;
         }
 
+
         public async Task<IEnumerable<TobaccoReview>> GetPlaceTobaccoReviews(int id, int pageSize = 10, int page = 0) =>
             await this.db.TobaccoReviews
                 .Where(a => a.SmokeSession.PlaceId != null && a.SmokeSession.PlaceId == id)
@@ -148,7 +149,7 @@ namespace smartHookah.Services.Place
 
             var result = await GoogleGeocodingAPI.SearchAddressAsync(address.ToString());
 
-            if (result.Results.Any())
+            if (result.Results.Any() && (this.ValidateCoordinates(address.Lat,address.Lng) ?? false ))
             {
                 var firstResult = result.Results.First();
                 address.Lat = firstResult.Geometry.Location.Lat.ToString(CultureInfo.InvariantCulture);
@@ -210,6 +211,24 @@ namespace smartHookah.Services.Place
             }
 
             return result;
+        }
+
+        public bool? ValidateCoordinates(double? lng, double? lat)
+        {
+            if (!lat.HasValue && !lng.HasValue) return null;
+
+            var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
+            return result;
+        }
+
+        public bool? ValidateCoordinates(string lng, string lat)
+        {
+            if (double.TryParse(lng, out var dLng) && double.TryParse(lat, out var dLat))
+            {
+                return this.ValidateCoordinates(dLng, dLat);
+            }
+
+            return false;
         }
 
         public Address ParseGoogleResult(GuigleAPI.Model.Address googleAddress)
