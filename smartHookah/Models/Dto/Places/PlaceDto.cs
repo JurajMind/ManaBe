@@ -73,16 +73,12 @@ namespace smartHookah.Models.Dto
                 LogoPath = this.LogoPath,
                 ShortDescriptions = this.ShortDescriptions,
                 Descriptions = this.Descriptions,
-                FriendlyUrl = this.FriendlyUrl,
+                FriendlyUrl = Guid.NewGuid().ToString().Substring(0,20),
                 Address = this.Address.ToModel(),
                 PhoneNumber = this.PhoneNumber,
                 Facebook = this.Facebook,
-                BaseHookahPrice = this.BaseHookahPrice,
-                Currency = this.Currency,
-                HaveReservation = this.HaveReservation,
-                MinimumReservationTime = this.MinimumReservationTime,
-                FranchiseId = this.FranchiseId,
-                Franchise = this.Franchise.ToModel(),
+                HaveReservation = false,
+                MinimumReservationTime = 5
             };
         }
     }

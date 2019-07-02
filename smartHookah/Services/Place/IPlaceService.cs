@@ -27,5 +27,6 @@ namespace smartHookah.Services.Place
         Task<Place> AddFlags(int placeId, List<string> flags);
 
         Task<PlaceDashboardDto> PlaceDashboard(int placeId);
+        bool? ValidateCoordinates(double? lng, double? lat);
     }
 }

@@ -132,7 +132,7 @@ namespace smartHookah.Controllers.Api
         [Route("SearchNearby")]
         public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, double? lat = null, double? lng = null,float radius = 50)
         {
-            var validate = this.ValidateCoordinates(lng, lat);
+            var validate = this.placeService.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
                 return new NearbyPlacesDto {Success = false, Message = "Cannot find your location."};
             if (pageSize < 0) pageSize = 10;
@@ -164,13 +164,7 @@ namespace smartHookah.Controllers.Api
             return result;
         }
 
-        private bool? ValidateCoordinates(double? lng, double? lat)
-        {
-            if (!lat.HasValue && !lng.HasValue) return null;
-
-            var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
-            return result;
-        }
+ 
 
         #endregion
 
@@ -228,6 +222,16 @@ namespace smartHookah.Controllers.Api
             }
 
             return Ok();
+        }
+
+        [HttpPost, Route("Add")]
+        public async Task<PlaceDto> AddPlace([FromBody] PlaceDto importedPlace)
+        {
+            var placeModel = importedPlace.ToModel();
+            placeModel.Src = PlaceSrc.Import;
+            placeModel.State = PlaceState.Waiting;
+            var imported = await placeService.AddPlace(placeModel);
+            return PlaceDto.FromModel(imported);
         }
 
         [HttpPut,Route("{placeId}/AddFlags")]
