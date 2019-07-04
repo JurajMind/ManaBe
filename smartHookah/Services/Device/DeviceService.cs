@@ -129,6 +129,15 @@ namespace smartHookah.Services.Device
             await this.iotService.SendMsgToDevice(deviceId, "restart:");
         }
 
+        public async Task Ping(string deviceId)
+        {
+            var hookah = this.getDevice(deviceId);
+
+            if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
+
+            await this.iotService.SendMsgToDevice(deviceId, "ping:");
+        }
+
         public async Task SetMode(string deviceId, int mode)
         {
             var hookah = this.getDevice(deviceId);
