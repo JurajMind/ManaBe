@@ -46,7 +46,7 @@ namespace smartHookah.Controllers.Api
                 if(Enum.TryParse<SearchType>(searchType.FirstLetterToUpper(), out var searchTypeType))
                     if(searchTypeType == SearchType.Brand)
 
-                return this.gearService.SearchAccesories(search, result, searchTypeType, page, pageSize);
+                return this.gearService.SearchAccessories(search, result, searchTypeType, page, pageSize);
 
                 var azureSearchType = await searchService.Search(search, type);
                 return azureSearchType.Select(s => new SearchPipeAccessory(s)).ToList();
@@ -141,6 +141,14 @@ namespace smartHookah.Controllers.Api
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        } 
+
+        [HttpPost, ApiAuthorize, System.Web.Http.Route("Add")]
+        public async Task<PipeAccesorySimpleDto> AddGear([FromBody] PipeAccesorySimpleDto accessory)
+        {
+            var modelAccessory = accessory.ToModel();
+            var result = await this.gearService.AddGear(modelAccessory);
+            return PipeAccesorySimpleDto.FromModel(result);
         }
     }
 }

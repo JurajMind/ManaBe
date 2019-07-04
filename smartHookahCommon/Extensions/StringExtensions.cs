@@ -1,4 +1,6 @@
-﻿namespace smartHookahCommon.Extensions
+﻿using System;
+
+namespace smartHookahCommon.Extensions
 {
     public static class StringExtensions
     {
@@ -19,6 +21,17 @@
 
 
             return sb.ToString();
+        }
+
+        public static string OnlyAlphaNumeric(this string s)
+        {
+            s = RemoveDiacritics(s);
+            char[] arr = s.ToCharArray();
+
+            arr = Array.FindAll<char>(arr, (c => (char.IsLetterOrDigit(c)
+                                                  || char.IsWhiteSpace(c)
+                                                  || c == '-')));
+            return new string(arr);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace smartHookah.Services.Device
         Task SetColor(string deviceId, Color color, PufType state);
         Task Sleep(string deviceId);
         Task Restart(string deviceId);
+        Task Ping(string id);
         Task SetMode(string deviceId, int mode);
         Task ShowQrCode(string deviceId);
         Task SetPreset(string deviceId, int settingId);
@@ -33,6 +34,7 @@ namespace smartHookah.Services.Device
         string GetDeviceInitString(string id, int hookahVersion);
 
         string GetUpdatePath(string deviceId, string token);
+
 
     }
 }
