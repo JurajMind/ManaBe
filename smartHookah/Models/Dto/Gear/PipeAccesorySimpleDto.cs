@@ -131,6 +131,44 @@ namespace smartHookah.Models.Dto
         {
             return model.Select(PipeAccesoryLikeDto.FromModel).ToList();
         }
+
+        public PipeAccesory ToModel()
+        {
+
+            var pipeAccessory = new PipeAccesory()
+            {
+                BrandName = this.BrandId ?? this.BrandName,
+                AccName = this.Name,
+                Id = this.Id,
+
+            };
+
+            switch (this.Type)
+            {
+
+                case "Hookah":
+                    return new Pipe(pipeAccessory);
+                case "Bowl":
+                    return new Bowl(pipeAccessory);
+                case "Tobacco":
+                {
+                    var protoTobbacco = new Tobacco(pipeAccessory);
+                    return protoTobbacco;
+                }
+                case "HeatManagement":
+                {
+                    return new HeatManagment(pipeAccessory);
+                }
+                case "Coal":
+                {
+                    return new Coal(pipeAccessory);
+                }
+                default:
+                    return pipeAccessory;
+
+
+            }
+        }
     }
     
     public class PipeAccesoryLikeDto

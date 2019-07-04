@@ -149,6 +149,23 @@ namespace smartHookah.Controllers.Api
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        [HttpPost, Route("{id}/Ping")]
+        public async Task<HttpResponseMessage> Ping(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+            try
+            {
+                await this.deviceService.Ping(id);
+            }
+            catch (KeyNotFoundException e)
+            {
+                var err = new HttpError(e.Message);
+                return this.Request.CreateResponse(HttpStatusCode.NotFound, err);
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
         [HttpPost, Route("{id}/ChangeMode")]
         public async Task<HttpResponseMessage> ChangeMode(string id, [FromBody] int mode)
         {
