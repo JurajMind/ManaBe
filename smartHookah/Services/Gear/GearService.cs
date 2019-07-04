@@ -11,6 +11,7 @@ using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using smartHookahCommon.Extensions;
 
 namespace smartHookah.Services.Gear
 {
@@ -153,7 +154,7 @@ namespace smartHookah.Services.Gear
 
         }
 
-        public List<SearchPipeAccessory> SearchAccesories(
+        public List<SearchPipeAccessory> SearchAccessories(
             string search,
             AccesoryType type,
             SearchType searchType,
@@ -197,6 +198,66 @@ namespace smartHookah.Services.Gear
             var brand = await this.db.Brands.FindAsync(brandName);
 
             return brand;
+        }
+
+        public async Task<PipeAccesory> AddGear(PipeAccesory accessory)
+        {
+            var tryFindMatch = await this.db.PipeAccesories.Where(a => a.AccName.Equals(accessory.AccName) && a.Status == AccessoryStatus.Ok).FirstOrDefaultAsync();
+            if (tryFindMatch != null)
+            {
+                return tryFindMatch;
+            }
+
+            var findBrand = await this.db.Brands.Where(a => a.DisplayName == accessory.BrandName || a.Name == accessory.BrandName).FirstOrDefaultAsync() ??
+                            CreateBrandFromAccessory(accessory);
+
+            accessory.Brand = findBrand;
+            accessory.BrandName = findBrand.Name;
+            accessory.Status = AccessoryStatus.Waiting;
+            accessory.CreatorId = this.personService.GetCurentPerson().Id;
+            accessory.CreatedAt = DateTimeOffset.UtcNow;
+            accessory.Id = 0;
+
+            this.db.PipeAccesories.Add(accessory);
+            this.db.SaveChanges();
+            return accessory;
+        }
+
+        private Brand CreateBrandFromAccessory(PipeAccesory accessory)
+        {
+            var brand = new Brand
+            {
+                DisplayName = accessory.BrandName,
+                Name = accessory.BrandName.OnlyAlphaNumeric(),
+                Url = "auto-created"
+            };
+
+            switch (accessory.GetTypeEnum())
+            {
+                case AccesoryType.Bowl:
+                    brand.Bowl = true;
+                    break;
+
+                case AccesoryType.Coal:
+                    brand.Coal = true;
+                    break;
+
+                case AccesoryType.Heatmanagement:
+                    brand.HeatManagment = true;
+                    break;
+
+                case AccesoryType.Tobacco:
+                    brand.Tobacco = true;
+                    break;
+
+                case AccesoryType.Hookah:
+                    brand.Tobacco = true;
+                    break;
+            }
+
+            this.db.Brands.Add(brand);
+            return brand;
+
         }
 
         public int UsedByPerson(PipeAccesory accessory, int personId)

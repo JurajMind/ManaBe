@@ -21,7 +21,7 @@ namespace smartHookah.Services.Gear
 
         Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
 
-        List<SearchPipeAccessory> SearchAccesories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
+        List<SearchPipeAccessory> SearchAccessories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
         
         int UsedByPerson(PipeAccesory accessory, int personId);
 
@@ -44,6 +44,8 @@ namespace smartHookah.Services.Gear
         ICollection<Models.Db.SmokeSession> UsedInSession(int accessoryId, int pageSize, int page);
 
         Task<Brand> GetBrand(string brandName);
+
+        Task<PipeAccesory> AddGear(PipeAccesory accessory);
 
     }
 

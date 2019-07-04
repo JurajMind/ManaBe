@@ -89,8 +89,20 @@ namespace smartHookah.Models.Db
             this.AccName = accesory.AccName;
             this.BrandName = accesory.BrandName;
         }
+        
+        public int? CreatorId { get; set; }
 
+        public Person Creator { get; set; }
 
+        public AccessoryStatus Status { get; set; }
+
+    }
+
+    public enum AccessoryStatus
+    {
+        Ok = 0,
+        Waiting = 1,
+        Blocked = 2,
     }
 
     public class ImportInformation
