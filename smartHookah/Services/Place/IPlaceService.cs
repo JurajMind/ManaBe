@@ -21,12 +21,16 @@ namespace smartHookah.Services.Place
 
         Task<List<TobaccoMix>> GetPlaceTobaccoMixes(Place place);
 
-        Task<Place> AddPlace(Place place);
+        Task<Place> AddPlace(Place place, List<string> flags);
 
         Task<Address> GetLocation(Address address);
         Task<Place> AddFlags(int placeId, List<string> flags);
 
         Task<PlaceDashboardDto> PlaceDashboard(int placeId);
         bool? ValidateCoordinates(double? lng, double? lat);
+
+        Task<List<Place>> GetWaitingPlaces();
+
+        Task<Place> ChangePlaceState(int placeId,PlaceState newState);
     }
 }

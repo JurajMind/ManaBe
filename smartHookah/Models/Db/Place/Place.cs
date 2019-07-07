@@ -141,9 +141,9 @@ namespace smartHookah.Models.Db
 
     public enum PlaceState
     {
-        Active = 1,
+        Active = 0,
         Blocked  = 2,
-        Waiting  = 0,
+        Waiting  = 1,
     }
 
     public class PlaceFlag

@@ -883,6 +883,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Controllers\Api\Admin\PlaceAdminController.cs" />
     <Compile Include="Controllers\Api\CompetitionController.cs" />
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\FeatureMixController.cs" />
