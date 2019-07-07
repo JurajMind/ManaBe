@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GuigleAPI;
 using Microsoft.VisualStudio.Services.Common;
+using smartHookah.Helpers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Places;
@@ -88,14 +89,14 @@ namespace smartHookah.Services.Place
             return await this.db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
         }
 
-        public async Task<Place> AddPlace(Place place)
+        public async Task<Place> AddPlace(Place place,List<string> flags)
         {
             var tryFindPlace = this.db.Places.FirstOrDefault(a =>
                 (a.Address.Lat == place.Address.Lat && a.Address.Lat == place.Address.Lat) || a.Name == place.Name);
 
             if (tryFindPlace != null)
             {
-                return tryFindPlace;
+                // return tryFindPlace;
             }
             
             if (place == null) throw new ArgumentNullException(nameof(place));
@@ -103,23 +104,17 @@ namespace smartHookah.Services.Place
             place.FranchiseId = await db.Franchises.AnyAsync(a => a.Id == place.FranchiseId) ? place.FranchiseId : null;
             place.PersonId = await db.Persons.AnyAsync(a => a.Id == place.PersonId) ? place.PersonId : null;
             db.Places.Add(place);
-            try
-            {
-
-                await db.SaveChangesAsync();
-            }
-            catch (DbEntityValidationException e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-
-            return place;
+            db.SaveChanges();
+            return this.AddFlags(place, flags);
         }
 
         public async Task<Address> GetLocation(Address address)
         {
+            if (address.City != null && address.Number != null && address.Lat != null && address.Lng != null)
+            {
+                address.Location = GeographyExtensions.CreatePoint(address.Lat, address.Lng);
+                return address;
+            }
             var key = ConfigurationManager.AppSettings["googleMapApiKey"];
             GoogleGeocodingAPI.GoogleAPIKey = key;
             if (address.Street == null && (address.Lng != null && address.Lat != null))
@@ -162,6 +157,11 @@ namespace smartHookah.Services.Place
 
         public async Task<Place> AddFlags(int placeId, List<string> flags)
         {
+            if (flags == null || flags.Count == 0)
+            {
+                return null;
+            }
+
             var place = this.db.Places.Find(placeId);
 
             if (place == null)
@@ -169,18 +169,39 @@ namespace smartHookah.Services.Place
                 throw new ManaException(ErrorCodes.PlaceNotFound,$"Place {placeId} was not found");
             }
 
+            return AddFlags(place, flags);
 
-            
-            place.PlaceFlags.AddRange(flags.Select(f => new PlaceFlag
+        }
+
+        private Place AddFlags(Place place, List<string> flags)
+        {
+            if (flags == null || flags.Count == 0)
             {
-                Code = f
-            }));
-            
+                return null;
+            }
+
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound, $"Place was not found");
+            }
+
+            var uniqFlags = place.PlaceFlags == null ? flags  : flags.Where(a => place.PlaceFlags.Count(f => f.Code == a) == 0).ToList();
+            var dbFlags = this.db.PlaceFlags.Where(f => uniqFlags.Contains(f.Code)).ToList();
+
+            if (place.PlaceFlags != null)
+            {
+                place.PlaceFlags.AddRange(dbFlags);
+            }
+            else
+            {
+                place.PlaceFlags = dbFlags;
+            }
+
+
             this.db.Places.AddOrUpdate(place);
-            await this.db.SaveChangesAsync();
+            this.db.SaveChanges();
 
-            return this.db.Places.Find(placeId);
-
+            return this.db.Places.Find(place.Id);
         }
 
         public async Task<PlaceDashboardDto> PlaceDashboard(int placeId)
@@ -219,6 +240,26 @@ namespace smartHookah.Services.Place
 
             var result = lng > -180 && lng <= 180 && lat >= -90 && lat <= 90;
             return result;
+        }
+
+        public async Task<List<Place>> GetWaitingPlaces()
+        {
+            var places = this.db.Places.Where(a => a.State == PlaceState.Waiting).ToListAsync();
+            return await places;
+        }
+
+        public async Task<Place> ChangePlaceState(int placeId,PlaceState newState)
+        {
+            var place = await this.db.Places.FindAsync(placeId);
+            if (place == null)
+            {
+                throw new ManaException(ErrorCodes.PlaceNotFound, $"Place was not found");
+            }
+
+            place.State = newState;
+            this.db.Places.AddOrUpdate(place);
+            db.SaveChanges();
+            return place;
         }
 
         public bool? ValidateCoordinates(string lng, string lat)
