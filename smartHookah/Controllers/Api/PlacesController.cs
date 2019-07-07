@@ -122,7 +122,10 @@ namespace smartHookah.Controllers.Api
             {
                 if(address.Lat == null)
                     continue;
-
+                if (!(double.TryParse(address.Lat, out _) && double.TryParse(address.Lng, out _)))
+                {
+                    continue;;
+                }
                var location = GeographyExtensions.CreatePoint(address.Lat, address.Lng);
                address.Location = location;
                this.db.Addresses.AddOrUpdate(address);
@@ -145,12 +148,12 @@ namespace smartHookah.Controllers.Api
             
             
             IQueryable<Place> closestPlaces;
-            var places = this.db.Places.Include("BusinessHours").Where(a => a.Public);
+            var places = this.db.Places.Include("BusinessHours").Where(a => a.Public && a.State == PlaceState.Active);
             if (validate.HasValue)
             {
                 var myLocation = GeographyExtensions.CreatePoint(lat.Value, lng.Value);
 
-                closestPlaces = this.db.Places.Where(a => (a.Address.Location.Distance(myLocation) / 1000) < radius).OrderBy(a => a.Address.Location.Distance(myLocation))
+                closestPlaces = this.db.Places.Where(a => a.State == PlaceState.Active && (a.Address.Location.Distance(myLocation) / 1000) < radius).OrderBy(a => a.Address.Location.Distance(myLocation))
                     .Skip(page * pageSize).Take(pageSize);
             }
             else
@@ -197,7 +200,7 @@ namespace smartHookah.Controllers.Api
                 foreach (var record in records)
                 {
                     var place = PlaceImportModel.ToModel(record);
-                    await placeService.AddPlace(place);
+                    await placeService.AddPlace(place,null);
                 }
             }
 
@@ -221,7 +224,7 @@ namespace smartHookah.Controllers.Api
                 foreach (var record in records)
                 {
                     var place = PlaceImportModelMapToPlace(record);
-                    await placeService.AddPlace(place);
+                    await placeService.AddPlace(place,null);
                 }
             }
 
@@ -232,9 +235,9 @@ namespace smartHookah.Controllers.Api
         public async Task<PlaceDto> AddPlace([FromBody] PlaceDto importedPlace)
         {
             var placeModel = importedPlace.ToModel(this.personService.GetCurentPerson()?.Id);
-            placeModel.Src = PlaceSrc.Import;
+            placeModel.Src = PlaceSrc.Person;
             placeModel.State = PlaceState.Waiting;
-            var imported = await placeService.AddPlace(placeModel);
+            var imported = await placeService.AddPlace(placeModel,importedPlace.Flags);
             return PlaceDto.FromModel(imported);
         }
 
