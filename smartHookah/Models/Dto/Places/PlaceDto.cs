@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClosedXML.Excel;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto.Places.Reservations;
+using smartHookah.Support;
 
 namespace smartHookah.Models.Dto
 {
@@ -61,7 +63,7 @@ namespace smartHookah.Models.Dto
                 FranchiseId = model.FranchiseId,
                 Franchise = FranchiseDto.FromModel(model.Franchise),
                 Flags = model.PlaceFlags.Select(s => s.Code).ToList(),
-                SocialMedias = model.SocialMedias.ToList()
+                SocialMedias = model.SocialMedias.EmptyIfNull().ToList()
             };
 
         public Place ToModel(int? creator)
@@ -80,7 +82,9 @@ namespace smartHookah.Models.Dto
                 PhoneNumber = this.PhoneNumber,
                 Facebook = this.Facebook,
                 HaveReservation = false,
-                MinimumReservationTime = 5
+                MinimumReservationTime = 5,
+                BusinessHours = this.BusinessHours.Select(a => a.ToModel()).ToList(),
+                
             };
         }
     }
