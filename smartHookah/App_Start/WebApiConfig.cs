@@ -40,7 +40,7 @@ namespace smartHookah
             //};
             //config.Formatters.Clear();
             //config.Formatters.Insert(0, jsonFormatter);
-
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
             // Web API routes
             config.MapHttpAttributeRoutes();
 
