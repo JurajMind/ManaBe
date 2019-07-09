@@ -926,10 +926,6 @@
     <Compile Include="Migrations\201907041855099_accesoryCreation.Designer.cs">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201907081702459_peto-test.cs" />
-    <Compile Include="Migrations\201907081702459_peto-test.Designer.cs">
-      <DependentUpon>201907081702459_peto-test.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Dto\Device\DevicePictureDto.cs" />
     <Compile Include="Models\Dto\Device\UpdateDto.cs" />
     <Compile Include="Models\Db\Person\FeatureMixCreator.cs" />
@@ -1230,9 +1226,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907041855099_accesoryCreation.resx">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907081702459_peto-test.resx">
-      <DependentUpon>201907081702459_peto-test.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
