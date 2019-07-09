@@ -33,5 +33,7 @@ namespace smartHookahCommon.Errors
         public static string SessionNotFound = "SESSION_NOT_FOUND";
 
         public static string AccessoryNotFound = "ACCESSORY_NOT_FOUND";
+
+        public static string MediaUploadError = "MEDIA_UPLOAD_ERROR";
     }
 }
