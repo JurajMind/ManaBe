@@ -286,6 +286,8 @@ namespace smartHookah.Models.Db
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public string Path { get; set; }
+
+        public string Sizes { get; set; }
         public MediaType Type { get; set; }
         public bool IsDefault { get; set; }
 

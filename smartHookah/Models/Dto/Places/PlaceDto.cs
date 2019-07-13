@@ -337,6 +337,8 @@ namespace smartHookah.Models.Dto
 
         public string FileName { get; private set; }
 
+        public string Sizes { get; set; }
+
 
 
         public static MediaDto FromModel(Media model) => model == null
@@ -349,7 +351,8 @@ namespace smartHookah.Models.Dto
                 Type = model.Type,
                 IsDefault = model.IsDefault,
                 Extension = model.Extension,
-                FileName = model.FileName
+                FileName = model.FileName,
+                Sizes = model.Sizes
             };
 
         public Media ToModel()

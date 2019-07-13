@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
+using Microsoft.Ajax.Utilities;
 using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Media
@@ -13,7 +15,7 @@ namespace smartHookah.Services.Media
     public class MediaService : IMediaService
     {
         private readonly SmartHookahContext db;
-
+        private int[] sizes = {180, 300, 800, 1600};
         public MediaService(SmartHookahContext db)
         {
             this.db = db;
@@ -46,21 +48,23 @@ namespace smartHookah.Services.Media
 
         private Models.Db.Media SaveMedia(HttpPostedFile file, string path, string key)
         {
+            
             if (file != null)
             {
                 var media = new Models.Db.Media();
                 var lastId = Guid.NewGuid().ToString().Substring(0, 15);
                 var extension = Path.GetExtension(file.FileName);
                 var scalePath = path + key + "/" + lastId +"/";
-                media.Path = scalePath +"original"+ extension;
+                media.Path = scalePath;
+                media.Sizes = Json.Encode(sizes);
                 media.Created = DateTime.Now;
                 Directory.CreateDirectory(System.Web.Hosting.HostingEnvironment.MapPath(path));
                 Directory.CreateDirectory(System.Web.Hosting.HostingEnvironment.MapPath(scalePath));
                 var sourceimage = Image.FromStream(file.InputStream);
-                ScaleAndSave(sourceimage, 180, 80, scalePath, extension);
-                ScaleAndSave(sourceimage, 300, 80, scalePath, extension);
-                ScaleAndSave(sourceimage, 800, 80, scalePath, extension);
-                ScaleAndSave(sourceimage, 1600, 98, scalePath, extension);
+                foreach (int size in sizes)
+                {
+                    ScaleAndSave(sourceimage, size, 80, scalePath, extension);
+                }
 
                 file.SaveAs(System.Web.Hosting.HostingEnvironment.MapPath(scalePath + "original"+extension));
 
