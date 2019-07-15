@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using smartHookah.Helpers.ModelExtensions;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Models.Db
@@ -76,7 +78,7 @@ namespace smartHookah.Models.Db
         [NotMapped]
         public bool PlaceSession { get; set; } = false;
 
-        public virtual Place Place { get; set; }
+        public virtual Place.Place Place { get; set; }
 
         public int? PlaceId { get; set; }
         

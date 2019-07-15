@@ -8,6 +8,7 @@ using System.Web.Http;
 using smartHookah.ErrorHandler;
 using smartHookah.Filters;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Media;
 using smartHookah.SwaggerExtensions;

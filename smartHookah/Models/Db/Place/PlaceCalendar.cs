@@ -13,7 +13,7 @@ namespace smartHookah.Models.Db
         public TimeSpan CloseHour { get; set; }
         public virtual ICollection<PlaceEvent> PlaceEvents { get; set; }
         public int PlaceId { get; set; }
-        public virtual Place Place { get; set; }
+        public virtual Place.Place Place { get; set; }
 
         public PlaceDay()
         {

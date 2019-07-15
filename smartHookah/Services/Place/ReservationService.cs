@@ -7,6 +7,7 @@ using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Models.Dto.Reservations;
@@ -229,7 +230,7 @@ namespace smartHookah.Services.Place
             return continuoseSlotLeft.FirstOrDefault(a => a.Value.Count == continuoseSlot).Key;
         }
 
-        private IEnumerable<Reservation> TodayReservation(DateTime date, Models.Db.Place place,
+        private IEnumerable<Reservation> TodayReservation(DateTime date, Models.Db.Place.Place place,
             out List<Reservation> todayActiveReservation)
         {
             var todayReservation = db.Reservations

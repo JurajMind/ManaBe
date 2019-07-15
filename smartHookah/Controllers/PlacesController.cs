@@ -1,4 +1,5 @@
 ﻿using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Services.Person;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;

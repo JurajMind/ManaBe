@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
 
 namespace smartHookah.Services.Gear
 {

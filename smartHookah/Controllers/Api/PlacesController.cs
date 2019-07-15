@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Controllers.Mobile;
 using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Person;
 using smartHookahCommon.Extensions;

@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
 
 namespace smartHookah.Models.Dto
 {

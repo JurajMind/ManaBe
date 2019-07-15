@@ -15,7 +15,7 @@ namespace smartHookah.Models.Db
         public string Currency { get; set; }
 
         public int PlaceId { get; set; }
-        public virtual Place Place { get; set; }
+        public virtual Place.Place Place { get; set; }
 
         public int? PriceGroupId { get; set; }
         public virtual PriceGroup PriceGroup { get; set; }

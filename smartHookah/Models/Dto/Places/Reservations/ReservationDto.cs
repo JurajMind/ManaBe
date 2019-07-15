@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Support;
 
 namespace smartHookah.Models.Dto.Places.Reservations

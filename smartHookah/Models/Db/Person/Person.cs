@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Db
 {
@@ -36,10 +37,10 @@ namespace smartHookah.Models.Db
 
         public Brand AssignedBrand { get; set; }
 
-        public virtual ICollection<Place> Places { get; set; }
+        public virtual ICollection<Place.Place> Places { get; set; }
 
         [NotMapped]
-        public Place Place
+        public Place.Place Place
         {
             get { return Places.FirstOrDefault(); }
         }
@@ -55,7 +56,7 @@ namespace smartHookah.Models.Db
 
         public virtual ICollection<HookahOrder> Orders { get; set; }
 
-        public virtual ICollection<Place> Manage { get; set; }
+        public virtual ICollection<Place.Place> Manage { get; set; }
 
         public virtual ICollection<Notificatiom> Notificatioms { get; set; }
 

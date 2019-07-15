@@ -21,7 +21,7 @@ namespace smartHookah.Services.Media
             this.db = db;
         }
 
-        public async Task<Models.Db.Media> AddPlacePicture(int id, HttpPostedFile file)
+        public async Task<Models.Db.Place.Media> AddPlacePicture(int id, HttpPostedFile file)
         {
             var place = await this.db.Places.FindAsync(id);
             var path = $"/Content/Place/";
@@ -34,7 +34,7 @@ namespace smartHookah.Services.Media
             return media;
         }
 
-        public async Task<Models.Db.Media> AddGearPicture(int id, HttpPostedFile file)
+        public async Task<Models.Db.Place.Media> AddGearPicture(int id, HttpPostedFile file)
         {
             var gear = await this.db.PipeAccesories.FindAsync(id);
             var path = $"/Content/Gear/{gear.BrandName}/";
@@ -46,12 +46,12 @@ namespace smartHookah.Services.Media
             return media;
         }
 
-        private Models.Db.Media SaveMedia(HttpPostedFile file, string path, string key)
+        private Models.Db.Place.Media SaveMedia(HttpPostedFile file, string path, string key)
         {
             
             if (file != null)
             {
-                var media = new Models.Db.Media();
+                var media = new Models.Db.Place.Media();
                 var lastId = Guid.NewGuid().ToString().Substring(0, 15);
                 var extension = Path.GetExtension(file.FileName);
                 var scalePath = path + key + "/" + lastId +"/";

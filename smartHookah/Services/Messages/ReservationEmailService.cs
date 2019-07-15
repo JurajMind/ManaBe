@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Messages

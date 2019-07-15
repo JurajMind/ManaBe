@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Controllers
 {
