@@ -4,6 +4,8 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 using smartHookah.Models.Db.Device;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Db
 {
@@ -70,7 +72,7 @@ namespace smartHookah.Models.Db
 
         public DbSet<PlaceEvent> PlaceEvents { get; set; }
 
-        public DbSet<Place> Places { get; set; }
+        public DbSet<Place.Place> Places { get; set; }
 
         public DbSet<PriceGroup> PriceGroup { get; set; }
 
@@ -205,13 +207,13 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<PipeAccesory>().HasOptional(a => a.Statistics).WithRequired(a => a.PipeAccesory);
 
-            modelBuilder.Entity<Place>().HasOptional(a => a.Person).WithMany().HasForeignKey(a => a.PersonId);
+            modelBuilder.Entity<Place.Place>().HasOptional(a => a.Person).WithMany().HasForeignKey(a => a.PersonId);
 
             modelBuilder.Entity<Person>().HasOptional(a => a.AssignedBrand);
 
             modelBuilder.Entity<SmokeSession>().HasMany(a => a.SmokeEvents).WithRequired(a => a.SmokeSession);
 
-            modelBuilder.Entity<Place>().HasMany(a => a.SmokeSessions).WithOptional(a => a.Place);
+            modelBuilder.Entity<Place.Place>().HasMany(a => a.SmokeSessions).WithOptional(a => a.Place);
 
             modelBuilder.Entity<Person>().HasMany(a => a.Places).WithOptional(a => a.Person);
 
@@ -243,7 +245,7 @@ namespace smartHookah.Models.Db
                         cs.ToTable("ReservationSeat");
                     });
 
-            modelBuilder.Entity<Place>().HasMany(s => s.PlaceFlags).WithMany(h => h.Places).Map(
+            modelBuilder.Entity<Place.Place>().HasMany(s => s.PlaceFlags).WithMany(h => h.Places).Map(
                 cs =>
                 {
                     cs.MapLeftKey("PlaceRefId");
@@ -264,7 +266,7 @@ namespace smartHookah.Models.Db
             modelBuilder.Entity<PipeAccesory>().HasMany(s => s.SimilarAccesories).WithRequired(h => h.Original)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Place>().HasMany(p => p.PlaceDays);
+            modelBuilder.Entity<Place.Place>().HasMany(p => p.PlaceDays);
 
             modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
 

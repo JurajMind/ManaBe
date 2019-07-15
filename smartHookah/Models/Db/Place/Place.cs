@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
 using System.Linq;
 
-namespace smartHookah.Models.Db
+namespace smartHookah.Models.Db.Place
 {
     public class Place
     {
@@ -76,6 +76,8 @@ namespace smartHookah.Models.Db
         public bool HaveMana { get; set; }
 
         public int Rating { get; set; }
+
+        public ICollection<PlaceReview> Reviews { get; set; }
 
         public int MinimumReservationTime { get; set; }
         public string Map { get; set; }

@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Support;
 
@@ -26,6 +28,8 @@ namespace smartHookah.Models.Db
         public virtual Brand Brand { get; set; }
         public virtual PipeAccesoryStatistics Statistics { get; set; }
 
+        public double Rating { get; set; }
+
         public virtual ICollection<SimilarAccesories> SimilarAccesories { get; set; }
 
         public virtual ICollection<Media> Mediae { get; set; }
@@ -42,6 +46,7 @@ namespace smartHookah.Models.Db
 
         public int? ControlSearch { get; set; }
 
+        public ICollection<PipeAccessoryReview> Reviews { get; set; }
 
         [MaxLength(128)]
         public string Picture { get; set; }

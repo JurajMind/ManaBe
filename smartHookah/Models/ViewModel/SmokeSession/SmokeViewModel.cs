@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using smartHookah.Helpers;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers

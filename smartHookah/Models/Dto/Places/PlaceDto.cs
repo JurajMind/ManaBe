@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ClosedXML.Excel;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Support;
 

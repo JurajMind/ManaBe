@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using CsvHelper.Configuration.Attributes;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using ServiceStack.Common;
 
 namespace smartHookah.Controllers.Api

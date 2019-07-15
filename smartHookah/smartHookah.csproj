@@ -924,6 +924,11 @@
     <Compile Include="Migrations\201907041855099_accesoryCreation.Designer.cs">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907152119522_place-review.cs" />
+    <Compile Include="Migrations\201907152119522_place-review.Designer.cs">
+      <DependentUpon>201907152119522_place-review.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\Place\PlaceReview.cs" />
     <Compile Include="Models\Dto\Device\DevicePictureDto.cs" />
     <Compile Include="Models\Dto\Device\UpdateDto.cs" />
     <Compile Include="Models\Db\Person\FeatureMixCreator.cs" />
@@ -1224,6 +1229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907041855099_accesoryCreation.resx">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907152119522_place-review.resx">
+      <DependentUpon>201907152119522_place-review.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

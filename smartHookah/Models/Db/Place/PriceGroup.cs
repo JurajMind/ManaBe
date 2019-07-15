@@ -11,7 +11,7 @@ namespace smartHookah.Models.Db
         public virtual ICollection<OwnPipeAccesories> Items { get; set; }
 
         public int PlaceId { get; set; }
-        public virtual Place Place { get; set; }
+        public virtual Place.Place Place { get; set; }
 
         public decimal Price { get; set; }
     }

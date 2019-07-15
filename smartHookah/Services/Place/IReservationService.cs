@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places.Reservations;
 
 namespace smartHookah.Services.Place

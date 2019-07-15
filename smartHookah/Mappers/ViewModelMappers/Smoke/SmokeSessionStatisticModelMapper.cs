@@ -5,6 +5,7 @@ using System.Web;
 using smartHookah.Controllers;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
 using smartHookah.Models.ViewModel.SmokeSession;
 using smartHookah.Services.Person;
 

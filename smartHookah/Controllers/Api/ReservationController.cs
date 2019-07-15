@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Models.Dto.Reservations;
 using smartHookah.Support;

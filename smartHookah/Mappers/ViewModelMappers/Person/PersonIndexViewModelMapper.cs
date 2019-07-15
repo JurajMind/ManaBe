@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using smartHookah.Controllers;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Services.Device;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;

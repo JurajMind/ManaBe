@@ -7,7 +7,7 @@ namespace smartHookah.Services.Media
 {
     public interface IMediaService
     {
-        Task<Models.Db.Media> AddPlacePicture(int id, HttpPostedFile file);
-        Task<Models.Db.Media> AddGearPicture(int id, HttpPostedFile file);
+        Task<Models.Db.Place.Media> AddPlacePicture(int id, HttpPostedFile file);
+        Task<Models.Db.Place.Media> AddGearPicture(int id, HttpPostedFile file);
     }
 }

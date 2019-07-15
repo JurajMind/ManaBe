@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.Azure.Amqp.Framing;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Person;

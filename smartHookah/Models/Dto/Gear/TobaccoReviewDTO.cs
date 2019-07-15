@@ -6,6 +6,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
 
 namespace smartHookah.Models.Dto
 {
@@ -19,7 +20,7 @@ namespace smartHookah.Models.Dto
 
         public int Smoke { get; set; }
 
-        public int Overall { get; set; }
+        public double Overall { get; set; }
 
         public string Text { get; set; }
         
@@ -42,7 +43,7 @@ namespace smartHookah.Models.Dto
         public int Smoke { get; set; }
 
         [DataMember, JsonProperty("Overall")]
-        public int Overall { get; set; }
+        public double Overall { get; set; }
 
         [DataMember, JsonProperty("Text")]
         public string Text { get; set; }

@@ -12,6 +12,8 @@ using GuigleAPI;
 using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Device;
@@ -23,7 +25,7 @@ namespace smartHookah.Services.Place
 {
     using smartHookah.Services.Person;
 
-    using Place = Models.Db.Place;
+    using Place = Models.Db.Place.Place;
 
     public class PlaceService : IPlaceService
     {
