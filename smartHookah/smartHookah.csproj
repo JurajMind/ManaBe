@@ -924,6 +924,10 @@
     <Compile Include="Migrations\201907041855099_accesoryCreation.Designer.cs">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907131434298_mediaSizes.cs" />
+    <Compile Include="Migrations\201907131434298_mediaSizes.Designer.cs">
+      <DependentUpon>201907131434298_mediaSizes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201907152119522_place-review.cs" />
     <Compile Include="Migrations\201907152119522_place-review.Designer.cs">
       <DependentUpon>201907152119522_place-review.cs</DependentUpon>
@@ -1229,6 +1233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907041855099_accesoryCreation.resx">
       <DependentUpon>201907041855099_accesoryCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907131434298_mediaSizes.resx">
+      <DependentUpon>201907131434298_mediaSizes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907152119522_place-review.resx">
       <DependentUpon>201907152119522_place-review.cs</DependentUpon>

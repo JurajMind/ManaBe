@@ -622,7 +622,7 @@ namespace smartHookah.Controllers
 
             var byMonthVisit = reservation.GroupBy(a => a.Time.ToString("yyyy.MM"), a => a).ToPlotData(a => a.ToString());
             var test = reservation.Where(a => a.Seats.Count(b => b.Id == 40) > 0);
-            var tableUssage = reservation.GroupBy(a => a.Seats.FirstOrDefault().Name)
+            var tableUssage = reservation.GroupBy(a => a.Seats.FirstOrDefault()?.Name ?? "no seat")
                 .ToPlotData(a => a.ToString());
 
             var model = new GetStatisticModel();
