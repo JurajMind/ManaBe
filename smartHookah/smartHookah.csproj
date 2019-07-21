@@ -1909,11 +1909,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Landing\img_parallax.jpg" />
-    <Content Include="Landing\img_parallax2.jpg" />
-    <Content Include="Landing\img_parallax3.jpg" />
-    <Content Include="Landing\Index.htm" />
-    <Content Include="Landing\logo.png" />
     <Content Include="Scripts\bootstrap-colorselector.js" />
     <Content Include="Scripts\bootstrap-rating-input.js" />
     <Content Include="Scripts\bootstrap-tagsinput.js" />
