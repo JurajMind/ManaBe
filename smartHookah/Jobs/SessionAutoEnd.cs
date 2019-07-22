@@ -70,7 +70,7 @@ namespace smartHookah.Jobs
         {
             
                 var stands = await this.db.Hookahs.ToListAsync();
-                var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code));
+                var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code).ToList());
 
             Parallel.ForEach(
                 stands,

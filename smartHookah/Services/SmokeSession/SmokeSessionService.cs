@@ -77,7 +77,7 @@ namespace smartHookah.Services.SmokeSession
             return session.MetaData;
         }
 
-        public (SmokeSessionStatistics,SmokeSessionMetaData) GetFinishedData(int id)
+        public SmokeSession GetSmokeSession(int id)
         {
             var session = db.SmokeSessions
                 .Include(a => a.MetaData).Include(a => a.Statistics)
@@ -87,7 +87,7 @@ namespace smartHookah.Services.SmokeSession
                 throw new ManaException(ErrorCodes.SessionNotFound,$"Session id {id} not found or it has no metadata.");
             }
 
-            return (session?.Statistics, session?.MetaData);
+            return session;
         }
 
 

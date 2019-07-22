@@ -264,7 +264,7 @@ namespace smartHookah.Services.Device
 
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
         {
-            return this.iotService.GetOnlineStates(deviceIds);
+            return this.iotService.GetOnlineStates(deviceIds.ToList());
         }
 
         public List<Animation> GetAnimations()
