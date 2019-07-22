@@ -120,12 +120,13 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("GetFinishedData")]
         public FinishedSessionDataDto GetFinishedData(int id)
         {
-            var data = this.sessionService.GetFinishedData(id);
+            var data = this.sessionService.GetSmokeSession(id);
 
             return new FinishedSessionDataDto()
             {
-                MetaData = SmokeSessionMetaDataDto.FromModel(data.Item2),
-                Statistics = SmokeSessionStatisticsDto.FromModel(data.Item1)
+                Data =  SmokeSessionSimpleDto.FromModel(data),
+                MetaData = SmokeSessionMetaDataDto.FromModel(data.MetaData),
+                Statistics = SmokeSessionStatisticsDto.FromModel(data.Statistics)
             };
         }
 
@@ -163,10 +164,10 @@ namespace smartHookah.Controllers.Api
         }
         
         [HttpPost, Route("{id}/End")]
-        public async Task<int> EndSmokeSession(string id)
+        public async Task<SmokeSessionSimpleDto> EndSmokeSession(string id)
         {
             var endedESession =  await this.sessionService.EndSmokeSession(id,SessionReport.Good);
-            return endedESession.Id;
+            return SmokeSessionSimpleDto.FromModel(endedESession);
         }
 
         #endregion

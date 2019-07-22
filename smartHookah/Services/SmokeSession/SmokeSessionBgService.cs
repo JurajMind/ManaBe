@@ -94,7 +94,7 @@ namespace smartHookah.Services.SmokeSession
             if (smokeSession.MetaData != null && smokeSession.MetaData.TobaccoId.HasValue)
                 TobaccoController.CalculateStatistic(smokeSession.MetaData.TobaccoId.Value, db);
 
-                       await this.iotService.SendMsgToDevice(deviceId, "restart:");
+            await this.iotService.SendMsgToDevice(deviceId, "restart:");
 
             GamificationController.Engine.ManualValidateSession(smokeSession.Id);
 

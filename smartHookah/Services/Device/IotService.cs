@@ -1,4 +1,6 @@
-﻿namespace smartHookah.Services.Device
+﻿using smartHookahCommon.Extensions;
+
+namespace smartHookah.Services.Device
 {
     using System;
     using System.Collections.Generic;
@@ -22,9 +24,10 @@
             this.registryManager = RegistryManager.CreateFromConnectionString(iotConnectionString);
         }
 
-        public async Task<IEnumerable<Device>> GetDevices(IEnumerable<string> deviceIds)
+        public async Task<IEnumerable<Device>> GetDevices(List<string> deviceIds)
         {
-            var devices = await this.registryManager.GetDevicesAsync(100);
+           
+            var devices = await this.registryManager.GetDevicesAsync(deviceIds.Count);
             return devices.Where(d => deviceIds.Contains(d.Id));
         }
 
@@ -39,12 +42,22 @@
             return devices?.ConnectionState == DeviceConnectionState.Connected;
         }
 
-        public async Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
+        public async Task<Dictionary<string, bool>> GetOnlineStates(IList<string> deviceIds)
         {
-            var devices = await this.registryManager.GetDevicesAsync(100);
-            return devices.Where(d => deviceIds.Contains(d.Id)).ToDictionary(
-                a => a.Id,
-                b => b.ConnectionState == DeviceConnectionState.Connected);
+            var result = new Dictionary<string, bool>();
+            var query = registryManager.CreateQuery("SELECT * FROM devices", 100);
+            while (query.HasMoreResults)
+            {
+                var page = await query.GetNextAsTwinAsync();
+                foreach (var twin in page)
+                {
+                    result.Add(twin.DeviceId,twin.ConnectionState == DeviceConnectionState.Connected);
+                }
+                if(result.Keys.Count(deviceIds.Contains) == deviceIds.Count())
+                    break;;
+            }
+
+            return result;
         }
 
         public async Task SendMsgToDevice(string deviceId, string message)

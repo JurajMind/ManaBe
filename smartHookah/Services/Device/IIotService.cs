@@ -7,13 +7,13 @@
 
     public interface IIotService
     {
-        Task<IEnumerable<Device>> GetDevices(IEnumerable<string> deviceIds);
+        Task<IEnumerable<Device>> GetDevices(List<string> deviceIds);
 
         Task<Device> GetDevice(string deviceId);
 
         Task<bool> GetOnlineState(string deviceId);
 
-        Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds);
+        Task<Dictionary<string, bool>> GetOnlineStates(IList<string> deviceIds);
 
         Task SendMsgToDevice(string deviceId, string message);
     }
