@@ -121,7 +121,7 @@ namespace smartHookah.Controllers
 
         public async Task<ActionResult> ByBrand(string brand, int? page, string sortOrder = null)
         {
-            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
+            this.redisService.StoreAddress(Request.UserHostAddress, Request.UserHostName);
             ViewBag.Brand = brand;
 
             var filterTobacco = FilterTobacco(sortOrder, page, ViewBag, filter: $"brand_{brand}");
@@ -132,7 +132,7 @@ namespace smartHookah.Controllers
         // GET: TobaccoSimple/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
+            this.redisService.StoreAddress(Request.UserHostAddress, Request.UserHostName);
 
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -403,7 +403,7 @@ namespace smartHookah.Controllers
             string previousSort = null)
         {
 
-            this.redisService.StoreAdress(Request.UserHostAddress, Request.UserHostName);
+            this.redisService.StoreAddress(Request.UserHostAddress, Request.UserHostName);
 
             var model = FilterTobacco(sortOrder, page, filter: filter, previousSort: previousSort);
 

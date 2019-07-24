@@ -78,7 +78,7 @@ namespace smartHookah.Controllers
             if (hookah == null)
                 return RedirectToAction("Index", "Home");
 
-            var adresses = this.redisService.GetAdress(hookah.Code + "_acces");
+            var adresses = this.redisService.GetAddress(hookah.Code + "_acces");
 
             return this.View(adresses);
         }

@@ -82,21 +82,43 @@ namespace smartHookah.Services.Redis
             using (var redis = this.redisManager.GetClient())
             {
                 var key = String.Format(RedisKeys.DeviceKey, hookahId);
-                var value =  TryGetNamespaced<string>(key, redis);
+                var sessionId =  TryGetNamespaced<string>(key, redis);
+                var controlHookahId = String.Format(RedisKeys.SessionKey, sessionId);
+                var controlValue = TryGetNamespaced<string>(controlHookahId, redis);
 
-                if (string.IsNullOrEmpty(value))
+
+                if (string.IsNullOrEmpty(sessionId))
                 {
                     var device = this.db.Hookahs.FirstOrDefault(a => a.Code == hookahId);
                     if (device == null)
                         return "";
-                    var sessionId = this.db.SmokeSessions.FirstOrDefault(a => a.HookahId == device.Id && a.StatisticsId == null);
-                    if (sessionId == null)
+                    var dbSession = this.db.SmokeSessions.FirstOrDefault(a => a.HookahId == device.Id && a.StatisticsId == null);
+                    if (dbSession == null)
                         return "";
-                    this.CreateSmokeSession(sessionId.SessionId, hookahId);
-                    return sessionId.SessionId;
+                    this.CreateSmokeSession(dbSession.SessionId, hookahId);
+                    return dbSession.SessionId;
                 }
 
-                return value;
+
+                if (hookahId != controlValue)
+                {
+                    var device = this.db.Hookahs.FirstOrDefault(a => a.Code == hookahId);
+                    if (device == null)
+                        return "";
+                    var hookahSession =
+                        this.db.SmokeSessions.FirstOrDefault(s => s.HookahId == device.Id && s.StatisticsId == null);
+
+                    if (hookahSession == null)
+                    {
+                        
+                    }
+                    else
+                    {
+                        return hookahSession.SessionId;
+                    }
+                }
+
+                    return sessionId;
             }
         }
 
@@ -154,15 +176,15 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public void StoreAdress(string adress, string hostName)
+        public void StoreAddress(string address, string hostName)
         {
             using (var redis = this.redisManager.GetClient())
             {
-                redis.AddItemToList(adress, hostName);
+                redis.AddItemToList(address, hostName);
             }
         }
 
-        public IList<string> GetAdress(string key)
+        public IList<string> GetAddress(string key)
         {
             using (var redis = this.redisManager.GetClient())
             {
@@ -170,7 +192,7 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public IList<Puf> GetPufs(string sessionId)
+        public IList<Puf> GetPuffs(string sessionId)
         {
             using (var redis = this.redisManager.GetClient())
             {

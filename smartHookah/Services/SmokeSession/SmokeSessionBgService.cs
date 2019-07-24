@@ -39,7 +39,7 @@ namespace smartHookah.Services.SmokeSession
             if (result == null)
             {
                 result = new DynamicSmokeStatistic();
-                result.FullUpdate(this.redisService.GetPufs(sessionId).ToList(), sessionId);
+                result.FullUpdate(this.redisService.GetPuffs(sessionId).ToList(), sessionId);
                 result.LastPufs = new List<Puf>();
                 this.redisService.SetDynamicSmokeStatistic(sessionId,result);
             }
@@ -51,7 +51,7 @@ namespace smartHookah.Services.SmokeSession
         {
             // Get hookah code from session Id
             var deviceId = this.redisService.GetHookahId(id);
-            var rawPufs = this.redisService.GetPufs(id);
+            var rawPufs = this.redisService.GetPuffs(id);
 
             if (!rawPufs.Any())
                 return null;
@@ -163,6 +163,35 @@ namespace smartHookah.Services.SmokeSession
             {
                 await this.InitSmokeSession(device);
             }
+
+            await this.CleanWrongSessions();
+        }
+
+        public async Task CleanWrongSessions()
+        {
+          
+                var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
+
+                var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
+
+
+                var sessionToDelete = smokeSessionToDelete as Models.Db.SmokeSession[] ?? smokeSessionToDelete.ToArray();
+                db.SmokeSessions.RemoveRange(sessionToDelete);
+                db.SessionMetaDatas.RemoveRange(sessionToDelete.Where(a => a.MetaData != null).Select(a => a.MetaData));
+                try
+                {
+                    db.SaveChanges();
+                    foreach (var session in sessionToDelete)
+                    {
+                        this.redisService.RemoveSession(session.SessionId);
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            
         }
 
         private string CreateSessionId()

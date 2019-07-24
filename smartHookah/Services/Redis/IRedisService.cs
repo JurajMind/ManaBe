@@ -18,11 +18,11 @@ namespace smartHookah.Services.Redis
 
         void SetDynamicSmokeStatistic(string sessionId,DynamicSmokeStatistic dynamicSmokeStatistic);
 
-        void StoreAdress(string adress, string name);
+        void StoreAddress(string address, string name);
 
-        IList<string> GetAdress(string key);
+        IList<string> GetAddress(string key);
 
-        IList<Puf> GetPufs(string sessionId);
+        IList<Puf> GetPuffs(string sessionId);
 
         void SetReservationUsage(int placeId, DateTime date, ReservationUsage reservationUsage);
 

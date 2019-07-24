@@ -47,25 +47,31 @@ namespace smartHookah.Controllers
             var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
 
             var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
-
-
-            var sessionToDelete = smokeSessionToDelete as SmokeSession[] ?? smokeSessionToDelete.ToArray();
-            db.SmokeSessions.RemoveRange(sessionToDelete);
-            db.SessionMetaDatas.RemoveRange(sessionToDelete.Where(a => a.MetaData != null).Select(a => a.MetaData));
-            try
+            foreach (var session in smokeSessionToDelete)
             {
-                db.SaveChanges();
-                foreach (var session in sessionToDelete)
+                try
                 {
+                    db.SmokeSessions.Remove(session);
+                    if (session.MetaData != null)
+                    {
+                        db.SessionMetaDatas.Remove(session.MetaData);
+                    }
+
+                    db.SaveChanges();
                     this.redisService.RemoveSession(session.SessionId);
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    
+                }
+              
+              
             }
-            catch (Exception e)
-            {
 
-            }
 
-            return View(sessionToDelete.Count());
+
+            return View(smokeSessionToDelete.Count());
         }
 
         public ActionResult CleanShortSession()
