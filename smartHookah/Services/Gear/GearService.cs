@@ -210,13 +210,22 @@ namespace smartHookah.Services.Gear
 
             var findBrand = await this.db.Brands.Where(a => a.DisplayName == accessory.BrandName || a.Name == accessory.BrandName).FirstOrDefaultAsync() ??
                             CreateBrandFromAccessory(accessory);
-
+            var person = this.personService.GetCurentPerson(db);
             accessory.Brand = findBrand;
             accessory.BrandName = findBrand.Name;
             accessory.Status = AccessoryStatus.Waiting;
-            accessory.CreatorId = this.personService.GetCurentPerson().Id;
+            accessory.CreatorId = person.Id;
             accessory.CreatedAt = DateTimeOffset.UtcNow;
             accessory.Id = 0;
+
+            person.OwnedPipeAccesories.Add(new OwnPipeAccesories()
+            {
+                PipeAccesory = accessory,
+                CreatedDate = DateTime.UtcNow,
+                Person = person
+            });
+
+            this.db.Persons.AddOrUpdate(person);
 
             this.db.PipeAccesories.Add(accessory);
             this.db.SaveChanges();
