@@ -77,7 +77,7 @@ namespace smartHookah.Controllers.Api
                 {
                     if (ds == null)
                         ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(this.redisService.GetPufs(session).ToList(), session);
+                    ds.FullUpdate(this.redisService.GetPuffs(session).ToList(), session);
                 }
                 else
                 {

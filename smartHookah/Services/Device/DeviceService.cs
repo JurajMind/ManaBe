@@ -210,7 +210,7 @@ namespace smartHookah.Services.Device
         {
             var sessionId = this.redisService.GetSessionId(id);
 
-            var pufs = this.redisService.GetPufs(sessionId);
+            var pufs = this.redisService.GetPuffs(sessionId);
 
             var intake = pufs.Count(a => a.Type == PufType.In);
             var setting = new DeviceSetting();

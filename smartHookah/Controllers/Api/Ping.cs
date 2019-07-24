@@ -52,7 +52,7 @@ namespace smartHookah.Controllers.Api
                 try
                 {
                     var adress = ((HttpContextWrapper)this.Request.Properties["MS_HttpContext"]).Request.UserHostAddress;
-                    this.redisService.StoreAdress(hookah.Code + "_acces", adress);
+                    this.redisService.StoreAddress(hookah.Code + "_acces", adress);
                 }
                 catch (Exception e)
                 {

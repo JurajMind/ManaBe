@@ -13,5 +13,7 @@ namespace smartHookah.Services.SmokeSession
         Task<Models.Db.SmokeSession> InitSmokeSession(string deviceId);
 
         Task IntNewSessions();
+
+        Task CleanWrongSessions();
     }
 }

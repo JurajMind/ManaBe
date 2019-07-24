@@ -5,6 +5,8 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using smartHookah.Models.Redis;
 using System.Threading.Tasks;
+using log4net;
+using smartHookah.Controllers.Api;
 using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Models.Db;
 using smartHookah.Services.Device;
@@ -22,6 +24,8 @@ namespace smartHookah.Services.SmokeSession
         private readonly IRedisService redisService;
         private readonly IDeviceService deviceService;
         private readonly ISmokeSessionBgService smokeSessionBgService;
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(SmokeSessionService));
 
         public SmokeSessionService(SmartHookahContext db, IRedisService redisService, IDeviceService deviceService, ISmokeSessionBgService smokeSessionBgService)
         {
@@ -90,6 +94,11 @@ namespace smartHookah.Services.SmokeSession
             return session;
         }
 
+        public SmokeSession GetSmokeSession(string sessionId)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public DeviceSetting GetStandSettings(string id)
         {
@@ -100,13 +109,58 @@ namespace smartHookah.Services.SmokeSession
 
         public SmokeSession GetLiveSmokeSession(string sessionId)
         {
-            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == sessionId);
+            var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == sessionId && a.StatisticsId == null);
             if (session != null)
             {
                 session.DynamicSmokeStatistic = this.GetDynamicStatistic(sessionId,null);
+            }
+
+            return session;
+        }
+
+        public List<SmokeSession> GetLiveSmokeSessions(List<string> sessions)
+        {
+           var dbSessions = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).Where(a => sessions.Contains(a.SessionId) && a.StatisticsId == null).ToList();
+
+           foreach (var smokeSession in dbSessions)
+           {
+               smokeSession.DynamicSmokeStatistic = this.GetDynamicStatistic(smokeSession.SessionId, null);
+           }
+
+           return dbSessions;
+        }
+
+        public List<SmokeSession> GetDevicesLiveSessions(List<int> deviceId)
+        {
+            var dbSessions = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).Where(a => deviceId.Contains(a.HookahId) && a.StatisticsId == null).ToList();
+
+            foreach (var i in deviceId)
+            {
+                var deviceSession = dbSessions.FirstOrDefault(s => s.HookahId == i);
+                // soft error, device have no active session!
+                if (deviceSession == null)
+                {
+                    logger.Error($"Device with id {i} have no LIVE session!");
+                    var device = this.db.Hookahs.Find(i);
+                    if (device == null)
+                    {
+                        logger.Error($"Device with id {i} not found!");
+                    }
+                    else
+                    {
+                        this.smokeSessionBgService.InitSmokeSession(device.Code);
+                        deviceSession.DynamicSmokeStatistic = new DynamicSmokeStatistic();
+                    }
+                    
+                }
+                else
+                {
+                    deviceSession.DynamicSmokeStatistic = this.GetDynamicStatistic(deviceSession.SessionId, null);
+                }
 
             }
-            return session;
+            return dbSessions;
+          
         }
 
         public async Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model)

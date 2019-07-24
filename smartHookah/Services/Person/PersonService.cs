@@ -1,6 +1,8 @@
 ﻿using System.Data.Entity.Migrations;
+using log4net;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
+using smartHookah.Services.SmokeSession;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 
@@ -36,7 +38,11 @@ namespace smartHookah.Services.Person
 
         private readonly IRedisService redisService;
 
-        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user, IDeviceService deviceService, IRedisService redisService)
+        private readonly ISmokeSessionService smokeSessionService;
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(SmokeSessionService));
+
+        public PersonService(SmartHookahContext db, IOwinContext owinContext, IPrincipal user, IDeviceService deviceService, IRedisService redisService, ISmokeSessionService smokeSessionService)
         {
             this.db = db;
             this.owinContext = owinContext;
@@ -44,6 +50,7 @@ namespace smartHookah.Services.Person
             this.user = user;
             this.deviceService = deviceService;
             this.redisService = redisService;
+            this.smokeSessionService = smokeSessionService;
         }
 
         public Models.Db.Person GetCurentPerson()
@@ -173,6 +180,7 @@ namespace smartHookah.Services.Person
 
             var sessions = db.SmokeSessions.Include(h => h.Hookah).Include(a => a.Persons).Where(a => a.StatisticsId == null)
                 .Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
+            
 
             var result = new List<Models.Db.SmokeSession>();
             var devices = sessions.Select(d => d.Hookah.Code);
@@ -183,8 +191,18 @@ namespace smartHookah.Services.Person
             {
                 var state = onlineDevices.TryGetValue(session.Hookah.Code, out var onlineState);
                 var hookahSessionCode = redisService.GetSessionId(session.Hookah.Code);
-                if(session.SessionId != hookahSessionCode)
-                    continue;
+                if (session.SessionId != hookahSessionCode)
+                {
+                    logger.Error($"Invalid session {session.SessionId} hookah: {hookahSessionCode}");
+                    var hookahSession = this.db.SmokeSessions.FirstOrDefault(a => a.SessionId == hookahSessionCode);
+                    if (hookahSession == null || hookahSession.StatisticsId != null)
+                    {
+                        // wrong hookah code
+                        this.redisService.CleanSmokeSession(hookahSessionCode);
+                        this.redisService.CreateSmokeSession(session.SessionId, session.Hookah.Code);
+                    }
+                
+                }
                 var ds = this.redisService.GetDynamicSmokeStatistic(session.SessionId);
                 var code = redisService.GetHookahId(session.SessionId);
                 if (code == null) continue;
