@@ -54,14 +54,9 @@ namespace smartHookahTests.Services
 
             db.Setup(d => d.Persons).Returns(mockSet.Object);
 
-            var service = new PersonService(
-                db.Object,
-                owinMock.Object,
-                principal.Object,
-                deviceServiceMock.Object,
-                redisMock.Object);
+         
 
-            var result = service.GetCurentPerson();
+         //   var result = service.GetCurentPerson();
 
         }
     }
