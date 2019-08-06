@@ -19,6 +19,9 @@ namespace smartHookah.Models.Db.Place
 
         public string Descriptions { get; set; }
 
+        public virtual ICollection<PlaceTranslation> DbDescription { get; set; }
+
+
         [Required]
         [MaxLength(25)]
         [Index(IsUnique = true)]

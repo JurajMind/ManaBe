@@ -9,6 +9,8 @@ namespace smartHookah.Models.Db
        public string Name { get; set; }
        public string Description { get; set; }
 
+       public ICollection<FeatureMixCreatorTranslation> DbDescription { get; set; }
+
        public string Location { get; set; }
 
        public virtual ICollection<SocialMedia> SocialMedias { get; set; }

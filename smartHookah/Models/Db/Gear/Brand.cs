@@ -33,5 +33,7 @@ namespace smartHookah.Models.Db
 
         public string DisplayName { get; set; }
 
+        public ICollection<BrandTranslation> DbDescription { get; set; }
+
     }
 }

@@ -27,7 +27,15 @@ namespace smartHookah.Models.Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string ShortDescriptions { get; set; }
+        public Dictionary<string, string> ShortDescriptions { get; set; }
+        public Dictionary<string, string> Description { get; set; }
+
+        public int? FranchiseId { get; set; }
+
+        public string FranchiseName { get; set; }
+
+        public string FranchiseLogo { get; set; }
+
         public string FriendlyUrl { get; set; }
         public string LogoPath { get; set; }
         public AddressDto Address { get; set; }
@@ -57,7 +65,10 @@ namespace smartHookah.Models.Dto
         {
             Id = model.Id,
             Name = model.Name,
-            ShortDescriptions = model.ShortDescriptions,
+            ShortDescriptions = model.DbDescription.ToDictionary(a => a.Lng,b => b.ShortDescriptions),
+            Description = model.DbDescription.ToDictionary(a => a.Lng, b => b.Descriptions),
+            FranchiseId = model.FranchiseId,
+            FranchiseName = model?.Franchise?.Name,
             FriendlyUrl = model.FriendlyUrl,
             LogoPath = model.LogoPath,
             Address = AddressDto.FromModel(model.Address),
