@@ -281,6 +281,7 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<Person>().HasMany(a => a.NotificationTokens).WithRequired(a => a.Person).HasForeignKey(x => x.PersonId);
 
+            
         }
 
         private SmokeSession CurrentSession(Hookah hookah)
