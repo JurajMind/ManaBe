@@ -17,7 +17,7 @@ namespace smartHookah.Services.Place
 
         Task<bool> CanManagePlace(int id);
 
-        Task<IEnumerable<TobaccoReview>> GetPlaceTobaccoReviews(int id, int pageSize = 10, int page = 0);
+        Task<IEnumerable<PlaceReview>> GetPlaceReviews(int id, int pageSize = 10, int page = 0);
 
         IEnumerable<PipeAccesory> GetPlaceAccessories(Place place);
 

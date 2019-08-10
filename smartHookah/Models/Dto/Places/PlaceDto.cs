@@ -4,6 +4,7 @@ using System.Linq;
 using ClosedXML.Excel;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
+using smartHookah.Models.Dto.Places;
 using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Support;
 
@@ -21,7 +22,7 @@ namespace smartHookah.Models.Dto
 
         public IEnumerable<SeatDto> Seats { get; set; }
         
-        public IEnumerable<TobaccoReviewDto> TobaccoReviews { get; set; }
+        public IEnumerable<PlaceReviewDto> PlaceReviews { get; set; }
 
         public IEnumerable<MediaDto> Medias { get; set; }
         
@@ -44,7 +45,8 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 Name = model.Name,
                 LogoPath = model.LogoPath,
-                ShortDescriptions = model.ShortDescriptions,
+                ShortDescriptions = model.DbDescription.ToDictionary(a => a.Lng, b => b.ShortDescriptions),
+                Description = model.DbDescription.ToDictionary(a => a.Lng, b => b.Descriptions),
                 Descriptions = model.Descriptions,
                 FriendlyUrl = model.FriendlyUrl,
                 Address = AddressDto.FromModel(model.Address),
@@ -76,7 +78,7 @@ namespace smartHookah.Models.Dto
                 CreatorId = creator,
                 CreatedAt =  DateTime.UtcNow,
                 LogoPath = this.LogoPath,
-                ShortDescriptions = this.ShortDescriptions,
+                // ShortDescriptions = this.ShortDescriptions,
                 Descriptions = this.Descriptions,
                 FriendlyUrl = Guid.NewGuid().ToString().Substring(0,20),
                 Address = this.Address.ToModel(),

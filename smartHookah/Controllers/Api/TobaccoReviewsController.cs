@@ -1,119 +1,119 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
-using smartHookah.Models.Dto;
+﻿//using System;
+//using System.Data.Entity;
+//using System.Data.Entity.Migrations;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using System.Web.Http;
+//using System.Web.Mvc;
+//using smartHookah.Helpers;
+//using smartHookah.Models;
+//using smartHookah.Models.Db;
+//using smartHookah.Models.Db.Gear;
+//using smartHookah.Models.Dto;
 
-namespace smartHookah.Controllers.Api
-{
-    public class TobaccoReviewsController : ApiController
-    {
-        private readonly SmartHookahContext db;
+//namespace smartHookah.Controllers.Api
+//{
+//    public class TobaccoReviewsController : ApiController
+//    {
+//        private readonly SmartHookahContext db;
 
-        public TobaccoReviewsController(SmartHookahContext db)
-        {
-            this.db = db;
-        }
+//        public TobaccoReviewsController(SmartHookahContext db)
+//        {
+//            this.db = db;
+//        }
 
-        [System.Web.Mvc.HttpGet]
-        public async Task<TobaccoReviewDTO> GetReviewVue(int sessionId)
-        {
-            var review = (sessionId < 0) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SmokeSession.Id == sessionId);
+//        [System.Web.Mvc.HttpGet]
+//        public async Task<TobaccoReviewDTO> GetReviewVue(int sessionId)
+//        {
+//            var review = (sessionId < 0) ? null : db.TobaccoReviews.FirstOrDefault(a => a.SessionReview!= null && a.SessionReview.SmokeSessionId == sessionId);
 
-            return (review != null) ? new TobaccoReviewDTO()
-            {
-                Id = review.Id,
-                Overall = review.Overall,
-                Quality = review.Quality,
-                Smoke = review.Smoke,
-                SmokeSessionId = review.SmokeSession.Id,
-                Taste = review.Taste,
-                Text = review.Text
-            } : null;
-        }
+//            return (review != null) ? new TobaccoReviewDTO()
+//            {
+//                Id = review.Id,
+//                Overall = review.Overall,
+//                Quality = review.Quality,
+//                Smoke = review.Smoke,
+//                SmokeSessionId = review.SessionReview.SmokeSessionId ?? 0,
+//                Taste = review.Taste,
+//                Text = review.Text
+//            } : null;
+//        }
 
-        [System.Web.Mvc.HttpPost]
-        public async Task<TobaccoReviewDTO> SaveVueReview([Bind(Include = "Id,Quality,Taste,Smoke,Overall,Text,SmokeSessionId")] TobaccoReviewDTO tobaccoReviewDto)
-        {
-            if (tobaccoReviewDto != null)
-            {
-                var tobaccoReview = new TobaccoReview()
-                {
-                    Id = tobaccoReviewDto.Id,
-                    Overall = tobaccoReviewDto.Overall,
-                    Quality = tobaccoReviewDto.Quality,
-                    Smoke = tobaccoReviewDto.Smoke,
-                    SmokeSessionId = tobaccoReviewDto.SmokeSessionId,
-                    Taste = tobaccoReviewDto.Taste,
-                    Text = tobaccoReviewDto.Text
-                };
-                var smokeSession = await db.SmokeSessions.FindAsync(tobaccoReview.SmokeSessionId);
-                tobaccoReview.PublishDate = DateTime.UtcNow;
-                if (smokeSession.MetaData.TobaccoId.HasValue)
-                    tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
-                else
-                {
-                    return null;
-                }
+//        [System.Web.Mvc.HttpPost]
+//        public async Task<TobaccoReviewDTO> SaveVueReview([Bind(Include = "Id,Quality,Taste,Smoke,Overall,Text,SmokeSessionId")] TobaccoReviewDTO tobaccoReviewDto)
+//        {
+//            if (tobaccoReviewDto != null)
+//            {
+//                var tobaccoReview = new TobaccoReview()
+//                {
+//                    Id = tobaccoReviewDto.Id,
+//                    Overall = tobaccoReviewDto.Overall,
+//                    Quality = tobaccoReviewDto.Quality,
+//                    Smoke = tobaccoReviewDto.Smoke,
+//                    SmokeSessionId = review.SessionReview.SmokeSessionId ?? 0,
+//                    Taste = tobaccoReviewDto.Taste,
+//                    Text = tobaccoReviewDto.Text
+//                };
+//                var smokeSession = await db.SmokeSessions.FindAsync(tobaccoReview.SmokeSessionId);
+//                tobaccoReview.PublishDate = DateTime.UtcNow;
+//                if (smokeSession.MetaData.TobaccoId.HasValue)
+//                    tobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId.Value;
+//                else
+//                {
+//                    return null;
+//                }
 
-                if (UserHelper.GetCurentPerson() == null)
-                {
-                    return null;
-                }
+//                if (UserHelper.GetCurentPerson() == null)
+//                {
+//                    return null;
+//                }
 
-                tobaccoReview.AuthorId = UserHelper.GetCurentPerson().Id;
+//                tobaccoReview.AuthorId = UserHelper.GetCurentPerson().Id;
                 
-                var rev = db.TobaccoReviews.Find(tobaccoReview.Id);
+//                var rev = db.TobaccoReviews.Find(tobaccoReview.Id);
 
-                if (rev != null)
-                {
-                    rev.PublishDate = tobaccoReview.PublishDate;
-                    rev.Quality = tobaccoReview.Quality;
-                    rev.Smoke = tobaccoReview.Smoke;
-                    rev.Overall = tobaccoReview.Overall;
-                    rev.Text = tobaccoReview.Text;
-                    rev.Taste = tobaccoReview.Taste;
-                    db.Entry(rev).State = EntityState.Modified;
-                    smokeSession.Review = rev;
-                    db.SmokeSessions.AddOrUpdate(smokeSession);
+//                if (rev != null)
+//                {
+//                    rev.PublishDate = tobaccoReview.PublishDate;
+//                    rev.Quality = tobaccoReview.Quality;
+//                    rev.Smoke = tobaccoReview.Smoke;
+//                    rev.Overall = tobaccoReview.Overall;
+//                    rev.Text = tobaccoReview.Text;
+//                    rev.Taste = tobaccoReview.Taste;
+//                    db.Entry(rev).State = EntityState.Modified;
+//                    smokeSession.Review = rev;
+//                    db.SmokeSessions.AddOrUpdate(smokeSession);
 
-                    await db.SaveChangesAsync();
-                    return new TobaccoReviewDTO()
-                    {
-                        Id = rev.Id,
-                        Overall = rev.Overall,
-                        Quality = rev.Quality,
-                        Smoke = rev.Smoke,
-                        SmokeSessionId = rev.SmokeSession.Id,
-                        Taste = rev.Taste,
-                        Text = rev.Text
-                    };
-                }
+//                    await db.SaveChangesAsync();
+//                    return new TobaccoReviewDTO()
+//                    {
+//                        Id = rev.Id,
+//                        Overall = rev.Overall,
+//                        Quality = rev.Quality,
+//                        Smoke = rev.Smoke,
+//                        SmokeSessionId = rev.SmokeSession.Id,
+//                        Taste = rev.Taste,
+//                        Text = rev.Text
+//                    };
+//                }
 
-                db.TobaccoReviews.AddOrUpdate(tobaccoReview);
-                smokeSession.Review = tobaccoReview;
-                db.SmokeSessions.AddOrUpdate(smokeSession);
+//                db.TobaccoReviews.AddOrUpdate(tobaccoReview);
+//                smokeSession.Review = tobaccoReview;
+//                db.SmokeSessions.AddOrUpdate(smokeSession);
 
-                await db.SaveChangesAsync();
-                return new TobaccoReviewDTO()
-                {
-                    Id = tobaccoReview.Id,
-                    Overall = tobaccoReview.Overall,
-                    Quality = tobaccoReview.Quality,
-                    Smoke = tobaccoReview.Smoke,
-                    SmokeSessionId = tobaccoReview.SmokeSession.Id,
-                    Taste = tobaccoReview.Taste,
-                    Text = tobaccoReview.Text
-                };
-            }
-            return null;
-        }
-    }
-}
+//                await db.SaveChangesAsync();
+//                return new TobaccoReviewDTO()
+//                {
+//                    Id = tobaccoReview.Id,
+//                    Overall = tobaccoReview.Overall,
+//                    Quality = tobaccoReview.Quality,
+//                    Smoke = tobaccoReview.Smoke,
+//                    SmokeSessionId = tobaccoReview.SmokeSession.Id,
+//                    Taste = tobaccoReview.Taste,
+//                    Text = tobaccoReview.Text
+//                };
+//            }
+//            return null;
+//        }
+//    }
+//}

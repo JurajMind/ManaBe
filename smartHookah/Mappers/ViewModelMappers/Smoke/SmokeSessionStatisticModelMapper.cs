@@ -6,6 +6,7 @@ using smartHookah.Controllers;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 using smartHookah.Models.ViewModel.SmokeSession;
 using smartHookah.Services.Person;
 
@@ -30,12 +31,13 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             result.SmokeSession = db.SmokeSessions.Find(sessionId);
 
 
-            result.SessionReview = db.TobaccoReviews.FirstOrDefault(a => a.SmokeSessionId == result.SmokeSession.Id);
+            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSessionId == result.SmokeSession.Id);
 
             if (result.SessionReview == null)
             {
-                result.SessionReview = new TobaccoReview();
+                result.SessionReview = new SessionReview();
             }
+
             result.SessionReview.SmokeSessionId = result.SmokeSession.Id;
             SmokeSessionMetaData outMetaData;
             result.SmokeMetadataModalViewModel = this.metadataModalViewModelMapper.Map(result.SmokeSession.SessionId,

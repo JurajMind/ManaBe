@@ -5,6 +5,7 @@ using smartHookah.Helpers;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 using smartHookahCommon;
 
 namespace smartHookah.Controllers
@@ -33,7 +34,7 @@ namespace smartHookah.Controllers
 
         public DeviceControlController.DeviceSettingViewModel StandSetting { get; set; }
 
-        public TobaccoReview SessionReview { get; set; } = new TobaccoReview();
+        public SessionReview SessionReview { get; set; } = new SessionReview();
 
         public string ShareToken { get; set; }
 

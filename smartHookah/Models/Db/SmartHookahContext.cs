@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using smartHookah.Models.Db.Device;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
+using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db
 {
@@ -97,6 +98,10 @@ namespace smartHookah.Models.Db
         public DbSet<TobaccoMix> TobaccoMixs { get; set; }
 
         public DbSet<TobaccoReview> TobaccoReviews { get; set; }
+
+        public DbSet<SessionReview> SessionReviews { get; set; }
+
+        public DbSet<PlaceReview> PlaceReviews { get; set; }
 
         public DbSet<Tobacco> Tobaccos { get; set; }
 
@@ -281,7 +286,15 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<Person>().HasMany(a => a.NotificationTokens).WithRequired(a => a.Person).HasForeignKey(x => x.PersonId);
 
-            
+
+            modelBuilder.Entity<PlaceReview>().HasOptional(a => a.SessionReview).WithOptionalDependent();
+
+            modelBuilder.Entity<SessionReview>().HasOptional(a => a.PlaceReview).WithOptionalPrincipal();
+
+            modelBuilder.Entity<PipeAccessoryReview>().HasMany(s => s.Medias).WithOptional(h => h.PipeAccessoryReview);
+
+            modelBuilder.Entity<Place.Place>().HasMany(s => s.Medias).WithOptional(h => h.Place);
+
         }
 
         private SmokeSession CurrentSession(Hookah hookah)
