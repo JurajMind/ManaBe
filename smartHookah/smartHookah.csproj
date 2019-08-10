@@ -936,7 +936,14 @@
     <Compile Include="Migrations\201908062136106_translation.Designer.cs">
       <DependentUpon>201908062136106_translation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908101835239_reviewupgrade.cs" />
+    <Compile Include="Migrations\201908101835239_reviewupgrade.Designer.cs">
+      <DependentUpon>201908101835239_reviewupgrade.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\Session\SessionReview.cs" />
     <Compile Include="Models\Db\Place\PlaceReview.cs" />
+    <Compile Include="Models\Dto\SmokeSession\SessionReviewDto.cs" />
+    <Compile Include="Models\Dto\Places\PlaceReviewDto.cs" />
     <Compile Include="Models\Db\Resource.cs" />
     <Compile Include="Models\Dto\Device\DevicePictureDto.cs" />
     <Compile Include="Models\Dto\Device\UpdateDto.cs" />
@@ -1248,6 +1255,9 @@
     <EmbeddedResource Include="Migrations\201908062136106_translation.resx">
       <DependentUpon>201908062136106_translation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908101835239_reviewupgrade.resx">
+      <DependentUpon>201908101835239_reviewupgrade.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1371,9 +1381,9 @@
     </Compile>
     <Compile Include="Models\Dto\Gear\TobaccoReviewDTO.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\ActiveSessionListItemViewModel.cs" />
-    <Compile Include="Models\Db\SmokeSession\SessionReport.cs" />
-    <Compile Include="Models\Db\SmokeSession\SmokeEvent.cs" />
-    <Compile Include="Models\Db\SmokeSession\SmokeEventType.cs" />
+    <Compile Include="Models\Db\Session\SessionReport.cs" />
+    <Compile Include="Models\Db\Session\SmokeEvent.cs" />
+    <Compile Include="Models\Db\Session\SmokeEventType.cs" />
     <Compile Include="Models\Db\Device\StandUsage.cs" />
     <Compile Include="Models\Db\Tag.cs" />
     <Compile Include="Models\ViewModel\Places\EditOpenHoursPostModel.cs" />
@@ -1424,7 +1434,7 @@
     <Compile Include="Models\ViewModel\GameProfile.cs" />
     <Compile Include="Models\Db\Notificatiom.cs" />
     <Compile Include="Models\ViewModel\PersonModel.cs" />
-    <Compile Include="Models\Db\SmokeSession\Puf.cs" />
+    <Compile Include="Models\Db\Session\Puf.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionListItemViewModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionViewModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SaveSmokeMetadataModel.cs" />
@@ -1432,7 +1442,6 @@
     <Compile Include="Controllers\SmokeSessionController.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeViewModel.cs" />
     <Compile Include="Controllers\TobaccoController.cs" />
-    <Compile Include="Controllers\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -1458,9 +1467,9 @@
     <Compile Include="Models\Redis\DynamicSmokeStatistic.cs" />
     <Compile Include="Models\Db\SmartHookahContext.cs" />
     <Compile Include="Models\ViewModel\SmartHookahInitializer.cs" />
-    <Compile Include="Models\Db\SmokeSession\SmokeSession.cs" />
-    <Compile Include="Models\Db\SmokeSession\SmokeSessionMetaData.cs" />
-    <Compile Include="Models\Db\SmokeSession\SmokeSessionStatistics.cs" />
+    <Compile Include="Models\Db\Session\SmokeSession.cs" />
+    <Compile Include="Models\Db\Session\SmokeSessionMetaData.cs" />
+    <Compile Include="Models\Db\Session\SmokeSessionStatistics.cs" />
     <Compile Include="Models\Db\Device\StandPicture.cs" />
     <Compile Include="Models\Db\Device\Update.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\TobaccoListViewModel.cs" />

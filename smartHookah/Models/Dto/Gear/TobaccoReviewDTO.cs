@@ -59,7 +59,7 @@ namespace smartHookah.Models.Dto
                 Overall = model.Overall,
                 Quality = model.Quality,
                 Smoke = model.Smoke,
-                SmokeSessionId = model.SmokeSession.Id,
+                // SmokeSessionId = model.SmokeSession.Id,
                 Taste = model.Taste,
                 Text = model.Text
             };

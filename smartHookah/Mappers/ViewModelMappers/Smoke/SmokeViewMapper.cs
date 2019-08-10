@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
 
@@ -52,11 +53,11 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             result.Session = session;
 
             if (person != null) result.IsAssigned = session.IsPersonAssign(person.Id);
-            result.SessionReview = db.TobaccoReviews.FirstOrDefault(a => a.SmokeSessionId == session.Id);
+            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSessionId == session.Id);
 
             if (result.SessionReview == null)
             {
-                result.SessionReview = new TobaccoReview();
+                result.SessionReview = new SessionReview();
                 result.SessionReview.SmokeSessionId = session.Id;
             }
 

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using smartHookah.Models.Db.Place;
+using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db.Gear
 {
@@ -42,8 +45,12 @@ namespace smartHookah.Models.Db.Gear
         public double Overall { get; set; }
 
         public virtual PipeAccesory Accessor { get; set; }
+        public int? SessionReviewId { get; set; }
+
+        public virtual SessionReview SessionReview { get; set; }
+
         public int? SmokeSessionId { get; set; }
-        [ForeignKey("SmokeSessionId")]
-        public virtual SmokeSession SmokeSession { get; set; }
+
+        public virtual ICollection<Media> Medias { get; set; }
     }
 }

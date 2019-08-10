@@ -2,6 +2,7 @@
 using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.ViewModel.SmokeSession
 {
@@ -9,7 +10,7 @@ namespace smartHookah.Models.ViewModel.SmokeSession
     {
         public SmokeStatisticViewModel LiveStatistic { get; set; }
         public Db.SmokeSession SmokeSession { get; set; }
-        public TobaccoReview SessionReview { get; set; }
+        public SessionReview SessionReview { get; set; }
         public SmokeMetadataModalViewModel SmokeMetadataModalViewModel { get; set; }
         public List<List<Puf>> Histogram { get; set; }
         public bool Share { get; set; }

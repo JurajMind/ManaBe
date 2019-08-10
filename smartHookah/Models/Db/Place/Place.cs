@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db.Place
 {
@@ -301,6 +303,14 @@ namespace smartHookah.Models.Db.Place
         [NotMapped] public string FileName => System.IO.Path.GetFileNameWithoutExtension(Path);
 
         [NotMapped] public string GetDirectory => System.IO.Path.GetDirectoryName(Path);
+
+        public virtual PlaceReview PlaceReview { get; set; }
+
+        public virtual SessionReview SessionReview { get; set; }
+
+        public virtual Place Place { get; set; }
+
+        public virtual PipeAccessoryReview PipeAccessoryReview { get; set; }
 
         public string Sized(int i = 0)
         {

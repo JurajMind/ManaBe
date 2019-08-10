@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db.Place
 {
@@ -17,5 +20,10 @@ namespace smartHookah.Models.Db.Place
         public int? PlaceId { get; set; }
         [ForeignKey("PlaceId")]
         public virtual Place Place { get; set; }
+
+        public int? SessionReviewId { get; set; }
+        public virtual SessionReview SessionReview { get; set; }
+
+        public virtual ICollection<Media> Medias{ get; set; }
     }
 }

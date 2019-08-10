@@ -100,10 +100,10 @@ namespace smartHookah.Controllers.Api
             try
             {
                 var place = await placeService.GetPlace(id);
-                var reviews = await placeService.GetPlaceTobaccoReviews(id);
+                var reviews = await placeService.GetPlaceReviews(id);
 
                 var result = PlaceDto.FromModel(place);
-                result.TobaccoReviews = TobaccoReviewDto.FromModelList(reviews);
+                result.PlaceReviews = PlaceReviewDto.FromModelList(reviews);
 
                 return result;
             }
