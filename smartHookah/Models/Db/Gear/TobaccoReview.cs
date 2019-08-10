@@ -38,6 +38,8 @@ namespace smartHookah.Models.Db.Gear
 
         public DateTime PublishDate { get; set; }
 
+        public bool Deleted { get; set; }
+
         public string Text { get; set; }
 
         public int AccessorId { get; set; }

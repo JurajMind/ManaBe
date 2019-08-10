@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db.Place;
@@ -34,17 +35,14 @@ namespace smartHookah.Models.Dto.Places
         [JsonProperty("placeId")]
         public int? PlaceId { get; set; }
 
-        [DataMember]
-        [JsonProperty("place")]
-        public PlaceDto Place { get; set; }
         
         [DataMember]
         [JsonProperty("sessionReview")]
-        public SessionReviewDto SessionReview { get; set; }
+        public SessionPlaceReviewDto SessionReview { get; set; }
 
         [DataMember]
         [JsonProperty("medias")]
-        public ICollection<Media> Medias { get; set; }
+        public ICollection<MediaDto> Medias { get; set; }
 
         public static PlaceReviewDto FromModel(PlaceReview model)
         {
@@ -55,10 +53,9 @@ namespace smartHookah.Models.Dto.Places
                 Author = model.Author.DisplayName,
                 PublishDate = model.PublishDate, 
                 Text = model.Text, 
-                PlaceId = model.PlaceId, 
-                Place = PlaceDto.FromModel(model.Place), 
-                SessionReview = SessionReviewDto.FromModel(model.SessionReview), 
-                Medias = model.Medias, 
+                PlaceId = model.PlaceId,
+                SessionReview = SessionPlaceReviewDto.FromModel(model.SessionReview), 
+                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
             }; 
         }
 
@@ -80,8 +77,7 @@ namespace smartHookah.Models.Dto.Places
                 PublishDate = PublishDate, 
                 Text = Text, 
                 PlaceId = PlaceId, 
-                SessionReview = SessionReview.ToModel(), 
-                Medias = Medias, 
+                SessionReview = SessionReview.ToModel(),
             }; 
         }
     }

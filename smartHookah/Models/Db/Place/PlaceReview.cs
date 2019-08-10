@@ -15,6 +15,8 @@ namespace smartHookah.Models.Db.Place
 
         public DateTime PublishDate { get; set; }
 
+        public bool Deleted { get; set; }
+
         public string Text { get; set; }
 
         public int? PlaceId { get; set; }

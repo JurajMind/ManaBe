@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Microsoft.Owin;
 
 using smartHookah;
 
@@ -75,6 +77,12 @@ namespace smartHookah
 
             //app.MapSignalR();
             this.ConfigureOAuth(app);
+
+#if DEBUG
+TelemetryConfiguration.Active.DisableTelemetry = true;
+TelemetryDebugWriter.IsTracingDisabled = true;
+
+#endif
         }
 
         public void ConfigureOAuth(IAppBuilder app)

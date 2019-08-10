@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db.Gear;
-using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Gear;
 using smartHookah.Models.Dto.Places;
 
 namespace smartHookah.Models.Db.Session.Dto
@@ -34,12 +34,8 @@ namespace smartHookah.Models.Db.Session.Dto
         public int? PlaceReviewId { get; set; }
 
         [DataMember]
-        [JsonProperty("placeReview")]
-        public PlaceReviewDto PlaceReview { get; set; }
-
-        [DataMember]
         [JsonProperty("gearReviews")]
-        public ICollection<PipeAccessoryReview> GearReviews { get; set; }
+        public ICollection<PipeAccessoryReviewDto> GearReviews { get; set; }
 
         [DataMember]
         [JsonProperty("medias")]
@@ -62,12 +58,20 @@ namespace smartHookah.Models.Db.Session.Dto
                 PublishDate = model.PublishDate, 
                 TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview), 
                 PlaceReviewId = model.PlaceReview.Id, 
-                PlaceReview = PlaceReviewDto.FromModel(model.PlaceReview), 
-                GearReviews = model.GearReviews, 
+                GearReviews = PipeAccessoryReviewDto.FromModelList(model.GearReviews).ToList(), 
                 Medias = MediaDto.FromModelList(model.Medias).ToList(), 
                 SmokeSessionId = model.SmokeSessionId, 
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession), 
             }; 
+        }
+
+        public static IEnumerable<SessionReviewDto> FromModelList(IEnumerable<SessionReview> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
         }
 
         public SessionReview ToModel()
@@ -76,10 +80,78 @@ namespace smartHookah.Models.Db.Session.Dto
             {
                 AuthorId = AuthorId,
                 PublishDate = PublishDate,
-                PlaceReview = PlaceReview.ToModel(), 
-                GearReviews = GearReviews, 
                 SmokeSessionId = SmokeSessionId,
             }; 
+        }
+    }
+
+    [DataContract]
+    public class SessionPlaceReviewDto
+    {
+        [DataMember]
+        [JsonProperty("authorId")]
+        public int? AuthorId { get; set; }
+
+        [DataMember]
+        [JsonProperty("author")]
+        public string Author { get; set; }
+
+        [DataMember]
+        [JsonProperty("publishDate")]
+        public DateTime PublishDate { get; set; }
+
+        [DataMember]
+        [JsonProperty("tobaccoReview")]
+        public TobaccoReviewDto TobaccoReview { get; set; }
+
+        [DataMember]
+        [JsonProperty("gearReviews")]
+        public ICollection<PipeAccessoryReviewDto> GearReviews { get; set; }
+
+        [DataMember]
+        [JsonProperty("medias")]
+        public ICollection<MediaDto> Medias { get; set; }
+
+        [DataMember]
+        [JsonProperty("smokeSessionId")]
+        public int SmokeSessionId { get; set; }
+
+        [DataMember]
+        [JsonProperty("smokeSession")]
+        public SmokeSessionSimpleDto SmokeSession { get; set; }
+
+        public static SessionPlaceReviewDto FromModel(SessionReview model)
+        {
+            return new SessionPlaceReviewDto()
+            {
+                AuthorId = model.AuthorId,
+                Author = model.Author.DisplayName,
+                PublishDate = model.PublishDate,
+                TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview),
+                GearReviews = PipeAccessoryReviewDto.FromModelList(model.GearReviews).ToList(),
+                Medias = MediaDto.FromModelList(model.Medias).ToList(),
+                SmokeSessionId = model.SmokeSessionId,
+                SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
+            };
+        }
+
+        public static IEnumerable<SessionPlaceReviewDto> FromModelList(IEnumerable<SessionReview> model)
+        {
+            if (model == null) yield break;
+            foreach (var item in model)
+            {
+                yield return FromModel(item);
+            }
+        }
+
+        public SessionReview ToModel()
+        {
+            return new SessionReview()
+            {
+                AuthorId = AuthorId,
+                PublishDate = PublishDate,
+                SmokeSessionId = SmokeSessionId,
+            };
         }
     }
 }

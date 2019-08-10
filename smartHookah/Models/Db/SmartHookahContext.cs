@@ -103,6 +103,8 @@ namespace smartHookah.Models.Db
 
         public DbSet<PlaceReview> PlaceReviews { get; set; }
 
+        public DbSet<PipeAccessoryReview> PipeAccessoryReviews { get; set; }
+
         public DbSet<Tobacco> Tobaccos { get; set; }
 
         public DbSet<TobacoMixPart> TobaccosMixParts { get; set; }

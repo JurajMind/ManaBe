@@ -1,32 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
 
-namespace smartHookah.Models.Dto
+namespace smartHookah.Models.Dto.Gear
 {
-    public class TobaccoReviewDTO : DTO
-    {
-        public int Id { get; set; }
-
-        public int Quality { get; set; }
-
-        public int Taste { get; set; }
-
-        public int Smoke { get; set; }
-
-        public double Overall { get; set; }
-
-        public string Text { get; set; }
-        
-        public int SmokeSessionId { get; set; }
-    }
-
     [DataContract]
     public class TobaccoReviewDto
     {
@@ -59,7 +37,6 @@ namespace smartHookah.Models.Dto
                 Overall = model.Overall,
                 Quality = model.Quality,
                 Smoke = model.Smoke,
-                // SmokeSessionId = model.SmokeSession.Id,
                 Taste = model.Taste,
                 Text = model.Text
             };
