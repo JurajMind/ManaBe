@@ -899,6 +899,7 @@
     <Compile Include="Controllers\Api\DevicePresetController.cs" />
     <Compile Include="Controllers\Api\FeatureMixController.cs" />
     <Compile Include="Controllers\Api\MediaController.cs" />
+    <Compile Include="Controllers\Api\ReviewController.cs" />
     <Compile Include="Filters\ValidateMimeMultipartContentFilter.cs" />
     <Compile Include="Migrations\201905041206426_features.cs" />
     <Compile Include="Migrations\201905041206426_features.Designer.cs">
@@ -940,6 +941,11 @@
     <Compile Include="Migrations\201908101835239_reviewupgrade.Designer.cs">
       <DependentUpon>201908101835239_reviewupgrade.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908101944257_softReviewDelete.cs" />
+    <Compile Include="Migrations\201908101944257_softReviewDelete.Designer.cs">
+      <DependentUpon>201908101944257_softReviewDelete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Db\Gear\TobaccoReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
     <Compile Include="Models\Db\Place\PlaceReview.cs" />
     <Compile Include="Models\Dto\SmokeSession\SessionReviewDto.cs" />
@@ -1096,6 +1102,8 @@
     <Compile Include="Services\Media\MediaService.cs" />
     <Compile Include="Services\Messages\FirebaseNotificationService.cs" />
     <Compile Include="Services\Messages\IFirebaseNotificationService.cs" />
+    <Compile Include="Services\Review\IReviewService.cs" />
+    <Compile Include="Services\Review\ReviewService.cs" />
     <Compile Include="Services\Search\ISearchService.cs" />
     <Compile Include="Services\Messages\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -1257,6 +1265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908101835239_reviewupgrade.resx">
       <DependentUpon>201908101835239_reviewupgrade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908101944257_softReviewDelete.resx">
+      <DependentUpon>201908101944257_softReviewDelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

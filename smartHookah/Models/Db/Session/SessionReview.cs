@@ -23,7 +23,9 @@ namespace smartHookah.Models.Db.Session
 
         public virtual ICollection<Media> Medias { get; set; }
 
-        
+        public bool Deleted { get; set; }
+
+
         public int SmokeSessionId { get; set; }
         [ForeignKey("SmokeSessionId")]
         public virtual SmokeSession SmokeSession { get; set; }

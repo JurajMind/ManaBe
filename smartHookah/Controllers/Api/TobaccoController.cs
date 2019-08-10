@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using smartHookah.Models;
 using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Gear;
 using smartHookah.Services.Gear;
 
 namespace smartHookah.Controllers.Api

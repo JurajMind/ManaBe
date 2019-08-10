@@ -16,6 +16,11 @@ namespace smartHookahCommon.Exceptions
             this.Code = code;
         }
 
+        public ManaException(string code) : base(code)
+        {
+            this.Code = code;
+        }
+
         public ManaException(string code, string message,Exception innerException) : base(message,innerException)
         {
             this.Code = code;
