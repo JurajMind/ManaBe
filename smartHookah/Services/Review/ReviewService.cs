@@ -174,11 +174,19 @@ namespace smartHookah.Services.Review
 
             if (review.TobaccoReview != null)
             {
-                review.TobaccoReview = await this.AddTobaccoReviews(review.TobaccoReview);
-            }
-
-            if (review.GearReviews != null)
-            {
+                // check , if session have metadata
+                if (smokeSession?.MetaData?.TobaccoId == null)
+                {
+                    // use session data
+                    review.nsTaste = review.TobaccoReview.Taste;
+                    review.nsSmoke = review.TobaccoReview.Smoke;
+                    review.nsStrength = review.TobaccoReview.Strength;
+                    review.nsDuration = review.TobaccoReview.Duration;
+                }
+                else
+                {
+                    review.TobaccoReview = await this.AddTobaccoReviews(review.TobaccoReview);
+                }
                 
             }
 

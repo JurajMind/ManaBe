@@ -273,16 +273,8 @@ namespace smartHookah.Controllers
                     tobacco =
                         tobacco.OrderByDescending(a => a.Statistics.SessionDurationTick)
                             .ThenByDescending(a => a.Statistics.SmokeDurationTick);
-                    break;
-                case "quality":
-                    tobacco =
-                        tobacco.OrderBy(a => a.Statistics.Quality).ThenByDescending(a => a.Statistics.SmokeDurationTick);
-                    break;
-                case "quality_desc":
-                    tobacco =
-                        tobacco.OrderByDescending(a => a.Statistics.Quality)
-                            .ThenByDescending(a => a.Statistics.SmokeDurationTick);
-                    break;
+                   break;
+
                 case "taste":
                     tobacco =
                         tobacco.OrderBy(a => a.Statistics.Taste).ThenByDescending(a => a.Statistics.SmokeDurationTick);
@@ -862,7 +854,9 @@ namespace smartHookah.Controllers
                 result.Overall = smokeSesinReview.Average(a => a.Overall);
                 result.Taste = smokeSesinReview.Average(a => a.Taste);
                 result.Smoke = smokeSesinReview.Average(a => a.Smoke);
-                result.Quality = smokeSesinReview.Average(a => a.Quality);
+                result.Cut = smokeSesinReview.Average(a => a.Cut);
+                result.Strength = smokeSesinReview.Average(a => a.Strength);
+                result.Duration = smokeSesinReview.Average(a => a.Duration);
             }
 
 

@@ -8,11 +8,15 @@ namespace smartHookah.Models.Db.Gear
 {
     public class TobaccoReview : PipeAccessoryReview
     {
-        public int Quality { get; set; }
-
         public int Taste { get; set; }
 
         public int Smoke { get; set; }
+
+        public int Cut { get; set; }
+
+        public int Strength { get; set; }
+
+        public int Duration { get; set; }
 
         [NotMapped]
         public int ReviewedTobaccoId {

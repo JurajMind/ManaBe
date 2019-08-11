@@ -19,7 +19,15 @@ namespace smartHookah.Models.Db.Session
 
         public virtual PlaceReview PlaceReview { get; set; }
 
-        public virtual ICollection<PipeAccessoryReview> GearReviews { get; set; }
+        public int? nsTaste { get; set; }
+
+        public int? nsStrength { get; set; }
+
+        public int? nsDuration { get; set; }
+
+        public int? nsSmoke { get; set; }
+
+        // public virtual ICollection<PipeAccessoryReview> GearReviews { get; set; }
 
         public virtual ICollection<Media> Medias { get; set; }
 

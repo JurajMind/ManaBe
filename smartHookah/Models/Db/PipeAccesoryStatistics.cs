@@ -47,15 +47,21 @@ namespace smartHookah.Models.Db
 
         public PackType PackType { get; set; }
 
-        public double Quality { get; set; }
         public double Taste { get; set; }
 
         public double Smoke { get; set; }
 
         public double Overall { get; set; }
 
+        public double Cut { get; set; }
+
+        public double Strength { get; set; }
+
+        public double Duration { get; set; }
+
         public double SmokeTimePercentil { get; set; }
         public double SessionTimePercentil { get; set; }
 
     }
+
 }
