@@ -98,10 +98,10 @@ namespace smartHookah.Models.Db
         public virtual ICollection<PipeAccesoryLike> Likes { get; set; }
 
         [NotMapped]
-        public  virtual ICollection<TobaccoMix> FavoriteTobaccoMixs {
+        public  virtual IQueryable<TobaccoMix> FavoriteTobaccoMixs {
             get
             {
-                return (ICollection<TobaccoMix>)this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0);
+                return this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0).Select(a => a.PipeAccesory as TobaccoMix).AsQueryable();
             }
         }
 

@@ -46,7 +46,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("GetMixes")]
         [ApiAuthorize]
-        public async Task<IEnumerable<TobaccoMixSimpleDto>> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "name", string order = "asc")
+        public async Task<IEnumerable<TobaccoMixSimpleDto>> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "created", string order = "dsc")
         {
            var query = from a in this.db.TobaccoMixs select a;
             if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
@@ -64,6 +64,17 @@ namespace smartHookah.Controllers.Api
                 var userId = user.Id;
                 query = from m in query where m.Author.Id == userId select m;
             }
+            else if(author == "favorite")
+            {
+                var user = this.personService.GetCurentPerson();
+                if (user == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User not found"));
+                }
+
+                query = user.FavoriteTobaccoMixs.Select(a => a).AsQueryable();
+
+            }
             var result = new List<TobaccoMixSimpleDto>();
             switch (orderBy.ToLower())
             {
@@ -71,6 +82,11 @@ namespace smartHookah.Controllers.Api
                     query = order == "asc"
                                 ? from a in query orderby a.AccName ascending select a
                                 : from a in query orderby a.AccName descending select a;
+                    break;
+                case "created":
+                    query = order == "asc"
+                        ? from a in query orderby a.CreatedAt ascending select a
+                        : from a in query orderby a.CreatedAt descending select a;
                     break;
                 case "used":
                     query = order == "asc"
