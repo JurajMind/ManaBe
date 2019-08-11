@@ -42,20 +42,20 @@ namespace smartHookah.Models.Db.Session.Dto
         public int SmokeSessionId { get; set; }
 
         [DataMember]
-        [JsonProperty("smokeSessionId")]
+        [JsonProperty("taste")]
         public int Taste { get; set; }
 
         [DataMember]
-        [JsonProperty("smokeSessionId")]
+        [JsonProperty("smoke")]
         public int Smoke { get; set; }
 
 
         [DataMember]
-        [JsonProperty("smokeSessionId")]
+        [JsonProperty("strength")]
         public int Strength { get; set; }
 
         [DataMember]
-        [JsonProperty("smokeSessionId")]
+        [JsonProperty("duration")]
         public int Duration { get; set; }
 
         [DataMember]

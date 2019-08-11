@@ -36,6 +36,7 @@ namespace smartHookah.Services.Statistics
                 .Where(a => a.Statistics.Start >= from && a.Statistics.End <= to)
                 .Include(a => a.MetaData)
                 .Include(a => a.Statistics)
+                .OrderByDescending(a => a.Statistics.Start)
                 .ToList();
         }
 
