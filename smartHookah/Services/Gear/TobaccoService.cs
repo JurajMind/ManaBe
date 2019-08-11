@@ -280,7 +280,10 @@ namespace smartHookah.Services.Gear
                 result.Overall = smokeSesinReview.Average(a => a.Overall);
                 result.Taste = smokeSesinReview.Average(a => a.Taste);
                 result.Smoke = smokeSesinReview.Average(a => a.Smoke);
-                result.Quality = smokeSesinReview.Average(a => a.Quality);
+                result.Cut = smokeSesinReview.Average(a => a.Cut);
+                result.Duration = smokeSesinReview.Average(a => a.Duration);
+                result.Strength = smokeSesinReview.Average(a => a.Strength);
+
             }
             return result;
         }

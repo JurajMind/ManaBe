@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
 
@@ -35,8 +32,15 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("PackType")]
         public PackType PackType { get; set; }
 
-        [DataMember, JsonProperty("Quality")]
-        public double Quality { get; set; }
+        [DataMember, JsonProperty("Cut")]
+        public double Cut { get; set; }
+
+        [DataMember, JsonProperty("Strength")]
+        public double Strength { get; set; }
+
+
+        [DataMember, JsonProperty("Duration")]
+        public double Duration { get; set; }
 
         [DataMember, JsonProperty("Taste")]
         public double Taste { get; set; }
@@ -63,7 +67,9 @@ namespace smartHookah.Models.Dto
                 BlowCount = model.BlowCount,
                 Overall = model.Overall,
                 PufCount = model.PufCount,
-                Quality = model.Quality,
+                Duration = model.Duration,
+                Cut = model.Cut,
+                Strength = model.Strength,
                 SessionDurationTick = model.SessionDurationTick,
                 SessionTimePercentil = model.SessionTimePercentil,
                 Smoke = model.Smoke,

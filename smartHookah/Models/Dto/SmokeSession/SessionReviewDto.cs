@@ -32,11 +32,7 @@ namespace smartHookah.Models.Db.Session.Dto
         [DataMember]
         [JsonProperty("placeReviewId")]
         public int? PlaceReviewId { get; set; }
-
-        [DataMember]
-        [JsonProperty("gearReviews")]
-        public ICollection<PipeAccessoryReviewDto> GearReviews { get; set; }
-
+        
         [DataMember]
         [JsonProperty("medias")]
         public ICollection<MediaDto> Medias { get; set; }
@@ -44,6 +40,23 @@ namespace smartHookah.Models.Db.Session.Dto
         [DataMember]
         [JsonProperty("smokeSessionId")]
         public int SmokeSessionId { get; set; }
+
+        [DataMember]
+        [JsonProperty("smokeSessionId")]
+        public int Taste { get; set; }
+
+        [DataMember]
+        [JsonProperty("smokeSessionId")]
+        public int Smoke { get; set; }
+
+
+        [DataMember]
+        [JsonProperty("smokeSessionId")]
+        public int Strength { get; set; }
+
+        [DataMember]
+        [JsonProperty("smokeSessionId")]
+        public int Duration { get; set; }
 
         [DataMember]
         [JsonProperty("smokeSession")]
@@ -54,14 +67,19 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReviewDto()
             {
                 AuthorId = model.AuthorId, 
+
+                Taste = model?.TobaccoReview?.Taste ?? model.nsTaste ?? -1,
+                Smoke = model?.TobaccoReview?.Smoke ?? model.nsSmoke ?? -1,
+                Strength = model?.TobaccoReview?.Strength ?? model.nsStrength ?? -1,
+                Duration = model?.TobaccoReview?.Duration ?? model.nsDuration ?? -1,
+
                 Author = model.Author.DisplayName,
                 PublishDate = model.PublishDate, 
                 TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview), 
                 PlaceReviewId = model.PlaceReview.Id, 
-                GearReviews = PipeAccessoryReviewDto.FromModelList(model.GearReviews).ToList(), 
                 Medias = MediaDto.FromModelList(model.Medias).ToList(), 
                 SmokeSessionId = model.SmokeSessionId, 
-                SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession), 
+                SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
             }; 
         }
 
@@ -128,7 +146,6 @@ namespace smartHookah.Models.Db.Session.Dto
                 Author = model.Author.DisplayName,
                 PublishDate = model.PublishDate,
                 TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview),
-                GearReviews = PipeAccessoryReviewDto.FromModelList(model.GearReviews).ToList(),
                 Medias = MediaDto.FromModelList(model.Medias).ToList(),
                 SmokeSessionId = model.SmokeSessionId,
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),

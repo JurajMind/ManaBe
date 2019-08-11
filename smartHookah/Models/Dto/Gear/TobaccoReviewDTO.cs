@@ -11,14 +11,20 @@ namespace smartHookah.Models.Dto.Gear
         [DataMember, JsonProperty("Id")]
         public int Id { get; set; }
 
-        [DataMember, JsonProperty("Quality")]
-        public int Quality { get; set; }
+        [DataMember, JsonProperty("Cut")]
+        public int Cut { get; set; }
 
         [DataMember, JsonProperty("Taste")]
         public int Taste { get; set; }
 
         [DataMember, JsonProperty("Smoke")]
         public int Smoke { get; set; }
+
+        [DataMember, JsonProperty("Strength")]
+        public int Strength { get; set; }
+
+        [DataMember, JsonProperty("Duration")]
+        public int Duration { get; set; }
 
         [DataMember, JsonProperty("Overall")]
         public double Overall { get; set; }
@@ -34,10 +40,14 @@ namespace smartHookah.Models.Dto.Gear
             : new TobaccoReviewDto()
             {
                 Id = model.Id,
+
                 Overall = model.Overall,
-                Quality = model.Quality,
+                Cut = model.Cut,
+                Strength = model.Strength,
+                Duration = model.Duration,
                 Smoke = model.Smoke,
                 Taste = model.Taste,
+
                 Text = model.Text
             };
 
