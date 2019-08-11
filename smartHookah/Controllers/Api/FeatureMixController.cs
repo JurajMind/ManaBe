@@ -4,6 +4,7 @@ using System.Web.Http;
 using smartHookah.ErrorHandler;
 using smartHookah.Models.Dto;
 using smartHookah.Services.FeatureMix;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers.Api
 {
@@ -12,10 +13,12 @@ namespace smartHookah.Controllers.Api
     public class FeatureMixController : ApiController
     {
         private readonly IFeatureMixService featureMixService;
+        private readonly IPersonService personService;
 
-        public FeatureMixController(IFeatureMixService featureMixService)
+        public FeatureMixController(IFeatureMixService featureMixService, IPersonService personService)
         {
             this.featureMixService = featureMixService;
+            this.personService = personService;
         }
 
 
@@ -32,9 +35,10 @@ namespace smartHookah.Controllers.Api
         }
 
         [Route("Mixes/{id}")]
-        public List<PipeAccesorySimpleDto> GetMixes(int id,int page,int pageSize,string orderBy,string order)
+        public List<TobaccoMixSimpleDto> GetMixes(int id,int page,int pageSize,string orderBy,string order)
         {
-            return PipeAccesorySimpleDto.FromModelList(this.featureMixService.GetCreatorMixes(id,page,pageSize,orderBy,order)).ToList();
+            var person = this.personService.GetCurentPerson();
+            return TobaccoMixSimpleDto.FromModelList(this.featureMixService.GetCreatorMixes(id,page,pageSize,orderBy,order), person?.Id).ToList();
         }
 
         [Route("FollowedCreators")]

@@ -46,16 +46,20 @@ namespace smartHookah.Services.FeatureMix
             return query.ToList();
         }
 
-        public IList<PipeAccesory> GetCreatorMixes(int creatorId, int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
+        public IList<TobaccoMix> GetCreatorMixes(int creatorId, int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
-            var query = this.db.FeatureMixCreators.Find(creatorId)
-                ?.Person.Likes
-                .SelectMany(a => a.Person.Likes.Where(b => b is TobaccoMix).Select(c => c.PipeAccesory));
+            var personLikes = this.db.FeatureMixCreators.Find(creatorId)
+                ?.Person.Likes;
+                var query = personLikes.Where(a => a.PipeAccesory is TobaccoMix mix && (mix.AuthorId == creatorId || mix.AuthorId == null)).Select(c => c.PipeAccesory as TobaccoMix);
 
             switch (orderBy.ToLower())
             {
                 case "name":
                     query = order.ToLower() == "asc" ? from a in query orderby a.AccName ascending select a : from a in query orderby a.AccName descending select a;
+                    break;
+
+                case "created":
+                    query = order.ToLower() == "asc" ? from a in query orderby a.CreatedAt ascending select a : from a in query orderby a.CreatedAt descending select a;
                     break;
                 case "rating":
                     query = order.ToLower() == "asc" ? from a in query orderby a.LikeCount ascending select a : from a in query orderby a.LikeCount descending select a;
