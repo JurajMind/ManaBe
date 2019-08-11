@@ -17,6 +17,6 @@ namespace smartHookah.Services.FeatureMix
 
         void CreateFeatureMixCreatorFromOld();
 
-        IList<PipeAccesory> GetCreatorMixes(int creatorId, int page, int pageSize, string orderBy, string order);
+        IList<TobaccoMix> GetCreatorMixes(int creatorId, int page, int pageSize, string orderBy, string order);
     }
 }
