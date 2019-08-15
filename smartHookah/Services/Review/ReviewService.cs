@@ -40,8 +40,10 @@ namespace smartHookah.Services.Review
             {
                 throw new ManaException(ErrorCodes.PlaceNotFound, "Place not found");
             }
-            
-            review.AuthorId = this.PersonService.GetCurentPerson().Id;
+
+            var author = this.PersonService.GetCurentPerson(db);
+            review.AuthorId = author.Id;
+            review.Author = author;
             review.PublishDate = DateTime.UtcNow;
 
             if (review.SessionReview != null)

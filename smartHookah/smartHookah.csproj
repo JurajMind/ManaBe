@@ -949,6 +949,10 @@
     <Compile Include="Migrations\201908111811115_reviewUpd2.Designer.cs">
       <DependentUpon>201908111811115_reviewUpd2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908152036120_place-review-data.cs" />
+    <Compile Include="Migrations\201908152036120_place-review-data.Designer.cs">
+      <DependentUpon>201908152036120_place-review-data.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Db\Gear\TobaccoReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
     <Compile Include="Models\Db\Place\PlaceReview.cs" />
@@ -1275,6 +1279,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908111811115_reviewUpd2.resx">
       <DependentUpon>201908111811115_reviewUpd2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908152036120_place-review-data.resx">
+      <DependentUpon>201908152036120_place-review-data.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
