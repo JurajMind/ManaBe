@@ -140,6 +140,11 @@ namespace smartHookah.Models.Db.Session.Dto
 
         public static SessionPlaceReviewDto FromModel(SessionReview model)
         {
+            if (model == null)
+            {
+                return null;
+                
+            }
             return new SessionPlaceReviewDto()
             {
                 AuthorId = model.AuthorId,

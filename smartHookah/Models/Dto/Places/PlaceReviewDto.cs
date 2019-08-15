@@ -31,6 +31,21 @@ namespace smartHookah.Models.Dto.Places
         [JsonProperty("text")]
         public string Text { get; set; }
 
+
+        [DataMember]
+        [JsonProperty("service")]
+        public int Service { get; set; }
+
+
+        [DataMember]
+        [JsonProperty("ambience")]
+        public int Ambience { get; set; }
+
+
+        [DataMember]
+        [JsonProperty("overall")]
+        public int Overall { get; set; }
+
         [DataMember]
         [JsonProperty("placeId")]
         public int? PlaceId { get; set; }
@@ -55,7 +70,10 @@ namespace smartHookah.Models.Dto.Places
                 Text = model.Text, 
                 PlaceId = model.PlaceId,
                 SessionReview = SessionPlaceReviewDto.FromModel(model.SessionReview), 
-                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
+                Medias = MediaDto.FromModelList(model.Medias)?.ToList(), 
+                Ambience = model.Ambience,
+                Overall = model.Overall,
+                Service = model.Service
             }; 
         }
 
@@ -77,7 +95,10 @@ namespace smartHookah.Models.Dto.Places
                 PublishDate = PublishDate, 
                 Text = Text, 
                 PlaceId = PlaceId, 
-                SessionReview = SessionReview.ToModel(),
+                SessionReview = SessionReview?.ToModel(),
+                Ambience = Ambience,
+                Overall = Overall,
+                Service = Service
             }; 
         }
     }

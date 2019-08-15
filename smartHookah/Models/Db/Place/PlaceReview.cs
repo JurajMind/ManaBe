@@ -27,5 +27,12 @@ namespace smartHookah.Models.Db.Place
         public virtual SessionReview SessionReview { get; set; }
 
         public virtual ICollection<Media> Medias{ get; set; }
+
+        public int Service { get; set; }
+
+        public int Ambience { get; set; }
+
+        public int Overall { get; set; }
+
     }
 }
