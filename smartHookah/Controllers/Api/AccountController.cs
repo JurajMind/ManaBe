@@ -132,7 +132,10 @@ namespace smartHookah.Controllers.Api
                 var callbackUrl = this.Url.Link(
                     "ResetPassword",
                     new { controller = "Account", userId = user.Id, code = code });
-                await this.UserManager.SendEmailAsync(
+
+                callbackUrl = callbackUrl.Replace("/api", "");
+
+               await this.UserManager.SendEmailAsync(
                     user.Id,
                     "Reset Password",
                     "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
@@ -142,6 +145,14 @@ namespace smartHookah.Controllers.Api
 
             // If we got this far, something failed, redisplay form
             return this.BadRequest(this.ModelState);
+        }
+
+        [AllowAnonymous]
+        [Route("api/Account/ResetPassword/", Name = "ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(string userId, string code)
+        {
+            // dummy 
+            return null;
         }
 
         protected override void Dispose(bool disposing)
@@ -158,7 +169,10 @@ namespace smartHookah.Controllers.Api
             if (!result.Succeeded)
             {
                 if (result.Errors != null)
-                    foreach (var error in result.Errors) this.ModelState.AddModelError(string.Empty, this.TransformErrorCode(error));
+                    foreach (var error in result.Errors)
+                    {
+                        this.ModelState.AddModelError(this.TransformErrorCode(error), error);
+                    }
 
                 if (this.ModelState.IsValid) return this.BadRequest();
 
@@ -173,7 +187,7 @@ namespace smartHookah.Controllers.Api
             if(error.StartsWith("Passwords must have at least one digit")) return "ERR_PASS_DIGIT";
             if (error.Contains("is invalid, can only contain letters or digits.")) return "ERR_NAME";
             if (error.Contains("is already taken")) return "ERR_EMAIL_REGISTERED";
-            return $"ERR_UNKNOWN :{error}";
+            return $"ERR_UNKNOWN";
 
         }
     }
