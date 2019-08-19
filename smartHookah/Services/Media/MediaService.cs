@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Helpers;
 using Microsoft.Ajax.Utilities;
 using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Services.Media
 {
@@ -118,5 +119,30 @@ namespace smartHookah.Services.Media
             return MimeMapping.GetMimeMapping("file"+extension);
         }
 
+        public async Task<Models.Db.Place.Media> AddPlaceReviewPictureAsync(int id, HttpPostedFile file)
+        {
+            var placeReview = await this.db.PlaceReviews.FindAsync(id);
+            var path = $"/Content/PlaceReview/";
+            var key = placeReview.Id.ToString();
+            var media = SaveMedia(file, path, key);
+
+            placeReview.Medias.Add(media);
+
+            db.SaveChanges();
+            return media;
+        }
+
+        public async Task<Models.Db.Place.Media> AddSessionReviewPictureAsync(int id, HttpPostedFile file)
+        {
+            var sessionReview = await this.db.SessionReviews.FindAsync(id);
+            var path = $"/Content/Sessions/";
+            var key = sessionReview.Id.ToString();
+            var media = SaveMedia(file, path, key);
+
+            sessionReview.Medias.Add(media);
+
+            db.SaveChanges();
+            return media;
+        }
     }
 }
