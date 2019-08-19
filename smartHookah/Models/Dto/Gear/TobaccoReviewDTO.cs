@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db.Gear;
@@ -57,6 +58,18 @@ namespace smartHookah.Models.Dto.Gear
 
             foreach (var item in model)
                 yield return FromModel(item);
+        }
+
+        internal TobaccoReview ToModel()
+        {
+            return new TobaccoReview()
+            {
+                Id = Id,
+                Text = Text,
+                Taste = Taste,
+                Smoke = Smoke,
+                Strength = Strength,
+            };
         }
     }
 }

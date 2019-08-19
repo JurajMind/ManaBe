@@ -32,7 +32,11 @@ namespace smartHookah.Models.Db.Session.Dto
         [DataMember]
         [JsonProperty("placeReviewId")]
         public int? PlaceReviewId { get; set; }
-        
+
+        [DataMember]
+        [JsonProperty("placeReview")]
+        public PlaceReviewDto PlaceReview { get; set; }
+
         [DataMember]
         [JsonProperty("medias")]
         public ICollection<MediaDto> Medias { get; set; }
@@ -77,6 +81,7 @@ namespace smartHookah.Models.Db.Session.Dto
                 PublishDate = model.PublishDate, 
                 TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview), 
                 PlaceReviewId = model.PlaceReview.Id, 
+                PlaceReview = PlaceReviewDto.FromModel(model.PlaceReview),
                 Medias = MediaDto.FromModelList(model.Medias).ToList(), 
                 SmokeSessionId = model.SmokeSessionId, 
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
@@ -99,6 +104,8 @@ namespace smartHookah.Models.Db.Session.Dto
                 AuthorId = AuthorId,
                 PublishDate = PublishDate,
                 SmokeSessionId = SmokeSessionId,
+                PlaceReview = PlaceReview?.ToModel(),
+                TobaccoReview = TobaccoReview?.ToModel(),
             }; 
         }
     }

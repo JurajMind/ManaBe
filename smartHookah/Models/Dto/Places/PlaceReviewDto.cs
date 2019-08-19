@@ -61,6 +61,9 @@ namespace smartHookah.Models.Dto.Places
 
         public static PlaceReviewDto FromModel(PlaceReview model)
         {
+            if (model == null)
+                return null;
+
             return new PlaceReviewDto()
             {
                 Id = model.Id, 
