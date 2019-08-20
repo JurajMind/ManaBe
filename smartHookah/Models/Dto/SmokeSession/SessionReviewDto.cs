@@ -114,6 +114,10 @@ namespace smartHookah.Models.Db.Session.Dto
     public class SessionPlaceReviewDto
     {
         [DataMember]
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [DataMember]
         [JsonProperty("authorId")]
         public int? AuthorId { get; set; }
 
@@ -154,6 +158,7 @@ namespace smartHookah.Models.Db.Session.Dto
             }
             return new SessionPlaceReviewDto()
             {
+                Id = model.Id,
                 AuthorId = model.AuthorId,
                 Author = model.Author.DisplayName,
                 PublishDate = model.PublishDate,
