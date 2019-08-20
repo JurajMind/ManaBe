@@ -14,6 +14,10 @@ namespace smartHookah.Models.Db.Session.Dto
     public class SessionReviewDto
     {
         [DataMember]
+        [JsonProperty("id")]
+        public int? Id { get; set; }
+
+        [DataMember]
         [JsonProperty("authorId")]
         public int? AuthorId { get; set; }
 
@@ -70,6 +74,7 @@ namespace smartHookah.Models.Db.Session.Dto
         {
             return new SessionReviewDto()
             {
+                Id = model.Id,
                 AuthorId = model.AuthorId, 
 
                 Taste = model?.TobaccoReview?.Taste ?? model.nsTaste ?? -1,

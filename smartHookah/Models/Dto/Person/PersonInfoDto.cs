@@ -25,7 +25,7 @@ namespace smartHookah.Models.Dto
         public List<string> Roles { get; set; }
 
         [DataMember, JsonProperty("PersonId")]
-        public string PersonId { get; set; }
+        public int PersonId { get; set; }
 
     }
 }

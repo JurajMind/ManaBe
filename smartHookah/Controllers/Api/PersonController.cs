@@ -124,7 +124,7 @@ namespace smartHookah.Controllers.Api
                     Email = user.Email,
                     ManagedPlaces = PlaceSimpleDto.FromModelList(user.Person.Manage).ToList(),
                     Roles = personService.GetUserRoles(user.Id),
-                    PersonId = personService.GetCurentPerson().ToString()
+                    PersonId = personService.GetCurentPerson().Id
 
                 };
             }
