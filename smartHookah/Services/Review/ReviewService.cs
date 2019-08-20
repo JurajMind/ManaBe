@@ -120,7 +120,7 @@ namespace smartHookah.Services.Review
 
         public async Task<TobaccoReview> AddTobaccoReviews(TobaccoReview review)
         {
-            var pipeAccessory = await this.db.TobaccoReviews.FindAsync(review.AccessorId);
+            var pipeAccessory = await this.db.PipeAccesories.FindAsync(review.AccessorId);
 
             if (pipeAccessory == null)
             {
@@ -187,7 +187,7 @@ namespace smartHookah.Services.Review
                 }
                 else
                 {
-                    
+                    review.TobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId ?? 0;
                     review.TobaccoReview = await this.AddTobaccoReviews(review.TobaccoReview);
                 }
                 
