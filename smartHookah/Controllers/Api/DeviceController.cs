@@ -216,9 +216,16 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{id}/Add")]
-        public async Task<DeviceSimpleDto> AddDevice(string id)
+        public async Task<DeviceSimpleDto> AddDevice(string id,string code,string newName)
         {
-            var added = await this.personService.AddDevice(id);
+            var added = await this.personService.AddDeviceAsync(id, code, newName);
+            return DeviceSimpleDto.FromModel(added);
+        }
+
+        [HttpPost, Route("{id}/ChangeName")]
+        public async Task<DeviceSimpleDto> ChangeName(string id, string newName)
+        {
+            var added = await this.personService.ChangeNameAsync(id, newName);
             return DeviceSimpleDto.FromModel(added);
         }
 

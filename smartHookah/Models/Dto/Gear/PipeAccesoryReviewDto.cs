@@ -43,7 +43,7 @@ namespace smartHookah.Models.Db.Gear
                 Text = model.Text, 
                 AccessorId = model.AccessorId, 
                 Overall = model.Overall,
-                SessionReviewId = model.SessionReviewId,
+                SessionReviewId = model?.SessionReview?.Id,
                 SmokeSessionId = model.SmokeSessionId, 
                 Medias = MediaDto.FromModelList(model.Medias).ToList(), 
             }; 
@@ -66,8 +66,7 @@ namespace smartHookah.Models.Db.Gear
                 Deleted = Deleted, 
                 Text = Text, 
                 AccessorId = AccessorId, 
-                Overall = Overall,
-                SessionReviewId = SessionReviewId,
+                Overall = Overall,              
                 SmokeSessionId = SmokeSessionId,
             }; 
         }

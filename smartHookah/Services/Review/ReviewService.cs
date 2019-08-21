@@ -151,6 +151,16 @@ namespace smartHookah.Services.Review
             return true;
         }
 
+        public Task<TobaccoReview> GetTobaccoReviewDetail(int reviewId)
+        {
+            var review = this.db.TobaccoReviews.FindAsync(reviewId);
+            if(review == null)
+            {
+                throw new ManaException(ErrorCodes.ReviewNotFond);
+            }
+            return review;
+        }
+
         public async Task<IEnumerable<SessionReview>> GetSessionReviews(int id, int pageSize = 10, int page = 0) =>
             await this.db.SessionReviews
                 .Where(a => a.SmokeSessionId == id && !a.Deleted)
@@ -214,5 +224,6 @@ namespace smartHookah.Services.Review
 
             return true;
         }
+
     }
 }
