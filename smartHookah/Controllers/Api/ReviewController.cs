@@ -94,7 +94,7 @@ namespace smartHookah.Controllers.Api
             return await this.reviewService.DeleteTobaccoReviews(id);
         }
 
-        [HttpDelete, Route("Tobacco/{id}/Detail")]
+        [HttpGet, Route("Tobacco/{id}/Detail")]
         public async Task<TobaccoReviewDetailDto> TobaccoReviewDetail(int id)
         {
             var review =  await this.reviewService.GetTobaccoReviewDetail(id);
