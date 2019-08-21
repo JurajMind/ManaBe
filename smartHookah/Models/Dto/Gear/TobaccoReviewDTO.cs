@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db.Gear;
@@ -35,6 +34,9 @@ namespace smartHookah.Models.Dto.Gear
 
         [DataMember, JsonProperty("SmokeSessionId")]
         public int SmokeSessionId { get; set; }
+        
+        [DataMember, JsonProperty("SessionReviewId")]
+        public int SessionReviewId { get; set; }
 
         public static TobaccoReviewDto FromModel(TobaccoReview model) => model == null
             ? null
@@ -48,7 +50,8 @@ namespace smartHookah.Models.Dto.Gear
                 Duration = model.Duration,
                 Smoke = model.Smoke,
                 Taste = model.Taste,
-
+                SmokeSessionId = model.SmokeSessionId ?? 0,
+                SessionReviewId = model?.SessionReview?.Id ?? 0,
                 Text = model.Text
             };
 
@@ -72,4 +75,6 @@ namespace smartHookah.Models.Dto.Gear
             };
         }
     }
+
+
 }

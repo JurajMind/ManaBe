@@ -953,9 +953,14 @@
     <Compile Include="Migrations\201908152036120_place-review-data.Designer.cs">
       <DependentUpon>201908152036120_place-review-data.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Db\Gear\TobaccoReviewDto.cs" />
+    <Compile Include="Migrations\201908212023441_reviewIdFix.cs" />
+    <Compile Include="Migrations\201908212023441_reviewIdFix.Designer.cs">
+      <DependentUpon>201908212023441_reviewIdFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dto\Gear\PipeAccesoryReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
     <Compile Include="Models\Db\Place\PlaceReview.cs" />
+    <Compile Include="Models\Dto\Gear\TobaccoReviewDetailDTO .cs" />
     <Compile Include="Models\Dto\SmokeSession\SessionReviewDto.cs" />
     <Compile Include="Models\Dto\Places\PlaceReviewDto.cs" />
     <Compile Include="Models\Db\Resource.cs" />
@@ -1282,6 +1287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908152036120_place-review-data.resx">
       <DependentUpon>201908152036120_place-review-data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908212023441_reviewIdFix.resx">
+      <DependentUpon>201908212023441_reviewIdFix.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

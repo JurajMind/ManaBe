@@ -1,8 +1,6 @@
 ﻿using System;
-using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
-using smartHookah.Services.Person;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 
@@ -14,6 +12,7 @@ namespace smartHookah.Services.Device
     using System.Linq;
     using System.Threading.Tasks;
     using smartHookah.Helpers;
+    using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
     public class DeviceService : IDeviceService
@@ -25,6 +24,7 @@ namespace smartHookah.Services.Device
         private readonly IRedisService redisService;
 
         private readonly ISignalNotificationService _signalNotificationService;
+
 
 
         public DeviceService(SmartHookahContext db, IIotService iotService, IRedisService redisService,
@@ -364,5 +364,6 @@ namespace smartHookah.Services.Device
                     break;
             }
         }
+
     }
 }

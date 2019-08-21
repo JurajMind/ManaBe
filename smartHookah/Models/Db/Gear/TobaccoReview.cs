@@ -51,7 +51,6 @@ namespace smartHookah.Models.Db.Gear
         public double Overall { get; set; }
 
         public virtual PipeAccesory Accessor { get; set; }
-        public int? SessionReviewId { get; set; }
 
         public virtual SessionReview SessionReview { get; set; }
 

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using smartHookah.Models.Db.Session.Dto;
+using smartHookah.Models.Dto.Gear;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Review;
 
@@ -64,6 +65,41 @@ namespace smartHookah.Controllers.Api
         public async Task<bool> RemoveSessionReview(int id)
         {
             return await this.reviewService.DeleteSessionReviews(id);
+        }
+
+
+
+        #endregion
+
+        #region TobaccoReview
+
+        [HttpGet, Route("Tobacco/{id}")]
+        public async Task<IEnumerable<TobaccoReviewDto>> GetTobaccoReview(int id, int pageSize = 10, int page = 0)
+        {
+            var reviews = await this.reviewService.GetTobaccoReviews(id, pageSize, page);
+            return TobaccoReviewDto.FromModelList(reviews);
+        }
+
+        [HttpPost, Route("Tobacco/{id}")]
+        public async Task<TobaccoReviewDto> AddTobaccoReview([FromBody] TobaccoReviewDto reviewDto)
+        {
+            var mReview = reviewDto.ToModel();
+            var review = await this.reviewService.AddTobaccoReviews(mReview);
+            return TobaccoReviewDto.FromModel(review);
+        }
+
+        [HttpDelete, Route("Tobacco/{id}")]
+        public async Task<bool> RemoveTobaccoReview(int id)
+        {
+            return await this.reviewService.DeleteTobaccoReviews(id);
+        }
+
+        [HttpDelete, Route("Tobacco/{id}/Detail")]
+        public async Task<TobaccoReviewDetailDto> TobaccoReviewDetail(int id)
+        {
+            var review =  await this.reviewService.GetTobaccoReviewDetail(id);
+
+            return TobaccoReviewDetailDto.FromModel(review);
         }
 
         #endregion

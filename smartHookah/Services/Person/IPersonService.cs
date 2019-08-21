@@ -44,10 +44,10 @@ namespace smartHookah.Services.Person
 
         string GetCode();
 
+        Task<Hookah> AddDeviceAsync(string deviceId, string key, string newName);
 
-        Task<Hookah> AddDevice(string deviceId);
+        Task<Hookah> ChangeNameAsync(string deviceId, string newName);
 
         Task<Hookah> RemoveDevice(string deviceId);
-
     }
 }

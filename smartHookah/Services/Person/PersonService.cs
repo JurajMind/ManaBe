@@ -48,7 +48,7 @@ namespace smartHookah.Services.Person
             this.owinContext = owinContext;
 
             this.user = user;
-            this.deviceService = deviceService;
+          
             this.redisService = redisService;
             this.smokeSessionService = smokeSessionService;
         }
@@ -299,8 +299,9 @@ namespace smartHookah.Services.Person
             return code;
         }
 
-        public async Task<Hookah> AddDevice(string deviceId)
+        public async Task<Hookah> AddDeviceAsync(string deviceId, string key, string newName)
         {
+
             var person = this.GetCurentPerson();
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
 
@@ -317,6 +318,7 @@ namespace smartHookah.Services.Person
             }
 
             device.Owners.Add(person);
+            device.Name = newName;
             this.db.Hookahs.AddOrUpdate(device);
             await this.db.SaveChangesAsync();
             return device;
@@ -344,5 +346,33 @@ namespace smartHookah.Services.Person
             await this.db.SaveChangesAsync();
             return device;
         }
+
+        public async Task<Hookah> ChangeNameAsync(string deviceId, string newName)
+        {
+            var person = this.GetCurentPerson();
+            var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
+
+            if (device == null)
+            {
+                throw new ManaException(ErrorCodes.DeviceNotFound, $"Device id:{deviceId} was not found");
+            }
+
+            var owned = device.Owners.Count(a => a.Id == person.Id);
+
+            if (owned == 0)
+            {
+                throw new ManaException(ErrorCodes.DeviceAlreadyAdded, $"Device id:{deviceId} not found on user");
+            }
+
+            device.Name = newName;
+            this.db.Hookahs.AddOrUpdate(device);
+            await this.db.SaveChangesAsync();
+            return device;
+        }
+
     }
-}
+
+
+
+
+    }

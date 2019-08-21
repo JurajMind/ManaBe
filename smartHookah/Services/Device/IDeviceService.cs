@@ -36,5 +36,7 @@ namespace smartHookah.Services.Device
         string GetUpdatePath(string deviceId, string token);
 
 
+
+
     }
 }

@@ -137,10 +137,7 @@ namespace smartHookah.Models.Db.Session.Dto
         [DataMember]
         [JsonProperty("tobaccoReview")]
         public TobaccoReviewDto TobaccoReview { get; set; }
-
-        [DataMember]
-        [JsonProperty("gearReviews")]
-        public ICollection<PipeAccessoryReviewDto> GearReviews { get; set; }
+        
 
         [DataMember]
         [JsonProperty("medias")]
