@@ -48,7 +48,7 @@ namespace smartHookah.Services.Person
             this.owinContext = owinContext;
 
             this.user = user;
-          
+            this.deviceService = deviceService;
             this.redisService = redisService;
             this.smokeSessionService = smokeSessionService;
         }
