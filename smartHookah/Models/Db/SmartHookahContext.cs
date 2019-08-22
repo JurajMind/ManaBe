@@ -294,8 +294,9 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<Place.Place>().HasMany(s => s.Medias).WithOptional(h => h.Place);
 
-            modelBuilder.Entity<PlaceReview>().HasOptional(s => s.SessionReview).WithOptionalPrincipal();
+            modelBuilder.Entity<PlaceReview>().HasOptional(s => s.SessionReview).WithOptionalDependent(s => s.PlaceReview);
 
+            modelBuilder.Entity<SessionReview>().HasOptional(s => s.PlaceReview).WithOptionalPrincipal(s => s.SessionReview);
 
         }
 
