@@ -20,9 +20,10 @@ namespace smartHookah.Models.Db.Place
         public string Text { get; set; }
 
         public int? PlaceId { get; set; }
-        [ForeignKey("PlaceId")]
+
         public virtual Place Place { get; set; }
 
+        public int? SessionReviewId { get; set; }
         public virtual SessionReview SessionReview { get; set; }
 
         public virtual ICollection<Media> Medias{ get; set; }
