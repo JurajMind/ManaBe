@@ -298,6 +298,10 @@ namespace smartHookah.Models.Db
 
             modelBuilder.Entity<SessionReview>().HasOptional(s => s.PlaceReview).WithOptionalPrincipal(s => s.SessionReview);
 
+            modelBuilder.Entity<SmokeSession>().HasOptional(s => s.SessionReview).WithOptionalPrincipal(s => s.SmokeSession);
+
+            modelBuilder.Entity<SessionReview>().HasOptional(s => s.SmokeSession).WithOptionalDependent(s => s.SessionReview);
+
         }
 
         private SmokeSession CurrentSession(Hookah hookah)

@@ -9,6 +9,8 @@ using smartHookah.Models;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Gear;
 using smartHookah.Services.Gear;
+using smartHookah.Services.Person;
+using smartHookah.Services.Review;
 
 namespace smartHookah.Controllers.Api
 {
@@ -16,10 +18,14 @@ namespace smartHookah.Controllers.Api
     public class TobaccoController : ApiController
     {
         private readonly ITobaccoService tobaccoService;
+        private readonly IReviewService reviewService;
+        private readonly IPersonService personService;
 
-        public TobaccoController(ITobaccoService tobaccoService)
+        public TobaccoController(ITobaccoService tobaccoService,IReviewService reviewService, IPersonService personService)
         {
             this.tobaccoService = tobaccoService;
+            this.reviewService = reviewService;
+            this.personService = personService;
         }
 
         #region Getters
@@ -58,15 +64,13 @@ namespace smartHookah.Controllers.Api
                 var stats = tobaccoService.GetTobaccoStatistics(tobacco);
                 var personStats = tobaccoService.GetPersonTobaccoStatistics(tobacco);
                 var tastes = tobaccoService.GetTobaccoTastes(tobacco);
-                var sessionsTask = tobaccoService.GetTobaccoSessions(tobacco);
-                var reviewsTask = tobaccoService.GetTobaccoReviews(tobacco);
-
-                await Task.WhenAll(sessionsTask, reviewsTask);
-                
+                var sessionsTask =  tobaccoService.GetTobaccoSessions(tobacco);
+                var reviewsTask =  this.reviewService.GetTobaccoReviews(tobacco.Id);
+                                
                 var sessions = await sessionsTask;
                 var reviews = await reviewsTask;
 
-                return TobaccoInformationDto.FromModel(tobacco, tastes, personStats, stats, sessions, reviews);
+                return TobaccoInformationDto.FromModel(tobacco, tastes, personStats, stats, sessions, reviews.ToList());
             }
             catch(Exception e)
             {
@@ -111,21 +115,6 @@ namespace smartHookah.Controllers.Api
             }
         }
 
-        [HttpGet, Route("{id}/GetReviews")]
-        public async Task<List<TobaccoReviewDto>> GetTobaccoReviews(int id, int pageSize = 10, int page = 0)
-        {
-            try
-            {
-                var tobacco = await tobaccoService.GetTobacco(id);
-                var reviews = await tobaccoService.GetTobaccoReviews(tobacco, pageSize, page);
-                return TobaccoReviewDto.FromModelList(reviews).ToList();
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
-            }
-        }
 
         [HttpGet, Route("{id}/GetSessions")]
         public async Task<List<SmokeSessionSimpleDto>> GetTobaccoSessions(int id, int pageSize = 10, int page = 0)
@@ -141,6 +130,16 @@ namespace smartHookah.Controllers.Api
                 throw new HttpResponseException(
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
             }
+        }
+
+
+        [HttpGet, Route("{id}/InMix")]
+        public async Task<List<TobaccoMixSimpleDto>> GetTobaccoInMixes(int id, int pageSize = 10, int page = 0)
+        {
+            var mixes = await this.tobaccoService.GetMixFromTobacco(id, pageSize, page);
+
+            var result = TobaccoMixSimpleDto.FromModelList(mixes, this.personService.GetCurentPersonId());
+            return result.ToList();
         }
 
         #endregion

@@ -6,11 +6,12 @@ using System.Linq;
 using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
+using smartHookah.Models.Db.Session;
 using smartHookah.Models.Redis;
 
 namespace smartHookah.Models.Db
 {
-    public  class 
+    public class
         SmokeSession
     {
 
@@ -29,7 +30,7 @@ namespace smartHookah.Models.Db
         public virtual Hookah Hookah { get; set; }
 
         public virtual ICollection<Person> Persons { get; set; }
-        
+
         public bool IsPersonAssign(int id)
         {
             return Persons.Any(a => a.Id == id);
@@ -59,15 +60,17 @@ namespace smartHookah.Models.Db
 
         public int? MetaDataId { get; set; }
         public virtual SmokeSessionMetaData MetaData { get; set; }
-        
-        public virtual ICollection<SmokeEvent> SmokeEvents{get;set;
+
+        public virtual ICollection<SmokeEvent> SmokeEvents { get; set;
         }
 
         public int? StatisticsId { get; set; }
-        
+
         public virtual SmokeSessionStatistics Statistics { get; set; }
-        
+
         public virtual TobaccoReview Review { get; set; }
+
+        public virtual SessionReview SessionReview{get;set;}
 
         [Index("Token")]
         [MaxLength(10)]

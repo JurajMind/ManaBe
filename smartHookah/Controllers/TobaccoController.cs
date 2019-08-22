@@ -847,7 +847,7 @@ namespace smartHookah.Controllers
             result.Used = smokeSessions.Count();
             result.Weight = smokeSessions.Average(a => a.MetaData.TobaccoWeight);
 
-            var smokeSesinReview = smokeSessions.Where(a => a.Review != null).Select(a => a.Review).ToArray();
+            var smokeSesinReview = smokeSessions.Where(a => a.SessionReview != null && a.SessionReview.TobaccoReview != null).Select(a => a.SessionReview.TobaccoReview).ToArray();
 
             if (smokeSesinReview.Any())
             {

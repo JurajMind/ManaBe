@@ -370,6 +370,16 @@ namespace smartHookah.Services.Person
             return device;
         }
 
+        private int? personId = null;
+        public int GetCurentPersonId()
+        {
+            if (personId != null)
+                return personId.Value;
+
+            personId = this.GetCurentPerson().Id;
+
+            return personId.Value;
+        }
     }
 
 

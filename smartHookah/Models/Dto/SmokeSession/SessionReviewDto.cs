@@ -88,7 +88,7 @@ namespace smartHookah.Models.Db.Session.Dto
                 PlaceReviewId = model.PlaceReview.Id, 
                 PlaceReview = PlaceReviewDto.FromModel(model.PlaceReview),
                 Medias = MediaDto.FromModelList(model.Medias).ToList(), 
-                SmokeSessionId = model.SmokeSessionId, 
+                SmokeSessionId = model?.SmokeSession?.Id ?? 0, 
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
             }; 
         }
@@ -107,8 +107,7 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReview()
             {
                 AuthorId = AuthorId,
-                PublishDate = PublishDate,
-                SmokeSessionId = SmokeSessionId,
+                PublishDate = PublishDate,              
                 PlaceReview = PlaceReview?.ToModel(),
                 TobaccoReview = TobaccoReview?.ToModel(),
             }; 
@@ -166,7 +165,7 @@ namespace smartHookah.Models.Db.Session.Dto
                 PublishDate = model.PublishDate,
                 TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview),
                 Medias = MediaDto.FromModelList(model.Medias).ToList(),
-                SmokeSessionId = model.SmokeSessionId,
+                SmokeSessionId = model?.SmokeSession?.Id ?? 0,
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
             };
         }
@@ -185,8 +184,7 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReview()
             {
                 AuthorId = AuthorId,
-                PublishDate = PublishDate,
-                SmokeSessionId = SmokeSessionId,
+                PublishDate = PublishDate,                
             };
         }
     }

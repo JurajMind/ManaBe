@@ -32,8 +32,6 @@ namespace smartHookah.Models.Db.Session
 
         public bool Deleted { get; set; }
 
-        public int SmokeSessionId { get; set; }
-
         public virtual SmokeSession SmokeSession { get; set; }
     }
 }

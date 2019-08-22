@@ -34,7 +34,7 @@ namespace smartHookah.Services.Review
         //SessionReview
         Task<IEnumerable<SessionReview>> GetSessionReviews(int id, int pageSize = 10, int page = 0);
 
-        Task<SessionReview> AddSessionReviews(SessionReview review);
+        Task<SessionReview> AddSessionReviews(int id,SessionReview review);
 
         Task<bool> DeleteSessionReviews(int id);
 
