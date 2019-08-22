@@ -949,9 +949,13 @@
     <Compile Include="Migrations\201908111811115_reviewUpd2.Designer.cs">
       <DependentUpon>201908111811115_reviewUpd2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201908221012272_review_refix.cs" />
-    <Compile Include="Migrations\201908221012272_review_refix.Designer.cs">
-      <DependentUpon>201908221012272_review_refix.cs</DependentUpon>
+    <Compile Include="Migrations\201908221123048_reviewUpd3.cs" />
+    <Compile Include="Migrations\201908221123048_reviewUpd3.Designer.cs">
+      <DependentUpon>201908221123048_reviewUpd3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908221151313_reviewUpd4.cs" />
+    <Compile Include="Migrations\201908221151313_reviewUpd4.Designer.cs">
+      <DependentUpon>201908221151313_reviewUpd4.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Dto\Gear\PipeAccesoryReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
@@ -1281,8 +1285,11 @@
     <EmbeddedResource Include="Migrations\201908111811115_reviewUpd2.resx">
       <DependentUpon>201908111811115_reviewUpd2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908221012272_review_refix.resx">
-      <DependentUpon>201908221012272_review_refix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201908221123048_reviewUpd3.resx">
+      <DependentUpon>201908221123048_reviewUpd3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908221151313_reviewUpd4.resx">
+      <DependentUpon>201908221151313_reviewUpd4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

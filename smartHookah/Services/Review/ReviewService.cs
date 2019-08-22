@@ -46,10 +46,10 @@ namespace smartHookah.Services.Review
             review.Author = author;
             review.PublishDate = DateTime.UtcNow;
 
-            if (review.SessionReview != null)
-            {
-                review.SessionReview = await this.AddSessionReviews(review.SessionReview);
-            }
+            //if (review.SessionReview != null)
+            //{
+            //    review.SessionReview = await this.AddSessionReviews(review.SessionReview);
+            //}
 
             this.db.PlaceReviews.Add(review);
             this.db.SaveChanges();
@@ -179,10 +179,10 @@ namespace smartHookah.Services.Review
             review.AuthorId = this.PersonService.GetCurentPerson().Id;
             review.PublishDate = DateTime.UtcNow;
 
-            if (review.PlaceReview != null)
-            {
-                review.PlaceReview = await this.AddPlaceReview(review.PlaceReview);
-            }
+            //if (review.PlaceReview != null)
+            //{
+            //    review.PlaceReview = await this.AddPlaceReview(review.PlaceReview);
+            //}
 
             if (review.TobaccoReview != null)
             {
