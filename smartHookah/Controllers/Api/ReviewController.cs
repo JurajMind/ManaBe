@@ -54,10 +54,10 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("Session/{id}")]
-        public async Task<SessionReviewDto> AddSessionReview([FromBody] SessionReviewDto reviewDto)
+        public async Task<SessionReviewDto> AddSessionReview(int id,[FromBody] SessionReviewDto reviewDto)
         {
             var mReview = reviewDto.ToModel();
-            var review = await this.reviewService.AddSessionReviews(mReview);
+            var review = await this.reviewService.AddSessionReviews(id,mReview);
             return SessionReviewDto.FromModel(review);
         }
 

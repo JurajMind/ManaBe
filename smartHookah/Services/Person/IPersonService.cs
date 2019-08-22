@@ -13,6 +13,8 @@ namespace smartHookah.Services.Person
     {
         Models.Db.Person GetCurentPerson();
 
+        int GetCurentPersonId();
+
         Models.Db.Person GetCurentPerson(SmartHookahContext context);
 
         Models.Db.Person GetCurentPerson(int? personId, bool manage = false);

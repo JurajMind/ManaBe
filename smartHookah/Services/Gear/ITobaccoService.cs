@@ -14,11 +14,8 @@ namespace smartHookah.Services.Gear
         Task<PipeAccesoryStatistics> GetPersonTobaccoStatistics(Tobacco tobacco, int personId);
         List<TobaccoTaste> GetTobaccoTastes(Tobacco tobacco);
         Task<List<Models.Db.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0);
-        Task<List<TobaccoReview>> GetTobaccoReviews(Tobacco tobacco, int pageSize = 10, int page = 0);
-
 
         IList<Tobacco> GetTobaccoList(int page, int pageSize, TobaccoFilter filter);
-
 
         Task<TobaccoMix> GetTobaccoMix(int id);
         Task<PipeAccesoryStatistics> GetTobaccoMixStatistics(TobaccoMix mix);
@@ -29,5 +26,8 @@ namespace smartHookah.Services.Gear
         Task<List<TobaccoReview>> GetTobaccoMixReviews(TobaccoMix mix, int count = 10);
 
         Task<TobaccoMix> AddOrUpdateMix(TobaccoMix newMix);
+
+        Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0);
     }
+        
 }

@@ -31,14 +31,14 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             result.SmokeSession = db.SmokeSessions.Find(sessionId);
 
 
-            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSessionId == result.SmokeSession.Id);
+            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSession != null && a.SmokeSession.Id == result.SmokeSession.Id);
 
             if (result.SessionReview == null)
             {
                 result.SessionReview = new SessionReview();
             }
 
-            result.SessionReview.SmokeSessionId = result.SmokeSession.Id;
+            result.SessionReview.SmokeSession = result.SmokeSession;
             SmokeSessionMetaData outMetaData;
             result.SmokeMetadataModalViewModel = this.metadataModalViewModelMapper.Map(result.SmokeSession.SessionId,
                 result.SmokeSession.MetaData, personService.GetCurentPerson(), out outMetaData);

@@ -53,12 +53,15 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             result.Session = session;
 
             if (person != null) result.IsAssigned = session.IsPersonAssign(person.Id);
-            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSessionId == session.Id);
+            result.SessionReview = db.SessionReviews.FirstOrDefault(a => a.SmokeSession != null && a.SmokeSession.Id == session.Id);
 
             if (result.SessionReview == null)
             {
-                result.SessionReview = new SessionReview();
-                result.SessionReview.SmokeSessionId = session.Id;
+                result.SessionReview = new SessionReview()
+                {
+                    SmokeSession = session
+                };
+                
             }
 
             result.CurentState = PufType.Idle;

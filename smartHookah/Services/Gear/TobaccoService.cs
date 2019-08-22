@@ -42,7 +42,7 @@ namespace smartHookah.Services.Gear
             var tobacco = await db.Tobaccos.FirstOrDefaultAsync(a => a.Id == id);
             if(tobacco == null) throw new KeyNotFoundException($"Tobacco with id {id} not found.");
             return tobacco;
-        }
+        }        
 
         public PipeAccesoryStatistics GetTobaccoStatistics(Tobacco tobacco)
         {
@@ -51,10 +51,10 @@ namespace smartHookah.Services.Gear
 
         public PipeAccesoryStatistics GetPersonTobaccoStatistics(Tobacco tobacco)
         {
-            var person = personService.GetCurentPerson();
+            var person = personService.GetCurentPersonId();
             if (person == null) throw new AccountNotFoundException();
-            var sessions = person.SmokeSessions.Where(a => a.MetaData.TobaccoId == tobacco.Id).ToList();
-            return sessions.Any() ? CalculateStatistics(sessions.ToList()) : null;
+            var sessions = db.SmokeSessions.Include(a => a.Statistics).Include(a => a.SessionReview).Where(a => a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person)).ToList();
+            return sessions.Any() ? CalculateStatistics(sessions) : null;
         }
 
         [Authorize(Roles = "Admin")]
@@ -73,23 +73,13 @@ namespace smartHookah.Services.Gear
 
         public async Task<List<Models.Db.SmokeSession>> GetTobaccoSessions(Tobacco tobacco, int pageSize = 10, int page = 0)
         {
+            var person = this.personService.GetCurentPersonId();
             return await db.SmokeSessions
-                .Where(a => a.MetaData.TobaccoId == tobacco.Id)
+                .Where(a => a.MetaData != null &&  a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person))
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip(page * pageSize)
                 .Take(pageSize).ToListAsync();
         }
-
-        public async Task<List<TobaccoReview>> GetTobaccoReviews(Tobacco tobacco, int pageSize = 10, int page = 0)
-        {
-            return await db.SmokeSessions
-                .Where(a => a.MetaData.TobaccoId == tobacco.Id)
-                .Select(a => a.Review)
-                .OrderByDescending(a => a.PublishDate)
-                .Skip(page * pageSize)
-                .Take(pageSize).ToListAsync();
-        }
-
 
         public IList<Tobacco> GetTobaccoList(int page = 1, int pageSize = 50, TobaccoFilter filter = null )
         {
@@ -148,6 +138,14 @@ namespace smartHookah.Services.Gear
             if (mix == null) throw new KeyNotFoundException($"Tobacco mix with id {id} not found.");
             return mix;
         }
+
+        public async Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0) {
+            var mixes = await this.db.TobaccosMixParts.Where(a => a.TobaccoId == id).Select(a => a.InMix).Distinct().OrderBy(b => b.Id).Skip(page * pageSize)
+                .Take(pageSize).ToListAsync();
+
+            return mixes;
+        }
+
 
         public async Task<PipeAccesoryStatistics> GetTobaccoMixStatistics(TobaccoMix mix)
         {
@@ -260,7 +258,7 @@ namespace smartHookah.Services.Gear
         private PipeAccesoryStatistics CalculateStatistics(IEnumerable<Models.Db.SmokeSession> session)
         {
             var result = new PipeAccesoryStatistics();
-            
+            var personId = this.personService.GetCurentPerson().Id;
             var smokeSessions = session as Models.Db.SmokeSession[] ?? session.ToArray();
 
             if (!smokeSessions.Any())
@@ -273,7 +271,7 @@ namespace smartHookah.Services.Gear
             result.Used = smokeSessions.Count();
             result.Weight = smokeSessions.Average(a => a.MetaData.TobaccoWeight);
 
-            var smokeSesinReview = smokeSessions.Where(a => a.Review != null).Select(a => a.Review).ToArray();
+            var smokeSesinReview = smokeSessions.Where(a => a.SessionReview != null && a.Review.AuthorId == personId).Select(a => a.Review).ToArray();
 
             if (smokeSesinReview.Any())
             {

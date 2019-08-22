@@ -140,6 +140,29 @@ namespace smartHookah.Services.Media
             var media = SaveMedia(file, path, key);
 
             sessionReview.Medias.Add(media);
+            if (sessionReview.TobaccoReview != null)
+            {
+                media.PipeAccessoryReview = sessionReview.TobaccoReview;
+            }
+
+            if (sessionReview.PlaceReview != null)
+            {
+                media.PlaceReview = sessionReview.PlaceReview;
+            }
+
+            db.SaveChanges();
+           
+            return media;
+        }
+
+        public async Task<Models.Db.Place.Media> AddTobaccoReviewPictureAsync(int id, HttpPostedFile file)
+        {
+            var tobaccoReview = await this.db.TobaccoReviews.FindAsync(id);
+            var path = $"/Content/TobaccoReview/";
+            var key = tobaccoReview.Id.ToString();
+            var media = SaveMedia(file, path, key);
+
+            tobaccoReview.Medias.Add(media);
 
             db.SaveChanges();
             return media;

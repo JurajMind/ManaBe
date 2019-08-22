@@ -163,13 +163,13 @@ namespace smartHookah.Services.Review
 
         public async Task<IEnumerable<SessionReview>> GetSessionReviews(int id, int pageSize = 10, int page = 0) =>
             await this.db.SessionReviews
-                .Where(a => a.SmokeSessionId == id && !a.Deleted)
+                .Where(a => a.SmokeSession != null && a.SmokeSession.Id == id && !a.Deleted)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
 
-        public async Task<SessionReview> AddSessionReviews(SessionReview review)
+        public async Task<SessionReview> AddSessionReviews(int id,SessionReview review)
         {
-            var smokeSession = await this.db.SmokeSessions.FindAsync(review.SmokeSessionId);
+            var smokeSession = await this.db.SmokeSessions.FindAsync(id);
 
             if (smokeSession == null)
             {
@@ -219,6 +219,12 @@ namespace smartHookah.Services.Review
             }
 
             review.Deleted = true;
+            if (review.TobaccoReview != null)
+                review.TobaccoReview.Deleted = true;
+
+            if (review.PlaceReview != null)
+                review.PlaceReview.Deleted = true;
+
             this.db.SessionReviews.AddOrUpdate(review);
             this.db.SaveChanges();
 

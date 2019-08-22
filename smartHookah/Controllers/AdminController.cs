@@ -46,7 +46,7 @@ namespace smartHookah.Controllers
         {
             var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
 
-            var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
+            var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.SessionReview == null);
             foreach (var session in smokeSessionToDelete)
             {
                 try
