@@ -64,11 +64,9 @@ namespace smartHookah.Controllers.Api
                 var stats = tobaccoService.GetTobaccoStatistics(tobacco);
                 var personStats = tobaccoService.GetPersonTobaccoStatistics(tobacco);
                 var tastes = tobaccoService.GetTobaccoTastes(tobacco);
-                var sessionsTask =  tobaccoService.GetTobaccoSessions(tobacco);
-                var reviewsTask =  this.reviewService.GetTobaccoReviews(tobacco.Id);
-                                
-                var sessions = await sessionsTask;
-                var reviews = await reviewsTask;
+                var sessions = await tobaccoService.GetTobaccoSessions(tobacco);
+                var reviews = await this.reviewService.GetTobaccoReviews(tobacco.Id,null);
+
 
                 return TobaccoInformationDto.FromModel(tobacco, tastes, personStats, stats, sessions, reviews.ToList());
             }

@@ -111,8 +111,8 @@ namespace smartHookah.Services.Review
             return true;
         }
 
-        public async Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, int pageSize = 10, int page = 0) =>
-            await this.db.TobaccoReviews
+        public async Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, SmartHookahContext db , int pageSize = 10, int page = 0) =>
+            await (db ??this.db).TobaccoReviews
                 .Where(a => a.AccessorId == id && !a.Deleted)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
