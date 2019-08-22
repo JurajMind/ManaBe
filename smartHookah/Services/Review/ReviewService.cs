@@ -179,10 +179,10 @@ namespace smartHookah.Services.Review
             review.AuthorId = this.PersonService.GetCurentPerson().Id;
             review.PublishDate = DateTime.UtcNow;
 
-            //if (review.PlaceReview != null)
-            //{
-            //    review.PlaceReview = await this.AddPlaceReview(review.PlaceReview);
-            //}
+            if (review.PlaceReview != null)
+            {
+                review.PlaceReview = await this.AddPlaceReview(review.PlaceReview);
+            }
 
             if (review.TobaccoReview != null)
             {
