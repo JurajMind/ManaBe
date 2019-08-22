@@ -53,7 +53,7 @@ namespace smartHookah.Services.Gear
         {
             var person = personService.GetCurentPersonId();
             if (person == null) throw new AccountNotFoundException();
-            var sessions = db.SmokeSessions.Include(a => a.Statistics).Include(a => a.SessionReview).Where(a => a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person)).ToList();
+            var sessions = db.SmokeSessions.Include(a => a.Statistics).Include(a => a.SessionReview).Where(a =>a.MetaData != null &&  a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person)).ToList();
             return sessions.Any() ? CalculateStatistics(sessions) : null;
         }
 
@@ -259,7 +259,7 @@ namespace smartHookah.Services.Gear
         {
             var result = new PipeAccesoryStatistics();
             var personId = this.personService.GetCurentPerson().Id;
-            var smokeSessions = session as Models.Db.SmokeSession[] ?? session.ToArray();
+            var smokeSessions = session as Models.Db.SmokeSession[] ?? session.Where(a => a.Statistics != null).ToArray();
 
             if (!smokeSessions.Any())
                 return null;

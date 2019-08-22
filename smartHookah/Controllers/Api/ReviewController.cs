@@ -76,7 +76,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("Tobacco/{id}")]
         public async Task<IEnumerable<TobaccoReviewDto>> GetTobaccoReview(int id, int pageSize = 10, int page = 0)
         {
-            var reviews = await this.reviewService.GetTobaccoReviews(id, pageSize, page);
+            var reviews = await this.reviewService.GetTobaccoReviews(id, null,pageSize, page);
             return TobaccoReviewDto.FromModelList(reviews);
         }
 

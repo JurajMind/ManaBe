@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Db.Session;
@@ -23,7 +24,7 @@ namespace smartHookah.Services.Review
         Task<bool> DeletePipeAccessoryReview(int id);
 
         //TobaccoReview
-        Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, int pageSize = 10, int page = 0);
+        Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, SmartHookahContext db, int pageSize = 10, int page = 0);
 
         Task<TobaccoReview> AddTobaccoReviews(TobaccoReview review);
 
