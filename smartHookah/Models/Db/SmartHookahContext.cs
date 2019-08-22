@@ -289,13 +289,13 @@ namespace smartHookah.Models.Db
             modelBuilder.Entity<Person>().HasMany(a => a.NotificationTokens).WithRequired(a => a.Person).HasForeignKey(x => x.PersonId);
 
 
-            modelBuilder.Entity<PlaceReview>().HasOptional(a => a.SessionReview).WithOptionalDependent();
-
-            modelBuilder.Entity<SessionReview>().HasOptional(a => a.PlaceReview).WithOptionalPrincipal();
 
             modelBuilder.Entity<PipeAccessoryReview>().HasMany(s => s.Medias).WithOptional(h => h.PipeAccessoryReview);
 
             modelBuilder.Entity<Place.Place>().HasMany(s => s.Medias).WithOptional(h => h.Place);
+
+            modelBuilder.Entity<PlaceReview>().HasOptional(s => s.SessionReview).WithOptionalPrincipal();
+
 
         }
 

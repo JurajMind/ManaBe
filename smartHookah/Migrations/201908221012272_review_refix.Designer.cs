@@ -7,13 +7,13 @@ namespace smartHookah.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class placereviewdata : IMigrationMetadata
+    public sealed partial class review_refix : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(placereviewdata));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(review_refix));
         
         string IMigrationMetadata.Id
         {
-            get { return "201908152036120_place-review-data"; }
+            get { return "201908221012272_review_refix"; }
         }
         
         string IMigrationMetadata.Source

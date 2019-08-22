@@ -15,13 +15,7 @@ namespace smartHookah.Models.Db.Session
 
         public DateTime PublishDate { get; set; }
 
-        [ForeignKey("TobaccoReview")]
-        public int? TobaccoReviewId { get; set; }
-
         public virtual TobaccoReview TobaccoReview { get; set; }
-
-        [ForeignKey("PlaceReview")]
-        public int? PlaceReviewId { get; set; }
 
         public virtual PlaceReview PlaceReview { get; set; }
 
@@ -38,9 +32,8 @@ namespace smartHookah.Models.Db.Session
 
         public bool Deleted { get; set; }
 
-
         public int SmokeSessionId { get; set; }
-        [ForeignKey("SmokeSessionId")]
+
         public virtual SmokeSession SmokeSession { get; set; }
     }
 }
