@@ -15,19 +15,13 @@ using Microsoft.AspNet.SignalR;
 using smartHookah.Helpers;
 using smartHookah.Hubs;
 using smartHookah.Mappers.ViewModelMappers.Smoke;
-using smartHookah.Models;
 using smartHookah.Models.Db;
-using smartHookah.Models.Redis;
 using smartHookah.Services.SmokeSession;
 using smartHookah.Support;
-using smartHookahCommon;
 using static System.Threading.Tasks.Task;
 
 namespace smartHookah.Controllers
 {
-    using EntityFramework.BulkInsert;
-    using EntityFramework.BulkInsert.Extensions;
-
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 

@@ -9,6 +9,8 @@
 
         public string Type { get; set; }
 
+        public bool NonVerified { get; set; }
+
         public SearchPipeAccessory()
         {
 
@@ -20,6 +22,7 @@
             this.Brand = accessory.Brand;
             this.Type = accessory.Type;
             this.Name = accessory.Name;
+            this.NonVerified = accessory.Status != 0;
         }
     }
 

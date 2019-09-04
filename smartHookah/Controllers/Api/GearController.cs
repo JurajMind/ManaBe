@@ -5,21 +5,17 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.VisualStudio.Services.WebApi;
 using smartHookah.ErrorHandler;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Services.Gear;
 using smartHookah.Services.Redis;
 using smartHookah.Services.Search;
-using ServiceStack.Common.Web;
-using ServiceStack.ServiceHost;
+using smartHookah.Helpers;
+using smartHookah.Models.Dto;
 
 namespace smartHookah.Controllers.Api
 {
-    using MaxMind.GeoIP2.Exceptions;
-    using smartHookah.Helpers;
-    using smartHookah.Models.Dto;
+
 
     [RoutePrefix("api/Gear")]
     public class GearController : ApiController
@@ -37,7 +33,7 @@ namespace smartHookah.Controllers.Api
 
         #region Getters
 
-        [HttpGet, ApiAuthorize, System.Web.Http.Route("Search/{search}")]
+        [HttpGet, ApiAuthorize, Route("Search/{search}")]
         public async Task<List<SearchPipeAccessory>> Search(string search, string type = null, int page = 0, int pageSize = 50, string searchType = "All")
         {
            
@@ -150,5 +146,14 @@ namespace smartHookah.Controllers.Api
             var result = await this.gearService.AddGear(modelAccessory);
             return PipeAccesorySimpleDto.FromModel(result);
         }
+
+        [HttpPost, ApiAuthorize, System.Web.Http.Route("Merge")]
+        public async Task<PipeAccesorySimpleDto> Merge([FromUri] int targetId, [FromUri] int sourceId)
+        {
+            var accessory = await this.gearService.MergeGear(targetId, sourceId);
+
+            return PipeAccesorySimpleDto.FromModel(accessory);
+        }
+
     }
 }

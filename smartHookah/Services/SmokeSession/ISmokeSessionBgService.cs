@@ -15,5 +15,7 @@ namespace smartHookah.Services.SmokeSession
         Task IntNewSessions();
 
         Task CleanWrongSessions();
+
+        Task<PipeAccesoryStatistics> CalculateStatistic(PipeAccesory source);
     }
 }
