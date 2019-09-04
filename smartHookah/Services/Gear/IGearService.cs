@@ -47,6 +47,9 @@ namespace smartHookah.Services.Gear
 
         Task<PipeAccesory> AddGear(PipeAccesory accessory);
 
+        Task<PipeAccesory> MergeGear(int targetId, int sourceId);
+
+
     }
 
     public class GearFilter

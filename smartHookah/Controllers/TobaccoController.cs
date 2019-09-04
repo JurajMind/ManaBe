@@ -11,6 +11,8 @@ using PagedList;
 
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using smartHookah.Services.Gear;
+using smartHookah.Services.SmokeSession;
 using smartHookah.Support;
 
 namespace smartHookah.Controllers
@@ -28,11 +30,17 @@ namespace smartHookah.Controllers
 
         private readonly IRedisService redisService;
 
-        public TobaccoController(SmartHookahContext db, IPersonService personService, IRedisService redisService)
+        private readonly IGearService gearService;
+
+        private readonly ISmokeSessionBgService sessionBgService;
+
+        public TobaccoController(SmartHookahContext db, IPersonService personService, IRedisService redisService, IGearService gearService, ISmokeSessionBgService sessionBgService)
         {
             this.db = db;
             this.personService = personService;
             this.redisService = redisService;
+            this.gearService = gearService;
+            this.sessionBgService = sessionBgService;
         }
 
         // GET: TobaccoSimple
@@ -692,7 +700,7 @@ namespace smartHookah.Controllers
 
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult CalculateAllTobacoStatistic()
+        public async Task<ActionResult> CalculateAllTobacoStatistic()
         {
             var Session =
                  db.SmokeSessions.Where(a => a.MetaData.Tobacco != null)
@@ -707,8 +715,8 @@ namespace smartHookah.Controllers
             foreach (var tobaccoId in usedTobacc)
             {
                 var tobaccoSessionStatistic = Session.Where(a => a.MetaData.TobaccoId == tobaccoId && a.Statistics != null);
-
-                var stats = Calculate(tobaccoSessionStatistic);
+                var acc = await this.db.PipeAccesories.FindAsync(tobaccoId);
+                var stats = await this.sessionBgService.CalculateStatistic(acc);
 
                 if (stats == null)
                     continue;
@@ -728,10 +736,13 @@ namespace smartHookah.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult CalculateStatistic(int id)
+        public async  Task<ActionResult> CalculateStatistic(int id)
         {
 
-            CalculateStatistic(id, db);
+            var acc = this.db.PipeAccesories.Find(id);
+            var stats = await this.sessionBgService.CalculateStatistic(acc);
+            this.db.PipeAccesoryStatistics.AddOrUpdate(stats);
+
             var allTobacoReview = db.PipeAccesoryStatistics.Select(a => new SessionTicks()
             {
                 Session = a.SessionDurationTick,
@@ -799,70 +810,6 @@ namespace smartHookah.Controllers
                     equal++;
             }
             return (double)(200 * less + 100 * equal) / (double)(sequence.Length * 2);
-        }
-
-        public static void CalculateStatistic(int id, SmartHookahContext db)
-        {
-            var Session =
-                db.SmokeSessions.Where(a => a.MetaData.Tobacco != null)
-                    .Include(x => x.MetaData)
-                    .Include(x => x.Statistics);
-
-            var tobaccoSessionStatistic = Session.Where(a => a.MetaData.TobaccoId == id && a.Statistics != null);
-
-            var stats = Calculate(tobaccoSessionStatistic);
-
-            if (stats == null)
-            {
-
-                db.PipeAccesoryStatistics.Remove(db.PipeAccesoryStatistics.Find(id));
-                db.SaveChanges();
-                return;
-            }
-
-
-            var tobacco = db.Tobaccos.Find(id);
-
-            stats.PipeAccesoryId = tobacco.Id;
-
-            db.PipeAccesoryStatistics.AddOrUpdate(stats);
-            db.SaveChanges();
-            return;
-        }
-
-        private static PipeAccesoryStatistics Calculate(IEnumerable<SmokeSession> session)
-        {
-            var result = new PipeAccesoryStatistics();
-
-
-            var smokeSessions = session as SmokeSession[] ?? session.ToArray();
-
-            if (!smokeSessions.Any())
-                return null;
-            result.PufCount = smokeSessions.Average(a => a.Statistics.PufCount);
-            result.PackType = smokeSessions.GroupBy(i => i.MetaData.PackType).OrderByDescending(j => j.Count()).Select(a => a.Key).First();
-            result.BlowCount = smokeSessions.Average(b => b.DbPufs.Count(puf => puf.Type == PufType.Out));
-            result.SessionDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SessionDuration.TotalSeconds));
-            result.SmokeDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SmokeDuration.TotalSeconds));
-            result.Used = smokeSessions.Count();
-            result.Weight = smokeSessions.Average(a => a.MetaData.TobaccoWeight);
-
-            var smokeSesinReview = smokeSessions.Where(a => a.SessionReview != null && a.SessionReview.TobaccoReview != null).Select(a => a.SessionReview.TobaccoReview).ToArray();
-
-            if (smokeSesinReview.Any())
-            {
-                result.Overall = smokeSesinReview.Average(a => a.Overall);
-                result.Taste = smokeSesinReview.Average(a => a.Taste);
-                result.Smoke = smokeSesinReview.Average(a => a.Smoke);
-                result.Cut = smokeSesinReview.Average(a => a.Cut);
-                result.Strength = smokeSesinReview.Average(a => a.Strength);
-                result.Duration = smokeSesinReview.Average(a => a.Duration);
-            }
-
-
-
-
-            return result;
         }
 
         public async Task<ActionResult> Mix()

@@ -232,6 +232,81 @@ namespace smartHookah.Services.Gear
             return accessory;
         }
 
+        public async Task<PipeAccesory> MergeGear(int targetId, int sourceId)
+        {
+            var source = await this.db.PipeAccesories.FindAsync(sourceId);
+          
+            var target = await this.db.PipeAccesories.FindAsync(targetId);
+            if (source == null || target == null)
+            {
+                throw new ManaException(ErrorCodes.PipeAccessoryNotFound);
+            }
+
+            //sessions
+            var sessions = await this.db.SessionMetaDatas.Where(a =>
+                a != null &&
+                (   a.TobaccoId == source.Id
+                 || a.BowlId == source.Id
+                 || a.PipeId == source.Id
+                 || a.HeatManagementId == source.Id
+                 || a.CoalId == source.Id)).ToListAsync();
+
+
+            foreach (var smokeSession in sessions)
+            {
+                if (smokeSession.BowlId == source.Id)
+                {
+                    smokeSession.BowlId = target.Id;
+                }
+                if (smokeSession.PipeId == source.Id)
+                {
+                    smokeSession.PipeId = target.Id;
+                }
+                if (smokeSession.HeatManagementId == source.Id)
+                {
+                    smokeSession.HeatManagementId = target.Id;
+                }
+                if (smokeSession.CoalId == source.Id)
+                {
+                    smokeSession.CoalId = target.Id;
+                }
+                this.db.SessionMetaDatas.AddOrUpdate(smokeSession);
+            }
+
+            //own
+
+            var ownage = await this.db.OwnPipeAccesorieses.Where(a => a.PipeAccesoryId == target.Id).ToListAsync();
+            foreach (var ownPipeAccessoriese in ownage)
+            {
+                ownPipeAccessoriese.PipeAccesoryId = target.Id;
+                this.db.OwnPipeAccesorieses.AddOrUpdate(ownPipeAccessoriese);
+            }
+
+            // media
+
+            //likes
+            var likes = await this.db.PipeAccesoryLikes.Where(a => a.PipeAccesoryId == source.Id).ToListAsync();
+            foreach (var pipeAccessoryLike in likes)
+            {
+                pipeAccessoryLike.PipeAccesoryId = target.Id;
+                this.db.PipeAccesoryLikes.AddOrUpdate(pipeAccessoryLike);
+            }
+
+            // reviews
+            var reviews = await this.db.PipeAccessoryReviews.Where(a => a.AccessorId == source.Id).ToListAsync();
+            foreach (var review in reviews)
+            {
+                review.AccessorId = target.Id;
+                this.db.PipeAccessoryReviews.AddOrUpdate(review);
+            }
+
+
+
+            // this.db.SaveChanges();
+            return target;
+
+        }
+
         private Brand CreateBrandFromAccessory(PipeAccesory accessory)
         {
             var brand = new Brand

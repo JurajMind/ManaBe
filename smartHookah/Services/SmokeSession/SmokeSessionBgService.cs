@@ -92,7 +92,15 @@ namespace smartHookah.Services.SmokeSession
             this.redisService.CleanSmokeSession(id);
             await this.InitSmokeSession(deviceId);
             if (smokeSession.MetaData != null && smokeSession.MetaData.TobaccoId.HasValue)
-                TobaccoController.CalculateStatistic(smokeSession.MetaData.TobaccoId.Value, db);
+            {
+                var stats = await this.CalculateStatistic(smokeSession.MetaData.Tobacco);
+                if (stats != null)
+                {
+                    this.db.PipeAccesoryStatistics.AddOrUpdate(stats);
+                    this.db.SaveChanges();
+                }
+
+            }
 
             await this.iotService.SendMsgToDevice(deviceId, "restart:");
 
@@ -100,6 +108,52 @@ namespace smartHookah.Services.SmokeSession
 
 
             return smokeSession;
+        }
+
+
+        public async Task<PipeAccesoryStatistics> CalculateStatistic(PipeAccesory source)
+        {
+            var sessions = await this.db.SmokeSessions.Where(a =>
+                a.MetaData != null &&
+                (a.MetaData.TobaccoId == source.Id
+                 || a.MetaData.BowlId == source.Id
+                 || a.MetaData.PipeId == source.Id
+                 || a.MetaData.HeatManagementId == source.Id
+                 || a.MetaData.CoalId == source.Id)).ToListAsync();
+
+            var stats = Calculate(source,sessions);
+
+            return stats;
+        }
+
+        private PipeAccesoryStatistics Calculate(PipeAccesory accessory, IEnumerable<Models.Db.SmokeSession> session)
+        {
+            var result = new PipeAccesoryStatistics { PipeAccesory = accessory };
+
+            var smokeSessions = session as Models.Db.SmokeSession[] ?? session.ToArray();
+
+            if (!smokeSessions.Any())
+                return null;
+            result.PufCount = smokeSessions.Average(a => a.Statistics.PufCount);
+            result.PackType = smokeSessions.GroupBy(i => i.MetaData.PackType).OrderByDescending(j => j.Count()).Select(a => a.Key).First();
+            result.BlowCount = smokeSessions.Average(b => b.DbPufs.Count(puf => puf.Type == PufType.Out));
+            result.SessionDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SessionDuration.TotalSeconds));
+            result.SmokeDuration = TimeSpan.FromSeconds(smokeSessions.Average(a => a.Statistics.SmokeDuration.TotalSeconds));
+            result.Used = smokeSessions.Count();
+            result.Weight = smokeSessions.Average(a => a.MetaData.TobaccoWeight);
+
+            var smokeSessionReview = smokeSessions.Where(a => a.SessionReview?.TobaccoReview != null).Select(a => a.SessionReview.TobaccoReview).ToArray();
+
+            if (!smokeSessionReview.Any()) return result;
+            {
+                result.Overall = smokeSessionReview.Average(a => a.Overall);
+                result.Taste = smokeSessionReview.Average(a => a.Taste);
+                result.Smoke = smokeSessionReview.Average(a => a.Smoke);
+                result.Cut = smokeSessionReview.Average(a => a.Cut);
+                result.Strength = smokeSessionReview.Average(a => a.Strength);
+                result.Duration = smokeSessionReview.Average(a => a.Duration);
+            }
+            return result;
         }
 
         public async Task<Models.Db.SmokeSession> InitSmokeSession(string deviceId)

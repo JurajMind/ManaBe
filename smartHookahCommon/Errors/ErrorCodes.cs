@@ -37,5 +37,7 @@ namespace smartHookahCommon.Errors
         public static string MediaUploadError = "MEDIA_UPLOAD_ERROR";
 
         public static string ReviewNotFond = "REVIEW_NOT_FOUND";
+
+        public static string PipeAccessoryNotFound = "PIPE_ACCESSORY_NOT_FOUND";
     }
 }
