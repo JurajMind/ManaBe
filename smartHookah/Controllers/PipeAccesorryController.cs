@@ -221,7 +221,7 @@ namespace smartHookah.Controllers
 
             var pipes = person.Pipes.Select(a => new { id = a.Id, name = a.BrandName + " " + a.AccName });
             var bowls = person.Bowls.Select(a => new { id = a.Id, name = a.BrandName + " " + a.AccName });
-            var tobacoBrands = person.Tobacco.Select(a => a.BrandName).Distinct().Select(b => new { id = b, name = b });
+            var tobacoBrands = person.Tobaccos.Select(a => a.BrandName).Distinct().Select(b => new { id = b, name = b });
 
             return Json(new { pipes, bowls, tobacoBrands }, JsonRequestBehavior.AllowGet);
         }

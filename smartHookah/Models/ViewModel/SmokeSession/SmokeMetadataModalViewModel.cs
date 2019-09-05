@@ -96,10 +96,10 @@ namespace smartHookah.Controllers
                 result.MyGear = person.MyGear;
                 if (person.MyGear)
                 {
-                    result.Bowl = person.Bowls.Any() ? person.Bowls : db.Bowls.ToList();
-                    result.Pipes = person.Pipes.Any() ? person.Pipes : db.Pipes.ToList();
-                    result.Hmses = person.HeatManagments.Any() ? person.HeatManagments : db.HeatManagments.ToList();
-                    result.Coals = person.Coals.Any() ? person.Coals : db.Coals.ToList();
+                    result.Bowl = person.Bowls.Any() ? person.Bowls.ToList() : db.Bowls.ToList();
+                    result.Pipes = person.Pipes.Any() ? person.Pipes.ToList() : db.Pipes.ToList();
+                    result.Hmses = person.HeatManagments.Any() ? person.HeatManagments.ToList() : db.HeatManagments.ToList();
+                    result.Coals = person.Coals.Any() ? person.Coals.ToList() : db.Coals.ToList();
                 }
                 else
                 {

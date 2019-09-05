@@ -723,10 +723,10 @@ namespace smartHookah.Controllers
             var model = new OrderHookahViewModel
                             {
                                 Place = place,
-                                Hookah = place.Person.Pipes,
-                                Bowls = place.Person.Bowls,
-                                Tobacco = place.Person.Tobacco
-                            };
+                                Hookah = place.Person.Pipes.ToList(),
+                                Bowls = place.Person.Bowls.ToList(),
+                                Tobacco = place.Person.Tobaccos.ToList()
+            };
                         if (resId.HasValue)
             {
                 var reservation = this.db.Reservations.Find(resId);

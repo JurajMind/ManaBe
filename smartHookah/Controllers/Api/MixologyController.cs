@@ -194,6 +194,21 @@ namespace smartHookah.Controllers.Api
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
             }
         }
+        [System.Web.Http.HttpGet, System.Web.Http.Route("Suggest/Mix")]
+        public async Task<List<TobaccoMixSimpleDto>> GetMiFromTobaccos([FromUri] int[] ids, int pageSize = 100, int page = 0,
+            bool own = true)
+        {
+            var result = await this.tobaccoService.GetMixFromTobaccos(ids.ToList(), pageSize, page);
+            return TobaccoMixSimpleDto.FromModelList(result,this.personService.GetCurentPersonId()).ToList();
+        }
+
+        [System.Web.Http.HttpGet, System.Web.Http.Route("Suggest/Tobacco")]
+        public async Task<List<TobaccoSimpleDto>> SuggestMixTobacco([FromUri] int[] ids, int pageSize = 100, int page = 0,
+            bool own = true)
+        {
+            var result = await this.tobaccoService.SuggestTobaccos(ids.ToList(), pageSize, page,own);
+            return TobaccoSimpleDto.FromModelList(result).ToList();
+        }
 
         #endregion
 

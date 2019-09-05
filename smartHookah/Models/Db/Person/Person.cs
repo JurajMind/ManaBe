@@ -98,28 +98,28 @@ namespace smartHookah.Models.Db
         public virtual ICollection<PipeAccesoryLike> Likes { get; set; }
 
         [NotMapped]
-        public  virtual IQueryable<TobaccoMix> FavoriteTobaccoMixs {
+        public  virtual IEnumerable<TobaccoMix> FavoriteTobaccoMixs {
             get
             {
-                return this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0).Select(a => a.PipeAccesory as TobaccoMix).AsQueryable();
+                return this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0)
+                    .Select(a => a.PipeAccesory as TobaccoMix);
             }
         }
 
         [NotMapped]
-        public virtual List<Pipe> Pipes
+        public virtual IEnumerable<Pipe> Pipes
         {
             get
             {
                 return
                     OwnedPipeAccesories.Where(a => a.PipeAccesory is Pipe && !a.DeleteDate.HasValue)
                         .Select(a => a.PipeAccesory)
-                        .Cast<Pipe>()
-                        .ToList();
+                        .Cast<Pipe>();
             }
         }
 
         [NotMapped]
-        public virtual List<Bowl> Bowls
+        public virtual IEnumerable<Bowl> Bowls
         {
             get
             {
@@ -132,41 +132,38 @@ namespace smartHookah.Models.Db
         }
 
         [NotMapped]
-        public virtual List<Tobacco> Tobacco
+        public virtual IEnumerable<Tobacco> Tobaccos
         {
             get
             {
                 return
                     OwnedPipeAccesories.Where(a => a.PipeAccesory is Tobacco && !a.DeleteDate.HasValue)
                         .Select(a => a.PipeAccesory)
-                        .Cast<Tobacco>()
-                        .ToList();
+                        .Cast<Tobacco>();
             }
         }
 
         [NotMapped]
-        public virtual List<HeatManagment> HeatManagments
+        public virtual IEnumerable<HeatManagment> HeatManagments
         {
             get
             {
                 return
                     OwnedPipeAccesories.Where(a => a.PipeAccesory is HeatManagment && !a.DeleteDate.HasValue)
                         .Select(a => a.PipeAccesory)
-                        .Cast<HeatManagment>()
-                        .ToList();
+                        .Cast<HeatManagment>();
             }
         }
 
         [NotMapped]
-        public virtual List<Coal> Coals
+        public virtual IEnumerable<Coal> Coals
         {
             get
             {
                 return
                     OwnedPipeAccesories.Where(a => a.PipeAccesory is Coal && !a.DeleteDate.HasValue)
                         .Select(a => a.PipeAccesory)
-                        .Cast<Coal>()
-                        .ToList();
+                        .Cast<Coal>();
             }
         }
 
