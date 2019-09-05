@@ -151,7 +151,7 @@ namespace smartHookah.Support
             if (person != null)
                 if (person.MyTobacco)
                 {
-                    var tobacco = person.Tobacco.Select(b => b.BrandName).Distinct().ToList();
+                    var tobacco = person.Tobaccos.Select(b => b.BrandName).Distinct().ToList();
                     tobacco.Add(SmokeSession.myMixes);
                     return tobacco;
                 }

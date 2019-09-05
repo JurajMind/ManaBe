@@ -105,7 +105,7 @@ namespace smartHookah.Services.Gear
 
             if (filter.Owned)
             {
-                tobacco = person.Tobacco.AsQueryable();
+                tobacco = person.Tobaccos.AsQueryable();
             }
 
             if (filter.Smoked)
@@ -140,12 +140,40 @@ namespace smartHookah.Services.Gear
         }
 
         public async Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0) {
-            var mixes = await this.db.TobaccosMixParts.Where(a => a.TobaccoId == id).Select(a => a.InMix).Distinct().OrderBy(b => b.Id).Skip(page * pageSize)
+            var mixes = await this.db.TobaccosMixParts.Where(a => a.TobaccoId == id && a.InMix != null).Select(a => a.InMix).OrderBy(a => a.Statistics.Used).Distinct().OrderBy(b => b.Id).Skip(page * pageSize)
                 .Take(pageSize).ToListAsync();
 
             return mixes;
         }
 
+        public async Task<List<TobaccoMix>> GetMixFromTobaccos(List<int> ids, int pageSize = 10, int page = 0)
+        {
+            var result = new List<TobaccoMix>();
+
+            foreach (var id in ids)
+            {
+                result.AddRange(await this.GetMixFromTobacco(id, pageSize, page));
+            }
+
+            var filtered =  result.GroupBy(a => a.Id).OrderBy(b => b.Count()).SelectMany(b => b).Distinct();
+
+            return filtered.ToList();
+        }
+
+        public async Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0,bool own = true)
+        {
+            var mixes = await this.GetMixFromTobaccos(ids, pageSize, page);
+
+            var tobaccos =  mixes.SelectMany(a => a.Tobaccos).Select(a => a.Tobacco).Distinct().ToList();
+
+            if (!own)
+                return tobaccos;
+
+            var owned = this.personService.GetCurentPerson().Tobaccos;
+
+
+            return tobaccos.Intersect(owned).ToList();
+        }
 
         public async Task<PipeAccesoryStatistics> GetTobaccoMixStatistics(TobaccoMix mix)
         {

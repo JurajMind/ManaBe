@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Xml;
 using Newtonsoft.Json.Serialization;
@@ -41,6 +42,7 @@ namespace smartHookah
             //config.Formatters.Clear();
             //config.Formatters.Insert(0, jsonFormatter);
             config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
+           
             // Web API routes
             config.MapHttpAttributeRoutes();
 

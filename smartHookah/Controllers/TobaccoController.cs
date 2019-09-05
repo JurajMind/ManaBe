@@ -365,7 +365,7 @@ namespace smartHookah.Controllers
                         case "owned":
                             {
                                 var ownedTobacco =
-                                    person.Include(a => a.OwnedPipeAccesories).First().Tobacco.Select(a => a.Id).ToList();
+                                    person.Include(a => a.OwnedPipeAccesories).First().Tobaccos.Select(a => a.Id).ToList();
                                 return db.Tobaccos.Where(a => ownedTobacco.Contains(a.Id));
                             }
 
@@ -508,7 +508,7 @@ namespace smartHookah.Controllers
                     }
                     else
                     {
-                        tobacos = person.Tobacco.Where(a => a.BrandName == id).ToList();
+                        tobacos = person.Tobaccos.Where(a => a.BrandName == id).ToList();
                     }
 
 
