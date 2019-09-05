@@ -1,6 +1,7 @@
 ﻿@using System.Configuration
 @using System.Globalization
 @using smartHookah.Models
+@using System.Linq
 @model smartHookah.Controllers.PlaceDetailsViewModel
 @{
     var key = ConfigurationManager.AppSettings["googleMapApiKey"];
@@ -33,7 +34,7 @@
                 <dt>Today:</dt>
                 <dd>
                          
-                               @{ var day = Model.Place.BusinessHours.FirstOrDefault(a => a.Day == (int) DateTime.Now.DayOfWeek); }
+                               @{ var day = Model.Place.BusinessHours.ToList().FirstOrDefault(a => a.Day == (int) DateTime.Now.DayOfWeek); }
                                @if (day == null)
                                 {
                                    <text>
@@ -83,7 +84,7 @@
         <div class="card">
             <h4 class="card-header"><img src="~/Content/icons/tobacco.svg" width="18px" />Tobaccos</h4>
             <div class="card-body container">
-                 @Html.Partial("~/Views/Person/_TobaccoList.cshtml", new TobaccoListViewModel() { CanEdit = false, Tobaccos = Model.Place.Person.Tobaccos })
+                 @Html.Partial("~/Views/Person/_TobaccoList.cshtml", new TobaccoListViewModel() { CanEdit = false, Tobaccos = Model.Place.Person.Tobaccos.ToList() })
 
             </div>
         </div>
