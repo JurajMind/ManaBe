@@ -202,7 +202,7 @@ namespace smartHookah.Services.Gear
 
         public async Task<PipeAccesory> AddGear(PipeAccesory accessory)
         {
-            var tryFindMatch = await this.db.PipeAccesories.Where(a => a.AccName.Equals(accessory.AccName) && a.Status == AccessoryStatus.Ok).FirstOrDefaultAsync();
+            var tryFindMatch = await this.db.PipeAccesories.Where(a => a.BrandName == accessory.BrandName && a.AccName.Equals(accessory.AccName) && a.Status == AccessoryStatus.Ok).FirstOrDefaultAsync();
             if (tryFindMatch != null)
             {
                 return tryFindMatch;
