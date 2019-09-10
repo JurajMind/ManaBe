@@ -302,7 +302,7 @@ namespace smartHookah.Services.Person
         public async Task<Hookah> AddDeviceAsync(string deviceId, string key, string newName)
         {
 
-            var person = this.GetCurentPerson();
+            var person = this.GetCurentPerson(db);
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
 
             if (device == null)
@@ -326,7 +326,7 @@ namespace smartHookah.Services.Person
 
         public async Task<Hookah> RemoveDevice(string deviceId)
         {
-            var person = this.GetCurentPerson();
+            var person = this.GetCurentPerson(db);
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
 
             if (device == null)
@@ -349,7 +349,7 @@ namespace smartHookah.Services.Person
 
         public async Task<Hookah> ChangeNameAsync(string deviceId, string newName)
         {
-            var person = this.GetCurentPerson();
+            var person = this.GetCurentPerson(db);
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == deviceId);
 
             if (device == null)
