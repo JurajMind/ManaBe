@@ -106,7 +106,7 @@ namespace smartHookah.Controllers.Api
                 default:
                     throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"bad order value {orderBy}"));
             }
-            query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
+            query = pageSize > 0 && page >= 0 ? query.Where(a => a.Tobaccos.Count > 0).Skip(pageSize * page).Take(pageSize) : query.Take(50);
 
             var res = query.ToList();
             var person = this.personService.GetCurentPerson();
