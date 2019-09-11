@@ -15,12 +15,9 @@ namespace smartHookah.Controllers
     using System.Configuration;
     using System.Data.Entity.Migrations;
     using System.Net.Http;
-
     using Microsoft.Owin;
     using Microsoft.Owin.Security.OAuth;
-
     using Newtonsoft.Json.Linq;
-
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
 
@@ -41,7 +38,10 @@ namespace smartHookah.Controllers
 
         private readonly SmartHookahContext db;
 
-        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService,IRedisService redisService, SmartHookahContext db)
+        private static string fbAppToken = "1107199546054049|dlrAZ0Z5cltOcdfPnc7r7MYTRds";
+
+        public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService,
+            IRedisService redisService, SmartHookahContext db)
         {
             this.owinContext = owinContext;
             this.personService = personService;
@@ -66,15 +66,9 @@ namespace smartHookah.Controllers
 
         public ApplicationSignInManager SignInManager
         {
-            get
-            {
-                return this._signInManager ?? this.HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
+            get { return this._signInManager ?? this.HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
 
-            private set
-            {
-                this._signInManager = value;
-            }
+            private set { this._signInManager = value; }
         }
 
         public ApplicationUserManager UserManager
@@ -84,10 +78,7 @@ namespace smartHookah.Controllers
                 return this._userManager ?? this.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
 
-            private set
-            {
-                this._userManager = value;
-            }
+            private set { this._userManager = value; }
         }
 
         // GET: /Account/Login
@@ -123,10 +114,10 @@ namespace smartHookah.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await this.SignInManager.PasswordSignInAsync(
-                             model.Email,
-                             model.Password,
-                             model.RememberMe,
-                             shouldLockout: false);
+                model.Email,
+                model.Password,
+                model.RememberMe,
+                shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -136,7 +127,7 @@ namespace smartHookah.Controllers
                 case SignInStatus.RequiresVerification:
                     return this.RedirectToAction(
                         "SendCode",
-                        new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                        new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
                 case SignInStatus.Failure:
                 default:
                     this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -155,7 +146,7 @@ namespace smartHookah.Controllers
             }
 
             return this.View(
-                new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+                new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
         // POST: /Account/VerifyCode
@@ -174,10 +165,10 @@ namespace smartHookah.Controllers
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
             var result = await this.SignInManager.TwoFactorSignInAsync(
-                             model.Provider,
-                             model.Code,
-                             isPersistent: model.RememberMe,
-                             rememberBrowser: model.RememberBrowser);
+                model.Provider,
+                model.Code,
+                isPersistent: model.RememberMe,
+                rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -207,13 +198,13 @@ namespace smartHookah.Controllers
             if (this.ModelState.IsValid)
             {
                 var user = new ApplicationUser
-                               {
-                                   UserName = model.Email,
-                                   Email = model.Email,
-                                   DisplayName = model.DisplayName
-                               };
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    DisplayName = model.DisplayName
+                };
                 var result = await this.UserManager.CreateAsync(user, model.Password);
-         
+
                 if (result.Succeeded)
                 {
                     await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -230,7 +221,7 @@ namespace smartHookah.Controllers
                     var callbackUrl = this.Url.Action(
                         "ConfirmEmail",
                         "Account",
-                        new { userId = user.Id, code = code },
+                        new {userId = user.Id, code = code},
                         protocol: this.Request.Url.Scheme);
                     await this.UserManager.SendEmailAsync(
                         user.Id,
@@ -247,11 +238,12 @@ namespace smartHookah.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles ="Admin")]
-        public async Task<ActionResult> RegeneratePersons(){
-           var badUsers =  this.db.Users.Where(a => a.PersonId == null);
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> RegeneratePersons()
+        {
+            var badUsers = this.db.Users.Where(a => a.PersonId == null);
 
-            foreach(var user in badUsers)
+            foreach (var user in badUsers)
             {
                 var person = new Person();
                 person.GameProfile = new GameProfile();
@@ -304,7 +296,7 @@ namespace smartHookah.Controllers
                 var callbackUrl = this.Url.Action(
                     "ResetPassword",
                     "Account",
-                    new { userId = user.Id, code = code },
+                    new {userId = user.Id, code = code},
                     protocol: this.Request.Url.Scheme);
                 await this.UserManager.SendEmailAsync(
                     user.Id,
@@ -378,7 +370,7 @@ namespace smartHookah.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(
                 provider,
-                this.Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+                this.Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
         }
 
         // GET: /Account/SendCode
@@ -392,10 +384,10 @@ namespace smartHookah.Controllers
             }
 
             var userFactors = await this.UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose })
+            var factorOptions = userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose})
                 .ToList();
             return this.View(
-                new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+                new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
         // POST: /Account/SendCode
@@ -417,7 +409,7 @@ namespace smartHookah.Controllers
 
             return this.RedirectToAction(
                 "VerifyCode",
-                new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+                new {Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe});
         }
 
         // GET: /Account/ExternalLoginCallback
@@ -439,7 +431,7 @@ namespace smartHookah.Controllers
                 case SignInStatus.LockedOut:
                     return this.View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return this.RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    return this.RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
@@ -448,10 +440,10 @@ namespace smartHookah.Controllers
                     return this.View(
                         "ExternalLoginConfirmation",
                         new ExternalLoginConfirmationViewModel
-                            {
-                                Email = loginInfo.Email,
-                                DisplayName = loginInfo.DefaultUserName
-                            });
+                        {
+                            Email = loginInfo.Email,
+                            DisplayName = loginInfo.DefaultUserName
+                        });
             }
         }
 
@@ -478,21 +470,20 @@ namespace smartHookah.Controllers
                 }
 
                 var user = new ApplicationUser
-                               {
-                                   UserName = model.Email,
-                                   Email = model.Email,
-                                   DisplayName = model.DisplayName
-                               };
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    DisplayName = model.DisplayName
+                };
                 var result = await this.UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await this.UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-
                         var matchUser = await UserManager.FindByEmailAsync(model.Email);
                         user.Person = matchUser != null ? matchUser.Person : Person.CreateDefault();
-                       
+
                         await this.UserManager.UpdateAsync(user);
                         await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return this.RedirectToLocal(returnUrl);
@@ -522,6 +513,32 @@ namespace smartHookah.Controllers
             return this.View();
         }
 
+        private async Task<RegistrationInfo> GetUserInfo(string provider, string token)
+        {
+            RegistrationInfo result = new RegistrationInfo();
+
+            if (provider == "Facebook")
+            {
+                var fbEndpoint = string.Format(
+                    "https://graph.facebook.com/me?fields=name,email&access_token={0}",
+                    token
+                );
+
+                var client = new HttpClient();
+                var uri = new Uri(fbEndpoint);
+                var response = await client.GetAsync(uri);
+                var content = await response.Content.ReadAsStringAsync();
+                dynamic jObj = (JObject) Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                var name = jObj["name"];
+                var email = jObj["email"];
+                result.DisplayName = name;
+                result.Email = email;
+                return result;
+            }
+
+            return null;
+        }
+
         private async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(string provider, string accessToken)
         {
             ParsedExternalAccessToken parsedToken = null;
@@ -532,18 +549,18 @@ namespace smartHookah.Controllers
             {
                 // You can get it from here: https://developers.facebook.com/tools/accesstoken/
                 // More about debug_tokn here: http://stackoverflow.com/questions/16641083/how-does-one-get-the-app-access-token-for-debug-token-inspection-on-facebook
-                var appToken = "1107199546054049|dlrAZ0Z5cltOcdfPnc7r7MYTRds";
+
                 verifyTokenEndPoint = string.Format(
                     "https://graph.facebook.com/debug_token?input_token={0}&access_token={1}",
                     accessToken,
-                    appToken);
+                    fbAppToken);
             }
             else if (provider == "Google")
             {
                 verifyTokenEndPoint = string.Format(
                     "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}",
                     accessToken);
-            }            
+            }
             else
             {
                 return null;
@@ -557,7 +574,7 @@ namespace smartHookah.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
 
-                dynamic jObj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                dynamic jObj = (JObject) Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
                 parsedToken = new ParsedExternalAccessToken();
 
@@ -567,9 +584,9 @@ namespace smartHookah.Controllers
                     parsedToken.app_id = jObj["data"]["app_id"];
 
                     if (!string.Equals(
-                            ConfigurationManager.AppSettings["fbAppId"],
-                            parsedToken.app_id,
-                            StringComparison.OrdinalIgnoreCase))
+                        ConfigurationManager.AppSettings["fbAppId"],
+                        parsedToken.app_id,
+                        StringComparison.OrdinalIgnoreCase))
                     {
                         return null;
                     }
@@ -580,9 +597,9 @@ namespace smartHookah.Controllers
                     parsedToken.app_id = jObj["audience"];
 
                     if (!string.Equals(
-                            ConfigurationManager.AppSettings["googleAppId"],
-                            parsedToken.app_id,
-                            StringComparison.OrdinalIgnoreCase))
+                        ConfigurationManager.AppSettings["googleAppId"],
+                        parsedToken.app_id,
+                        StringComparison.OrdinalIgnoreCase))
                     {
                         return null;
                     }
@@ -604,11 +621,12 @@ namespace smartHookah.Controllers
                 // return BadRequest("Provider or external access token is not sent");
             }
 
-            if(provider == "Manapipes")
+            if (provider == "Manapipes")
             {
                 var userId = this.redisService.GetPerson(externalAccessToken);
                 var manaUser = this.UserManager.FindById(userId);
-                var accessTokenResponseMana = this.accountService.GenerateLocalAccessTokenResponse(manaUser, this.UserManager);
+                var accessTokenResponseMana =
+                    this.accountService.GenerateLocalAccessTokenResponse(manaUser, this.UserManager);
 
                 return await accessTokenResponseMana;
             }
@@ -626,15 +644,55 @@ namespace smartHookah.Controllers
 
             bool hasRegistered = user != null;
 
+            // register new
             if (!hasRegistered)
             {
-                return null;
+                var userInfo = await this.GetUserInfo(provider, externalAccessToken);
 
-                // return BadRequest("External user is not registered");
+                if (userInfo != null)
+                {
+                    var matchUser = await UserManager.FindByEmailAsync(userInfo.Email);
+                    if (matchUser != null)
+                    {
+                        var addLoginResult = await this.UserManager.AddLoginAsync(matchUser.Id,
+                            new UserLoginInfo(provider, verifiedAccessToken.user_id));
+                        if (addLoginResult.Succeeded)
+                        {
+                            user = matchUser;
+                            await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        }
+                    }
+                    else
+                    {
+                        var newUser = new ApplicationUser
+                        {
+                            UserName = userInfo.Email,
+                            Email = userInfo.Email,
+                            DisplayName = userInfo.DisplayName
+                        };
+
+                        var result = await this.UserManager.CreateAsync(newUser);
+                        if (result.Succeeded)
+                        {
+                            var createdUser = await UserManager.FindByEmailAsync(userInfo.Email);
+                            result = await this.UserManager.AddLoginAsync(matchUser.Id,
+                                new UserLoginInfo(provider, verifiedAccessToken.user_id));
+                            if (result.Succeeded)
+                            {
+                                user = createdUser;
+                                user.Person = Person.CreateDefault();
+
+                                await this.UserManager.UpdateAsync(user);
+                                await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            }
+                        }
+                    }
+                }
             }
 
+
             // generate access token response
-            var accessTokenResponse = this.accountService.GenerateLocalAccessTokenResponse(user,this.UserManager);
+            var accessTokenResponse = this.accountService.GenerateLocalAccessTokenResponse(user, this.UserManager);
 
             return await accessTokenResponse;
         }
@@ -666,10 +724,7 @@ namespace smartHookah.Controllers
 
         private IAuthenticationManager AuthenticationManager
         {
-            get
-            {
-                return this.HttpContext.GetOwinContext().Authentication;
-            }
+            get { return this.HttpContext.GetOwinContext().Authentication; }
         }
 
         private void AddErrors(IdentityResult result)
@@ -712,7 +767,7 @@ namespace smartHookah.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties { RedirectUri = this.RedirectUri };
+                var properties = new AuthenticationProperties {RedirectUri = this.RedirectUri};
                 if (this.UserId != null)
                 {
                     properties.Dictionary[XsrfKey] = this.UserId;
@@ -729,5 +784,12 @@ namespace smartHookah.Controllers
     {
         public string user_id { get; set; }
         public string app_id { get; set; }
+    }
+
+    public class RegistrationInfo
+    {
+        public string Email { get; set; }
+
+        public string DisplayName { get; set; }
     }
 }
