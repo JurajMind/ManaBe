@@ -5,26 +5,25 @@ using smartHookah.Models.Db.Place;
 using smartHookah.Services.SmokeSession;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Security.Principal;
+using System.Threading.Tasks;
+
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+
+using smartHookah.Helpers;
+using smartHookah.Models;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Person
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Security.Principal;
-    using System.Threading.Tasks;
 
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
-    using Microsoft.Owin;
-
-    using smartHookah.Helpers;
-    using smartHookah.Models;
-    using smartHookah.Services.Device;
-    using smartHookah.Services.Redis;
-
-    using smartHookahCommon;
 
     public class PersonService : IPersonService
     {

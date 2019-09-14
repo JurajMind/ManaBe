@@ -42,7 +42,7 @@ namespace smartHookah.Services.Gear
                 : db.Persons.Find(personId);
             
             if (person == null) throw new AccountNotFoundException();
-            var query = person.OwnedPipeAccesories.Select(a => a.PipeAccesory);
+            var query = person.OwnedPipeAccesories.Where(a => a.DeleteDate == null).Select(a => a.PipeAccesory);
             switch (type.ToLower())
             {
                 case "bowl":
@@ -433,7 +433,7 @@ namespace smartHookah.Services.Gear
 
             if (person.OwnedPipeAccesories.Any(a => a.PipeAccesory.Id == accessory.Id))
             {
-                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
+                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id && a.DeleteDate == null);
                 if (current != null)
                 {
                     current.Amount += count;
@@ -461,23 +461,24 @@ namespace smartHookah.Services.Gear
 
             var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
 
-            if (accessory == null) throw new KeyNotFoundException($"Accessory id {id} not found.");
+            if (accessory == null) throw new ManaException(ErrorCodes.AccessoryNotFound,$"Accessory id {id} not found.");
 
             if (person.OwnedPipeAccesories.All(a => a.PipeAccesory.Id != accessory.Id))
                 throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
             {
                 var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
                 if (current == null) throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
-                if (count != null && current.Amount > count)
-                {
-                    current.Amount -= (decimal) count;
-                    db.OwnPipeAccesorieses.AddOrUpdate(current);
-                    await db.SaveChangesAsync();
-                    return true;
-                }
+                //if (count != null && current.Amount > count)
+                //{
+                //    current.Amount -= (decimal) count;
+                //    db.OwnPipeAccesorieses.AddOrUpdate(current);
+                //    await db.SaveChangesAsync();
+                //    return true;
+                //}
 
                 current.Amount = 0;
                 current.DeleteDate = DateTime.UtcNow;
+                
                 db.OwnPipeAccesorieses.AddOrUpdate(current);
                 await db.SaveChangesAsync();
                 return true;
