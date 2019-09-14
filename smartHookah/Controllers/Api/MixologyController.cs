@@ -72,7 +72,7 @@ namespace smartHookah.Controllers.Api
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User not found"));
                 }
 
-                query = user.FavoriteTobaccoMixs.Select(a => a).AsQueryable();
+                query = user.Likes.Where(a => a.PipeAccesory is TobaccoMix mix && a.Value > 0).Select(c => c.PipeAccesory as TobaccoMix).AsQueryable();
 
             }
             var result = new List<TobaccoMixSimpleDto>();

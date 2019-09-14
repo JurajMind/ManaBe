@@ -188,7 +188,7 @@ namespace smartHookah.Controllers.Api
 
         #region Setters
 
-        [HttpPost, ApiAuthorize, Route("MyGear/{id}/Add/{count}")]
+        [HttpPost, ApiAuthorize, Route("MyGear/{id}/Add")]
         public async Task<PipeAccesorySimpleDto> AddMyGear(int id, int count)
         {
             try

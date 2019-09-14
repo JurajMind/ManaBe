@@ -50,7 +50,7 @@ namespace smartHookah.Services.FeatureMix
         {
             var personLikes = this.db.FeatureMixCreators.Find(creatorId)
                 ?.Person.Likes;
-                var query = personLikes.Where(a => a.PipeAccesory is TobaccoMix mix && (mix.AuthorId == creatorId || mix.AuthorId == null)).Select(c => c.PipeAccesory as TobaccoMix);
+                var query = personLikes.Where(a => a.PipeAccesory is TobaccoMix mix && a.Value > 0 && (mix.AuthorId == creatorId || mix.AuthorId == null)).Select(c => c.PipeAccesory as TobaccoMix).Where(a => a.Tobaccos.Count > 0);
 
             switch (orderBy.ToLower())
             {
