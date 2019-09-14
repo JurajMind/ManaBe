@@ -189,31 +189,15 @@ namespace smartHookah.Controllers.Api
         #region Setters
 
         [HttpPost, ApiAuthorize, Route("MyGear/{id}/Add")]
-        public async Task<PipeAccesorySimpleDto> AddMyGear(int id, int count)
+        public async Task<PipeAccesorySimpleDto> AddMyGear(int id, int count = 1)
         {
-            try
-            {
-                return PipeAccesorySimpleDto.FromModel(await gearService.AddMyGear(id, count, null));
-            }
-            catch(Exception e)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
-            }
+            return PipeAccesorySimpleDto.FromModel(await gearService.AddMyGear(id, count, null));
         }
 
         [HttpPost, ApiAuthorize, Route("MyGear/{id}/Delete")]
-        public async Task<bool> DeleteMyGear(int id, int? count)
+        public async Task<bool> DeleteMyGear(int id, int? count = 0)
         {
-            try
-            {
-                return await gearService.DeleteMyGear(id, count, null);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(
-                    this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message));
-            }
+            return await gearService.DeleteMyGear(id, count, null);
         }
 
         #endregion

@@ -466,7 +466,7 @@ namespace smartHookah.Services.Gear
             if (person.OwnedPipeAccesories.All(a => a.PipeAccesory.Id != accessory.Id))
                 throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
             {
-                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id);
+                var current = person.OwnedPipeAccesories.FirstOrDefault(a => a.PipeAccesory.Id == accessory.Id && a.DeleteDate == null);
                 if (current == null) throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
                 //if (count != null && current.Amount > count)
                 //{
