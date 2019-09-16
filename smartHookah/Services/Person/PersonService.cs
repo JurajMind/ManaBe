@@ -320,6 +320,15 @@ namespace smartHookah.Services.Person
             device.Name = newName;
             this.db.Hookahs.AddOrUpdate(device);
             await this.db.SaveChangesAsync();
+
+            var newSessionID = device.SmokeSessions.Where(a => a.Statistics == null).OrderByDescending(b => b.Id).Select(b => b.Id)
+                .FirstOrDefault();
+            if (newSessionID != null)
+            {
+                await this.AssignSession(newSessionID);
+            }
+             
+
             return device;
         }
 
@@ -344,6 +353,43 @@ namespace smartHookah.Services.Person
             this.db.Hookahs.AddOrUpdate(device);
             await this.db.SaveChangesAsync();
             return device;
+        }
+
+        public async Task<bool> UnAssignSession(int sessionId)
+        {
+            var session = await this.db.SmokeSessions.FindAsync();
+
+            if (session == null)
+            {
+                throw new ManaException(ErrorCodes.SessionNotFound, $"Session id:{session} not found");
+            }
+
+            var person = this.GetCurentPerson(db);
+            session.Persons.Remove(person);
+            db.SmokeSessions.AddOrUpdate(session);
+            db.SaveChanges();
+            return true;
+        }
+
+        public async Task<Models.Db.SmokeSession> AssignSession(int sessionId)
+        {
+            var session = await this.db.SmokeSessions.FindAsync();
+
+            if (session == null)
+            {
+                throw new ManaException(ErrorCodes.SessionNotFound, $"Session id:{session} not found");
+            }
+
+            var person = this.GetCurentPerson(db);
+            // already assigned
+            if (session.Persons.Count(a => a.Id == person.Id) > 0)
+            {
+                return session;
+            }
+            session.Persons.Add(person);
+            db.SmokeSessions.AddOrUpdate(session);
+            db.SaveChanges();
+            return session;
         }
 
         public async Task<Hookah> ChangeNameAsync(string deviceId, string newName)

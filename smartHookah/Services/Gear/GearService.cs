@@ -12,14 +12,15 @@ using smartHookah.Services.Person;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 using smartHookahCommon.Extensions;
+using System.Data.SqlClient;
+
+using smartHookah.Helpers;
+using smartHookah.Models.Dto;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Gear
 {
-    using System.Data.SqlClient;
 
-    using smartHookah.Helpers;
-    using smartHookah.Models.Dto;
-    using smartHookah.Services.Redis;
 
     public partial class GearService : IGearService
     {

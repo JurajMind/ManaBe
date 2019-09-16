@@ -45,12 +45,6 @@ namespace smartHookah.Controllers
             return View("Index", person.Hookahs.ToList());
         }
 
-        public async Task<ActionResult> Restart()
-        {
-           await IotDeviceHelper.SendMsgToDevice("beta4", "restart:");
-            return null;
-        }
-
         [HttpPost]
         public async Task<ActionResult> ChangeName(int id,string newName)
         {

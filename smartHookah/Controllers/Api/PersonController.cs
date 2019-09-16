@@ -200,6 +200,18 @@ namespace smartHookah.Controllers.Api
             return await gearService.DeleteMyGear(id, count, null);
         }
 
+        [HttpPost, ApiAuthorize, Route("AssignSession/{id}")]
+        public async Task<SmokeSessionSimpleDto> AssignSession(int id)
+        {
+            return SmokeSessionSimpleDto.FromModel(await personService.AssignSession(id));
+        }
+
+        [HttpPost, ApiAuthorize, Route("UnAssignSession/{id}")]
+        public async Task<bool> UnAssignSession(int id)
+        {
+            return await personService.UnAssignSession(id);
+        }
+
         #endregion
     }
 }

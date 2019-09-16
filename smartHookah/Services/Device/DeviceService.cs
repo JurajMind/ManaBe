@@ -3,17 +3,18 @@ using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using System.Threading.Tasks;
+using smartHookah.Helpers;
+using smartHookah.Services.Person;
+using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Device
 {
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using smartHookah.Helpers;
-    using smartHookah.Services.Person;
-    using smartHookah.Services.Redis;
+
 
     public class DeviceService : IDeviceService
     {
@@ -260,6 +261,18 @@ namespace smartHookah.Services.Device
             }
 
             return updateRedis.FilePath;
+        }
+
+        public async Task SetPercentage(string code,int pufCount)
+        {
+            await this.iotService.SendMsgToDevice(code, $"stat:{pufCount}:");
+         
+        }
+
+        public ICollection<Models.Db.SmokeSession> Sessions(int id, int pageSize, int page)
+        {
+            var sessions = this.db.SmokeSessions.Where(a => a.HookahId == id).OrderByDescending(a => a.Id).Skip(pageSize * page).Take(pageSize);
+            return sessions.ToList();
         }
 
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)

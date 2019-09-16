@@ -40,5 +40,7 @@ namespace smartHookah.Services.SmokeSession
         SmokeSession GetSmokeSession(int id);
 
         SmokeSession GetSmokeSession(string sessionId);
+
+        Task UpdateDevicePercentage(int sessionId);
     }
 }
