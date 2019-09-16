@@ -12,7 +12,6 @@ using Microsoft.ApplicationInsights;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
-using smartHookah.Helpers;
 using smartHookah.Hubs;
 using smartHookah.Mappers.ViewModelMappers.Smoke;
 using smartHookah.Models.Db;
@@ -302,30 +301,19 @@ namespace smartHookah.Controllers
           
             if (person == null)
                 return false;
-            var cotnextPersson = this._db.Persons.Find(person.Id);
+          
             if (User.IsInRole("Admin") && !manual)
                 return false;
 
             if (assign)
             {
-                if (session.IsPersonAssign(person.Id))
-                    return false;
-
-                session.Persons.Add(cotnextPersson);
-             
-                
-                _db.SmokeSessions.AddOrUpdate(session);
-                await _db.SaveChangesAsync();
-
-                return true;
+                await this.personService.AssignSession(session.Id);
             }
-            if (!session.IsPersonAssign(person.Id))
-                return false;
-
-            session.Persons.Remove(cotnextPersson);
-
-            _db.SmokeSessions.AddOrUpdate(session);
-            await _db.SaveChangesAsync();
+            else
+            {
+                await this.personService.UnAssignSession(session.Id);
+                
+            }
 
             return true;
         }
@@ -401,7 +389,9 @@ namespace smartHookah.Controllers
 
             //Online Session
             if (!dbSession.DbPufs.Any() && dbSession.MetaData.Tobacco != null && dbSession.Hookah != null)
-                await SentPercentageToDevice(dbSession.Hookah, dbSession.MetaData.Tobacco);
+            {
+                await this.sessionService.UpdateDevicePercentage(dbSession.Id);
+            }
 
             _db.SessionMetaDatas.AddOrUpdate(dbSession.MetaData);
             try
@@ -462,23 +452,6 @@ namespace smartHookah.Controllers
 
 
             metadata.CoalsCount = model.CoalsCount;
-        }
-
-
-        private async Task SentPercentageToDevice(Hookah hookah, Tobacco metaDataTobacco)
-        {
-            if (hookah.Version < 1000011)
-                return;
-
-            var percentage = 300;
-
-            if (metaDataTobacco.Statistics != null)
-                percentage = (int) metaDataTobacco.Statistics.PufCount;
-
-            if (!await IotDeviceHelper.GetState(hookah.Code))
-                return;
-
-            await IotDeviceHelper.SendMsgToDevice(hookah.Code, $"stat:{percentage}:");
         }
 
         [HttpPost]

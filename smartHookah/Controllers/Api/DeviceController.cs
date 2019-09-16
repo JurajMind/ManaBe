@@ -11,6 +11,7 @@ using smartHookah.Models.Dto.Device;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
+using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Controllers.Api
 {
@@ -30,14 +31,17 @@ namespace smartHookah.Controllers.Api
 
         private readonly IDevicePictureService devicePictureService;
 
+        private readonly ISmokeSessionService smokeSessionService;
 
-        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService, IPersonService personService)
+
+        public DeviceController(IDeviceService deviceService, IDeviceSettingsPresetService deviceSettingsPresetService, IUpdateService updateService, IDevicePictureService devicePictureService, IPersonService personService, ISmokeSessionService smokeSessionService)
         {
             this.deviceService = deviceService;
             this.deviceSettingsPresetService = deviceSettingsPresetService;
             this.updateService = updateService;
             this.devicePictureService = devicePictureService;
             this.personService = personService;
+            this.smokeSessionService = smokeSessionService;
         }
 
         [HttpPost, Route("{id}/ChangeAnimation")]
@@ -271,6 +275,14 @@ namespace smartHookah.Controllers.Api
             var pictures = await devicePictureService.GetAllPictures(null);
 
             return pictures.Select(DevicePictureDto.FromModel).ToList();
+        }
+
+        [HttpGet, Route("{id}/Sessions")]
+        public ICollection<SmokeSessionSimpleDto> GetDeviceSessions(int id,int pageSize = 10,int page = 0)
+        {
+            var sessions = this.deviceService.Sessions(id, pageSize, page);
+;
+            return SmokeSessionSimpleDto.FromModelList(sessions.ToList()).ToList();
         }
 
 

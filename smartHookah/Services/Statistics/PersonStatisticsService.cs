@@ -33,7 +33,7 @@ namespace smartHookah.Services.Statistics
 
             return db.SmokeSessions
                 .Where(a => a.Persons.Any(x => x.Id == person.Id))
-                .Where(a => a.Statistics.Start >= from && a.Statistics.End <= to)
+                .Where(a => a.Statistics.Start >= from && a.Statistics.Start <= to)
                 .Include(a => a.MetaData)
                 .Include(a => a.Statistics)
                 .OrderByDescending(a => a.Statistics.Start)

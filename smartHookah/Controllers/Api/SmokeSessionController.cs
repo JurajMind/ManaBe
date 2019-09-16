@@ -7,13 +7,14 @@ using System.Web.Http;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.SmokeSession;
+using smartHookah.ErrorHandler;
+using smartHookah.Services.Gear;
+using smartHookah.Services.Redis;
+using System.Collections.Generic;
 
 namespace smartHookah.Controllers.Api
 {
-    using smartHookah.ErrorHandler;
-    using smartHookah.Services.Gear;
-    using smartHookah.Services.Redis;
-    using System.Collections.Generic;
+
 
     [RoutePrefix("api/SmokeSession")]
     public class SmokeSessionController : ApiController

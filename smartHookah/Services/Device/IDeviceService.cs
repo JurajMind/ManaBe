@@ -1,11 +1,11 @@
 ﻿using smartHookah.Models.Db;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using smartHookah.Helpers;
+
 
 namespace smartHookah.Services.Device
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using Helpers;
 
     public interface IDeviceService
     {
@@ -35,7 +35,10 @@ namespace smartHookah.Services.Device
 
         string GetUpdatePath(string deviceId, string token);
 
+        Task SetPercentage(string code,int pufCount);
 
+
+        ICollection<Models.Db.SmokeSession> Sessions(int id, int pageSize, int page);
 
 
     }

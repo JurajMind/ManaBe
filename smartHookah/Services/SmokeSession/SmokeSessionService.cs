@@ -99,6 +99,22 @@ namespace smartHookah.Services.SmokeSession
             throw new NotImplementedException();
         }
 
+        public async Task UpdateDevicePercentage(int sessionId)
+        {
+            var session = this.db.SmokeSessions.Include(b => b.Hookah).Include(b => b.MetaData).Include(b => b.MetaData.Tobacco.Statistics).FirstOrDefault(a => a.Id ==sessionId);
+            if (session == null)
+            {
+                throw new ManaException(ErrorCodes.SessionNotFound);
+            }
+            var pufCount = 300;
+
+            if (session?.MetaData?.Tobacco?.Statistics != null)
+                pufCount = (int)session?.MetaData?.Tobacco?.Statistics.PufCount;
+
+            await this.deviceService.SetPercentage(session.Hookah.Code,pufCount);
+       
+        }
+
 
         public DeviceSetting GetStandSettings(string id)
         {

@@ -51,5 +51,9 @@ namespace smartHookah.Services.Person
         Task<Hookah> ChangeNameAsync(string deviceId, string newName);
 
         Task<Hookah> RemoveDevice(string deviceId);
+
+        Task<bool> UnAssignSession(int sessionId);
+
+        Task<Models.Db.SmokeSession> AssignSession(int sessionId);
     }
 }
