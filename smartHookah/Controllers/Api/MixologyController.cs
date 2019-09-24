@@ -51,7 +51,7 @@ namespace smartHookah.Controllers.Api
            var query = from a in this.db.TobaccoMixs select a;
             if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
             {
-                query = from m in query where m.Brand.Name.ToLower() == author.ToLower() select m;
+                query = from m in query where m.Brand.Name.ToLower() == author.ToLower() && m.Deleted == false  select m;
             }
             else if (author == "me")
             {
@@ -62,7 +62,7 @@ namespace smartHookah.Controllers.Api
                 }
                 ;
                 var userId = user.Id;
-                query = from m in query where m.Author.Id == userId select m;
+                query = from m in query where m.Author.Id == userId &&  m.Deleted == false select m;
             }
             else if(author == "favorite")
             {
@@ -113,50 +113,6 @@ namespace smartHookah.Controllers.Api
             return TobaccoMixSimpleDto.FromModelList(res,person.Id);
         }
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("GetMixCreators")]
-        public MixCreatorsDto GetFeaturedMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
-        {
-            var query = from b in this.db.Brands
-                        where b.TobaccoMixBrand
-                        select b;
-            
-            switch (orderBy.ToLower())
-            {
-                case "name":
-                    query = order.ToLower() == "asc" ? from a in query orderby a.DisplayName ascending select a : from a in query orderby a.DisplayName descending select a;
-                    break;
-                case "count":
-                    query = order.ToLower() == "asc" ? from a in query orderby a.PipeAccessories.Count(x => x is TobaccoMix) ascending select a : from a in query orderby a.PipeAccessories.Count(x => x is TobaccoMix) descending select a;
-                    break;
-                default:
-                    throw new ManaException(ErrorCodes.WrongOrderField, "Invalid OrderBy value, select \"name\" or \"count\".");
-            }
-
-            query = pageSize > 0 && page >= 0 ? query.Skip(pageSize * page).Take(pageSize) : query.Take(50);
-
-            var res = query.ToList();
-
-            if (res.Any())
-            {
-                var result = new MixCreatorsDto();
-                foreach (var m in res)
-                {
-                    var creator = new MixCreator()
-                    {
-                        Name = m.Name,
-                        DisplayName = m.DisplayName,
-                        Picture = m.Picture,
-                        MixCount = m.PipeAccessories.Count(a => a is TobaccoMix)
-                    };
-
-                    result.MixCreatorsList.Add(creator);
-                }
-                return result;
-            }
-
-            return new MixCreatorsDto();
-        }
 
         [System.Web.Http.HttpGet, System.Web.Http.Route("{id}/GetMix")]
         public async Task<TobaccoMixSimpleDto> GetTobaccoMix(int id)
@@ -286,16 +242,11 @@ namespace smartHookah.Controllers.Api
 
             try
             {
-                if (mix.Statistics != null && mix.Statistics.Used > 0)
-                {
-                    mix.Author = null;
-                    this.db.TobaccoMixs.AddOrUpdate(mix);
-                    this.db.SaveChanges();
-                    return new DTO(){ Success = true, Message = $"Author of mix {mix.Id} removed." };
-                }
-                this.db.TobaccoMixs.Remove(mix);
+                mix.Deleted = true;
                 this.db.SaveChanges();
                 return new DTO() { Success = true, Message = $"Mix {mix.Id} removed." };
+
+
             }
             catch (Exception e)
             {
