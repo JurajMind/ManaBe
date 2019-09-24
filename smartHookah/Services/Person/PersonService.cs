@@ -350,6 +350,13 @@ namespace smartHookah.Services.Person
             }
 
             device.Owners.Remove(person);
+            var activeSession = device.SmokeSessions.FirstOrDefault(a => a.Statistics == null);
+            if (activeSession != null)
+            {
+                activeSession.Persons.Remove(person);
+                this.db.SmokeSessions.AddOrUpdate(activeSession);
+            }
+             
             this.db.Hookahs.AddOrUpdate(device);
             await this.db.SaveChangesAsync();
             return device;
