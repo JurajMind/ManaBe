@@ -364,7 +364,7 @@ namespace smartHookah.Services.Person
 
         public async Task<bool> UnAssignSession(int sessionId)
         {
-            var session = await this.db.SmokeSessions.FindAsync();
+            var session = await this.db.SmokeSessions.FindAsync(sessionId);
 
             if (session == null)
             {
@@ -380,7 +380,7 @@ namespace smartHookah.Services.Person
 
         public async Task<Models.Db.SmokeSession> AssignSession(int sessionId)
         {
-            var session = await this.db.SmokeSessions.FindAsync();
+            var session = await this.db.SmokeSessions.FindAsync(sessionId);
 
             if (session == null)
             {
