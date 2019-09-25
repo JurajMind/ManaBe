@@ -11,6 +11,7 @@ using smartHookah.ErrorHandler;
 using smartHookah.Services.Gear;
 using smartHookah.Services.Redis;
 using System.Collections.Generic;
+using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers.Api
 {
@@ -27,12 +28,15 @@ namespace smartHookah.Controllers.Api
 
         private readonly ITobaccoService tobaccoService;
 
-        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService, ITobaccoService tobaccoService)
+        private readonly IPersonService personService;
+
+        public SmokeSessionController(SmartHookahContext db, ISmokeSessionService sessionService, IRedisService redisService, ITobaccoService tobaccoService, IPersonService personService)
         {
             this.db = db;
             this.sessionService = sessionService;
             this.redisService = redisService;
             this.tobaccoService = tobaccoService;
+            this.personService = personService;
         }
 
         #region Getters and Validators
@@ -122,12 +126,13 @@ namespace smartHookah.Controllers.Api
         public FinishedSessionDataDto GetFinishedData(int id)
         {
             var data = this.sessionService.GetSmokeSession(id);
-
+            var personId = this.personService.GetCurentPersonId();
             return new FinishedSessionDataDto()
             {
                 Data =  SmokeSessionSimpleDto.FromModel(data),
                 MetaData = SmokeSessionMetaDataDto.FromModel(data.MetaData),
-                Statistics = SmokeSessionStatisticsDto.FromModel(data.Statistics)
+                Statistics = SmokeSessionStatisticsDto.FromModel(data.Statistics),
+                Assigned = data.IsPersonAssign(personId)
             };
         }
 
