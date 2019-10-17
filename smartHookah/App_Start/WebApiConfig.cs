@@ -28,7 +28,7 @@ namespace smartHookah
             config.Filters.Add(new ApiExceptionFilter());
             config.Filters.Add(new ClientIdFilter());
            // config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new ShortIsoDateFormatConverter());
-            var cors = new EnableCorsAttribute("http://localhost:8080", "*", "*");
+            var cors = new EnableCorsAttribute("*", "*", "*");
             
             config.EnableCors(cors);
             //var jsonFormatter = new JsonMediaTypeFormatter
