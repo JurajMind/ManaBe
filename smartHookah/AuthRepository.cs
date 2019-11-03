@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using smartHookah.Models.Db;
 
 namespace smartHookah
@@ -74,11 +75,15 @@ namespace smartHookah
         public async Task<bool> AddRefreshToken(RefreshToken token)
         {
 
-            var existingToken = _ctx.RefreshTokens.Where(r => r.Subject == token.Subject && r.ClientId == token.ClientId).SingleOrDefault();
+            var existingTokens = await 
+                _ctx.RefreshTokens.Where(r => r.Subject == token.Subject && r.ClientId == token.ClientId).ToListAsync();
 
-            if (existingToken != null)
+            foreach (var existingToken in existingTokens)
             {
-                var result = await RemoveRefreshToken(existingToken);
+                if (existingToken.ExpiresUtc < DateTime.UtcNow)
+                {
+                    await RemoveRefreshToken(existingToken);
+                }
             }
 
             _ctx.RefreshTokens.Add(token);

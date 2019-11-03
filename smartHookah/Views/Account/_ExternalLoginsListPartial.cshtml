@@ -2,6 +2,17 @@
 @using Microsoft.Owin.Security
 
 <h4 class="card-header">@Account.Account.useSocial</h4>
+
+<style>
+    .signin-button {
+        width: 210px;
+        height: 40px;
+    }
+
+    #appleid-signin > div > div:nth-child(2) {
+        height: 40px!important;
+    }
+</style>
 <div class="card-body">
     @{
         var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
@@ -23,11 +34,27 @@
                     <p>
                         @foreach (AuthenticationDescription p in loginProviders)
                         {
-                            <button type="submit" class="loginBtn  loginBtn--@p.Caption.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                        <button type="submit" class="loginBtn  loginBtn--@p.Caption.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">Continue with @p.AuthenticationType</button>
                         }
+                    <div class="signin-button">
+                        <div id="appleid-signin" class="signin-button" data-color="white" data-border="true" data-type="continue"></div>
+                    </div>
+
                     </p>
                 </div>
             }
+        
         }
     }
+    
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+   
+    <script type="text/javascript">
+        AppleID.auth.init({
+            clientId : '[CLIENT_ID]',
+            scope : '[SCOPES]',
+            redirectURI: '[REDIRECT_URI]',
+            state : '[STATE]'
+        });
+    </script>
 </div>
