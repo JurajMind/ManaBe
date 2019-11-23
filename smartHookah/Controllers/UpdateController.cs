@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using NeinLinq;
 using smartHookah.Models.Db;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
+using System.Linq;
 
 namespace smartHookah.Controllers
 {
@@ -152,6 +155,28 @@ namespace smartHookah.Controllers
             string fileName = "update.bin";
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
+
+        [AllowAnonymous]
+        [OptionalHttps(true)]
+        public FileResult InitDownload(string id)
+        {
+            var device = this.db.Hookahs.FirstOrDefault(a => a.Code == id);
+            if (device == null || device.UpdateType != UpdateType.Init)
+            {
+                return null;
+            }
+
+            var path = this.db.Updates.OrderByDescending(a => a.ReleseDate).First();
+
+            var filePath = Server.MapPath(path.Path);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            string fileName = "update.bin";
+            device.UpdateType = UpdateType.Stable;
+            this.db.Hookahs.AddOrUpdate(device);
+            this.db.SaveChanges();
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
         [Authorize]
         public async Task<JsonResult> PromptUpdate(int hookahId, int updateId )
         {

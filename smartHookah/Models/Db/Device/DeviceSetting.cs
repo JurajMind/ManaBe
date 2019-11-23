@@ -10,7 +10,6 @@ namespace smartHookah.Models.Db
 
         public DeviceSetting(DeviceSetting setting)
         {
-            this.Bt = setting.Bt;
             this.Color = setting.Color;
             this.PictureId = setting.PictureId;
 
@@ -74,8 +73,6 @@ namespace smartHookah.Models.Db
 
         public int PufSpeed { get; set; } = 100;
 
-        public BtState Bt { get; set; }
-
         public Color Color { get; set; } = new Color();
 
         public Color PufColor { get; set; } = new Color();
@@ -104,18 +101,7 @@ namespace smartHookah.Models.Db
         public string GetInitStringWithBrightness(int intake, int percentage)
         {
             return
-                $"{PufAnimation},{BlowAnimation},{IdleAnimation},{intake},{percentage},{Color.Hue:000},{Color.Saturation:000},{Color.Value:000},{IdleBrightness},{PufBrightness},{GetBtStateInit()},";
-        }
-
-        public int GetBtStateInit()
-        {
-            if (Bt == BtState.On)
-                return 1;
-
-            else
-            {
-                return 0;
-            }
+                $"{PufAnimation},{BlowAnimation},{IdleAnimation},{intake},{percentage},{Color.Hue:000},{Color.Saturation:000},{Color.Value:000},{IdleBrightness},{PufBrightness},{0},";
         }
 
         public int PictureId { get; set; }
@@ -161,16 +147,9 @@ namespace smartHookah.Models.Db
                    $"{Color.Hue:000},{Color.Saturation:000},{Color.Value:000}," +
                    $"{PufColor.Hue:000},{PufColor.Saturation:000},{PufColor.Value:000}," +
                    $"{BlowColor.Hue:000},{BlowColor.Saturation:000},{BlowColor.Value:000}," +
-                   $"{IdleBrightness},{PufBrightness},{GetBtStateInit()}," +
+                   $"{IdleBrightness},{PufBrightness},{0}," +
                    $"{IdleSpeed},{PufSpeed},{sessionId},";
         }
-    }
-
-    public enum BtState
-    {
-        On = 0,
-        Off = 1,
-        Disabled = 2,
     }
 
     public class Color

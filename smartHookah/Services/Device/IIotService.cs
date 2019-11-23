@@ -16,5 +16,7 @@
         Task<Dictionary<string, bool>> GetOnlineStates(IList<string> deviceIds);
 
         Task SendMsgToDevice(string deviceId, string message);
+
+        Task<Device> CreateDevice(string code);
     }
 }

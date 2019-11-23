@@ -12,6 +12,7 @@ using smartHookah.Services.Redis;
 using smartHookah.Services.Search;
 using smartHookah.Helpers;
 using smartHookah.Models.Dto;
+using smartHookahCommon.Extensions;
 
 namespace smartHookah.Controllers.Api
 {

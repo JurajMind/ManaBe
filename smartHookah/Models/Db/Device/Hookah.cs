@@ -88,6 +88,7 @@ namespace smartHookah.Models.Db
  
         public UpdateType UpdateType { get; set; }
 
+        public DateTime Created { get; set; }
 
         public int? DefaultMetaDataId { get; set; }
         public virtual SmokeSessionMetaData DefaultMetaData { get; set; }

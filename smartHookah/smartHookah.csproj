@@ -909,7 +909,7 @@
     <Compile Include="Controllers\Api\FeatureMixController.cs" />
     <Compile Include="Controllers\Api\MediaController.cs" />
     <Compile Include="Controllers\Api\ReviewController.cs" />
-    <Compile Include="Filters\ValidateMimeMultipartContentFilter.cs" />
+    <Compile Include="Controllers\DeviceManagerController.cs" />
     <Compile Include="Migrations\201905041206426_features.cs" />
     <Compile Include="Migrations\201905041206426_features.Designer.cs">
       <DependentUpon>201905041206426_features.cs</DependentUpon>
@@ -970,6 +970,11 @@
     <Compile Include="Migrations\201908222000305_reviewUpd5.Designer.cs">
       <DependentUpon>201908222000305_reviewUpd5.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911231406446_device_add.cs" />
+    <Compile Include="Migrations\201911231406446_device_add.Designer.cs">
+      <DependentUpon>201911231406446_device_add.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dto\Device\DeviceCreationDto.cs" />
     <Compile Include="Models\Dto\Gear\PipeAccesoryReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
     <Compile Include="Models\Db\Place\PlaceReview.cs" />
@@ -1119,7 +1124,9 @@
     <Compile Include="Models\ViewModel\ImportResultModel.cs" />
     <Compile Include="Services\Config\ConfigService.cs" />
     <Compile Include="Services\Config\IConfigService.cs" />
+    <Compile Include="Services\Device\DeviceManageService.cs" />
     <Compile Include="Services\Device\DevicePictureService.cs" />
+    <Compile Include="Services\Device\IDeviceManageService.cs" />
     <Compile Include="Services\Device\IUpdateService.cs" />
     <Compile Include="Services\Device\UpdateService.cs" />
     <Compile Include="Services\FeatureMix\FeatureMixService.cs" />
@@ -1153,7 +1160,6 @@
     <Compile Include="ErrorHandler\ApiAuthorize.cs" />
     <Compile Include="Helpers\EnumExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
-    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.cs" />
     <Compile Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.Designer.cs">
       <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
@@ -1307,6 +1313,9 @@
     <EmbeddedResource Include="Migrations\201908222000305_reviewUpd5.resx">
       <DependentUpon>201908222000305_reviewUpd5.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911231406446_device_add.resx">
+      <DependentUpon>201911231406446_device_add.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1370,7 +1379,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\Api\AnimController.cs" />
     <Compile Include="Controllers\Api\AnimationController.cs" />
-    <Compile Include="Controllers\Api\CleanAllController.cs" />
     <Compile Include="Controllers\Api\EndSessionController.cs" />
     <Compile Include="Controllers\Api\TobaccoReviewsController.cs" />
     <Compile Include="Controllers\Api\Ping.cs" />
@@ -1450,7 +1458,6 @@
     <Compile Include="Filters\LocalizationAttribute.cs" />
     <Compile Include="Helpers\ImageActionLinkHelper.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
-    <Compile Include="Helpers\RedisHelper.cs" />
     <Compile Include="Jobs\SessionAutoEnd.cs" />
     <Compile Include="Models\ViewModel\ChangeNameViewModel.cs" />
     <Compile Include="Controllers\ControllerModule.cs" />
@@ -1472,11 +1479,7 @@
     <Compile Include="Models\ViewModel\Places\SeatManagerModel.cs" />
     <Compile Include="Models\ViewModel\SmokeSession\SmokeSessionGetStaticsticsModel.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
-    <Compile Include="Helpers\DbHelper.cs" />
-    <Compile Include="Helpers\ExpandPropertyAttribute.cs" />
     <Compile Include="Helpers\HtmlHelper.cs" />
-    <Compile Include="Helpers\IFFTHelper.cs" />
-    <Compile Include="Helpers\MySqlFuncs.cs" />
     <Compile Include="Helpers\ServerRenderHelper.cs" />
     <Compile Include="Helpers\ShareHelper.cs" />
     <Compile Include="Helpers\SmokeHelper.cs" />
