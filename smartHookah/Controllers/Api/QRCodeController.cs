@@ -54,8 +54,7 @@ namespace smartHookah.Controllers
                 {
                     ClientContext.Clients.Group(hookah.Code).online(hookah.Code);
                     Task.Factory.StartNew(() => this._signalNotificationService.OnlineDevice(hookah.Code));
-                    Task.Factory.StartNew(() => IFFTHelper.PushToMakerConnect(id)
-                    );
+                    
 
                 }
                 catch (Exception)

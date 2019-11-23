@@ -20,16 +20,7 @@ namespace smartHookah.Helpers
             };
             await serviceClient.SendAsync(deviceId, serviceMessage);
             await serviceClient.CloseAsync();
-        }
-
-        public static async Task<bool> GetState(string deviceId)
-        {
-            var registryManager = RegistryManager.CreateFromConnectionString(ConfigurationManager.AppSettings["IoTConnectionString"]);
-            var devices = await registryManager.GetDevicesAsync(100);
-            var selectedDevice = devices.FirstOrDefault(d => d.Id == deviceId);
-
-            return selectedDevice?.ConnectionState == DeviceConnectionState.Connected;
-        }
+       }
 
         public static async Task<List<string>> GetState(List<string> deviceIds)
         {

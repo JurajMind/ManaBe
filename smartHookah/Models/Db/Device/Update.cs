@@ -25,6 +25,7 @@ namespace smartHookah.Models.Db
         Alfa = 2,
         Stable = 0,
         Devel = 3,
+        Init = 4,
     }
 
     public enum StandType

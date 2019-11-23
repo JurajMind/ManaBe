@@ -1,4 +1,6 @@
-﻿using smartHookahCommon.Extensions;
+﻿using Microsoft.Azure.Devices.Common;
+using smartHookah.Models.Dto.Device;
+using smartHookahCommon.Extensions;
 
 namespace smartHookah.Services.Device
 {
@@ -70,6 +72,20 @@ namespace smartHookah.Services.Device
                     };
             await this.serviceClient.SendAsync(deviceId, serviceMessage);
             await this.serviceClient.CloseAsync();
+        }
+
+        public async Task<Device> CreateDevice(string code)
+        {
+            var primaryKey = CryptoKeyGenerator.GenerateKey(32);
+            var secondaryKey = CryptoKeyGenerator.GenerateKey(32);
+            var device = new Device(code)
+            {
+                Authentication = new AuthenticationMechanism
+                {
+                    SymmetricKey = {PrimaryKey = primaryKey, SecondaryKey = secondaryKey}
+                }
+            };
+            return await registryManager.AddDeviceAsync(device);
         }
     }
 }
