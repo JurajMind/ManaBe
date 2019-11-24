@@ -1,10 +1,10 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Place;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Db
 {
@@ -45,7 +45,7 @@ namespace smartHookah.Models.Db
             get { return Places.FirstOrDefault(); }
         }
 
-        public virtual  int? FeatureMixCreatorId { get; set; }
+        public virtual int? FeatureMixCreatorId { get; set; }
         public virtual FeatureMixCreator FeatureMixCreator { get; set; }
 
         [NotMapped]
@@ -98,7 +98,8 @@ namespace smartHookah.Models.Db
         public virtual ICollection<PipeAccesoryLike> Likes { get; set; }
 
         [NotMapped]
-        public  virtual IEnumerable<TobaccoMix> FavoriteTobaccoMixs {
+        public virtual IEnumerable<TobaccoMix> FavoriteTobaccoMixs
+        {
             get
             {
                 return this.Likes.Where(a => a.PipeAccesory is TobaccoMix && a.Value > 0)
@@ -172,7 +173,8 @@ namespace smartHookah.Models.Db
         [NotMapped]
         public string DisplayName
         {
-            get {
+            get
+            {
                 var displayName = User.First().DisplayName;
                 if (string.IsNullOrEmpty(displayName))
                     return User.First().Email;
@@ -187,7 +189,7 @@ namespace smartHookah.Models.Db
             person.GameProfile = new GameProfile();
             return person;
         }
- 
+
 
 
     }
@@ -233,7 +235,9 @@ namespace smartHookah.Models.Db
 
         public string Currency { get; set; }
         [NotMapped]
-        public decimal Price {
-            get { return 0; } }
+        public decimal Price
+        {
+            get { return 0; }
+        }
     }
 }

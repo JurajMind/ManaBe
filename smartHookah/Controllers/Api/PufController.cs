@@ -1,18 +1,15 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Microsoft.ApplicationInsights;
+﻿using Microsoft.ApplicationInsights;
 using Microsoft.AspNet.SignalR;
-using smartHookah.Helpers;
 using smartHookah.Hubs;
-using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Redis;
 using smartHookah.Support;
-using smartHookahCommon;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 
 namespace smartHookah.Controllers.Api
@@ -56,8 +53,8 @@ namespace smartHookah.Controllers.Api
         [Route("api/Puf/lag/{id}")]
         public async Task<string> Lag(string id)
         {
-           System.Threading.Thread.Sleep(2000);
-           return await Put(id);
+            System.Threading.Thread.Sleep(2000);
+            return await Put(id);
         }
 
         public void OnPuf(string deviceId, Puf puf)
@@ -69,43 +66,43 @@ namespace smartHookah.Controllers.Api
 
         private void UpdateStistics(string deviceId, Puf puf)
         {
-        
-                var session = puf.SmokeSessionId;
-                var ds = this.redisService.GetDynamicSmokeStatistic(session);
 
-                if ((ds == null) || (ds.LastFullUpdate < DateTime.Now.AddMinutes(-5)))
-                {
-                    if (ds == null)
-                        ds = new DynamicSmokeStatistic();
-                    ds.FullUpdate(this.redisService.GetPuffs(session).ToList(), session);
-                }
-                else
-                {
-                    if (puf != null)
-                        ds.Update(puf, session, deviceId);
-                }
+            var session = puf.SmokeSessionId;
+            var ds = this.redisService.GetDynamicSmokeStatistic(session);
 
-                this.redisService.SetDynamicSmokeStatistic(session, ds);
-                var oldDs = new
-                {
-                    pufCount = ds.PufCount,
-                    lastPuf = ds.LastPufDuration.ToString(@"s\.fff"),
-                    lastPufTime = ds.LastPufTime.AddHours(-1).ToString("dd-MM-yyyy HH:mm:ss"),
-                    smokeDuration = ds.TotalSmokeTime.ToString(@"hh\:mm\:ss"),
-                    longestPuf = ds.LongestPuf.ToString(@"s\.fff"),
-                    start = ds.Start.ToString("dd-MM-yyyy HH:mm:ss"),
-                    duration = ((DateTime.UtcNow - ds.Start).ToString(@"hh\:mm\:ss")),
-                    longestPufMilis = ds.LongestPuf.TotalMilliseconds
-                };
+            if ((ds == null) || (ds.LastFullUpdate < DateTime.Now.AddMinutes(-5)))
+            {
+                if (ds == null)
+                    ds = new DynamicSmokeStatistic();
+                ds.FullUpdate(this.redisService.GetPuffs(session).ToList(), session);
+            }
+            else
+            {
+                if (puf != null)
+                    ds.Update(puf, session, deviceId);
+            }
 
-                var ownDs = new DynamicSmokeStatisticDto(ds);
+            this.redisService.SetDynamicSmokeStatistic(session, ds);
+            var oldDs = new
+            {
+                pufCount = ds.PufCount,
+                lastPuf = ds.LastPufDuration.ToString(@"s\.fff"),
+                lastPufTime = ds.LastPufTime.AddHours(-1).ToString("dd-MM-yyyy HH:mm:ss"),
+                smokeDuration = ds.TotalSmokeTime.ToString(@"hh\:mm\:ss"),
+                longestPuf = ds.LongestPuf.ToString(@"s\.fff"),
+                start = ds.Start.ToString("dd-MM-yyyy HH:mm:ss"),
+                duration = ((DateTime.UtcNow - ds.Start).ToString(@"hh\:mm\:ss")),
+                longestPufMilis = ds.LongestPuf.TotalMilliseconds
+            };
 
-                ClientContext.Clients.Group(session).updateStats(oldDs);
-                ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);
-                ClientContext.Clients.Group(session).updateState(new DynamicSmokeStatisticRawDto(ds));
+            var ownDs = new DynamicSmokeStatisticDto(ds);
+
+            ClientContext.Clients.Group(session).updateStats(oldDs);
+            ClientContext.Clients.Group(deviceId).updateStats(deviceId, ownDs);
+            ClientContext.Clients.Group(session).updateState(new DynamicSmokeStatisticRawDto(ds));
         }
 
-        private  Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime)
+        private Puf SendPuf(string connectionDeviceId, string data, DateTime enqueuedTime)
         {
 
             var direction = ToPufType(data);

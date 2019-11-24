@@ -77,7 +77,7 @@ namespace smartHookah.Models.Db
     {
         Unknown = 0,
         Foil = 1,
-        HMS =2,
+        HMS = 2,
         Ignis = 3,
         Kazach = 4,
         Badcha = 5,

@@ -2,11 +2,9 @@
 
 namespace smartHookah.Controllers.Api
 {
-    using System.Web.Http;
-
-    using smartHookah.Models;
     using smartHookah.Models.Dto;
     using smartHookah.Services.Device;
+    using System.Web.Http;
 
     [System.Web.Http.RoutePrefix("api/Animations")]
     public class AnimationController : ApiController
@@ -33,7 +31,7 @@ namespace smartHookah.Controllers.Api
                     Message = $"Id \'{id}\' not valid.",
                     HttpResponseCode = 404
                 };
-           
+
             var version = this.deviceService.GetDeviceVersion(id);
             if (version < 0) return new AnimationsDTO()
             {

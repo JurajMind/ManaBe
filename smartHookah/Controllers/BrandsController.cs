@@ -1,16 +1,13 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Migrations;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
@@ -65,7 +62,7 @@ namespace smartHookah.Controllers
 
                 var displayArray = brand.DisplayName.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
                 brand.Name = new string(displayArray);
-        
+
 
                 if (file != null)
                 {
@@ -157,7 +154,7 @@ namespace smartHookah.Controllers
             return RedirectToAction("Index");
         }
 
-         [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> GeneratePictures(string id)
         {
             var brands = this.db.Brands;
@@ -169,8 +166,8 @@ namespace smartHookah.Controllers
             foreach (var brand in brands)
             {
                 var colorIndex = random.Next(0, colors.Count);
-                
-                var name = string.Join(" ",brand.DisplayName.Split(new []{' '},StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]).ToList());
+
+                var name = string.Join(" ", brand.DisplayName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]).ToList());
                 if (string.IsNullOrEmpty(name))
                 {
                     name = 0.ToString();
@@ -187,7 +184,7 @@ namespace smartHookah.Controllers
                     db.Brands.AddOrUpdate(brand);
 
                 }
-               
+
 
                 result.Add(brand.Picture);
             }

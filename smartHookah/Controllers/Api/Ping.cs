@@ -1,15 +1,14 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
+using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers.Api
 {
-    using System.Web;
-
     using smartHookah.Services.Redis;
+    using System.Web;
 
     public class PingController : ApiController
     {
@@ -26,18 +25,18 @@ namespace smartHookah.Controllers.Api
         [HttpGet]
         [OptionalHttps(true)]
         [ActionName("DefaultAction")]
-        public bool DoPing(string id=null,string version=null)
+        public bool DoPing(string id = null, string version = null)
         {
             if (id == null)
             {
                 return true;
             }
 
-           
+
 
             var hookah = db.Hookahs.FirstOrDefault(a => a.Code == id);
 
-          
+
 
             if (hookah == null)
                 return true;
@@ -56,7 +55,7 @@ namespace smartHookah.Controllers.Api
                 }
                 catch (Exception e)
                 {
-            
+
                 }
 
                 redisService.SetConnectionTime(id);
@@ -74,7 +73,7 @@ namespace smartHookah.Controllers.Api
             {
                 return true;
             }
-          
+
 
 
 

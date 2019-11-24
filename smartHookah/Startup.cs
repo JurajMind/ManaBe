@@ -8,23 +8,17 @@ using smartHookah;
 
 namespace smartHookah
 {
-    using System;
-    using System.Configuration;
-
-    using EFCache;
-
     using Hangfire;
     using Hangfire.Common;
     using Hangfire.Console;
-
     using Microsoft.AspNet.SignalR;
     using Microsoft.Owin.Cors;
     using Microsoft.Owin.Security.OAuth;
-
     using Owin;
-
     using smartHookah.Filters;
     using smartHookah.Jobs;
+    using System;
+    using System.Configuration;
 
     public partial class Startup
     {
@@ -44,12 +38,12 @@ namespace smartHookah
                     // providing a cors options with a different policy.
                     map.UseCors(CorsOptions.AllowAll);
                     var hubConfiguration = new HubConfiguration
-                                               {
-                                                   // You can enable JSONP by uncommenting line below.
-                                                   // JSONP requests are insecure but some older browsers (and some
-                                                   // versions of IE) require JSONP to work cross domain
-                                                   // EnableJSONP = true;
-                                               };
+                    {
+                        // You can enable JSONP by uncommenting line below.
+                        // JSONP requests are insecure but some older browsers (and some
+                        // versions of IE) require JSONP to work cross domain
+                        // EnableJSONP = true;
+                    };
                     // Run the SignalR pipeline. We're not using MapSignalR
                     // since this branch already runs under the "/signalr"
                     // path.
@@ -79,8 +73,8 @@ namespace smartHookah
             this.ConfigureOAuth(app);
 
 #if DEBUG
-TelemetryConfiguration.Active.DisableTelemetry = true;
-TelemetryDebugWriter.IsTracingDisabled = true;
+            TelemetryConfiguration.Active.DisableTelemetry = true;
+            TelemetryDebugWriter.IsTracingDisabled = true;
 
 #endif
         }
@@ -89,26 +83,26 @@ TelemetryDebugWriter.IsTracingDisabled = true;
         {
             OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
             OAuthServerOptions = new OAuthAuthorizationServerOptions
-                                         {
-                                             AllowInsecureHttp = true,
-                                             TokenEndpointPath =
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath =
                                                  new PathString("/token"),
-                                             AccessTokenExpireTimeSpan =
+                AccessTokenExpireTimeSpan =
                                                  TimeSpan.FromDays(1),
-                                             Provider =
+                Provider =
                                                  new SimpleAuthorizationServerProvider(),
-                                             RefreshTokenProvider =
+                RefreshTokenProvider =
                                                  new SimpleRefreshTokenProvider(),
-                                             AuthorizeEndpointPath =
+                AuthorizeEndpointPath =
                                                  new PathString(
                                                      "/api/Account/ExternalLogin")
-                                         };
+            };
 
             // Token Generation
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
         }
 
-   
+
     }
 }

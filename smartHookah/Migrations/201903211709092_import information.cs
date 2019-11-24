@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class importinformation : DbMigration
     {
         public override void Up()
@@ -10,30 +9,30 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.ImportInformation",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        DateTimeCreatedAt = c.DateTime(nullable: false),
-                        DataSource = c.String(),
-                        DataPath = c.String(),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    DateTimeCreatedAt = c.DateTime(nullable: false),
+                    DataSource = c.String(),
+                    DataPath = c.String(),
+                })
                 .PrimaryKey(t => t.Id);
-            
+
             CreateTable(
                 "dbo.AccessoryImportMapping",
                 c => new
-                    {
-                        AccessoryRefId = c.Int(nullable: false),
-                        ImportRefId = c.Int(nullable: false),
-                    })
+                {
+                    AccessoryRefId = c.Int(nullable: false),
+                    ImportRefId = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => new { t.AccessoryRefId, t.ImportRefId })
                 .ForeignKey("dbo.PipeAccesory", t => t.AccessoryRefId, cascadeDelete: true)
                 .ForeignKey("dbo.ImportInformation", t => t.ImportRefId, cascadeDelete: true)
                 .Index(t => t.AccessoryRefId)
                 .Index(t => t.ImportRefId);
-            
+
             AddColumn("dbo.PipeAccesory", "Valid", c => c.Boolean(nullable: false));
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.AccessoryImportMapping", "ImportRefId", "dbo.ImportInformation");

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using smartHookah.Models.Db;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -17,7 +17,7 @@ namespace smartHookah.Models.Dto
             this.MixCreatorsList = new List<MixCreator>();
         }
     }
-    
+
 
     [DataContract]
     public class TobaccoMixSimpleDto : TobaccoSimpleDto
@@ -68,17 +68,17 @@ namespace smartHookah.Models.Dto
             return model == null
                        ? null
                        : new TobaccoMix
-                             {
-                                 Id = model.Id,
-                                 AccName = model.Name,
-                                 BrandName = model.BrandId,
-                                 Tobaccos = model.Tobaccos.EmptyIfNull().Select(
+                       {
+                           Id = model.Id,
+                           AccName = model.Name,
+                           BrandName = model.BrandId,
+                           Tobaccos = model.Tobaccos.EmptyIfNull().Select(
                                      t => new TobacoMixPart
-                                              {
-                                                  Fraction = t.Fraction,
-                                                  TobaccoId = t.Tobacco.Id
+                                     {
+                                         Fraction = t.Fraction,
+                                         TobaccoId = t.Tobacco.Id
                                      }).ToList()
-                             };
+                       };
         }
     }
 

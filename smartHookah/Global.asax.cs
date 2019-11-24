@@ -1,5 +1,12 @@
 ﻿namespace smartHookah
 {
+    using Autofac;
+    using Autofac.Integration.Mvc;
+    using Autofac.Integration.WebApi;
+    using log4net;
+    using smartHookah.Controllers;
+    using smartHookah.Controllers.Api;
+    using smartHookah.Support.Config;
     using System;
     using System.Reflection;
     using System.Web;
@@ -7,17 +14,6 @@
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-
-    using Autofac;
-    using Autofac.Integration.Mvc;
-    using Autofac.Integration.WebApi;
-
-    using log4net;
-
-    using smartHookah.Controllers;
-    using smartHookah.Controllers.Api;
-    using smartHookah.Models;
-    using smartHookah.Support.Config;
 
     public class MvcApplication : HttpApplication
     {

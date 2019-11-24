@@ -3,11 +3,10 @@ using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Services.Person
 {
+    using smartHookah.Models;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using smartHookah.Models;
 
     public interface IPersonService
     {
@@ -40,7 +39,7 @@ namespace smartHookah.Services.Person
         ICollection<HookahOrder> GetUserHookahOrders(int? personId);
 
         GameProfile GetUserGameProfile(int? personId);
-        
+
         bool IsPlaceManager(int placeId);
         void AddNotificationToken(string token);
 

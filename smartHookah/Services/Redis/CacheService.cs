@@ -1,9 +1,7 @@
-﻿using System;
-using System.Configuration;
-
-using ServiceStack.Redis;
-
+﻿using ServiceStack.Redis;
 using smartHookah.Services.Config;
+using System;
+using System.Configuration;
 
 namespace smartHookah.Services.Redis
 {
@@ -32,7 +30,7 @@ namespace smartHookah.Services.Redis
         {
             using (var redis = this.redisManager.GetClient())
             {
-               return redis.Get<T>(this.TransformKey(key));
+                return redis.Get<T>(this.TransformKey(key));
             }
         }
 

@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.Azure.Search;
+using Microsoft.Azure.Search.Models;
+using Newtonsoft.Json;
+using smartHookah.Services.Person;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
-using Newtonsoft.Json;
-using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Search
 {
@@ -21,7 +20,7 @@ namespace smartHookah.Services.Search
             this.searchServiceClient = CreateSearchServiceClient();
         }
 
-        public async Task<IList<SearchPipeAccessory>> Search(string prefix,string type = null)
+        public async Task<IList<SearchPipeAccessory>> Search(string prefix, string type = null)
         {
             var personId = this.personService.GetCurentPersonId();
             DocumentSearchResult<SearchPipeAccessory> results;
@@ -36,7 +35,7 @@ namespace smartHookah.Services.Search
             }
             else
             {
-                results = await searchServiceClient.Documents.SearchAsync<SearchPipeAccessory>($"{prefix}*",new SearchParameters(){QueryType = QueryType.Full,Filter = $"Discriminator eq '{type}'" });
+                results = await searchServiceClient.Documents.SearchAsync<SearchPipeAccessory>($"{prefix}*", new SearchParameters() { QueryType = QueryType.Full, Filter = $"Discriminator eq '{type}'" });
             }
 
 

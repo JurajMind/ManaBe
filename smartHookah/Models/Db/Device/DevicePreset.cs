@@ -7,7 +7,7 @@ namespace smartHookah.Models.Db
     public class DevicePreset
     {
         public string Name { get; set; }
-        
+
         public int? PersonId { get; set; }
 
         public virtual Person Person { get; set; }

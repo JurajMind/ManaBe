@@ -1,14 +1,13 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using smartHookah.Models;
+using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
@@ -21,9 +20,9 @@ namespace smartHookah.Controllers
             {
                 if (_engine == null)
                 {
-                 
-                     _engine = new GamificationEngine();
-                    
+
+                    _engine = new GamificationEngine();
+
                 }
                 return _engine;
             }
@@ -46,7 +45,7 @@ namespace smartHookah.Controllers
             return View();
         }
 
-        public new ActionResult Profile(int?id)
+        public new ActionResult Profile(int? id)
         {
             if (id == null)
             {
@@ -77,10 +76,10 @@ namespace smartHookah.Controllers
 
             foreach (var person in persons)
             {
-                if(person.GameProfile != null)
+                if (person.GameProfile != null)
                     continue;
-                    person.GameProfile = GameProfile.Default();
-                    person.GameProfile.Person = person;
+                person.GameProfile = GameProfile.Default();
+                person.GameProfile.Person = person;
                 _db.Persons.AddOrUpdate(person);
             }
 
@@ -88,14 +87,14 @@ namespace smartHookah.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateEventRecepie(int id,int? recepieId = null)
+        public async Task<ActionResult> CreateEventRecepie(int id, int? recepieId = null)
         {
             var e = await _db.Events.FindAsync(id);
             if (e == null)
                 return RedirectToAction("Index");
 
             var recepie = new EventRecepie();
-                recepie.EventId = e.Id;
+            recepie.EventId = e.Id;
             if (recepieId != null)
                 recepie = await _db.EventRecepies.FindAsync(recepieId);
 
@@ -116,7 +115,7 @@ namespace smartHookah.Controllers
                 await _db.SaveChangesAsync();
             }
             ReloadEngine();
-            return RedirectToAction("EventDetail", new {id = model.Id});
+            return RedirectToAction("EventDetail", new { id = model.Id });
         }
 
         public async Task<ActionResult> EventDetail(int? id)
@@ -136,7 +135,7 @@ namespace smartHookah.Controllers
         [HttpGet]
         public ActionResult CreateEvent(int? id)
         {
-           var ev = new Event();
+            var ev = new Event();
 
             if (id != null)
                 ev = _db.Events.Find(id);
@@ -163,7 +162,7 @@ namespace smartHookah.Controllers
                     _db.Events.AddOrUpdate(e);
                 }
                 await _db.SaveChangesAsync();
-                return RedirectToAction("EventDetail",new {id = e.Id});
+                return RedirectToAction("EventDetail", new { id = e.Id });
             }
             ReloadEngine();
             return View(e);
@@ -174,7 +173,7 @@ namespace smartHookah.Controllers
         public async Task<ActionResult> CreateReward(int? id, int? rewardId)
         {
             var e = await _db.Events.FindAsync(id);
-           
+
             var reward = new Reward();
             if (e != null)
                 reward.EventId = e.Id;
@@ -191,7 +190,7 @@ namespace smartHookah.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult> CreateReward(Reward reward,string type,int rewardId)
+        public async Task<ActionResult> CreateReward(Reward reward, string type, int rewardId)
         {
             if (ModelState.IsValid)
             {
@@ -199,7 +198,7 @@ namespace smartHookah.Controllers
                 transform.Id = rewardId;
                 _db.Rewards.AddOrUpdate(transform);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("EventDetail", new {id = reward.EventId});
+                return RedirectToAction("EventDetail", new { id = reward.EventId });
             }
             return RedirectToAction("Index");
         }
@@ -245,7 +244,7 @@ namespace smartHookah.Controllers
         public void ValidateAll()
         {
             var sessions = _db.SmokeSessions.Select(a => a.Id).ToList();
-            
+
             foreach (var p in sessions)
             {
                 ValidateSession(p);
@@ -254,11 +253,11 @@ namespace smartHookah.Controllers
     }
 
 
-    public  class GamificationEngine
+    public class GamificationEngine
     {
         private SmartHookahContext _db;
         private List<EventTrigger> PersonEventsLong { get; set; }
-        
+
         private List<EventTrigger> PersonEventsTimeFrame { get; set; }
 
         private List<EventTrigger> PersonEventShort { get; set; }
@@ -272,8 +271,8 @@ namespace smartHookah.Controllers
                 (a.From == null || a.From > DateTime.Now) &&
                 (a.To == null || a.To < DateTime.Now)).ToList();
 
-            PersonEventShort = activeEvents.Where(a => a.Type == EventType.Person && a.TimeFrameTicks == null && 
-            ( a.TriggerTime == new TimeSpan()  && a.TriggerCount < 2)
+            PersonEventShort = activeEvents.Where(a => a.Type == EventType.Person && a.TimeFrameTicks == null &&
+            (a.TriggerTime == new TimeSpan() && a.TriggerCount < 2)
             ).Select(b => new EventTrigger(b))
                 .ToList();
 
@@ -292,34 +291,34 @@ namespace smartHookah.Controllers
         }
 
 
-    
 
 
-   
+
+
 
         public void ManualValidateSession(int smokeSessionId)
         {
             var sessions = _db.SmokeSessions.Where(a => a.Id == smokeSessionId).Include(a => a.MetaData)
                 .Include(b => b.Statistics).FirstOrDefault();
 
-            if(sessions == null)
+            if (sessions == null)
                 return;
-            
+
             ManualValidateSession(sessions);
         }
         public void ManualValidateSession(SmokeSession smokeSession)
         {
-             if (smokeSession.Statistics == null)
+            if (smokeSession.Statistics == null)
                 return;
 
             foreach (var eventTrigger in PersonEventShort)
             {
                 var processTriger = ProcessTrigger(smokeSession, eventTrigger);
-                
-                if(!processTriger)
+
+                if (!processTriger)
                     continue;
 
-            var e = eventTrigger.Execute(smokeSession);
+                var e = eventTrigger.Execute(smokeSession);
 
                 AddEventToPersons(smokeSession, e);
             }
@@ -369,8 +368,8 @@ namespace smartHookah.Controllers
 
                 foreach (var person in smokeSession.Persons)
                 {
-                 
-                    
+
+
                     if (processPerson(person, eventTrigger))
                         continue;
 
@@ -378,7 +377,7 @@ namespace smartHookah.Controllers
                         .Where(a => a.Statistics != null &&
                                     (a.Statistics.Start > smokeSession.Statistics.Start - eventTrigger.TimeSpan))
                         .ToList();
-                  
+
 
                     var progress =
                         _db.EventProgresses.FirstOrDefault(a => a.GameProfileId == person.Id &&
@@ -393,7 +392,7 @@ namespace smartHookah.Controllers
                         };
                     }
 
-                   var e =  eventTrigger.Execute(session,ref progress );
+                    var e = eventTrigger.Execute(session, ref progress);
 
                     if (e == null)
                     {
@@ -408,13 +407,13 @@ namespace smartHookah.Controllers
                         catch (Exception exception)
                         {
                             Console.WriteLine(exception);
-                           
+
                         }
-                       
+
                         AddEventToPersons(smokeSession, e);
                     }
 
-                   
+
 
                 }
 
@@ -436,7 +435,8 @@ namespace smartHookah.Controllers
             {
                 foreach (var person in smokeSession.Persons)
 
-                {   if(person.GameProfile.DoneEvent.Count(a => a.EventId == e.Id) > 0)
+                {
+                    if (person.GameProfile.DoneEvent.Count(a => a.EventId == e.Id) > 0)
                         continue;
                     AddEvent(person, e);
                 }
@@ -460,8 +460,8 @@ namespace smartHookah.Controllers
                 var eventPrograss =
                     _db.EventProgresses.Where(a => a.GameProfileId == person.Id && a.EventRecepie.Id == e.Id);
 
-                if( eventPrograss.Any())
-                _db.EventProgresses.RemoveRange(eventPrograss);
+                if (eventPrograss.Any())
+                    _db.EventProgresses.RemoveRange(eventPrograss);
             }
             _db.GameProfiles.AddOrUpdate(person.GameProfile);
         }
@@ -558,7 +558,7 @@ namespace smartHookah.Controllers
                 {
                     if (progress.IntProgress > _event.TriggerCount)
                         return _event;
-                   }
+                }
 
                 if (_event.TriggerTime > new TimeSpan())
                 {
@@ -664,7 +664,7 @@ namespace smartHookah.Controllers
 
         public override EventPartResult ExecuteMulti(SmokeSession smokeSession)
         {
-            if(smokeSession.Statistics == null)
+            if (smokeSession.Statistics == null)
                 return new EventPartResult();
 
             else
@@ -729,7 +729,7 @@ namespace smartHookah.Controllers
 
     internal class PufCountTrigger : EventPartTrigger
     {
-        
+
         public PufCountTrigger(EventRecepie e) : base(e)
         {
         }
@@ -845,9 +845,9 @@ namespace smartHookah.Controllers
             return false;
         }
     }
-    
+
     #endregion
-    
+
     internal class PlaceVisitTrigger : EventPartTrigger
     {
         public PlaceVisitTrigger(EventRecepie e) : base(e)
@@ -866,6 +866,6 @@ namespace smartHookah.Controllers
         }
 
     }
-    
+
 
 }

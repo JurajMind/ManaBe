@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using smartHookah.ErrorHandler;
+﻿using smartHookah.ErrorHandler;
 using smartHookah.Models.Dto;
 using smartHookah.Services.FeatureMix;
 using smartHookah.Services.Person;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {
@@ -25,7 +25,7 @@ namespace smartHookah.Controllers.Api
         [Route("FeatureCreators")]
         public List<FeatureMixCreatorSimpleDto> GetFeatureMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
-            return FeatureMixCreatorSimpleDto.FromModelList(this.featureMixService.GetFeatureMixCreators(page,pageSize,orderBy,order)).ToList();
+            return FeatureMixCreatorSimpleDto.FromModelList(this.featureMixService.GetFeatureMixCreators(page, pageSize, orderBy, order)).ToList();
         }
 
         [Route("FeatureCreator/{id}")]
@@ -35,10 +35,10 @@ namespace smartHookah.Controllers.Api
         }
 
         [Route("Mixes/{id}")]
-        public List<TobaccoMixSimpleDto> GetMixes(int id,int page,int pageSize,string orderBy,string order)
+        public List<TobaccoMixSimpleDto> GetMixes(int id, int page, int pageSize, string orderBy, string order)
         {
             var person = this.personService.GetCurentPerson();
-            return TobaccoMixSimpleDto.FromModelList(this.featureMixService.GetCreatorMixes(id,page,pageSize,orderBy,order), person?.Id).ToList();
+            return TobaccoMixSimpleDto.FromModelList(this.featureMixService.GetCreatorMixes(id, page, pageSize, orderBy, order), person?.Id).ToList();
         }
 
         [Route("FollowedCreators")]
@@ -51,7 +51,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost]
         public void AddFollow(int id)
         {
-          this.featureMixService.AddFollow(id);
+            this.featureMixService.AddFollow(id);
         }
 
         [Route("Follow/{id}")]

@@ -20,7 +20,7 @@ namespace smartHookah.Models.Dto.Reservations
 
         public TimeSlot()
         {
-            
+
         }
 
         public TimeSlot(TableTimeSlot table)
@@ -40,11 +40,11 @@ namespace smartHookah.Models.Dto.Reservations
     {
         public TableTimeSlot(TimeSlot timeSlot)
         {
-          this.Id = timeSlot.Id;
-         this.Text = timeSlot.Text;
-         this.Value = timeSlot.Value;
-         this.OrderIndex = timeSlot.OrderIndex;
-                        TableSlots = new Dictionary<int, TableSlot>();
+            this.Id = timeSlot.Id;
+            this.Text = timeSlot.Text;
+            this.Value = timeSlot.Value;
+            this.OrderIndex = timeSlot.OrderIndex;
+            TableSlots = new Dictionary<int, TableSlot>();
         }
         public Dictionary<int, TableSlot> TableSlots;
     }

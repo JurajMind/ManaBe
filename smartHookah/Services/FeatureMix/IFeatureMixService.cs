@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
+using System.Collections.Generic;
 
 namespace smartHookah.Services.FeatureMix
 {
@@ -7,7 +7,7 @@ namespace smartHookah.Services.FeatureMix
     {
         FeatureMixCreator GetFeatureMixCreator(int id);
 
-        IList<FeatureMixCreator> GetFeatureMixCreators(int page, int pageSize , string orderBy, string order);
+        IList<FeatureMixCreator> GetFeatureMixCreators(int page, int pageSize, string orderBy, string order);
 
         IList<FeatureMixCreator> GetFollowedMixCreators();
 

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Dto.Gear;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {
@@ -15,7 +15,7 @@ namespace smartHookah.Models.Dto
 
         [DataMember, JsonProperty("TobaccoTastes")]
         public List<TobaccoTasteDto> TobaccoTastes { get; set; }
-        
+
         [DataMember, JsonProperty("PersonTobaccoStats")]
         public PipeAccessoryStatisticsDto PersonTobaccoStats { get; set; }
 
@@ -36,18 +36,18 @@ namespace smartHookah.Models.Dto
             var sessions = new List<SmokeSessionSimpleDto>();
             var reviews = new List<TobaccoReviewDto>();
 
-            if(tobaccoTastes != null)
+            if (tobaccoTastes != null)
             {
                 foreach (var taste in tobaccoTastes)
                     tastes.Add(TobaccoTasteDto.FromModel(taste));
             }
 
-            if(smokeSessions != null)
+            if (smokeSessions != null)
                 foreach (var session in smokeSessions)
                     sessions.Add(SmokeSessionSimpleDto.FromModel(session));
 
-            if(tobaccoReviews != null)
-                foreach(var review in tobaccoReviews)
+            if (tobaccoReviews != null)
+                foreach (var review in tobaccoReviews)
                     reviews.Add(TobaccoReviewDto.FromModel(review));
 
             return new TobaccoInformationDto()
@@ -70,7 +70,7 @@ namespace smartHookah.Models.Dto
 
         [DataMember, JsonProperty("TobaccosTastes")]
         public Dictionary<int, TobaccoTasteDto> TobaccosTastes { get; set; }
-        
+
         [DataMember, JsonProperty("PersonTobaccoMixStats")]
         public PipeAccessoryStatisticsDto PersonTobaccoMixStats { get; set; }
 
@@ -81,7 +81,7 @@ namespace smartHookah.Models.Dto
             PipeAccesoryStatistics personStats, PipeAccesoryStatistics allStats)
         {
             if (tobaccoMix == null || personStats == null || allStats == null) return null;
-            
+
             var tastes = new Dictionary<int, TobaccoTasteDto>();
 
             if (tobaccoTastes != null)

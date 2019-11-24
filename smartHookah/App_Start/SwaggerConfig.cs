@@ -1,8 +1,8 @@
+using smartHookah;
+using smartHookah.SwaggerExtensions;
+using Swashbuckle.Application;
 using System.Web.Http;
 using WebActivatorEx;
-using smartHookah;
-using Swashbuckle.Application;
-using smartHookah.SwaggerExtensions;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -14,7 +14,7 @@ namespace smartHookah
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-           var httpConfig =  GlobalConfiguration.Configuration;
+            var httpConfig = GlobalConfiguration.Configuration;
             httpConfig.MessageHandlers.Add(new SwaggerAccessMessageHandler());
 
             httpConfig.EnableSwagger(c =>
@@ -122,8 +122,9 @@ namespace smartHookah
                         // Alternatively, you can provide your own custom strategy for inferring SchemaId's for
                         // describing "complex" types in your API.
                         //
-                        c.SchemaId(t => {
-                            var name = t.FullName.Replace(".", "").Replace("smartHookahModelsDto", "").Replace("DTO", "").Replace("+","");
+                        c.SchemaId(t =>
+                        {
+                            var name = t.FullName.Replace(".", "").Replace("smartHookahModelsDto", "").Replace("DTO", "").Replace("+", "");
                             if (string.IsNullOrEmpty(name))
                                 return "Dto";
                             return name;

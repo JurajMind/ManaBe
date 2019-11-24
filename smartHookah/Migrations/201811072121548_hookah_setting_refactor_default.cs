@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class hookah_setting_refactor_default : DbMigration
     {
         public override void Up()
@@ -16,7 +15,7 @@ namespace smartHookah.Migrations
             AddForeignKey("dbo.DevicePreset", "Person_Id", "dbo.Person", "Id");
             DropColumn("dbo.DevicePreset", "Defaut");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.DevicePreset", "Defaut", c => c.Boolean(nullable: false));

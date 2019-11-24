@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace smartHookah
 {
@@ -41,8 +38,8 @@ namespace smartHookah
                 return "1.0.0";
             }
 
-            var minor = version%1000;
-            version = version/1000;
+            var minor = version % 1000;
+            version = version / 1000;
             var major = version % 1000;
             version = version / 1000;
             var whole = version;

@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class Device_preset : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.HookahPersonSetting", "PersonId");
             AddForeignKey("dbo.HookahPersonSetting", "PersonId", "dbo.Person", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.HookahPersonSetting", "PersonId", "dbo.Person");

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using smartHookah.Helpers.ModelExtensions;
+﻿using smartHookah.Helpers.ModelExtensions;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Db.Session;
 using smartHookah.Models.Redis;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace smartHookah.Models.Db
 {
@@ -45,7 +45,8 @@ namespace smartHookah.Models.Db
         public string StorePath { get; set; }
 
         [NotMapped]
-        public virtual ICollection<DbPuf> Pufs {
+        public virtual ICollection<DbPuf> Pufs
+        {
             get
             {
                 if (this.StorePath != null)
@@ -61,7 +62,9 @@ namespace smartHookah.Models.Db
         public int? MetaDataId { get; set; }
         public virtual SmokeSessionMetaData MetaData { get; set; }
 
-        public virtual ICollection<SmokeEvent> SmokeEvents { get; set;
+        public virtual ICollection<SmokeEvent> SmokeEvents
+        {
+            get; set;
         }
 
         public int? StatisticsId { get; set; }
@@ -70,13 +73,13 @@ namespace smartHookah.Models.Db
 
         public virtual TobaccoReview Review { get; set; }
 
-        public virtual SessionReview SessionReview{get;set;}
+        public virtual SessionReview SessionReview { get; set; }
 
         [Index("Token")]
         [MaxLength(10)]
         public string Token { get; set; }
 
-        public SessionReport Report { get; set; } 
+        public SessionReport Report { get; set; }
 
         [NotMapped]
         public bool PlaceSession { get; set; } = false;
@@ -84,7 +87,7 @@ namespace smartHookah.Models.Db
         public virtual Place.Place Place { get; set; }
 
         public int? PlaceId { get; set; }
-        
+
         public virtual ICollection<HookahOrder> HookahOrder { get; set; }
 
         [NotMapped]

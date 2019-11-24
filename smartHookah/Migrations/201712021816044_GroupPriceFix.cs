@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class GroupPriceFix : DbMigration
     {
         public override void Up()
@@ -12,22 +11,22 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.PriceGroupPrice",
                 c => new
-                    {
-                        OwnPipeAccesoriesId = c.Int(nullable: false),
-                        PriceGroupId = c.Int(nullable: false),
-                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
-                    })
+                {
+                    OwnPipeAccesoriesId = c.Int(nullable: false),
+                    PriceGroupId = c.Int(nullable: false),
+                    Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                })
                 .PrimaryKey(t => new { t.OwnPipeAccesoriesId, t.PriceGroupId })
                 .ForeignKey("dbo.PriceGroup", t => t.PriceGroupId, cascadeDelete: true)
                 .ForeignKey("dbo.OwnPipeAccesories", t => t.OwnPipeAccesoriesId, cascadeDelete: true)
                 .Index(t => t.OwnPipeAccesoriesId)
                 .Index(t => t.PriceGroupId);
-            
+
             AlterColumn("dbo.OwnPipeAccesories", "Currency", c => c.String());
             DropColumn("dbo.OwnPipeAccesories", "PriceId");
             DropColumn("dbo.OwnPipeAccesories", "Price");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.OwnPipeAccesories", "Price", c => c.Decimal(nullable: false, precision: 18, scale: 2));

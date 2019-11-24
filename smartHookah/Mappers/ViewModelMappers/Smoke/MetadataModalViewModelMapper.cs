@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Services.Redis;
 using smartHookah.Support;
-using smartHookahCommon;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace smartHookah.Mappers.ViewModelMappers.Smoke
 {
@@ -178,7 +176,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
                         new SmokeMetadataModalTobacoMix()
                         {
                             name = "Part" + 1,
-                            Partin = (int) part.Fraction,
+                            Partin = (int)part.Fraction,
                             TobaccoBrand = part.Tobacco.Brand.Name,
                             TobacoFlavor = part.Tobacco.AccName,
                             TobacoId = part.Tobacco.Id,

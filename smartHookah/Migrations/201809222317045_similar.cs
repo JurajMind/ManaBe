@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class similar : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.SimilarAccesories", "PersonId");
             AddForeignKey("dbo.SimilarAccesories", "PersonId", "dbo.Person", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.SimilarAccesories", "PersonId", "dbo.Person");

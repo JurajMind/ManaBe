@@ -1,4 +1,13 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
+using smartHookah.Models.Redis;
+using smartHookah.Services.Messages;
+using smartHookah.Services.Redis;
+using smartHookah.Support;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -6,17 +15,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Azure.Amqp.Framing;
-using smartHookah.Helpers;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
-using smartHookah.Models.Redis;
-using smartHookah.Services.Messages;
-using smartHookah.Services.Person;
-using smartHookah.Services.Redis;
-using smartHookah.Support;
-using smartHookahCommon.Errors;
-using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Controllers
 {
@@ -33,7 +31,7 @@ namespace smartHookah.Controllers
         private readonly ISignalNotificationService _signalNotificationService;
         private readonly IRedisService redisService;
         private readonly IPlaceService placeService;
-        public ReservationController(SmartHookahContext db, IReservationService reservationService,ISignalNotificationService signalNotificationService, IPlaceService placeService)
+        public ReservationController(SmartHookahContext db, IReservationService reservationService, ISignalNotificationService signalNotificationService, IPlaceService placeService)
         {
             this.db = db;
             this.reservationService = reservationService;
@@ -129,15 +127,15 @@ namespace smartHookah.Controllers
                     var duration = _slotDuration.Multiply(model.Duration);
                     var table = db.Seats.FirstOrDefault(a => a.Id == model.Table);
                     var reservation = table?.Reservations.Where(a => a.Time.Date == parseDate &&
-                                                                     a.Status != ReservationState.Canceled 
-                                                                     && a.Status != ReservationState.Denied 
-                                                                     && a.Status != ReservationState.NonVisited ).ToList();
+                                                                     a.Status != ReservationState.Canceled
+                                                                     && a.Status != ReservationState.Denied
+                                                                     && a.Status != ReservationState.NonVisited).ToList();
 
                     var place = await db.Places.FindAsync(id);
-                    if(place == null || reservation == null)
-                         return Json(new { success = false});
+                    if (place == null || reservation == null)
+                        return Json(new { success = false });
 
-                    var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4,'0'), "HHmm", CultureInfo.InvariantCulture);
+                    var time = DateTime.ParseExact(model.Time.ToString().PadLeft(4, '0'), "HHmm", CultureInfo.InvariantCulture);
                     parseDate = parseDate.AddHours(time.Hour);
                     parseDate = parseDate.AddMinutes(time.Minute);
                     var status = ReservationState.Created;
@@ -166,27 +164,28 @@ namespace smartHookah.Controllers
                         },
                         Duration = duration,
                         Text = model.Text,
-                        Customers = new List<Person>() { person},
-                        Name  = person.DisplayName                        
+                        Customers = new List<Person>() { person },
+                        Name = person.DisplayName
                     };
 
                     if (!string.IsNullOrEmpty(model.Name))
                         newReservation.Name = model.Name;
-                  
+
 
                     //scope.Complete();
                     var conflict = false;
                     var notConfirm = false;
                     foreach (var reservation1 in reservation)
                     {
-                       // Check if new reservation is not in conflick
+                        // Check if new reservation is not in conflick
                         conflict = Colide(reservation1, newReservation);
                         if (conflict)
                         {
                             // Check if is in conflick with uncofirm reservation
                             if (reservation1.Status == ReservationState.ConfirmationRequired)
                                 notConfirm = true;
-                            else {
+                            else
+                            {
                                 notConfirm = false;
                                 break;
                             }
@@ -194,7 +193,7 @@ namespace smartHookah.Controllers
                     }
 
                     // If is in conflict in non confirm reservation, change status to confirmation requered as well
-                    if(notConfirm)
+                    if (notConfirm)
                     {
                         conflict = false;
                         newReservation.Status = ReservationState.ConfirmationRequired;
@@ -203,7 +202,7 @@ namespace smartHookah.Controllers
                     if (!conflict)
                     {
                         db.Reservations.Add(newReservation);
-                        
+
                         await db.SaveChangesAsync();
 
                         SendReservationMail(newReservation);
@@ -212,7 +211,7 @@ namespace smartHookah.Controllers
                     scope.Commit();
                     this._signalNotificationService.ReservationChanged(newReservation);
                     await reservationService.UpdateReservationUsage(place.Id, parseDate.Date);
-                    return Json(new {success = !conflict, id = newReservation.Id});
+                    return Json(new { success = !conflict, id = newReservation.Id });
                 }
                 catch (Exception e)
                 {
@@ -229,7 +228,7 @@ namespace smartHookah.Controllers
 
         private void SendReservationMail(Reservation newReservation)
         {
-           
+
             if (newReservation.Status == ReservationState.Created)
             {
                 SendReservationCreatemMail(newReservation);
@@ -248,24 +247,24 @@ namespace smartHookah.Controllers
         }
 
         private void SendReservationCreatemMail(Reservation newReservation)
-        {  
-                var email = newReservation.getEmail();
-                 emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
-       
+        {
+            var email = newReservation.getEmail();
+            emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
+
         }
 
         private void SendReservationConfirmMail(Reservation newReservation)
         {
             var email = newReservation.getEmail();
-             emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
+            emailService.SendTemplateAsync(email, "Potvrzení rezervace", "reservationConfirmManual.cshtml", newReservation);
         }
 
         private void SendReservationDeniedMail(Reservation newReservation)
         {
-            
-                var email = newReservation.getEmail();
-                emailService.SendTemplateAsync(email, "Zamítnutí rezervace", "reservationDenied.cshtml", newReservation);
-            
+
+            var email = newReservation.getEmail();
+            emailService.SendTemplateAsync(email, "Zamítnutí rezervace", "reservationDenied.cshtml", newReservation);
+
         }
 
         private void SendReservationConfirmRequiredMail(Reservation newReservation)
@@ -318,86 +317,86 @@ namespace smartHookah.Controllers
                 var endTime = placeTime.CloseTime;
 
                 // If close time pass over midnight , add whole day to end time 
-                if ( endTime < startTime)
+                if (endTime < startTime)
                 {
                     endTime += new TimeSpan(24, 0, 0);
                 }
                 var index = 0;
                 while (startTime <= endTime)
                 {
-                    timeSlot.Add(new TimeSlot {Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"),OrderIndex = index});
+                    timeSlot.Add(new TimeSlot { Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"), OrderIndex = index });
                     index++;
                     startTime = startTime + this._slotDuration;
                 }
-           
 
 
-            var todayReservation =
-                db.Reservations.Where(a => a.PlaceId == place.Id && DbFunctions.TruncateTime(a.Time) == parseDate)
-                    .ToList();
 
-            var todayActiveReservation = todayReservation
-                .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisited).ToList();
+                var todayReservation =
+                    db.Reservations.Where(a => a.PlaceId == place.Id && DbFunctions.TruncateTime(a.Time) == parseDate)
+                        .ToList();
+
+                var todayActiveReservation = todayReservation
+                    .Where(a => a.Status != ReservationState.Canceled && a.Status != ReservationState.Denied && a.Status != ReservationState.NonVisited).ToList();
 
 
 
                 model.Times = new List<KeyValuePair<int, string>>();
 
                 var minReservationTime = place.MinimumReservationTime;
-            model.MinimumReservationTime = place.MinimumReservationTime;
-            if (includeReservation)
-            {
-                minReservationTime = 1;
-            }
-
-            for (int i = minReservationTime; i < 9; i++)
-            {
-                var text = $"{ i * 0.5} hodiny";
-                model.Times.Add(new KeyValuePair<int, string>(i, text));
+                model.MinimumReservationTime = place.MinimumReservationTime;
+                if (includeReservation)
+                {
+                    minReservationTime = 1;
                 }
 
-            if (includeReservation)
-            {
-                model.Times.Add(new KeyValuePair<int, string>(index, "Do zavíračky"));
+                for (int i = minReservationTime; i < 9; i++)
+                {
+                    var text = $"{ i * 0.5} hodiny";
+                    model.Times.Add(new KeyValuePair<int, string>(i, text));
                 }
 
-
-            model.Tables = new List<TableDto>(place.Seats
-                .Select(a => new TableDto {Id = a.Id, Capacity = a.Capacity, Name = a.Name}).ToList());
-
-            if (includeReservation)
-            {
-                model.TodayReservation =
-                    todayActiveReservation.ToDictionary(a => a.Id.ToString(),
-                        a => new ReservationDto(a, _slotDuration));
-                model.Canceled = todayReservation
-                    .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied || a.Status == ReservationState.NonVisited)
-                    .Select(a => new ReservationDto(a, _slotDuration));
-
-                model.ConfirmationRequired = todayActiveReservation.Where(a => a.Status == ReservationState.ConfirmationRequired).Select(a => new ReservationDto(a, _slotDuration));
+                if (includeReservation)
+                {
+                    model.Times.Add(new KeyValuePair<int, string>(index, "Do zavíračky"));
                 }
 
 
-            model.Reservations = new Dictionary<string, List<TimeSlot>>();
+                model.Tables = new List<TableDto>(place.Seats
+                    .Select(a => new TableDto { Id = a.Id, Capacity = a.Capacity, Name = a.Name }).ToList());
 
-            foreach (var table in model.Tables)
-            {
-                var tableReservation = todayActiveReservation.Where(a => a.Seats.Any(b => b.Id == table.Id));
+                if (includeReservation)
+                {
+                    model.TodayReservation =
+                        todayActiveReservation.ToDictionary(a => a.Id.ToString(),
+                            a => new ReservationDto(a, _slotDuration));
+                    model.Canceled = todayReservation
+                        .Where(a => a.Status == ReservationState.Canceled || a.Status == ReservationState.Denied || a.Status == ReservationState.NonVisited)
+                        .Select(a => new ReservationDto(a, _slotDuration));
 
-                var timeTable = CreateTableTable(tableReservation, timeSlot, includeReservation);
-                model.Reservations.Add(table.Id.ToString(), timeTable);
-            }
-
-            foreach (var slot in timeSlot)
-            {
-                var slotData = model.Reservations.Values.SelectMany(a => a.ToArray()).Where(a => a.Value == slot.Value);
-
-                if (slotData.Count(a => !a.Reserved) <= 0)
-                    slot.Reserved = true;
-            }
+                    model.ConfirmationRequired = todayActiveReservation.Where(a => a.Status == ReservationState.ConfirmationRequired).Select(a => new ReservationDto(a, _slotDuration));
+                }
 
 
-            model.TimeSlots = timeSlot;
+                model.Reservations = new Dictionary<string, List<TimeSlot>>();
+
+                foreach (var table in model.Tables)
+                {
+                    var tableReservation = todayActiveReservation.Where(a => a.Seats.Any(b => b.Id == table.Id));
+
+                    var timeTable = CreateTableTable(tableReservation, timeSlot, includeReservation);
+                    model.Reservations.Add(table.Id.ToString(), timeTable);
+                }
+
+                foreach (var slot in timeSlot)
+                {
+                    var slotData = model.Reservations.Values.SelectMany(a => a.ToArray()).Where(a => a.Value == slot.Value);
+
+                    if (slotData.Count(a => !a.Reserved) <= 0)
+                        slot.Reserved = true;
+                }
+
+
+                model.TimeSlots = timeSlot;
             }
             return model;
         }
@@ -407,7 +406,7 @@ namespace smartHookah.Controllers
             var reservation = await db.Reservations.FindAsync(id);
 
             if (reservation == null)
-                return Json(new {success = false, msg = "Reservation not found"});
+                return Json(new { success = false, msg = "Reservation not found" });
 
             var oldReservation = new ReservationDto(reservation, this._slotDuration);
 
@@ -447,7 +446,7 @@ namespace smartHookah.Controllers
 
                 foreach (var res in tableReservation)
                     if (Colide(reservation, res))
-                        return Json(new {success = false, msg = $"Reservation colided with {res.Name}"});
+                        return Json(new { success = false, msg = $"Reservation colided with {res.Name}" });
 
                 reservation.Seats.Add(table);
             }
@@ -455,8 +454,12 @@ namespace smartHookah.Controllers
             db.Reservations.AddOrUpdate(reservation);
             await db.SaveChangesAsync();
             this._signalNotificationService.ReservationChanged(reservation);
-            return Json(new {oldRes= oldReservation,
-                            newRes = new ReservationDto(reservation,this._slotDuration),success = true});
+            return Json(new
+            {
+                oldRes = oldReservation,
+                newRes = new ReservationDto(reservation, this._slotDuration),
+                success = true
+            });
         }
 
 
@@ -579,13 +582,13 @@ namespace smartHookah.Controllers
         public ReservationDto(Reservation res, TimeSpan slot)
         {
             this.Name = res.DisplayName;
-            this.TimeSlots = (int) (res.Duration.Ticks / slot.Ticks);
+            this.TimeSlots = (int)(res.Duration.Ticks / slot.Ticks);
             this.Id = res.Id;
             this.Persons = res.Persons;
             this.State = res.Status;
             this.Message = res.Text;
             this.TimeText = res.Time.TimeOfDay.ToString(@"hh\:mm");
-            this.LateText = (res.LateDuration != null ? "+ "+res.LateDuration.ToString()+" min" : "");
+            this.LateText = (res.LateDuration != null ? "+ " + res.LateDuration.ToString() + " min" : "");
             this.StateText = res.Status.ToString().ToLower();
         }
 
@@ -654,4 +657,4 @@ namespace smartHookah.Controllers
         public IEnumerable<ReservationDto> ConfirmationRequired { get; set; }
     }
 
-    }
+}

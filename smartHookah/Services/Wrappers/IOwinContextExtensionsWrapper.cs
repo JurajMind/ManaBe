@@ -1,7 +1,6 @@
-﻿using System;
-
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
+using System;
 
 public interface IOwinContextExtensionsWrapper
 {

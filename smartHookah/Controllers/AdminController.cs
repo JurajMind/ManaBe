@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace smartHookah.Controllers
 {
-    using System.Configuration;
-    using System.Threading.Tasks;
-
     using MailChimp.Net;
     using MailChimp.Net.Interfaces;
     using MailChimp.Net.Models;
+    using System.Configuration;
+    using System.Threading.Tasks;
 
     [Authorize(Roles = "Admin")]
-    
+
     public class AdminController : Controller
     {
         private SmartHookahContext db;
@@ -63,10 +59,10 @@ namespace smartHookah.Controllers
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    
+
                 }
-              
-              
+
+
             }
 
 
@@ -105,15 +101,15 @@ namespace smartHookah.Controllers
         {
             var devices = this.db.Hookahs.Select(s => s.Code).ToList();
 
-            
+
             foreach (var device in devices)
             {
                 var hookah = this.db.Hookahs.FirstOrDefault(a => a.Code == device);
 
-                if(hookah == null)
+                if (hookah == null)
                     continue;
 
-                var sessions =  this.db.SmokeSessions.Where(s => s.HookahId == hookah.Id);
+                var sessions = this.db.SmokeSessions.Where(s => s.HookahId == hookah.Id);
 
                 if (sessions.Count(s => s.StatisticsId == null) == 0)
                 {
@@ -121,9 +117,9 @@ namespace smartHookah.Controllers
                     continue;
                 }
 
-                if(sessions.Count() != 0)
+                if (sessions.Count() != 0)
                     continue;
-                
+
 
                 await this.smokeSessionBg.InitSmokeSession(device);
             }

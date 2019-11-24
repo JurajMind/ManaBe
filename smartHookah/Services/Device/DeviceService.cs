@@ -1,16 +1,15 @@
-﻿using System;
+﻿using smartHookah.Helpers;
 using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
+using smartHookah.Services.Redis;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using smartHookah.Helpers;
-using smartHookah.Services.Person;
-using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Device
 {
@@ -48,9 +47,9 @@ namespace smartHookah.Services.Device
                     throw new NotSupportedException(
                         $"Animation {animation.DisplayName} not supported by your Hookah OS version.");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int) state},{animation.Id},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"led:{(int)state},{animation.Id},");
 
-            this.SetAnimation(hookah.Setting, (int) state, animation.Id);
+            this.SetAnimation(hookah.Setting, (int)state, animation.Id);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -62,9 +61,9 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int) state},{brightness},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"br:{(int)state},{brightness},");
 
-            this.SetBrightness(hookah.Setting, (int) state, brightness);
+            this.SetBrightness(hookah.Setting, (int)state, brightness);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -83,9 +82,9 @@ namespace smartHookah.Services.Device
 
             if (hookah == null) throw new KeyNotFoundException($"Device with id {deviceId} not found");
 
-            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int) state},{speed},");
+            var sendTask = this.iotService.SendMsgToDevice(deviceId, $"spd:{(int)state},{speed},");
 
-            this.SetSpeed(hookah.Setting, (int) state, speed);
+            this.SetSpeed(hookah.Setting, (int)state, speed);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -103,10 +102,10 @@ namespace smartHookah.Services.Device
             else
             {
                 sendTask = this.iotService.SendMsgToDevice(deviceId,
-                    $"clr:{(int) state},{color.Hue:000},{color.Saturation:000},{color.Value:000}");
+                    $"clr:{(int)state},{color.Hue:000},{color.Saturation:000},{color.Value:000}");
             }
 
-            this.SetColor(hookah.Setting, (int) state, color);
+            this.SetColor(hookah.Setting, (int)state, color);
             this.db.HookahSettings.AddOrUpdate(hookah.Setting);
             this._signalNotificationService.SessionSettingsChanged(deviceId, hookah.Setting);
             await Task.WhenAll(this.db.SaveChangesAsync(), sendTask);
@@ -227,7 +226,7 @@ namespace smartHookah.Services.Device
             if (dbSession != null && dbSession.MetaData != null && dbSession.MetaData.Tobacco != null &&
                 dbSession.MetaData.Tobacco.Statistics != null)
             {
-                percentage = (int) dbSession.MetaData.Tobacco.Statistics.PufCount;
+                percentage = (int)dbSession.MetaData.Tobacco.Statistics.PufCount;
             }
 
             if (hookahVersion < 1000011)
@@ -263,10 +262,10 @@ namespace smartHookah.Services.Device
             return updateRedis.FilePath;
         }
 
-        public async Task SetPercentage(string code,int pufCount)
+        public async Task SetPercentage(string code, int pufCount)
         {
             await this.iotService.SendMsgToDevice(code, $"stat:{pufCount}:");
-         
+
         }
 
         public ICollection<Models.Db.SmokeSession> Sessions(int id, int pageSize, int page)

@@ -2,16 +2,12 @@
 
 namespace smartHookah.Services.Person
 {
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.OAuth;
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
-    using Microsoft.Owin.Security;
-    using Microsoft.Owin.Security.OAuth;
-
-    using Newtonsoft.Json.Linq;
-
-    using smartHookah.Models;
 
     public class AccountService : IAccountService
     {

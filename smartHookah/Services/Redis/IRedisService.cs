@@ -3,10 +3,10 @@ using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Redis
 {
+    using Place;
+    using smartHookah.Models.Redis;
     using System;
     using System.Collections.Generic;
-    using smartHookah.Models.Redis;
-    using Place;
 
     public interface IRedisService
     {
@@ -16,7 +16,7 @@ namespace smartHookah.Services.Redis
 
         DynamicSmokeStatistic GetDynamicSmokeStatistic(string sessionId);
 
-        void SetDynamicSmokeStatistic(string sessionId,DynamicSmokeStatistic dynamicSmokeStatistic);
+        void SetDynamicSmokeStatistic(string sessionId, DynamicSmokeStatistic dynamicSmokeStatistic);
 
         void StoreAddress(string address, string name);
 
@@ -30,7 +30,7 @@ namespace smartHookah.Services.Redis
 
         bool CleanSmokeSession(string smokeSessionId);
 
-        bool CreateSmokeSession(string smokeSessionId,string deviceId);
+        bool CreateSmokeSession(string smokeSessionId, string deviceId);
 
         DateTime? GetConnectionTime(string deviceCode);
 
@@ -39,7 +39,7 @@ namespace smartHookah.Services.Redis
         Puf AddPuf(string smokeSessionId, string hookahId, PufType direction, DateTime pufTime, long milis,
             int presure = 0);
 
-        void StoreUpdate(string token,UpdateController.UpdateRedis update);
+        void StoreUpdate(string token, UpdateController.UpdateRedis update);
 
         UpdateController.UpdateRedis GetUpdate(string token);
 

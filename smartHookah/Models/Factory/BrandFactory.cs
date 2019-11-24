@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 
 namespace smartHookah.Models.Factory
 {
@@ -14,9 +11,9 @@ namespace smartHookah.Models.Factory
             var displayArray = name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray();
             var id = new string(displayArray);
             var brand = new Brand
-                        {
-                            Name = name,
-                            DisplayName = name
+            {
+                Name = name,
+                DisplayName = name
             };
 
             SetBrandFlag(type, brand);
@@ -26,7 +23,7 @@ namespace smartHookah.Models.Factory
 
         public static Brand SetFlag(Brand brand, string type)
         {
-            SetBrandFlag(type,brand);
+            SetBrandFlag(type, brand);
             return brand;
         }
 

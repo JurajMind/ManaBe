@@ -1,8 +1,8 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Place;
+using smartHookah.Models.Db.Session;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using smartHookah.Models.Db.Place;
-using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db.Gear
 {
@@ -19,7 +19,8 @@ namespace smartHookah.Models.Db.Gear
         public int Duration { get; set; }
 
         [NotMapped]
-        public int ReviewedTobaccoId {
+        public int ReviewedTobaccoId
+        {
             get => base.AccessorId;
             set => base.AccessorId = value;
         }

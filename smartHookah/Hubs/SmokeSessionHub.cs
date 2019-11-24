@@ -1,11 +1,8 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.AspNet.SignalR;
+using smartHookah.Models.Db;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.AspNet.SignalR;
-
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Hubs
 {

@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
 using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Session;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Mappers.ViewModelMappers.Smoke
 {
@@ -46,7 +45,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             {
             }
 
-            result.SmokeMetadataModalModal = this.metadataModalViewModelMapper.Map(sessionId,result.MetaData, person, out var outMetaData);
+            result.SmokeMetadataModalModal = this.metadataModalViewModelMapper.Map(sessionId, result.MetaData, person, out var outMetaData);
 
             result.MetaData = outMetaData;
             result.ShareToken = session.Token;
@@ -61,7 +60,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
                 {
                     SmokeSession = session
                 };
-                
+
             }
 
             result.CurentState = PufType.Idle;

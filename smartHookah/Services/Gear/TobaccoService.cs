@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿using Microsoft.VisualStudio.Services.Account;
+using smartHookah.Models.Db;
+using smartHookah.Models.Db.Gear;
+using smartHookah.Services.Person;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.TeamFoundation.VersionControl.Client;
-using Microsoft.VisualStudio.Services.Account;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
-using smartHookah.Services.Person;
 
 namespace smartHookah.Services.Gear
 {
-    using System.Data.Entity.Migrations;
-    using System.Net;
-    using System.Web.Helpers;
-
     using log4net;
-
-    using smartHookah.Controllers.Api;
-    using smartHookah.Models.Dto;
+    using System.Data.Entity.Migrations;
+    using System.Web.Helpers;
 
     public class TobaccoService : ITobaccoService
     {
@@ -40,9 +32,9 @@ namespace smartHookah.Services.Gear
         public async Task<Tobacco> GetTobacco(int id)
         {
             var tobacco = await db.Tobaccos.FirstOrDefaultAsync(a => a.Id == id);
-            if(tobacco == null) throw new KeyNotFoundException($"Tobacco with id {id} not found.");
+            if (tobacco == null) throw new KeyNotFoundException($"Tobacco with id {id} not found.");
             return tobacco;
-        }        
+        }
 
         public PipeAccesoryStatistics GetTobaccoStatistics(Tobacco tobacco)
         {
@@ -53,7 +45,7 @@ namespace smartHookah.Services.Gear
         {
             var person = personService.GetCurentPersonId();
             if (person == null) throw new AccountNotFoundException();
-            var sessions = db.SmokeSessions.Include(a => a.Statistics).Include(a => a.SessionReview).Where(a =>a.MetaData != null &&  a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person)).ToList();
+            var sessions = db.SmokeSessions.Include(a => a.Statistics).Include(a => a.SessionReview).Where(a => a.MetaData != null && a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person)).ToList();
             return sessions.Any() ? CalculateStatistics(sessions) : null;
         }
 
@@ -75,17 +67,17 @@ namespace smartHookah.Services.Gear
         {
             var person = this.personService.GetCurentPersonId();
             return await db.SmokeSessions
-                .Where(a => a.MetaData != null &&  a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person))
+                .Where(a => a.MetaData != null && a.MetaData.TobaccoId == tobacco.Id && a.Persons.Any(p => p.Id == person))
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip(page * pageSize)
                 .Take(pageSize).ToListAsync();
         }
 
-        public IList<Tobacco> GetTobaccoList(int page = 1, int pageSize = 50, TobaccoFilter filter = null )
+        public IList<Tobacco> GetTobaccoList(int page = 1, int pageSize = 50, TobaccoFilter filter = null)
         {
             if (filter == null)
             {
-                filter = new TobaccoFilter { SortDirection = SortDirection.Ascending,SortBy = TobaccoSortBy.Smart};
+                filter = new TobaccoFilter { SortDirection = SortDirection.Ascending, SortBy = TobaccoSortBy.Smart };
             }
             var filteredTobacco = this.GetFilteredTobacco(filter);
 
@@ -139,7 +131,8 @@ namespace smartHookah.Services.Gear
             return mix;
         }
 
-        public async Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0) {
+        public async Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0)
+        {
             var mixes = await this.db.TobaccosMixParts.Where(a => a.TobaccoId == id && a.InMix != null).Select(a => a.InMix).OrderBy(a => a.Statistics.Used).Distinct().OrderBy(b => b.Id).Skip(page * pageSize)
                 .Take(pageSize).ToListAsync();
 
@@ -155,16 +148,16 @@ namespace smartHookah.Services.Gear
                 result.AddRange(await this.GetMixFromTobacco(id, pageSize, page));
             }
 
-            var filtered =  result.GroupBy(a => a.Id).OrderBy(b => b.Count()).SelectMany(b => b).Distinct();
+            var filtered = result.GroupBy(a => a.Id).OrderBy(b => b.Count()).SelectMany(b => b).Distinct();
 
             return filtered.ToList();
         }
 
-        public async Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0,bool own = true)
+        public async Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0, bool own = true)
         {
             var mixes = await this.GetMixFromTobaccos(ids, pageSize, page);
 
-            var tobaccos =  mixes.SelectMany(a => a.Tobaccos).Select(a => a.Tobacco).Distinct().ToList();
+            var tobaccos = mixes.SelectMany(a => a.Tobaccos).Select(a => a.Tobacco).Distinct().ToList();
 
             if (!own)
                 return tobaccos;
@@ -177,7 +170,7 @@ namespace smartHookah.Services.Gear
 
         public async Task<PipeAccesoryStatistics> GetTobaccoMixStatistics(TobaccoMix mix)
         {
-            var mixes =  await db.TobaccoMixs.Where(a => !a.Tobaccos.Except(mix.Tobaccos).Any()).Include(a => a.Statistics).ToListAsync();
+            var mixes = await db.TobaccoMixs.Where(a => !a.Tobaccos.Except(mix.Tobaccos).Any()).Include(a => a.Statistics).ToListAsync();
             var sessions = await db.SmokeSessions.Where(a => mixes.Exists(x => x.Id == a.MetaData.TobaccoId)).ToListAsync();
             return CalculateStatistics(sessions);
         }
@@ -218,7 +211,7 @@ namespace smartHookah.Services.Gear
             throw new NotImplementedException();
         }
 
-        public async Task<TobaccoMix> AddOrUpdateMix (TobaccoMix newMix)
+        public async Task<TobaccoMix> AddOrUpdateMix(TobaccoMix newMix)
         {
             if (newMix == null)
             {
@@ -270,7 +263,7 @@ namespace smartHookah.Services.Gear
             {
                 this.logger.Error(e);
                 throw new Exception(
-                    $"Unknown error",e);
+                    $"Unknown error", e);
             }
         }
 

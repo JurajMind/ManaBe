@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class reviewUpd2 : DbMigration
     {
         public override void Up()
@@ -20,7 +19,7 @@ namespace smartHookah.Migrations
             DropColumn("dbo.PipeAccessoryReview", "Quality");
             DropColumn("dbo.PipeAccesoryStatistics", "Quality");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.PipeAccesoryStatistics", "Quality", c => c.Double(nullable: false));

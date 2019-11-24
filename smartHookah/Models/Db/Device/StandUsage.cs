@@ -4,6 +4,6 @@
     {
         Personal = 0,
         Company = 1
-        
+
     }
 }

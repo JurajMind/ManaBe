@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {
     [DataContract]
-    public class InitDataDto 
+    public class InitDataDto
     {
         [DataMember, JsonProperty("SmokeSession")]
         public SmokeSessionSimpleDto SmokeSession { get; set; }

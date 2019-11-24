@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using smartHookah.Resources.Enums;
+using System;
 using System.Resources;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Resources.Enums;
-using Smoke;
 using Westwind.Globalization;
 
 namespace smartHookah.Helpers
@@ -25,7 +22,8 @@ namespace smartHookah.Helpers
                     {
                         return "en-us";
                     }
-                case "cs":{
+                case "cs":
+                    {
                         return "cs-cz";
                     }
                 case "sk":
@@ -45,7 +43,7 @@ namespace smartHookah.Helpers
             span.Attributes.Add("data-resource-id", id);
             span.Attributes.Add("data-resource-set", set);
             return new HtmlString(text + span.ToString(TagRenderMode.Normal));
-            
+
         }
 
         private static

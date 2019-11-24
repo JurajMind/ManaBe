@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Db.Session;
 using smartHookah.Services.Person;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Review
 {
@@ -111,8 +111,8 @@ namespace smartHookah.Services.Review
             return true;
         }
 
-        public async Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, SmartHookahContext db , int pageSize = 10, int page = 0) =>
-            await (db ??this.db).TobaccoReviews
+        public async Task<IEnumerable<TobaccoReview>> GetTobaccoReviews(int id, SmartHookahContext db, int pageSize = 10, int page = 0) =>
+            await (db ?? this.db).TobaccoReviews
                 .Where(a => a.AccessorId == id && !a.Deleted)
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
@@ -154,7 +154,7 @@ namespace smartHookah.Services.Review
         public Task<TobaccoReview> GetTobaccoReviewDetail(int reviewId)
         {
             var review = this.db.TobaccoReviews.FindAsync(reviewId);
-            if(review == null)
+            if (review == null)
             {
                 throw new ManaException(ErrorCodes.ReviewNotFond);
             }
@@ -167,7 +167,7 @@ namespace smartHookah.Services.Review
                 .OrderByDescending(a => a.PublishDate)
                 .Skip(pageSize * page).Take(pageSize).ToListAsync();
 
-        public async Task<SessionReview> AddSessionReviews(int id,SessionReview review)
+        public async Task<SessionReview> AddSessionReviews(int id, SessionReview review)
         {
             var smokeSession = await this.db.SmokeSessions.FindAsync(id);
 
@@ -200,7 +200,7 @@ namespace smartHookah.Services.Review
                     review.TobaccoReview.ReviewedTobaccoId = smokeSession.MetaData.TobaccoId ?? 0;
                     review.TobaccoReview = await this.AddTobaccoReviews(review.TobaccoReview);
                 }
-                
+
             }
 
 

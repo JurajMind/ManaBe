@@ -2,10 +2,8 @@
 
 namespace smartHookah.Controllers
 {
-    using System.Resources;
-
     using Order;
-    using smartHookah.Models;
+    using System.Resources;
 
     public partial class PlacesController
     {
@@ -49,12 +47,12 @@ namespace smartHookah.Controllers
             {
                 var rm = new ResourceManager("smartHookah.Resources.Order.Order", typeof(Order).Assembly);
                 return new AccesoryDto
-                           {
-                               Name = rm.GetString("letusChoose"),
-                               Brand = string.Empty,
-                               Id = 0,
-                               Picture = picturePath
-                           };
+                {
+                    Name = rm.GetString("letusChoose"),
+                    Brand = string.Empty,
+                    Id = 0,
+                    Picture = picturePath
+                };
             }
         }
     }

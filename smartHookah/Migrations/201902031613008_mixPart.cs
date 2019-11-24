@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class mixPart : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace smartHookah.Migrations
             AlterColumn("dbo.TobacoMixPart", "InMixId", c => c.Int(nullable: false));
             CreateIndex("dbo.TobacoMixPart", "InMixId");
         }
-        
+
         public override void Down()
         {
             DropIndex("dbo.TobacoMixPart", new[] { "InMixId" });

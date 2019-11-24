@@ -1,10 +1,10 @@
+using Newtonsoft.Json;
+using smartHookah.Models.Db.Place;
+using smartHookah.Models.Db.Session.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using smartHookah.Models.Db.Place;
-using smartHookah.Models.Db.Session.Dto;
 
 namespace smartHookah.Models.Dto.Places
 {
@@ -50,7 +50,7 @@ namespace smartHookah.Models.Dto.Places
         [JsonProperty("placeId")]
         public int? PlaceId { get; set; }
 
-        
+
         [DataMember]
         [JsonProperty("sessionReview")]
         public SessionPlaceReviewDto SessionReview { get; set; }
@@ -66,18 +66,18 @@ namespace smartHookah.Models.Dto.Places
 
             return new PlaceReviewDto()
             {
-                Id = model.Id, 
-                AuthorId = model.AuthorId, 
+                Id = model.Id,
+                AuthorId = model.AuthorId,
                 Author = model.Author.DisplayName,
-                PublishDate = model.PublishDate, 
-                Text = model.Text, 
+                PublishDate = model.PublishDate,
+                Text = model.Text,
                 PlaceId = model.PlaceId,
-                SessionReview = SessionPlaceReviewDto.FromModel(model.SessionReview), 
-                Medias = MediaDto.FromModelList(model.Medias)?.ToList(), 
+                SessionReview = SessionPlaceReviewDto.FromModel(model.SessionReview),
+                Medias = MediaDto.FromModelList(model.Medias)?.ToList(),
                 Ambience = model.Ambience,
                 Overall = model.Overall,
                 Service = model.Service
-            }; 
+            };
         }
 
         public static IEnumerable<PlaceReviewDto> FromModelList(IEnumerable<PlaceReview> model)
@@ -93,16 +93,16 @@ namespace smartHookah.Models.Dto.Places
         {
             return new PlaceReview()
             {
-                Id = Id, 
+                Id = Id,
                 AuthorId = AuthorId,
-                PublishDate = PublishDate, 
-                Text = Text, 
-                PlaceId = PlaceId, 
+                PublishDate = PublishDate,
+                Text = Text,
+                PlaceId = PlaceId,
                 SessionReview = SessionReview?.ToModel(),
                 Ambience = Ambience,
                 Overall = Overall,
                 Service = Service
-            }; 
+            };
         }
     }
 }

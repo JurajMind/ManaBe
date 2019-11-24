@@ -1,20 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using smartHookah.Models.Db;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using smartHookah.Models.Db;
 
 namespace smartHookah
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.Validation;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-
-    using smartHookah.Models;
 
     public class AuthRepository : IDisposable
     {
@@ -61,11 +58,11 @@ namespace smartHookah
                 person = new Person();
             }
             var user = new ApplicationUser
-                           {
-                               UserName = userModel.UserName,
-                               Email =  userModel.Email,
-                          
-                           };
+            {
+                UserName = userModel.UserName,
+                Email = userModel.Email,
+
+            };
 
             var result = await this._userManager.CreateAsync(user, userModel.Password);
 
@@ -75,7 +72,7 @@ namespace smartHookah
         public async Task<bool> AddRefreshToken(RefreshToken token)
         {
 
-            var existingTokens = await 
+            var existingTokens = await
                 _ctx.RefreshTokens.Where(r => r.Subject == token.Subject && r.ClientId == token.ClientId).ToListAsync();
 
             foreach (var existingToken in existingTokens)
@@ -96,7 +93,7 @@ namespace smartHookah
                 Console.WriteLine(e);
                 throw;
             }
-          
+
         }
 
         public async Task<bool> RemoveRefreshToken(string refreshTokenId)
@@ -169,23 +166,23 @@ namespace smartHookah
     }
 }
 
-    public class UserModel
-    {
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+public class UserModel
+{
+    [DataType(DataType.Password)]
+    [Display(Name = "Confirm password")]
+    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+    public string ConfirmPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-    
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+    [Required]
+    [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+    [DataType(DataType.Password)]
+    [Display(Name = "Password")]
+    public string Password { get; set; }
 
-        [Required]
-        [Display(Name = "User name")]
-        public string Email { get; set; }
-    }
+    [Display(Name = "User name")]
+    public string UserName { get; set; }
+
+    [Required]
+    [Display(Name = "User name")]
+    public string Email { get; set; }
+}

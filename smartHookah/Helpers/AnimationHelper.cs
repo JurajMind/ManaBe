@@ -14,7 +14,7 @@ namespace smartHookah.Helpers
         private static List<Animation> CreateAnimations()
         {
             var result = new List<Animation>();
-            result.Add(new Animation(0, "Off", AnimationUsage.All,haveColor:false));
+            result.Add(new Animation(0, "Off", AnimationUsage.All, haveColor: false));
             result.Add(new Animation(1, "Puff Bar", AnimationUsage.All, haveColor: false));
             result.Add(new Animation(2, "Flicker", AnimationUsage.All));
             result.Add(new Animation(3, "OneColor", AnimationUsage.All, haveColor: false));
@@ -51,13 +51,13 @@ namespace smartHookah.Helpers
             result.Add(new Animation(34, "Different rainbow", AnimationUsage.Action, haveColor: false));
 
             result.Add(new Animation(35, "Session Progress", AnimationUsage.Idle, versionFrom: 1000020));
-            result.Add(new Animation(36, "Puff Time", AnimationUsage.Action,versionFrom: 1000020));
+            result.Add(new Animation(36, "Puff Time", AnimationUsage.Action, versionFrom: 1000020));
 
             return result;
         }
 
         public static MvcHtmlString AnimationDropdown(this HtmlHelper helper,
-            int animation,int version, string classname = "",string id="",string onChange="",
+            int animation, int version, string classname = "", string id = "", string onChange = "",
             IDictionary<string, object> htmlAttributes = null)
         {
             var attributes = new StringBuilder();
@@ -66,7 +66,7 @@ namespace smartHookah.Helpers
                     attributes.Append(htmlAttribute);
 
             var sb = new StringBuilder();
-            sb.AppendFormat("<select class=\"{0}\" id=\"{1}\" onchange=\"{2}\" " + attributes + ">",classname,id,onChange);
+            sb.AppendFormat("<select class=\"{0}\" id=\"{1}\" onchange=\"{2}\" " + attributes + ">", classname, id, onChange);
             foreach (
                 var item in
                 Animations.Where(a => a.VersionFrom <= version && a.VersionTo >= version).OrderBy(a => a.DisplayName))
@@ -76,9 +76,9 @@ namespace smartHookah.Helpers
                 {
                     selected = "selected=\"selected\"";
                 }
-                sb.AppendFormat("<option value=\"{0}\" {2}>{1}</option>", item.Id, item.DisplayName,selected);
+                sb.AppendFormat("<option value=\"{0}\" {2}>{1}</option>", item.Id, item.DisplayName, selected);
             }
-               
+
             sb.AppendLine("</select>");
 
             return MvcHtmlString.Create(sb.ToString());

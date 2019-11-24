@@ -10,11 +10,11 @@ namespace smartHookah.Models.Factory
         public static PipeAccesory CreateFromRecort(ImportPipeAccesory record, Brand brand, string type)
         {
             var pipeAccesory = new PipeAccesory
-                                   {
-                                       AccName = record.Name,
-                                       BrandName = brand.Name,
-                                       CreatedAt = DateTimeOffset.UtcNow,
-                                   };
+            {
+                AccName = record.Name,
+                BrandName = brand.Name,
+                CreatedAt = DateTimeOffset.UtcNow,
+            };
             switch (type)
             {
 
@@ -35,13 +35,13 @@ namespace smartHookah.Models.Factory
                     {
                         return new Coal(pipeAccesory);
                     }
-                    default:
-                        return pipeAccesory;
+                default:
+                    return pipeAccesory;
 
 
             }
         }
 
-        
+
     }
 }

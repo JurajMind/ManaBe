@@ -1,17 +1,14 @@
 ﻿using Microsoft.Azure.Devices.Common;
-using smartHookah.Models.Dto.Device;
-using smartHookahCommon.Extensions;
 
 namespace smartHookah.Services.Device
 {
+    using Microsoft.Azure.Devices;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-
-    using Microsoft.Azure.Devices;
 
     public class IotService : IIotService
     {
@@ -28,7 +25,7 @@ namespace smartHookah.Services.Device
 
         public async Task<IEnumerable<Device>> GetDevices(List<string> deviceIds)
         {
-           
+
             var devices = await this.registryManager.GetDevicesAsync(deviceIds.Count);
             return devices.Where(d => deviceIds.Contains(d.Id));
         }
@@ -53,10 +50,10 @@ namespace smartHookah.Services.Device
                 var page = await query.GetNextAsTwinAsync();
                 foreach (var twin in page)
                 {
-                    result.Add(twin.DeviceId,twin.ConnectionState == DeviceConnectionState.Connected);
+                    result.Add(twin.DeviceId, twin.ConnectionState == DeviceConnectionState.Connected);
                 }
-                if(result.Keys.Count(deviceIds.Contains) == deviceIds.Count())
-                    break;;
+                if (result.Keys.Count(deviceIds.Contains) == deviceIds.Count())
+                    break; ;
             }
 
             return result;
@@ -66,10 +63,10 @@ namespace smartHookah.Services.Device
         {
             var serviceMessage =
                 new Message(Encoding.ASCII.GetBytes(message))
-                    {
-                        Ack = DeliveryAcknowledgement.Full,
-                        MessageId = Guid.NewGuid().ToString()
-                    };
+                {
+                    Ack = DeliveryAcknowledgement.Full,
+                    MessageId = Guid.NewGuid().ToString()
+                };
             await this.serviceClient.SendAsync(deviceId, serviceMessage);
             await this.serviceClient.CloseAsync();
         }
@@ -82,7 +79,7 @@ namespace smartHookah.Services.Device
             {
                 Authentication = new AuthenticationMechanism
                 {
-                    SymmetricKey = {PrimaryKey = primaryKey, SecondaryKey = secondaryKey}
+                    SymmetricKey = { PrimaryKey = primaryKey, SecondaryKey = secondaryKey }
                 }
             };
             return await registryManager.AddDeviceAsync(device);

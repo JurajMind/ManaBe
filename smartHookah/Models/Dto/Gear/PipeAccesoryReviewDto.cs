@@ -1,8 +1,7 @@
+using smartHookah.Models.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using smartHookah.Models.Db.Session;
-using smartHookah.Models.Dto;
 
 namespace smartHookah.Models.Db.Gear
 {
@@ -26,7 +25,7 @@ namespace smartHookah.Models.Db.Gear
 
 
         public int? SessionReviewId { get; set; }
-        
+
         public int? SmokeSessionId { get; set; }
 
         public ICollection<MediaDto> Medias { get; set; }
@@ -35,18 +34,18 @@ namespace smartHookah.Models.Db.Gear
         {
             return new PipeAccessoryReviewDto()
             {
-                Id = model.Id, 
-                AuthorId = model.AuthorId, 
+                Id = model.Id,
+                AuthorId = model.AuthorId,
                 Author = model.Author.DisplayName,
-                PublishDate = model.PublishDate, 
-                Deleted = model.Deleted, 
-                Text = model.Text, 
-                AccessorId = model.AccessorId, 
+                PublishDate = model.PublishDate,
+                Deleted = model.Deleted,
+                Text = model.Text,
+                AccessorId = model.AccessorId,
                 Overall = model.Overall,
                 SessionReviewId = model?.SessionReview?.Id,
-                SmokeSessionId = model.SmokeSessionId, 
-                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
-            }; 
+                SmokeSessionId = model.SmokeSessionId,
+                Medias = MediaDto.FromModelList(model.Medias).ToList(),
+            };
         }
 
         public static IEnumerable<PipeAccessoryReviewDto> FromModelList(ICollection<PipeAccessoryReview> model)
@@ -60,15 +59,15 @@ namespace smartHookah.Models.Db.Gear
         {
             return new PipeAccessoryReview()
             {
-                Id = Id, 
-                AuthorId = AuthorId, 
-                PublishDate = PublishDate, 
-                Deleted = Deleted, 
-                Text = Text, 
-                AccessorId = AccessorId, 
-                Overall = Overall,              
+                Id = Id,
+                AuthorId = AuthorId,
+                PublishDate = PublishDate,
+                Deleted = Deleted,
+                Text = Text,
+                AccessorId = AccessorId,
+                Overall = Overall,
                 SmokeSessionId = SmokeSessionId,
-            }; 
+            };
         }
     }
 }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNet.SignalR.Hubs;
-using smartHookah.Models;
+﻿using Microsoft.AspNet.SignalR.Hubs;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Person;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace smartHookah.Services.Statistics
 {

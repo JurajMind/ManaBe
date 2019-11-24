@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
+using System.Collections.Generic;
 
 namespace smartHookah.Controllers
 {

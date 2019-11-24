@@ -1,18 +1,14 @@
 ﻿namespace smartHookah.Controllers
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Web.Mvc;
-    using System.Web.Security;
-
     using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
     using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
     using Microsoft.VisualStudio.Services.Common;
     using Microsoft.VisualStudio.Services.WebApi;
     using Microsoft.VisualStudio.Services.WebApi.Patch;
     using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
-
-    using smartHookah.Helpers;
+    using System;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
 
     [Authorize]
     public class ReportController : Controller
@@ -21,7 +17,7 @@
         public ActionResult Index()
         {
             if (Request.UrlReferrer != null) ViewBag.Url = Request.UrlReferrer.ToString();
-           
+
             return this.View();
         }
 
@@ -32,7 +28,7 @@
             var usr = User.Identity.Name;
             var bug = new CreateBug();
             var footer = $"Author:{usr} Url:{model.Url}";
-            var result = bug.CreateBugUsingClientLib(model.Title, model.Steps + footer,model.Priority);
+            var result = bug.CreateBugUsingClientLib(model.Title, model.Steps + footer, model.Priority);
 
             return RedirectToAction("Index", "Home");
         }
@@ -86,27 +82,27 @@
 
             patchDocument.Add(
                 new JsonPatchOperation
-                    {
-                        Operation = Operation.Add,
-                        Path = "/fields/Microsoft.VSTS.TCM.ReproSteps",
-                        Value = Steps
-                    });
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/Microsoft.VSTS.TCM.ReproSteps",
+                    Value = Steps
+                });
 
             patchDocument.Add(
                 new JsonPatchOperation
-                    {
-                        Operation = Operation.Add,
-                        Path = "/fields/Microsoft.VSTS.Common.Priority",
-                        Value = priority.ToString()
-                    });
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/Microsoft.VSTS.Common.Priority",
+                    Value = priority.ToString()
+                });
 
             patchDocument.Add(
                 new JsonPatchOperation
-                    {
-                        Operation = Operation.Add,
-                        Path = "/fields/Microsoft.VSTS.Common.Severity",
-                        Value = "2 - High"
-                    });
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/Microsoft.VSTS.Common.Severity",
+                    Value = "2 - High"
+                });
             var connection = new VssConnection(uri, credentials);
             var workItemTrackingHttpClient = connection.GetClient<WorkItemTrackingHttpClient>();
 

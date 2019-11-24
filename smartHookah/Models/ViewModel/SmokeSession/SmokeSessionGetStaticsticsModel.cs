@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
 using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Session;
+using System.Collections.Generic;
 
 namespace smartHookah.Models.ViewModel.SmokeSession
 {
@@ -17,7 +16,7 @@ namespace smartHookah.Models.ViewModel.SmokeSession
 
         public bool IsAssigned { get; set; }
         public bool Public { get; set; }
-        
+
 
     }
 }

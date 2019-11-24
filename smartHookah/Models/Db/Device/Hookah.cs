@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using smartHookahCommon;
 
 namespace smartHookah.Models.Db
 {
@@ -12,7 +11,7 @@ namespace smartHookah.Models.Db
 
         public Hookah()
         {
-            
+
         }
 
         public Hookah(Hookah modelHookah)
@@ -64,15 +63,15 @@ namespace smartHookah.Models.Db
             }
         }
 
-        public virtual  ICollection<SmokeSession> SmokeSessions { get; set; }
+        public virtual ICollection<SmokeSession> SmokeSessions { get; set; }
 
         [Index(IsUnique = true)]
         [MaxLength(128)]
         public string Code { get; set; }
-  
+
         [DefaultValue(0)]
         public StandUsage Usage { get; set; }
-        
+
         public virtual ICollection<Person> Owners { get; set; }
 
         public int? SettingId { get; set; }
@@ -85,7 +84,7 @@ namespace smartHookah.Models.Db
         public bool AutoSleep { get; set; }
 
         public int AutoSessionEndTime { get; set; }
- 
+
         public UpdateType UpdateType { get; set; }
 
         public DateTime Created { get; set; }

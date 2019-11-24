@@ -69,7 +69,7 @@
 //                }
 
 //                tobaccoReview.AuthorId = UserHelper.GetCurentPerson().Id;
-                
+
 //                var rev = db.TobaccoReviews.Find(tobaccoReview.Id);
 
 //                if (rev != null)

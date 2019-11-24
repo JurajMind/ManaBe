@@ -1,8 +1,7 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using System.Linq;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {
@@ -33,7 +32,7 @@ namespace smartHookah.Models
 
             //    },
             //    Descriptions = "Sukromna vodnofajkaren",
-             
+
             //};
 
             //context.Lounges.Add(lounge);
@@ -55,7 +54,7 @@ namespace smartHookah.Models
                 }
                 throw;
             }
-          
+
         }
     }
 }

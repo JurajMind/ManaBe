@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models

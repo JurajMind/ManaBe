@@ -1,19 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ClosedXML.Excel;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Models.Dto.Places.Reservations;
 using smartHookah.Support;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace smartHookah.Models.Dto
 {
     public class PlaceDto : PlaceSimpleDto
     {
         public string Url { get; set; }
-        
+
         public string Descriptions { get; set; }
 
         public decimal BaseHookahPrice { get; set; }
@@ -21,15 +20,15 @@ namespace smartHookah.Models.Dto
         public string Currency { get; set; }
 
         public IEnumerable<SeatDto> Seats { get; set; }
-        
+
         public IEnumerable<PlaceReviewDto> PlaceReviews { get; set; }
 
         public IEnumerable<MediaDto> Medias { get; set; }
-        
+
         public bool HaveReservation { get; set; }
 
         public int MinimumReservationTime { get; set; }
-        
+
         public int? FranchiseId { get; set; }
 
         public FranchiseDto Franchise { get; set; }
@@ -76,18 +75,18 @@ namespace smartHookah.Models.Dto
                 Id = this.Id,
                 Name = this.Name,
                 CreatorId = creator,
-                CreatedAt =  DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
                 LogoPath = this.LogoPath,
                 // ShortDescriptions = this.ShortDescriptions,
                 Descriptions = this.Descriptions,
-                FriendlyUrl = Guid.NewGuid().ToString().Substring(0,20),
+                FriendlyUrl = Guid.NewGuid().ToString().Substring(0, 20),
                 Address = this.Address.ToModel(),
                 PhoneNumber = this.PhoneNumber,
                 Facebook = this.Facebook,
                 HaveReservation = false,
                 MinimumReservationTime = 5,
                 BusinessHours = this.BusinessHours.Select(a => a.ToModel()).ToList(),
-                
+
             };
         }
     }
@@ -97,7 +96,7 @@ namespace smartHookah.Models.Dto
         public int Id { get; set; }
 
         public string Name { get; set; }
-        
+
         public string Code { get; set; }
 
         public int Capacity { get; set; }
@@ -200,7 +199,7 @@ namespace smartHookah.Models.Dto
                 Reservation = ReservationDto.FromModel(model.Reservation),
                 Type = model.Type,
             };
-        
+
 
         public static IEnumerable<HookahOrderDto> FromModelList(ICollection<HookahOrder> model)
         {
@@ -394,7 +393,7 @@ namespace smartHookah.Models.Dto
                 Name = model.Name,
                 Uril = model.Uril,
             };
-        
+
 
         public Franchise ToModel()
         {

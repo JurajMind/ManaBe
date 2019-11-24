@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Hangfire.Dashboard;
 using System.Web;
-using Hangfire.Dashboard;
-using Microsoft.Owin;
 
 namespace smartHookah.Filters
 {

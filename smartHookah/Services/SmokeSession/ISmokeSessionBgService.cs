@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.SmokeSession
 {

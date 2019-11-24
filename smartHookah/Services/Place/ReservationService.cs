@@ -1,12 +1,4 @@
-﻿using System.Data.Entity.Migrations;
-using smartHookah.Models.Db;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Places.Reservations;
@@ -17,6 +9,14 @@ using smartHookah.Services.Redis;
 using smartHookah.Support;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Migrations;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Place
 {
@@ -53,7 +53,7 @@ namespace smartHookah.Services.Place
             var place = await placeService.GetManagedPlace(id);
             var tables = SeatDto.FromModelList(place.Seats);
             var reservations = TodayReservation(date, place, out var today);
-            var placeTime = place.BusinessHours.First(a => a.Day == (int) date.DayOfWeek);
+            var placeTime = place.BusinessHours.First(a => a.Day == (int)date.DayOfWeek);
             var endTime = date.Date + placeTime.CloseTime;
             if (placeTime.CloseTime < placeTime.OpenTine)
             {
@@ -84,7 +84,7 @@ namespace smartHookah.Services.Place
             modelReservation.Customers = new List<Models.Db.Person>();
             if (person.Place?.Id != person.Id || person.Id == 1)
             {
-                modelReservation.Customers = new List<Models.Db.Person>(){ person };
+                modelReservation.Customers = new List<Models.Db.Person>() { person };
             }
             var check = await AllocateSeat(modelReservation);
             if (check != null)
@@ -113,7 +113,7 @@ namespace smartHookah.Services.Place
         {
             var place = await placeService.GetPlace(placeId);
 
-            if (place.BusinessHours.FirstOrDefault(a => a.Day == (int) date.DayOfWeek) == null)
+            if (place.BusinessHours.FirstOrDefault(a => a.Day == (int)date.DayOfWeek) == null)
             {
                 return new ReservationUsage();
             }
@@ -125,11 +125,11 @@ namespace smartHookah.Services.Place
 
             var timesSlots = GetTimeSlots(
                 date,
-                place.BusinessHours.First(a => a.Day == (int) date.DayOfWeek));
+                place.BusinessHours.First(a => a.Day == (int)date.DayOfWeek));
 
             var tableData = CreateTableTable(place.Seats, reservations.ToList(), timesSlots.ToList(), true);
 
-            var reservationUsage = new ReservationUsage {TimeSlots = tableData};
+            var reservationUsage = new ReservationUsage { TimeSlots = tableData };
 
             redisService.SetReservationUsage(placeId, date, reservationUsage);
 
@@ -160,8 +160,8 @@ namespace smartHookah.Services.Place
             var timeSlot = this.GetTimeSlots(reservation.Time.Date, businessHours);
             var reservationStart = reservation.Time.TimeOfDay.ToShortInt();
             var slots = timeSlot.SkipWhile(s => s.Value + slotDuration.ToShortInt() < reservationStart);
-            var takenSlots = Math.Round(reservation.Duration.Ticks / (double) slotDuration.Ticks);
-            return slots.Take((int) takenSlots).Select(s => s.Value);
+            var takenSlots = Math.Round(reservation.Duration.Ticks / (double)slotDuration.Ticks);
+            return slots.Take((int)takenSlots).Select(s => s.Value);
         }
 
         private async Task<int?> AllocateSeat(Reservation reservation)
@@ -175,9 +175,9 @@ namespace smartHookah.Services.Place
             var tableUsage = await this.GetReservationUsage(place.Id, reservation.Time.Date);
 
             var reservationSlots = getReservationTimeSlots(reservation,
-                place.BusinessHours.FirstOrDefault(s => s.Day == (int) reservation.Time.DayOfWeek)).ToList();
+                place.BusinessHours.FirstOrDefault(s => s.Day == (int)reservation.Time.DayOfWeek)).ToList();
 
-            if (reservationSlots.Count() > (int) Math.Round(reservation.Duration.Ticks / (double) slotDuration.Ticks))
+            if (reservationSlots.Count() > (int)Math.Round(reservation.Duration.Ticks / (double)slotDuration.Ticks))
             {
                 return null;
             }
@@ -289,7 +289,7 @@ namespace smartHookah.Services.Place
             if (reservation == null)
             {
                 // Bad reservation
-                throw new ManaException(ErrorCodes.ReservationNotFound,$"Reservation with id {id} was not found");
+                throw new ManaException(ErrorCodes.ReservationNotFound, $"Reservation with id {id} was not found");
             }
 
             var table = await db.Seats.FindAsync(tableId);
@@ -312,7 +312,7 @@ namespace smartHookah.Services.Place
                     throw new ManaException(ErrorCodes.ReservationConflict, $"Reservation with id {id} conflict with another reservation");
                 }
 
-            if (reservation.Status == ReservationState.ConfirmationRequired || reservation.Status == ReservationState.Canceled || reservation.Status == ReservationState.NonVisited) 
+            if (reservation.Status == ReservationState.ConfirmationRequired || reservation.Status == ReservationState.Canceled || reservation.Status == ReservationState.NonVisited)
             {
                 reservation.Status = ReservationState.Confirmed;
                 this.emailService.CreatedReservation(reservation);
@@ -398,7 +398,7 @@ namespace smartHookah.Services.Place
                 reservation.Status = ReservationState.UnConfirmed;
                 this.emailService.CreatedReservation(reservation);
             }
-            
+
             await db.SaveChangesAsync();
             _signalNotificationService.ReservationChanged(reservation);
             return reservation;
@@ -425,7 +425,7 @@ namespace smartHookah.Services.Place
             var reservation = await db.Reservations.FirstOrDefaultAsync(a => a.Id == id);
             if (reservation == null)
             {
-                throw new ManaException(ErrorCodes.ReservationNotFound,$"Reservation with id {id} was not found");
+                throw new ManaException(ErrorCodes.ReservationNotFound, $"Reservation with id {id} was not found");
             }
             reservation.Status = state;
             var person = this.personService.GetCurentPerson();
@@ -441,7 +441,7 @@ namespace smartHookah.Services.Place
             if (state == ReservationState.Canceled || state == ReservationState.NonVisited)
             {
                 reservation.Seats.Clear();
-               
+
             }
 
             db.Reservations.AddOrUpdate(reservation);
@@ -452,7 +452,7 @@ namespace smartHookah.Services.Place
             {
                 // todo textace
                 await firebaseNotificationService.NotifyAsync(reservation.PersonId.Value, "Reservation canceled",
-                    $"Your reservation in ${reservation.Place.Name} on ${reservation.Time.ToString("dd.MM.yyyy hh:mm",CultureInfo.CurrentCulture)} was canceled", new Dictionary<string, string>{{"RESERVATION_ID",reservation.Id.ToString()}});
+                    $"Your reservation in ${reservation.Place.Name} on ${reservation.Time.ToString("dd.MM.yyyy hh:mm", CultureInfo.CurrentCulture)} was canceled", new Dictionary<string, string> { { "RESERVATION_ID", reservation.Id.ToString() } });
             }
 
             if (state == ReservationState.Confirmed)
@@ -461,7 +461,7 @@ namespace smartHookah.Services.Place
                 await firebaseNotificationService.NotifyAsync(reservation.PersonId.Value, "Reservation confirmed",
                     $"Your reservation in ${reservation.Place.Name} on ${reservation.Time.ToString("dd.MM.yyyy hh:mm", CultureInfo.CurrentCulture)} was confirmed", new Dictionary<string, string> { { "RESERVATION_ID", reservation.Id.ToString() } });
             }
-            
+
             return true;
         }
 
@@ -485,7 +485,7 @@ namespace smartHookah.Services.Place
             {
                 result.Add(
                     new TimeSlot
-                        {Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"), OrderIndex = index});
+                    { Value = startTime.ToShortInt(), Text = startTime.ToString(@"hh\:mm"), OrderIndex = index });
                 index++;
                 startTime = startTime + slotDuration;
             }

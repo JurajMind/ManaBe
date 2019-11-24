@@ -18,7 +18,7 @@ namespace smartHookah.Models.Dto
 
         public DynamicSmokeStatisticDto(DynamicSmokeStatistic ds)
         {
-            if(ds == null)
+            if (ds == null)
                 return;
 
             this.PufCount = ds.PufCount;
@@ -43,7 +43,7 @@ namespace smartHookah.Models.Dto
 
     public class DynamicSmokeStatisticRawDto
     {
-        
+
         public int PufCount { get; private set; }
         public long LastPuf { get; private set; }
         public long LastPufTime { get; private set; }

@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Support;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace smartHookah.Models.Dto.Places.Reservations
 {
@@ -14,7 +14,7 @@ namespace smartHookah.Models.Dto.Places.Reservations
         public DateTime Created { get; set; }
 
         public int? PersonId { get; set; }
-        
+
         public int PlaceId { get; set; }
 
         public string PlaceName { get; set; }
@@ -22,13 +22,13 @@ namespace smartHookah.Models.Dto.Places.Reservations
         public DateTime? Started { get; set; }
 
         public DateTime? End { get; set; }
-        
+
         public int Persons { get; set; }
 
         public TimeSpan Duration { get; set; }
 
         public DateTime Time { get; set; }
-        
+
         public string Text { get; set; }
 
         public string Name { get; set; }

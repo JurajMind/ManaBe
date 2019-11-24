@@ -16,21 +16,21 @@ namespace smartHookah.Models.Dto.Device
         {
             return new DevicePictureDto()
             {
-                Id = model.Id, 
-                Width = model.Width, 
-                Height = model.Height, 
-                InlinePicture = model.HtmlString, 
-            }; 
+                Id = model.Id,
+                Width = model.Width,
+                Height = model.Height,
+                InlinePicture = model.HtmlString,
+            };
         }
 
         public StandPicture ToModel()
         {
             return new StandPicture()
             {
-                Id = Id, 
-                Width = Width, 
-                Height = Height, 
-            }; 
+                Id = Id,
+                Width = Width,
+                Height = Height,
+            };
         }
     }
 }

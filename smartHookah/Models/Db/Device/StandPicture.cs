@@ -1,21 +1,21 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using smartHookah.Helpers;
 
 namespace smartHookah.Models.Db.Device
 {
     public class StandPicture
     {
-       public int Id { get; set; }
-       public string PictueString { get; set; }
-       
-       public int Width { get; set; }
+        public int Id { get; set; }
+        public string PictueString { get; set; }
+
+        public int Width { get; set; }
 
         public int Height { get; set; }
-        
+
 
         [NotMapped]
         public string HtmlString
@@ -53,7 +53,7 @@ namespace smartHookah.Models.Db.Device
             return base64String;
         }
 
-      
+
 
     }
 }

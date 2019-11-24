@@ -1,15 +1,14 @@
-﻿using System;
+﻿using smartHookah.Controllers;
+using smartHookah.Helpers;
+using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using smartHookah.Controllers;
-using smartHookah.Helpers;
-using smartHookah.Models.Db;
-using smartHookah.Models.Dto;
-using smartHookah.Services.Redis;
-using smartHookahCommon.Errors;
-using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Device
 {
@@ -27,14 +26,14 @@ namespace smartHookah.Services.Device
 
         public async Task<ICollection<Update>> GetUpdates()
         {
-             return await this.db.Updates.Where(a => a.Type == UpdateType.Stable || a.Type == UpdateType.Beta).ToListAsync();
+            return await this.db.Updates.Where(a => a.Type == UpdateType.Stable || a.Type == UpdateType.Beta).ToListAsync();
         }
 
-        public async Task<(Update stable,Update beta)> GetUpdateInitInfo()
+        public async Task<(Update stable, Update beta)> GetUpdateInitInfo()
         {
             var stableUpdateTask = await LatestTypedUpdate(UpdateType.Stable);
             var betaUpdateTask = await LatestTypedUpdate(UpdateType.Beta);
-            
+
             return (stableUpdateTask, betaUpdateTask);
 
 

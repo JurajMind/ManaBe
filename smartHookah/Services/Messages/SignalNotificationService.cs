@@ -3,16 +3,12 @@ using smartHookah.Models.Dto.Places.Reservations;
 
 namespace smartHookah.Services.Messages
 {
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNet.SignalR;
-
     using smartHookah.Hubs;
-    using smartHookah.Models;
     using smartHookah.Models.Dto;
     using smartHookah.Services.Redis;
+    using System.Data.Entity;
+    using System.Linq;
 
     public class SignalNotificationService : ISignalNotificationService
     {
@@ -38,16 +34,16 @@ namespace smartHookah.Services.Messages
 
             foreach (var emails in device.Owners.SelectMany(s => s.User.Select(u => u.Email)))
             {
-                this.ClientContext.Clients.Group(emails).deviceOnline(sessionCode,  device.Name);
+                this.ClientContext.Clients.Group(emails).deviceOnline(sessionCode, device.Name);
             }
         }
 
         public async void ReservationChanged(Reservation reservation)
         {
-           this.ReservationChanged(reservation,null);
+            this.ReservationChanged(reservation, null);
         }
 
-        private  async void ReservationChanged(Reservation reservation, string emailTemplate)
+        private async void ReservationChanged(Reservation reservation, string emailTemplate)
         {
             var dBreservation = this.db.Reservations.Include(r => r.Customers).Include(r => r.Person.User)
                 .FirstOrDefault(r => r.Id == reservation.Id);
@@ -66,7 +62,7 @@ namespace smartHookah.Services.Messages
 
         public void ReservationStateChanged(Reservation reservation)
         {
-                this.ReservationChanged(reservation);
+            this.ReservationChanged(reservation);
         }
 
         public void ReservationCreated(Reservation reservation)

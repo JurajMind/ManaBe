@@ -1,8 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 namespace smartHookah.Models.Dto
 {
@@ -47,7 +47,7 @@ namespace smartHookah.Models.Dto
     public class GameProfileDto
     {
         public int PersonId { get; set; }
-        
+
         public int Level { get; set; }
 
         public int TestLevel { get; private set; }
@@ -92,52 +92,52 @@ namespace smartHookah.Models.Dto
         {
             return new GameProfileDto()
             {
-                PersonId = model.PersonId, 
-                Level = model.Level, 
-                TestLevel = model.TestLevel, 
-                LvlProgress = model.LvlProgress, 
-                Experience = model.Experience, 
-                Clouds = model.Clouds, 
-                GainRewards = model.GainRewards, 
-                DoneEvent = model.DoneEvent, 
-                InProgresses = model.InProgresses, 
-                TitleId = model.TitleId, 
-                Title = TitleDto.FromModel(model.Title), 
-                Picture = GamePictureDto.FromModel(model.Picture), 
-                Badge1Id = model.Badge1Id, 
-                Badge1 = BadgeDto.FromModel(model.Badge1), 
-                Badge2Id = model.Badge2Id, 
-                Badge2 = BadgeDto.FromModel(model.Badge2), 
-                Badge3Id = model.Badge3Id, 
-                Badge3 = BadgeDto.FromModel(model.Badge3), 
-                Badge4Id = model.Badge4Id, 
-                Badge4 = BadgeDto.FromModel(model.Badge4), 
-                Badges = model.Badges.Select(BadgeDto.FromModel).ToList(), 
-            }; 
+                PersonId = model.PersonId,
+                Level = model.Level,
+                TestLevel = model.TestLevel,
+                LvlProgress = model.LvlProgress,
+                Experience = model.Experience,
+                Clouds = model.Clouds,
+                GainRewards = model.GainRewards,
+                DoneEvent = model.DoneEvent,
+                InProgresses = model.InProgresses,
+                TitleId = model.TitleId,
+                Title = TitleDto.FromModel(model.Title),
+                Picture = GamePictureDto.FromModel(model.Picture),
+                Badge1Id = model.Badge1Id,
+                Badge1 = BadgeDto.FromModel(model.Badge1),
+                Badge2Id = model.Badge2Id,
+                Badge2 = BadgeDto.FromModel(model.Badge2),
+                Badge3Id = model.Badge3Id,
+                Badge3 = BadgeDto.FromModel(model.Badge3),
+                Badge4Id = model.Badge4Id,
+                Badge4 = BadgeDto.FromModel(model.Badge4),
+                Badges = model.Badges.Select(BadgeDto.FromModel).ToList(),
+            };
         }
 
         public GameProfile ToModel()
         {
             return new GameProfile()
             {
-                PersonId = PersonId, 
-                Level = Level, 
-                Experience = Experience, 
-                Clouds = Clouds, 
-                DoneEvent = DoneEvent, 
-                InProgresses = InProgresses, 
-                TitleId = TitleId, 
-                Title = Title.ToModel(), 
-                Picture = Picture.ToModel(), 
-                Badge1Id = Badge1Id, 
-                Badge1 = Badge1.ToModel(), 
-                Badge2Id = Badge2Id, 
-                Badge2 = Badge2.ToModel(), 
-                Badge3Id = Badge3Id, 
-                Badge3 = Badge3.ToModel(), 
-                Badge4Id = Badge4Id, 
-                Badge4 = Badge4.ToModel(), 
-            }; 
+                PersonId = PersonId,
+                Level = Level,
+                Experience = Experience,
+                Clouds = Clouds,
+                DoneEvent = DoneEvent,
+                InProgresses = InProgresses,
+                TitleId = TitleId,
+                Title = Title.ToModel(),
+                Picture = Picture.ToModel(),
+                Badge1Id = Badge1Id,
+                Badge1 = Badge1.ToModel(),
+                Badge2Id = Badge2Id,
+                Badge2 = Badge2.ToModel(),
+                Badge3Id = Badge3Id,
+                Badge3 = Badge3.ToModel(),
+                Badge4Id = Badge4Id,
+                Badge4 = Badge4.ToModel(),
+            };
         }
     }
 
@@ -159,26 +159,26 @@ namespace smartHookah.Models.Dto
         {
             return new DoneEventDto()
             {
-                Id = model.Id, 
-                GameProfileId = model.GameProfileId, 
-                GameProfile = GameProfileDto.FromModel(model.GameProfile), 
-                EventId = model.EventId, 
-                Event = EventDto.FromModel(model.Event), 
-                Obtain = model.Obtain, 
-            }; 
+                Id = model.Id,
+                GameProfileId = model.GameProfileId,
+                GameProfile = GameProfileDto.FromModel(model.GameProfile),
+                EventId = model.EventId,
+                Event = EventDto.FromModel(model.Event),
+                Obtain = model.Obtain,
+            };
         }
 
         public DoneEvent ToModel()
         {
             return new DoneEvent()
             {
-                Id = Id, 
-                GameProfileId = GameProfileId, 
-                GameProfile = GameProfile.ToModel(), 
-                EventId = EventId, 
-                Event = Event.ToModel(), 
-                Obtain = Obtain, 
-            }; 
+                Id = Id,
+                GameProfileId = GameProfileId,
+                GameProfile = GameProfile.ToModel(),
+                EventId = EventId,
+                Event = Event.ToModel(),
+                Obtain = Obtain,
+            };
         }
     }
 
@@ -204,30 +204,30 @@ namespace smartHookah.Models.Dto
         {
             return new EventProgressDto()
             {
-                Id = model.Id, 
-                GameProfileId = model.GameProfileId, 
-                GameProfile = GameProfileDto.FromModel(model.GameProfile), 
-                EventId = model.EventId, 
-                EventRecepie = EventDto.FromModel(model.EventRecepie), 
-                IntProgress = model.IntProgress, 
-                TimeProgress = model.TimeProgress, 
-                StringProgress = model.StringProgress, 
-            }; 
+                Id = model.Id,
+                GameProfileId = model.GameProfileId,
+                GameProfile = GameProfileDto.FromModel(model.GameProfile),
+                EventId = model.EventId,
+                EventRecepie = EventDto.FromModel(model.EventRecepie),
+                IntProgress = model.IntProgress,
+                TimeProgress = model.TimeProgress,
+                StringProgress = model.StringProgress,
+            };
         }
 
         public EventProgress ToModel()
         {
             return new EventProgress()
             {
-                Id = Id, 
-                GameProfileId = GameProfileId, 
-                GameProfile = GameProfile.ToModel(), 
-                EventId = EventId, 
-                EventRecepie = EventRecepie.ToModel(), 
-                IntProgress = IntProgress, 
-                TimeProgress = TimeProgress, 
-                StringProgress = StringProgress, 
-            }; 
+                Id = Id,
+                GameProfileId = GameProfileId,
+                GameProfile = GameProfile.ToModel(),
+                EventId = EventId,
+                EventRecepie = EventRecepie.ToModel(),
+                IntProgress = IntProgress,
+                TimeProgress = TimeProgress,
+                StringProgress = StringProgress,
+            };
         }
     }
 
@@ -269,46 +269,46 @@ namespace smartHookah.Models.Dto
         {
             return new EventDto()
             {
-                Id = model.Id, 
-                Name = model.Name, 
-                Description = model.Description, 
-                Rewards = model.Rewards, 
-                Recepies = model.Recepies, 
-                Done = model.Done, 
-                InProgresses = model.InProgresses, 
-                From = model.From, 
-                To = model.To, 
-                TimeFrameTicks = model.TimeFrameTicks, 
-                TimeFrame = model.TimeFrame, 
-                TriggerCount = model.TriggerCount, 
-                TriggerTime = model.TriggerTime, 
-                Type = model.Type, 
-                Experience = model.Experience, 
-                Clouds = model.Clouds, 
-            }; 
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Rewards = model.Rewards,
+                Recepies = model.Recepies,
+                Done = model.Done,
+                InProgresses = model.InProgresses,
+                From = model.From,
+                To = model.To,
+                TimeFrameTicks = model.TimeFrameTicks,
+                TimeFrame = model.TimeFrame,
+                TriggerCount = model.TriggerCount,
+                TriggerTime = model.TriggerTime,
+                Type = model.Type,
+                Experience = model.Experience,
+                Clouds = model.Clouds,
+            };
         }
 
         public Event ToModel()
         {
             return new Event()
             {
-                Id = Id, 
-                Name = Name, 
-                Description = Description, 
-                Rewards = Rewards, 
-                Recepies = Recepies, 
-                Done = Done, 
-                InProgresses = InProgresses, 
-                From = From, 
-                To = To, 
-                TimeFrameTicks = TimeFrameTicks, 
-                TimeFrame = TimeFrame, 
-                TriggerCount = TriggerCount, 
-                TriggerTime = TriggerTime, 
-                Type = Type, 
-                Experience = Experience, 
-                Clouds = Clouds, 
-            }; 
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                Rewards = Rewards,
+                Recepies = Recepies,
+                Done = Done,
+                InProgresses = InProgresses,
+                From = From,
+                To = To,
+                TimeFrameTicks = TimeFrameTicks,
+                TimeFrame = TimeFrame,
+                TriggerCount = TriggerCount,
+                TriggerTime = TriggerTime,
+                Type = Type,
+                Experience = Experience,
+                Clouds = Clouds,
+            };
         }
     }
 
@@ -340,36 +340,36 @@ namespace smartHookah.Models.Dto
         {
             return new EventRecepieDto()
             {
-                Id = model.Id, 
-                EventId = model.EventId, 
-                Event = EventDto.FromModel(model.Event), 
-                EventString = model.EventString, 
-                EventNumber = model.EventNumber, 
-                EventBool = model.EventBool, 
-                EventForeinId = model.EventForeinId, 
-                EventTimeSpan = model.EventTimeSpan, 
-                Active = model.Active, 
-                Type = model.Type, 
-                TriggerCountCompare = model.TriggerCountCompare, 
-            }; 
+                Id = model.Id,
+                EventId = model.EventId,
+                Event = EventDto.FromModel(model.Event),
+                EventString = model.EventString,
+                EventNumber = model.EventNumber,
+                EventBool = model.EventBool,
+                EventForeinId = model.EventForeinId,
+                EventTimeSpan = model.EventTimeSpan,
+                Active = model.Active,
+                Type = model.Type,
+                TriggerCountCompare = model.TriggerCountCompare,
+            };
         }
 
         public EventRecepie ToModel()
         {
             return new EventRecepie()
             {
-                Id = Id, 
-                EventId = EventId, 
-                Event = Event.ToModel(), 
-                EventString = EventString, 
-                EventNumber = EventNumber, 
-                EventBool = EventBool, 
-                EventForeinId = EventForeinId, 
-                EventTimeSpan = EventTimeSpan, 
-                Active = Active, 
-                Type = Type, 
-                TriggerCountCompare = TriggerCountCompare, 
-            }; 
+                Id = Id,
+                EventId = EventId,
+                Event = Event.ToModel(),
+                EventString = EventString,
+                EventNumber = EventNumber,
+                EventBool = EventBool,
+                EventForeinId = EventForeinId,
+                EventTimeSpan = EventTimeSpan,
+                Active = Active,
+                Type = Type,
+                TriggerCountCompare = TriggerCountCompare,
+            };
         }
     }
 
@@ -389,24 +389,24 @@ namespace smartHookah.Models.Dto
         {
             return new RewardDto()
             {
-                Id = model.Id, 
-                Name = model.Name, 
-                Event = EventDto.FromModel(model.Event), 
-                EventId = model.EventId, 
-                Param = model.Param, 
-            }; 
+                Id = model.Id,
+                Name = model.Name,
+                Event = EventDto.FromModel(model.Event),
+                EventId = model.EventId,
+                Param = model.Param,
+            };
         }
 
         public Reward ToModel()
         {
             return new Reward()
             {
-                Id = Id, 
-                Name = Name, 
-                Event = Event.ToModel(), 
-                EventId = EventId, 
-                Param = Param, 
-            }; 
+                Id = Id,
+                Name = Name,
+                Event = Event.ToModel(),
+                EventId = EventId,
+                Param = Param,
+            };
         }
     }
 
@@ -421,16 +421,16 @@ namespace smartHookah.Models.Dto
         {
             return new TitleDto()
             {
-                TitleName = model.TitleName, 
-            }; 
+                TitleName = model.TitleName,
+            };
         }
 
         public Title ToModel()
         {
             return new Title()
             {
-                TitleName = TitleName, 
-            }; 
+                TitleName = TitleName,
+            };
         }
     }
 
@@ -442,16 +442,16 @@ namespace smartHookah.Models.Dto
         {
             return new BadgeDto()
             {
-                BadgePictureUrl = model.BadgePictureUrl, 
-            }; 
+                BadgePictureUrl = model.BadgePictureUrl,
+            };
         }
 
         public Badge ToModel()
         {
             return new Badge()
             {
-                BadgePictureUrl = BadgePictureUrl, 
-            }; 
+                BadgePictureUrl = BadgePictureUrl,
+            };
         }
     }
 
@@ -463,16 +463,16 @@ namespace smartHookah.Models.Dto
         {
             return new AchievmentDto()
             {
-                AchievmentName = model.AchievmentName, 
-            }; 
+                AchievmentName = model.AchievmentName,
+            };
         }
 
         public Achievment ToModel()
         {
             return new Achievment()
             {
-                AchievmentName = AchievmentName, 
-            }; 
+                AchievmentName = AchievmentName,
+            };
         }
     }
 
@@ -489,8 +489,8 @@ namespace smartHookah.Models.Dto
         {
             return new GamePicture()
             {
-                PictureUrl = PictureUrl, 
-            }; 
+                PictureUrl = PictureUrl,
+            };
         }
     }
 }

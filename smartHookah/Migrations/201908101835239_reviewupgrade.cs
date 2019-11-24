@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class reviewupgrade : DbMigration
     {
         public override void Up()
@@ -12,13 +11,13 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.SessionReview",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        AuthorId = c.Int(),
-                        PublishDate = c.DateTime(nullable: false),
-                        SmokeSessionId = c.Int(nullable: false),
-                        TobaccoReview_Id = c.Int(),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    AuthorId = c.Int(),
+                    PublishDate = c.DateTime(nullable: false),
+                    SmokeSessionId = c.Int(nullable: false),
+                    TobaccoReview_Id = c.Int(),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Person", t => t.AuthorId)
                 .ForeignKey("dbo.SmokeSession", t => t.SmokeSessionId, cascadeDelete: true)
@@ -26,7 +25,7 @@ namespace smartHookah.Migrations
                 .Index(t => t.AuthorId)
                 .Index(t => t.SmokeSessionId)
                 .Index(t => t.TobaccoReview_Id);
-            
+
             AddColumn("dbo.Media", "SessionReview_Id", c => c.Int());
             AddColumn("dbo.Media", "PlaceReview_Id", c => c.Int());
             AddColumn("dbo.Media", "PipeAccessoryReview_Id", c => c.Int());
@@ -47,7 +46,7 @@ namespace smartHookah.Migrations
             AddForeignKey("dbo.PlaceReview", "SessionReview_Id1", "dbo.SessionReview", "Id");
             AddForeignKey("dbo.Media", "PipeAccessoryReview_Id", "dbo.PipeAccessoryReview", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Media", "PipeAccessoryReview_Id", "dbo.PipeAccessoryReview");

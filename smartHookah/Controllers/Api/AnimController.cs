@@ -1,7 +1,7 @@
-﻿using System;
+﻿using smartHookah.Services.Device;
+using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using smartHookah.Services.Device;
 
 namespace smartHookah.Controllers.Api
 {

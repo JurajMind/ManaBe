@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Place
 {
@@ -12,7 +11,7 @@ namespace smartHookah.Services.Place
     public interface IPlaceService
     {
         Task<Place> GetPlace(int id);
-    
+
         Task<Place> GetManagedPlace(int id);
 
         Task<bool> CanManagePlace(int id);
@@ -33,6 +32,6 @@ namespace smartHookah.Services.Place
 
         Task<List<Place>> GetWaitingPlaces();
 
-        Task<Place> ChangePlaceState(int placeId,PlaceState newState);
+        Task<Place> ChangePlaceState(int placeId, PlaceState newState);
     }
 }

@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class orderExtraPriceGroup : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.OrderExtra", "PriceGroupId");
             AddForeignKey("dbo.OrderExtra", "PriceGroupId", "dbo.PriceGroup", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.OrderExtra", "PriceGroupId", "dbo.PriceGroup");

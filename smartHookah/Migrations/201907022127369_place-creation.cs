@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class placecreation : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.Place", "CreatorId");
             AddForeignKey("dbo.Place", "CreatorId", "dbo.Person", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Place", "CreatorId", "dbo.Person");

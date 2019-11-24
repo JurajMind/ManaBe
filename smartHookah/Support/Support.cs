@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Owin;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
-using Microsoft.Owin;
 
 namespace smartHookah.Support
 {

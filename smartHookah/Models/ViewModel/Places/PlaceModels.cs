@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Redis;
+using System.Collections.Generic;
 
 namespace smartHookah.Models
 {
-    using System.Globalization;
-
     using smartHookah.Models.Dto;
+    using System.Globalization;
 
     public class EditPricePostModel
     {
@@ -28,7 +26,7 @@ namespace smartHookah.Models
         public int Id { get; set; }
 
         public string Currency { get; set; }
-        
+
         public List<EditPricePostItemPriceGroup> Prices { get; set; }
     }
 

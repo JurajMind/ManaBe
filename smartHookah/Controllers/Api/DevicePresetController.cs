@@ -2,16 +2,13 @@
 
 namespace smartHookah.Controllers.Api
 {
+    using smartHookah.Models.Dto;
+    using smartHookah.Services.Person;
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
-
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
-    using smartHookah.Models.Dto;
-    using smartHookah.Services.Person;
 
     [RoutePrefix("api/Device/Preset")]
     public class DevicePresetController : ApiController

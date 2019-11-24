@@ -2,6 +2,12 @@
 
 namespace smartHookah.Controllers.Api
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.AspNet.Identity.Owin;
+    using Newtonsoft.Json;
+    using smartHookah.Models;
+    using smartHookah.Services.Person;
     using System;
     using System.Collections.Generic;
     using System.Net;
@@ -12,15 +18,6 @@ namespace smartHookah.Controllers.Api
     using System.Web.Http;
     using System.Web.Http.ModelBinding;
     using System.Web.Http.Results;
-
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using Microsoft.AspNet.Identity.Owin;
-
-    using Newtonsoft.Json;
-
-    using smartHookah.Models;
-    using smartHookah.Services.Person;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -62,19 +59,19 @@ namespace smartHookah.Controllers.Api
             if (!this.ModelState.IsValid) return this.BadRequest(this.ModelState);
 
             var user = new ApplicationUser
-                           {
-                               UserName = userModel.Email,
-                               Email = userModel.Email,
-                               DisplayName = userModel.UserName
-                           };
-            var result = await this.UserManager.CreateAsync(user,userModel.Password);
+            {
+                UserName = userModel.Email,
+                Email = userModel.Email,
+                DisplayName = userModel.UserName
+            };
+            var result = await this.UserManager.CreateAsync(user, userModel.Password);
 
             if (result.Succeeded)
             {
                 await this.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                 var person = new Person();
-                 person.GameProfile = new GameProfile();
+                person.GameProfile = new GameProfile();
                 user.Person = person;
                 await this.UserManager.UpdateAsync(user);
                 // Send an email with this link
@@ -98,7 +95,7 @@ namespace smartHookah.Controllers.Api
 
             var newUser = await this.UserManager.FindByEmailAsync(userModel.Email);
             var tokenResponse = this.accountService.GenerateLocalAccessTokenResponse(newUser, this.UserManager);
-      
+
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(JsonConvert.SerializeObject(await tokenResponse));
             return this.ResponseMessage(response);
@@ -107,9 +104,9 @@ namespace smartHookah.Controllers.Api
 
         [AllowAnonymous]
         [Route("api/Account/ConfirmEmail/", Name = "ConfirmEmail")]
-        public async Task<IHttpActionResult> ConfirmEmail(string userId,string code)
+        public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
         {
-         // dummy 
+            // dummy 
             return null;
         }
         [HttpPost]
@@ -135,10 +132,10 @@ namespace smartHookah.Controllers.Api
 
                 callbackUrl = callbackUrl.Replace("/api", "");
 
-               await this.UserManager.SendEmailAsync(
-                    user.Id,
-                    "Reset Password",
-                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                await this.UserManager.SendEmailAsync(
+                     user.Id,
+                     "Reset Password",
+                     "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 var response = this.Request.CreateResponse(HttpStatusCode.OK);
                 return this.ResponseMessage(response);
             }
@@ -186,7 +183,7 @@ namespace smartHookah.Controllers.Api
 
         private string TransformErrorCode(string error)
         {
-            if(error.StartsWith("Passwords must have at least one digit")) return "ERR_PASS_DIGIT";
+            if (error.StartsWith("Passwords must have at least one digit")) return "ERR_PASS_DIGIT";
             if (error.Contains("is invalid, can only contain letters or digits.")) return "ERR_NAME";
             if (error.Contains("is already taken")) return "ERR_EMAIL_REGISTERED";
             return $"ERR_UNKNOWN";
@@ -214,7 +211,7 @@ namespace smartHookah.Controllers.Api
         {
             foreach (var modelStateValue in this.ModelState.Values)
             {
-               this.ErrorCodes.Add(modelStateValue.Value.AttemptedValue);
+                this.ErrorCodes.Add(modelStateValue.Value.AttemptedValue);
             }
         }
     }

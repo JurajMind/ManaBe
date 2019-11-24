@@ -1,12 +1,11 @@
+using Newtonsoft.Json;
+using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Gear;
+using smartHookah.Models.Dto.Places;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using smartHookah.Models.Db.Gear;
-using smartHookah.Models.Dto;
-using smartHookah.Models.Dto.Gear;
-using smartHookah.Models.Dto.Places;
 
 namespace smartHookah.Models.Db.Session.Dto
 {
@@ -75,7 +74,7 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReviewDto()
             {
                 Id = model.Id,
-                AuthorId = model.AuthorId, 
+                AuthorId = model.AuthorId,
 
                 Taste = model?.TobaccoReview?.Taste ?? model.nsTaste ?? -1,
                 Smoke = model?.TobaccoReview?.Smoke ?? model.nsSmoke ?? -1,
@@ -83,14 +82,14 @@ namespace smartHookah.Models.Db.Session.Dto
                 Duration = model?.TobaccoReview?.Duration ?? model.nsDuration ?? -1,
 
                 Author = model.Author.DisplayName,
-                PublishDate = model.PublishDate, 
-                TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview), 
-                PlaceReviewId = model.PlaceReview.Id, 
+                PublishDate = model.PublishDate,
+                TobaccoReview = TobaccoReviewDto.FromModel(model.TobaccoReview),
+                PlaceReviewId = model.PlaceReview.Id,
                 PlaceReview = PlaceReviewDto.FromModel(model.PlaceReview),
-                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
-                SmokeSessionId = model?.SmokeSession?.Id ?? 0, 
+                Medias = MediaDto.FromModelList(model.Medias).ToList(),
+                SmokeSessionId = model?.SmokeSession?.Id ?? 0,
                 SmokeSession = SmokeSessionSimpleDto.FromModel(model.SmokeSession),
-            }; 
+            };
         }
 
         public static IEnumerable<SessionReviewDto> FromModelList(IEnumerable<SessionReview> model)
@@ -107,10 +106,10 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReview()
             {
                 AuthorId = AuthorId,
-                PublishDate = PublishDate,              
+                PublishDate = PublishDate,
                 PlaceReview = PlaceReview?.ToModel(),
                 TobaccoReview = TobaccoReview?.ToModel(),
-            }; 
+            };
         }
     }
 
@@ -136,7 +135,7 @@ namespace smartHookah.Models.Db.Session.Dto
         [DataMember]
         [JsonProperty("tobaccoReview")]
         public TobaccoReviewDto TobaccoReview { get; set; }
-        
+
 
         [DataMember]
         [JsonProperty("medias")]
@@ -155,7 +154,7 @@ namespace smartHookah.Models.Db.Session.Dto
             if (model == null)
             {
                 return null;
-                
+
             }
             return new SessionPlaceReviewDto()
             {
@@ -184,7 +183,7 @@ namespace smartHookah.Models.Db.Session.Dto
             return new SessionReview()
             {
                 AuthorId = AuthorId,
-                PublishDate = PublishDate,                
+                PublishDate = PublishDate,
             };
         }
     }

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using EntityFramework.BulkInsert;
+﻿using EntityFramework.BulkInsert;
 using EntityFramework.BulkInsert.Extensions;
 using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Device;
 using smartHookah.Services.Redis;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -41,7 +40,7 @@ namespace smartHookah.Services.SmokeSession
                 result = new DynamicSmokeStatistic();
                 result.FullUpdate(this.redisService.GetPuffs(sessionId).ToList(), sessionId);
                 result.LastPufs = new List<Puf>();
-                this.redisService.SetDynamicSmokeStatistic(sessionId,result);
+                this.redisService.SetDynamicSmokeStatistic(sessionId, result);
             }
 
             return result;
@@ -121,7 +120,7 @@ namespace smartHookah.Services.SmokeSession
                  || a.MetaData.HeatManagementId == source.Id
                  || a.MetaData.CoalId == source.Id)).ToListAsync();
 
-            var stats = Calculate(source,sessions);
+            var stats = Calculate(source, sessions);
 
             return stats;
         }
@@ -223,29 +222,29 @@ namespace smartHookah.Services.SmokeSession
 
         public async Task CleanWrongSessions()
         {
-          
-                var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
 
-                var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
+            var smokeSession = db.SmokeSessions.Where(a => a.Statistics == null).Include(a => a.Hookah).ToList();
+
+            var smokeSessionToDelete = smokeSession.Where(a => redisService.GetSessionId(a.Hookah.Code) != a.SessionId && a.Review == null);
 
 
-                var sessionToDelete = smokeSessionToDelete as Models.Db.SmokeSession[] ?? smokeSessionToDelete.ToArray();
-                db.SmokeSessions.RemoveRange(sessionToDelete);
-                db.SessionMetaDatas.RemoveRange(sessionToDelete.Where(a => a.MetaData != null).Select(a => a.MetaData));
-                try
+            var sessionToDelete = smokeSessionToDelete as Models.Db.SmokeSession[] ?? smokeSessionToDelete.ToArray();
+            db.SmokeSessions.RemoveRange(sessionToDelete);
+            db.SessionMetaDatas.RemoveRange(sessionToDelete.Where(a => a.MetaData != null).Select(a => a.MetaData));
+            try
+            {
+                db.SaveChanges();
+                foreach (var session in sessionToDelete)
                 {
-                    db.SaveChanges();
-                    foreach (var session in sessionToDelete)
-                    {
-                        this.redisService.RemoveSession(session.SessionId);
-                    }
+                    this.redisService.RemoveSession(session.SessionId);
                 }
-                catch (Exception e)
-                {
+            }
+            catch (Exception e)
+            {
 
-                }
+            }
 
-            
+
         }
 
         private string CreateSessionId()

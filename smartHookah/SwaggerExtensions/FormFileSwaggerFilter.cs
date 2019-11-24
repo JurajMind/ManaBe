@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Swashbuckle.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Web;
 using System.Web.Http.Description;
-using Microsoft.AspNetCore.Http;
-using Swashbuckle.Swagger;
 
 namespace smartHookah.SwaggerExtensions
 {

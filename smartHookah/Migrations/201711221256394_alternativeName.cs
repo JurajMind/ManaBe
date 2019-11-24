@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class alternativeName : DbMigration
     {
         public override void Up()
@@ -10,12 +9,12 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.SimilarAccesories",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        OriginalId = c.Int(nullable: false),
-                        SimilarId = c.Int(nullable: false),
-                        PersonId = c.Int(nullable: false),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    OriginalId = c.Int(nullable: false),
+                    SimilarId = c.Int(nullable: false),
+                    PersonId = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Person", t => t.PersonId, cascadeDelete: true)
                 .ForeignKey("dbo.PipeAccesory", t => t.SimilarId, cascadeDelete: true)
@@ -23,9 +22,9 @@ namespace smartHookah.Migrations
                 .Index(t => t.OriginalId)
                 .Index(t => t.SimilarId)
                 .Index(t => t.PersonId);
-            
+
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.SimilarAccesories", "OriginalId", "dbo.PipeAccesory");

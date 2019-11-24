@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class hookah_setting_refactor_person_fix : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace smartHookah.Migrations
             DropColumn("dbo.DevicePreset", "PersonId");
             RenameColumn(table: "dbo.DevicePreset", name: "Person_Id", newName: "PersonId");
         }
-        
+
         public override void Down()
         {
             RenameColumn(table: "dbo.DevicePreset", name: "PersonId", newName: "Person_Id");

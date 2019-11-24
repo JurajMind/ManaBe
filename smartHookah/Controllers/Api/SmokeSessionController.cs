@@ -1,17 +1,17 @@
-﻿using System;
+﻿using smartHookah.ErrorHandler;
+using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
+using smartHookah.Services.Person;
+using smartHookah.Services.Redis;
+using smartHookah.Services.SmokeSession;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using smartHookah.Models.Db;
-using smartHookah.Models.Dto;
-using smartHookah.Services.SmokeSession;
-using smartHookah.ErrorHandler;
-using smartHookah.Services.Gear;
-using smartHookah.Services.Redis;
-using System.Collections.Generic;
-using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers.Api
 {
@@ -55,21 +55,21 @@ namespace smartHookah.Controllers.Api
 
             if (redisSessionId == null && dbSession.Statistics != null)
                 return new ValidationDTO()
-                           {
-                               Success = true,
-                               Message = $"Session with id {id} is not live.",
-                               Id = id,
-                               Flag = SessionState.Completed
-                           };
+                {
+                    Success = true,
+                    Message = $"Session with id {id} is not live.",
+                    Id = id,
+                    Flag = SessionState.Completed
+                };
 
             if (redisSessionId != null && dbSession.Statistics == null)
                 return new ValidationDTO()
-                           {
-                               Success = true,
-                               Message = $"Session with id {redisSessionId} is live.",
-                               Id = redisSessionId,
-                               Flag = SessionState.Live
-                           };
+                {
+                    Success = true,
+                    Message = $"Session with id {redisSessionId} is live.",
+                    Id = redisSessionId,
+                    Flag = SessionState.Live
+                };
 
             return new ValidationDTO() { Success = false, Message = "Session not found." };
         }
@@ -79,7 +79,7 @@ namespace smartHookah.Controllers.Api
         [ApiAuthorize(Roles = "Admin")]
         public object GetSessionCode(string id)
         {
-            return new { sessionCode = this.redisService.GetSessionId(id)};
+            return new { sessionCode = this.redisService.GetSessionId(id) };
 
         }
 
@@ -100,8 +100,8 @@ namespace smartHookah.Controllers.Api
                 throw new HttpResponseException(
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Id \'{id}\' was not found."));
             }
-            
-            var smokeSession =  SmokeSessionSimpleDto.FromModel(session);
+
+            var smokeSession = SmokeSessionSimpleDto.FromModel(session);
 
             var deviceSetting = DeviceSettingDto.FromModel(session.Hookah.Setting);
             return new InitDataDto() { SmokeSession = smokeSession, DeviceSettings = deviceSetting };
@@ -129,7 +129,7 @@ namespace smartHookah.Controllers.Api
             var personId = this.personService.GetCurentPersonId();
             return new FinishedSessionDataDto()
             {
-                Data =  SmokeSessionSimpleDto.FromModel(data),
+                Data = SmokeSessionSimpleDto.FromModel(data),
                 MetaData = SmokeSessionMetaDataDto.FromModel(data.MetaData),
                 Statistics = SmokeSessionStatisticsDto.FromModel(data.Statistics),
                 Assigned = data.IsPersonAssign(personId)
@@ -168,11 +168,11 @@ namespace smartHookah.Controllers.Api
                 throw new HttpRequestException(e.Message);
             }
         }
-        
+
         [HttpPost, Route("{id}/End")]
         public async Task<SmokeSessionSimpleDto> EndSmokeSession(string id)
         {
-            var endedESession =  await this.sessionService.EndSmokeSession(id,SessionReport.Good);
+            var endedESession = await this.sessionService.EndSmokeSession(id, SessionReport.Good);
             return SmokeSessionSimpleDto.FromModel(endedESession);
         }
 

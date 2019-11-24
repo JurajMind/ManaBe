@@ -1,7 +1,6 @@
-using System;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {
@@ -63,7 +62,7 @@ namespace smartHookah.Models.Dto
                 Id = model.Id,
                 TobaccoId = model.TobaccoId,
                 Tobacco = model.Tobacco == null ? null : PipeAccesorySimpleDto.FromModel(model.Tobacco),
-                TobaccoMix = TobaccoMixSimpleDto.FromModel(model.Tobacco as TobaccoMix,null),
+                TobaccoMix = TobaccoMixSimpleDto.FromModel(model.Tobacco as TobaccoMix, null),
                 TobaccoWeight = model.TobaccoWeight,
                 AnonymPeopleCount = model.AnonymPeopleCount,
                 BowlId = model.BowlId,
@@ -76,21 +75,21 @@ namespace smartHookah.Models.Dto
                 HeatManagement = model.HeatManagement == null ? null : PipeAccesorySimpleDto.FromModel(model.HeatManagement),
                 PackType = model.PackType,
                 CoalsCount = model.CoalsCount
-            }; 
-        
+            };
+
         public SmokeSessionMetaData ToModel()
         {
             return new SmokeSessionMetaData()
             {
-                Id = Id, 
-                TobaccoId = TobaccoId, 
-                BowlId = BowlId, 
-                PipeId = PipeId, 
-                CoalId = CoalId, 
-                HeatManagementId = HeatManagementId, 
-                PackType = PackType, 
+                Id = Id,
+                TobaccoId = TobaccoId,
+                BowlId = BowlId,
+                PipeId = PipeId,
+                CoalId = CoalId,
+                HeatManagementId = HeatManagementId,
+                PackType = PackType,
                 CoalsCount = CoalsCount
-            }; 
+            };
         }
     }
 }

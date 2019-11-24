@@ -1,7 +1,7 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using smartHookah.Models.Db;
+using System;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {

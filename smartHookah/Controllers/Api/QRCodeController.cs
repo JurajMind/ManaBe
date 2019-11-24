@@ -1,5 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.SignalR;
+using smartHookah.Hubs;
+using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
+using smartHookah.Support;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,14 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Microsoft.AspNet.SignalR;
-using smartHookah.Helpers;
-using smartHookah.Hubs;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Services.Redis;
-using smartHookah.Support;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
@@ -54,39 +50,39 @@ namespace smartHookah.Controllers
                 {
                     ClientContext.Clients.Group(hookah.Code).online(hookah.Code);
                     Task.Factory.StartNew(() => this._signalNotificationService.OnlineDevice(hookah.Code));
-                    
+
 
                 }
                 catch (Exception)
                 {
-                    
-                  
+
+
                 }
 
-            var sessionId = redisService.GetSessionId(id);
-            //var request = GetBaseUrl();
-            var request = "http://app.manapipes.com/";
-            var url = request + "smoke/"+ sessionId;
-            
-            var result = QrCodeHelper.GetBase64QrCode(url);
+                var sessionId = redisService.GetSessionId(id);
+                //var request = GetBaseUrl();
+                var request = "http://app.manapipes.com/";
+                var url = request + "smoke/" + sessionId;
 
-            if (hookah.Version < 1000003)
+                var result = QrCodeHelper.GetBase64QrCode(url);
+
+                if (hookah.Version < 1000003)
                 {
                     qrResult = result;
                 }
-            else
-            {
-                 
-                var initString = this.deviceService.GetDeviceInitString(id,hookah.Version);
-                qrResult = $"{initString};{result}";
-            }
+                else
+                {
+
+                    var initString = this.deviceService.GetDeviceInitString(id, hookah.Version);
+                    qrResult = $"{initString};{result}";
+                }
 
 
-           
-             
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(qrResult, Encoding.UTF8, "application/json");
-            return response;
+
+
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(qrResult, Encoding.UTF8, "application/json");
+                return response;
             }
         }
 

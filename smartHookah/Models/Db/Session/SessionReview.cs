@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using smartHookah.Models.Db.Gear;
+﻿using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
+using System;
+using System.Collections.Generic;
 
 namespace smartHookah.Models.Db.Session
 {

@@ -1,25 +1,23 @@
-﻿using System.Data.Entity.Migrations;
-using log4net;
+﻿using log4net;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using smartHookah.Helpers;
+using smartHookah.Models;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
-
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Services.Device;
-using smartHookah.Services.Redis;
 
 namespace smartHookah.Services.Person
 {
@@ -98,7 +96,7 @@ namespace smartHookah.Services.Person
             ApplicationUser curentUser = GetCurentUser();
             if (curentUser == null) return new List<Hookah>();
 
-           
+
 
             if (curentUser.Person != null) return await this.SetOnlineState(curentUser.Person.Hookahs);
 
@@ -147,7 +145,7 @@ namespace smartHookah.Services.Person
                 var user = this.GetCurentPerson();
                 personId = user.Id;
             }
-            var devices =  await db.Hookahs
+            var devices = await db.Hookahs
                 .Where(a => a.Owners.Any(x => x.Id == personId))
                 .ToListAsync();
 
@@ -163,7 +161,7 @@ namespace smartHookah.Services.Person
                 {
 
                 }
-              
+
             }
 
             return devices;
@@ -179,7 +177,7 @@ namespace smartHookah.Services.Person
 
             var sessions = db.SmokeSessions.Include(h => h.Hookah).Include(a => a.Persons).Where(a => a.StatisticsId == null)
                 .Where(a => a.Persons.Any(x => x.Id == personId)).ToList();
-            
+
 
             var result = new List<Models.Db.SmokeSession>();
             var devices = sessions.Select(d => d.Hookah.Code);
@@ -200,7 +198,7 @@ namespace smartHookah.Services.Person
                         this.redisService.CleanSmokeSession(hookahSessionCode);
                         this.redisService.CreateSmokeSession(session.SessionId, session.Hookah.Code);
                     }
-                
+
                 }
                 var ds = this.redisService.GetDynamicSmokeStatistic(session.SessionId);
                 var code = redisService.GetHookahId(session.SessionId);
@@ -292,7 +290,7 @@ namespace smartHookah.Services.Person
         public string GetCode()
         {
             var code = smartHookahCommon.Support.Random.RandomString(20);
-            var userIdentity = this.user.Identity.GetUserId();     
+            var userIdentity = this.user.Identity.GetUserId();
 
             this.redisService.StorePersonCode(userIdentity, code);
             return code;
@@ -327,7 +325,7 @@ namespace smartHookah.Services.Person
             {
                 await this.AssignSession(newSessionID);
             }
-             
+
 
             return device;
         }
@@ -356,7 +354,7 @@ namespace smartHookah.Services.Person
                 activeSession.Persons.Remove(person);
                 this.db.SmokeSessions.AddOrUpdate(activeSession);
             }
-             
+
             this.db.Hookahs.AddOrUpdate(device);
             await this.db.SaveChangesAsync();
             return device;
@@ -437,4 +435,4 @@ namespace smartHookah.Services.Person
 
 
 
-    }
+}

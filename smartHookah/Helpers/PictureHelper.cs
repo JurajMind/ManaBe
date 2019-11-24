@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Web;
 
 namespace smartHookah.Helpers
 {
@@ -23,49 +21,49 @@ namespace smartHookah.Helpers
 
             //Create our bitmap
             Bitmap B = new Bitmap(Width, Height);
-                //Will hold our byte as a string of bits
-                string Bits = null;
+            //Will hold our byte as a string of bits
+            string Bits = null;
 
-                //Current X,Y of the painting process
-                int X = 0;
-                int Y = 0;
+            //Current X,Y of the painting process
+            int X = 0;
+            int Y = 0;
 
-                //Loop through all of the bits
-                for (int i = 0; i < test_bits.Length; i++)
+            //Loop through all of the bits
+            for (int i = 0; i < test_bits.Length; i++)
+            {
+                //Convert the current byte to a string of bits and pad with extra 0's if needed
+                Bits = Convert.ToString(test_bits[i], 2).PadLeft(8, '0');
+
+                //Bits are stored with the first pixel in the least signigicant bit so we need to work the string from right to left
+                for (int j = 7; j >= 0; j--)
                 {
-                    //Convert the current byte to a string of bits and pad with extra 0's if needed
-                    Bits = Convert.ToString(test_bits[i], 2).PadLeft(8, '0');
+                    //Set the pixel's color based on whether the current bit is a 0 or 1
+                    B.SetPixel(X, Y, Bits[j] == '0' ? Color.White : Color.Black);
+                    //Incremement our X position
+                    X += 1;
 
-                    //Bits are stored with the first pixel in the least signigicant bit so we need to work the string from right to left
-                    for (int j = 7; j >= 0; j--)
+                    if (X >= Width)
                     {
-                        //Set the pixel's color based on whether the current bit is a 0 or 1
-                        B.SetPixel(X, Y, Bits[j] == '0' ? Color.White : Color.Black);
-                        //Incremement our X position
-                        X += 1;
+                        X = 0;
+                        Y += 1;
 
-                        if (X >= Width)
+                        if (Y >= Height)
                         {
-                            X = 0;
-                            Y += 1;
-
-                            if (Y >= Height)
-                            {
-                                return B;
-                            }
-
-                            break;
-
+                            return B;
                         }
 
-
+                        break;
 
                     }
-                }
 
-                //Output the bitmap to the desktop
-                return B;
-            
+
+
+                }
+            }
+
+            //Output the bitmap to the desktop
+            return B;
+
         }
 
         public static Bitmap TrimBitmap(Bitmap bmp)

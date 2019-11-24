@@ -1,18 +1,16 @@
-﻿using System;
+﻿using CsvHelper.Configuration.Attributes;
+using ServiceStack.Common;
+using smartHookah.Models.Db.Place;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Web;
-using CsvHelper.Configuration.Attributes;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
-using ServiceStack.Common;
 
 namespace smartHookah.Controllers.Api
 {
-    public class 
+    public class
         PlaceImportModel
     {
         #region Properties
@@ -190,10 +188,10 @@ namespace smartHookah.Controllers.Api
                     {
                         model.LogoPath = "";
                     }
-                    
+
                 }
-                
-                
+
+
             }
             var result = new Place()
             {
@@ -238,4 +236,5 @@ namespace smartHookah.Controllers.Api
         public string Lat { get; set; }
 
 
-}}
+    }
+}

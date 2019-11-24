@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
+using smartHookah.Services.SmokeSession;
+using smartHookah.Support;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Accord;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Services.SmokeSession;
-using smartHookahCommon;
-using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
@@ -35,7 +32,7 @@ namespace smartHookah.Controllers
         // GET: Hookahs
         public ActionResult All()
         {
-            return View("Index",db.Hookahs.ToList());
+            return View("Index", db.Hookahs.ToList());
         }
 
         public ActionResult Index()
@@ -46,7 +43,7 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ChangeName(int id,string newName)
+        public async Task<ActionResult> ChangeName(int id, string newName)
         {
             var hookah = await db.Hookahs.FindAsync(id);
             if (hookah == null)
@@ -54,7 +51,7 @@ namespace smartHookah.Controllers
 
             var person = UserHelper.GetCurentPerson(db);
 
-            if (hookah.Owners.Count(a => a.Id == person.Id) < 1) 
+            if (hookah.Owners.Count(a => a.Id == person.Id) < 1)
                 return RedirectToAction("Index", "Home");
 
             hookah.Name = newName;
@@ -62,10 +59,10 @@ namespace smartHookah.Controllers
             db.Hookahs.AddOrUpdate(hookah);
             await db.SaveChangesAsync();
 
-            return RedirectToAction("Details", new {id = hookah.Id});
+            return RedirectToAction("Details", new { id = hookah.Id });
         }
 
-        [Authorize( Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAdress(int id)
         {
             var hookah = await db.Hookahs.FindAsync(id);
@@ -134,7 +131,7 @@ namespace smartHookah.Controllers
 
             model.Updates = db.Updates.ToList()
                 .ToSelectedList(a => a.Id.ToString(), a => $"{a.ReleseDate:dd.MM.yyyy}\t{ @Helper.UpdateVersionToString(a.Version)}\t:RN:{a.ReleseNote}");
-            model.DeviceSetting = DeviceControlController.GetDeviceSettingViewModel(hookah.Setting,hookah.Version);
+            model.DeviceSetting = DeviceControlController.GetDeviceSettingViewModel(hookah.Setting, hookah.Version);
             model.DeviceSetting.SessionId = this.redisService.GetSessionId(hookah.Code);
             model.Pictures = new SelectList(db.StandPictures, "id", "id", model.Hookah.Setting.Picture);
             return View(model);
@@ -162,7 +159,7 @@ namespace smartHookah.Controllers
 
             return View(hookah);
         }
-        
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult CreateBatch()
@@ -182,7 +179,7 @@ namespace smartHookah.Controllers
             if (person == null || modelStand == null || model.StartIndex > model.EndIndex)
                 return RedirectToAction("CreateBatch");
             var deviceCodes = new List<string>();
-            for (int i = model.StartIndex; i < model.EndIndex +1; i++)
+            for (int i = model.StartIndex; i < model.EndIndex + 1; i++)
             {
                 var hookah = new Hookah(modelStand);
                 hookah.Code = string.Format(model.CodePattern, i);
@@ -202,7 +199,7 @@ namespace smartHookah.Controllers
                 await this.smokeSessionBgService.InitSmokeSession(device);
             }
 
-            return RedirectToAction("ShowGear","Person",new {id = person.Id});
+            return RedirectToAction("ShowGear", "Person", new { id = person.Id });
         }
 
         // GET: Hookahs/Edit/5
@@ -275,34 +272,34 @@ namespace smartHookah.Controllers
 
 
 
-        [HttpPost,ActionName("Assign")]
+        [HttpPost, ActionName("Assign")]
         [ValidateAntiForgeryToken]
         public ActionResult AssignHookahConfirmed(AssignHookahViewModel model)
         {
 
-            if(ModelState.IsValid)
-            { 
-            Hookah hookah = db.Hookahs.FirstOrDefault(a => a.Code==model.HookahCode);
+            if (ModelState.IsValid)
+            {
+                Hookah hookah = db.Hookahs.FirstOrDefault(a => a.Code == model.HookahCode);
                 Person person;
 
-            if (!string.IsNullOrEmpty(model.personId))
-            {
-                person = db.Persons.Find(int.Parse(model.personId));
-            }
-            else
-            {
-                 person = Helpers.UserHelper.GetCurentPerson(db);
-            }
-       
+                if (!string.IsNullOrEmpty(model.personId))
+                {
+                    person = db.Persons.Find(int.Parse(model.personId));
+                }
+                else
+                {
+                    person = Helpers.UserHelper.GetCurentPerson(db);
+                }
 
-            if(hookah == null || person == null)
-                return RedirectToAction("Index");
 
-         
-        
-            hookah.Owners.Add(person);
+                if (hookah == null || person == null)
+                    return RedirectToAction("Index");
+
+
+
+                hookah.Owners.Add(person);
                 db.Hookahs.AddOrUpdate(hookah);
-            db.SaveChanges();
+                db.SaveChanges();
             }
             return RedirectToAction("Index");
 

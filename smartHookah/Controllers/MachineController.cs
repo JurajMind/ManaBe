@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Accord.MachineLearning;
+using Newtonsoft.Json;
+using smartHookah.Models.Db;
+using smartHookah.Support;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Accord.MachineLearning;
-using Newtonsoft.Json;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
@@ -36,7 +35,7 @@ namespace smartHookah.Controllers
                 var clusters = pufs.GetClusterPuf().ToArray();
                 result.Add(new SessionMLData()
                 {
-                    Id =  session,
+                    Id = session,
                     Data = clusters
                 });
 
@@ -50,7 +49,7 @@ namespace smartHookah.Controllers
 
         }
 
-        public async Task<ActionResult> Clusters(int? id,int ? persons)
+        public async Task<ActionResult> Clusters(int? id, int? persons)
         {
             if (id == null)
             {
@@ -58,13 +57,13 @@ namespace smartHookah.Controllers
             }
             var session = db.SmokeSessions.Find(id);
 
-            if(session == null)
+            if (session == null)
             {
                 RedirectToAction("Index", "Home");
             }
 
             var cpufs = session.DbPufs.ToList().GetClusterPuf().Where(a => a.Presure > 0).ToArray();
-            var observations = cpufs.Select(a => new double[] {a.Presure, a.Duration.TotalMilliseconds}).ToArray();
+            var observations = cpufs.Select(a => new double[] { a.Presure, a.Duration.TotalMilliseconds }).ToArray();
 
             Accord.Math.Random.Generator.Seed = 0;
             if (persons == null)
@@ -85,7 +84,7 @@ namespace smartHookah.Controllers
 
             model.Cpufs = cpufs;
             model.persons = persons;
-            model.SessionId=id.Value;
+            model.SessionId = id.Value;
             return View(model);
         }
 

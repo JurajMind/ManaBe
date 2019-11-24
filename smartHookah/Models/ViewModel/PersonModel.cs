@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace smartHookah.Controllers
 {

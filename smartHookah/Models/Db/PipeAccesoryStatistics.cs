@@ -19,7 +19,7 @@ namespace smartHookah.Models.Db
             }
             set { SmokeDurationTick = value.Ticks; }
         }
-       
+
         [Key]
         [ForeignKey("PipeAccesory")]
         public int PipeAccesoryId { get; set; }

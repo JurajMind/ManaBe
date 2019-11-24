@@ -2,6 +2,7 @@
 
 namespace smartHookah.Support
 {
+    using smartHookah.Controllers;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -9,10 +10,6 @@ namespace smartHookah.Support
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
-
-    using smartHookah.Controllers;
-    using smartHookah.Models;
-
     using SmokeSession = Smoke.SmokeSession;
     using UrlHelper = System.Web.Http.Routing.UrlHelper;
 
@@ -103,12 +100,12 @@ namespace smartHookah.Support
                     if (presure < 0) cluster = !cluster;
 
                     yield return new CPuf
-                                     {
-                                         Presure = presure,
-                                         Duration = t,
-                                         TimeStamp = pufs[i].DateTime,
-                                         Cluster = cluster ? 0 : 1
-                                     };
+                    {
+                        Presure = presure,
+                        Duration = t,
+                        TimeStamp = pufs[i].DateTime,
+                        Cluster = cluster ? 0 : 1
+                    };
                 }
         }
 

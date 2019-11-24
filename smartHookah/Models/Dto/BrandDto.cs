@@ -1,6 +1,6 @@
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Linq;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -36,20 +36,20 @@ namespace smartHookah.Models.Dto
         {
             return new BrandDto()
             {
-                Name = model.Name, 
-                Url = model.Url, 
-                Picture = model.Picture, 
-                Tobacco = model.Tobacco, 
-                Bowl = model.Bowl, 
-                Hookah = model.Hookah, 
-                Coal = model.Coal, 
-                HeatManagment = model.HeatManagment, 
-                TobaccoMixBrand = model.TobaccoMixBrand, 
-                PipeAccessories = PipeAccesorySimpleDto.FromModelList(model.PipeAccessories).ToList(), 
-                SocialMedias = model.SocialMedias.ToList(), 
-                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
-                DisplayName = model.DisplayName, 
-            }; 
+                Name = model.Name,
+                Url = model.Url,
+                Picture = model.Picture,
+                Tobacco = model.Tobacco,
+                Bowl = model.Bowl,
+                Hookah = model.Hookah,
+                Coal = model.Coal,
+                HeatManagment = model.HeatManagment,
+                TobaccoMixBrand = model.TobaccoMixBrand,
+                PipeAccessories = PipeAccesorySimpleDto.FromModelList(model.PipeAccessories).ToList(),
+                SocialMedias = model.SocialMedias.ToList(),
+                Medias = MediaDto.FromModelList(model.Medias).ToList(),
+                DisplayName = model.DisplayName,
+            };
         }
     }
 }

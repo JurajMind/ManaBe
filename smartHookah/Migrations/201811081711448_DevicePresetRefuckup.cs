@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class DevicePresetRefuckup : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace smartHookah.Migrations
             RenameIndex(table: "dbo.Person", name: "IX_DefaultPreset_DevicePresetId", newName: "IX_DefaultPresetId");
             RenameIndex(table: "dbo.DevicePreset", name: "IX_DevicePresetId", newName: "IX_Id");
         }
-        
+
         public override void Down()
         {
             RenameIndex(table: "dbo.DevicePreset", name: "IX_Id", newName: "IX_DevicePresetId");

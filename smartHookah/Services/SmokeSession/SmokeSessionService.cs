@@ -1,18 +1,17 @@
-﻿using System;
+﻿using log4net;
+using smartHookah.Helpers.ModelExtensions;
+using smartHookah.Models.Db;
+using smartHookah.Models.Redis;
+using smartHookah.Services.Device;
+using smartHookah.Services.Redis;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using smartHookah.Models.Redis;
 using System.Threading.Tasks;
-using log4net;
-using smartHookah.Controllers.Api;
-using smartHookah.Helpers.ModelExtensions;
-using smartHookah.Models.Db;
-using smartHookah.Services.Device;
-using smartHookah.Services.Redis;
-using smartHookahCommon.Exceptions;
-using smartHookahCommon.Errors;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -35,9 +34,9 @@ namespace smartHookah.Services.SmokeSession
             this.smokeSessionBgService = smokeSessionBgService;
         }
 
-        public DynamicSmokeStatistic GetDynamicStatistic(string sessionId,string deviceId)
+        public DynamicSmokeStatistic GetDynamicStatistic(string sessionId, string deviceId)
         {
-           return this.smokeSessionBgService.GetDynamicStatistic(sessionId, deviceId);
+            return this.smokeSessionBgService.GetDynamicStatistic(sessionId, deviceId);
         }
 
         public Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistics(List<Hookah> hookah, Func<Hookah, string> getCode)
@@ -88,7 +87,7 @@ namespace smartHookah.Services.SmokeSession
                 .FirstOrDefault(a => a.Id == id);
             if (session == null)
             {
-                throw new ManaException(ErrorCodes.SessionNotFound,$"Session id {id} not found or it has no metadata.");
+                throw new ManaException(ErrorCodes.SessionNotFound, $"Session id {id} not found or it has no metadata.");
             }
 
             return session;
@@ -101,7 +100,7 @@ namespace smartHookah.Services.SmokeSession
 
         public async Task UpdateDevicePercentage(int sessionId)
         {
-            var session = this.db.SmokeSessions.Include(b => b.Hookah).Include(b => b.MetaData).Include(b => b.MetaData.Tobacco.Statistics).FirstOrDefault(a => a.Id ==sessionId);
+            var session = this.db.SmokeSessions.Include(b => b.Hookah).Include(b => b.MetaData).Include(b => b.MetaData.Tobacco.Statistics).FirstOrDefault(a => a.Id == sessionId);
             if (session == null)
             {
                 throw new ManaException(ErrorCodes.SessionNotFound);
@@ -111,8 +110,8 @@ namespace smartHookah.Services.SmokeSession
             if (session?.MetaData?.Tobacco?.Statistics != null)
                 pufCount = (int)session?.MetaData?.Tobacco?.Statistics.PufCount;
 
-            await this.deviceService.SetPercentage(session.Hookah.Code,pufCount);
-       
+            await this.deviceService.SetPercentage(session.Hookah.Code, pufCount);
+
         }
 
 
@@ -128,7 +127,7 @@ namespace smartHookah.Services.SmokeSession
             var session = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).FirstOrDefault(a => a.SessionId == sessionId && a.StatisticsId == null);
             if (session != null)
             {
-                session.DynamicSmokeStatistic = this.GetDynamicStatistic(sessionId,null);
+                session.DynamicSmokeStatistic = this.GetDynamicStatistic(sessionId, null);
             }
 
             return session;
@@ -136,14 +135,14 @@ namespace smartHookah.Services.SmokeSession
 
         public List<SmokeSession> GetLiveSmokeSessions(List<string> sessions)
         {
-           var dbSessions = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).Where(a => sessions.Contains(a.SessionId) && a.StatisticsId == null).ToList();
+            var dbSessions = this.db.SmokeSessions.Include(a => a.Hookah).Include(a => a.MetaData).Where(a => sessions.Contains(a.SessionId) && a.StatisticsId == null).ToList();
 
-           foreach (var smokeSession in dbSessions)
-           {
-               smokeSession.DynamicSmokeStatistic = this.GetDynamicStatistic(smokeSession.SessionId, null);
-           }
+            foreach (var smokeSession in dbSessions)
+            {
+                smokeSession.DynamicSmokeStatistic = this.GetDynamicStatistic(smokeSession.SessionId, null);
+            }
 
-           return dbSessions;
+            return dbSessions;
         }
 
         public List<SmokeSession> GetDevicesLiveSessions(List<int> deviceId)
@@ -167,7 +166,7 @@ namespace smartHookah.Services.SmokeSession
                         this.smokeSessionBgService.InitSmokeSession(device.Code);
                         deviceSession.DynamicSmokeStatistic = new DynamicSmokeStatistic();
                     }
-                    
+
                 }
                 else
                 {
@@ -176,7 +175,7 @@ namespace smartHookah.Services.SmokeSession
 
             }
             return dbSessions;
-          
+
         }
 
         public async Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model)
@@ -185,7 +184,7 @@ namespace smartHookah.Services.SmokeSession
 
             var session = db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
             if (session == null) throw new KeyNotFoundException($"Session with id {id} not found.");
-            
+
             if (session.MetaDataId != model.Id)
             {
                 model.Id = session.MetaDataId ?? 0;
@@ -220,10 +219,10 @@ namespace smartHookah.Services.SmokeSession
             {
                 var storePath = SmokeSessionPufExtension.StoredPufs(smokeSession, batchId);
                 smokeSession.StorePath = storePath;
-            
-                this.db.Database.ExecuteSqlCommand("DELETE FROM DbPuf where id=@p0",smokeSession.Id);
+
+                this.db.Database.ExecuteSqlCommand("DELETE FROM DbPuf where id=@p0", smokeSession.Id);
                 this.db.Database.ExecuteSqlCommand("update SmokeSession set StorePath = @p0 where id = @p1", storePath, smokeSession.Id);
-       
+
             }
         }
 
@@ -231,7 +230,7 @@ namespace smartHookah.Services.SmokeSession
         {
             var session = await this.db.SmokeSessions.FindAsync(id);
 
-            if(session == null)
+            if (session == null)
             {
                 throw new ManaException(ErrorCodes.SessionNotFound, $"Session with id {id} not found");
             }

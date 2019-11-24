@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
+﻿using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Place;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api.Admin
 {
@@ -33,7 +29,7 @@ namespace smartHookah.Controllers.Api.Admin
         [HttpPost, Route("{id}/ChangeState")]
         public async Task<PlaceSimpleDto> ChangeState(int id, int newState)
         {
-            var places = await this.placeService.ChangePlaceState(id,(PlaceState) newState);
+            var places = await this.placeService.ChangePlaceState(id, (PlaceState)newState);
             return PlaceSimpleDto.FromModel(places);
         }
     }

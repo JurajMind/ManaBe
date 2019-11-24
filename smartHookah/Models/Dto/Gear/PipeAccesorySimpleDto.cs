@@ -1,9 +1,9 @@
+using Newtonsoft.Json;
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.Http;
-using Newtonsoft.Json;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -13,7 +13,7 @@ namespace smartHookah.Models.Dto
         [DataMember]
         [JsonProperty("Id")]
         public int Id { get; set; }
-         
+
         [DataMember]
         [JsonProperty("Name")]
         public string Name { get; set; }
@@ -62,7 +62,7 @@ namespace smartHookah.Models.Dto
                 LikeCount = model.LikeCount,
                 DisLikeCount = model.DisLikeCount
             };
-        
+
         public static PipeAccesorySimpleDto FromModel(PipeAccesory model) => model == null
             ? null
             : new PipeAccesorySimpleDto()
@@ -80,7 +80,7 @@ namespace smartHookah.Models.Dto
 
         public static IEnumerable<PipeAccesorySimpleDto> FromModelList(IEnumerable<PipeAccesory> model)
         {
-            if(model == null) yield break;
+            if (model == null) yield break;
             foreach (var item in model)
             {
                 yield return FromModel(item);
@@ -151,18 +151,18 @@ namespace smartHookah.Models.Dto
                 case "Bowl":
                     return new Bowl(pipeAccessory);
                 case "Tobacco":
-                {
-                    var protoTobbacco = new Tobacco(pipeAccessory);
-                    return protoTobbacco;
-                }
+                    {
+                        var protoTobbacco = new Tobacco(pipeAccessory);
+                        return protoTobbacco;
+                    }
                 case "HeatManagement":
-                {
-                    return new HeatManagment(pipeAccessory);
-                }
+                    {
+                        return new HeatManagment(pipeAccessory);
+                    }
                 case "Coal":
-                {
-                    return new Coal(pipeAccessory);
-                }
+                    {
+                        return new Coal(pipeAccessory);
+                    }
                 default:
                     return pipeAccessory;
 
@@ -170,7 +170,7 @@ namespace smartHookah.Models.Dto
             }
         }
     }
-    
+
     public class PipeAccesoryLikeDto
     {
         [DataMember]

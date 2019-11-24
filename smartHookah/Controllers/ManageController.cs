@@ -1,15 +1,14 @@
-﻿using System;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using smartHookah.Helpers;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace smartHookah.Controllers
 {
@@ -19,7 +18,7 @@ namespace smartHookah.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private readonly SmartHookahContext _db;
-        public ManageController( SmartHookahContext db)
+        public ManageController(SmartHookahContext db)
         {
             _db = db;
         }
@@ -36,9 +35,9 @@ namespace smartHookah.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -116,7 +115,7 @@ namespace smartHookah.Controllers
                 await _db.SaveChangesAsync();
 
 
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
             return View(model);
         }
@@ -152,7 +151,7 @@ namespace smartHookah.Controllers
             return View();
         }
 
-    
+
 
         //
         // POST: /Manage/AddPhoneNumber
@@ -187,7 +186,7 @@ namespace smartHookah.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeName(ChangeNameViewModel model )
+        public async Task<ActionResult> ChangeName(ChangeNameViewModel model)
         {
 
             if (UserManager.Users.Where(x => x.UserName == model.Name).FirstOrDefault() == null) //chk for dupes
@@ -195,11 +194,11 @@ namespace smartHookah.Controllers
                 var user = UserManager.FindById(User.Identity.GetUserId());
                 user.DisplayName = model.Name;
                 var updateResult = await UserManager.UpdateAsync(user);
-             
+
                 return RedirectToAction("Index", "Manage");
             }
             throw new HttpException(500, "Please select a different username");
-          
+
         }
 
         //
@@ -405,7 +404,7 @@ namespace smartHookah.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -456,6 +455,6 @@ namespace smartHookah.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

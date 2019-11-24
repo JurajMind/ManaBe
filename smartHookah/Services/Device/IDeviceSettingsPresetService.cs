@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using smartHookah.Models.Db;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Person
 {

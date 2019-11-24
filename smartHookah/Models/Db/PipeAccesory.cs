@@ -1,13 +1,13 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Place;
+using smartHookah.Models.Dto;
+using smartHookah.Support;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
-using smartHookah.Models.Db.Gear;
-using smartHookah.Models.Db.Place;
-using smartHookah.Models.Dto;
-using smartHookah.Support;
 
 namespace smartHookah.Models.Db
 {
@@ -53,7 +53,7 @@ namespace smartHookah.Models.Db
 
         public PipeAccesory()
         {
-            
+
         }
 
         public string GetTypeName()
@@ -66,7 +66,7 @@ namespace smartHookah.Models.Db
 
             if (this is Coal)
                 return "Coal";
-            
+
             if (this is HeatManagment)
                 return "HeatManagement";
 
@@ -94,7 +94,7 @@ namespace smartHookah.Models.Db
             this.AccName = accesory.AccName;
             this.BrandName = accesory.BrandName;
         }
-        
+
         public int? CreatorId { get; set; }
 
         public Person Creator { get; set; }
@@ -130,7 +130,7 @@ namespace smartHookah.Models.Db
         public int PersonId { get; set; }
 
         public virtual Person Person { get; set; }
-        
+
         public int PipeAccesoryId { get; set; }
 
         public virtual PipeAccesory PipeAccesory { get; set; }
@@ -148,8 +148,8 @@ namespace smartHookah.Models.Db
         public virtual PipeAccesory Similar { get; set; }
 
         public int? PersonId { get; set; }
-        public virtual  Person Person { get; set; }
-      
+        public virtual Person Person { get; set; }
+
     }
 
 
@@ -187,12 +187,12 @@ namespace smartHookah.Models.Db
 
         public Tobacco()
         {
-            
+
         }
 
         public Tobacco(PipeAccesory accesory) : base(accesory)
         {
-            
+
         }
 
         public virtual ICollection<TobaccoTaste> Tastes { get; set; }
@@ -201,14 +201,14 @@ namespace smartHookah.Models.Db
         {
             if (this.Statistics == null)
             {
-               var stats =  db.Tobaccos.Where(a => a.Id == this.Id).Include(a => a.Statistics);
-               var tobaco = stats.FirstOrDefault();
+                var stats = db.Tobaccos.Where(a => a.Id == this.Id).Include(a => a.Statistics);
+                var tobaco = stats.FirstOrDefault();
                 this.Statistics = tobaco.Statistics;
             }
-          
+
             return this.Statistics?.PufCount ?? 300;
         }
-      
+
     }
 
     public class TobaccoMix : Tobacco
@@ -228,7 +228,7 @@ namespace smartHookah.Models.Db
         {
             var storedPufCount = base.GetTobacoEstimated(db);
 
-            if(storedPufCount != 300)
+            if (storedPufCount != 300)
                 return storedPufCount;
 
             else
@@ -256,7 +256,8 @@ namespace smartHookah.Models.Db
         DoubleFlavor = 4,
     }
 
-    public class TobacoMixPart { 
+    public class TobacoMixPart
+    {
         public int Id { get; set; }
         public int TobaccoId { get; set; }
         public int Fraction { get; set; }
@@ -268,7 +269,7 @@ namespace smartHookah.Models.Db
         public virtual TobaccoMix InMix { get; set; }
 
     }
-    
+
     public class Pipe : PipeAccesory
     {
         public Pipe()
@@ -276,7 +277,7 @@ namespace smartHookah.Models.Db
 
         public Pipe(PipeAccesory accesory) : base(accesory)
         {
-            
+
         }
     }
 
@@ -284,12 +285,12 @@ namespace smartHookah.Models.Db
     {
         public Bowl()
         {
-            
+
         }
 
         public Bowl(PipeAccesory bowl) : base(bowl)
         {
-            
+
         }
     }
 

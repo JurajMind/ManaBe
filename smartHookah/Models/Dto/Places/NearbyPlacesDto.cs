@@ -1,8 +1,7 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Place;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Dto
 {
@@ -65,7 +64,7 @@ namespace smartHookah.Models.Dto
         {
             Id = model.Id,
             Name = model.Name,
-            ShortDescriptions = model.DbDescription.ToDictionary(a => a.Lng,b => b.ShortDescriptions),
+            ShortDescriptions = model.DbDescription.ToDictionary(a => a.Lng, b => b.ShortDescriptions),
             Description = model.DbDescription.ToDictionary(a => a.Lng, b => b.Descriptions),
             FranchiseId = model.FranchiseId,
             FranchiseName = model?.Franchise?.Name,

@@ -11,8 +11,6 @@ using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
-    using smartHookah.Models;
-
     /// <summary>
     /// The price group dto.
     /// </summary>

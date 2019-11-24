@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class brandmedia : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.Media", "Brand_Name");
             AddForeignKey("dbo.Media", "Brand_Name", "dbo.Brand", "Name");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Media", "Brand_Name", "dbo.Brand");

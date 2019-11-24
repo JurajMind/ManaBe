@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using smartHookah.Models.Db.Place;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Db
 {

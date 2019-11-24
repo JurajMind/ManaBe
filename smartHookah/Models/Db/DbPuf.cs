@@ -9,9 +9,9 @@ namespace smartHookah.Models.Db
         public int Id { get; set; }
 
         public int? SmokeSession_Id { get; set; }
-        
+
         [ForeignKey("SmokeSession_Id")]
-        public virtual SmokeSession  SmokeSession{get; set; }
+        public virtual SmokeSession SmokeSession { get; set; }
         public DbPuf()
         { }
 

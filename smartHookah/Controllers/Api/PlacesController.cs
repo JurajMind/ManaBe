@@ -1,39 +1,26 @@
-﻿using System.Collections;
-using System.Data.Entity.Migrations;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Text;
-using System.Web;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
-using Microsoft.AspNetCore.Http;
-using Microsoft.VisualStudio.Services.Common;
-using smartHookah.Controllers.Mobile;
-using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Person;
 using smartHookahCommon.Extensions;
+using System.Data.Entity.Migrations;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 
 namespace smartHookah.Controllers.Api
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity.Spatial;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web.Http;
     using smartHookah.Helpers;
     using smartHookah.Models;
     using smartHookah.Models.Dto;
     using smartHookah.Services.Place;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Http;
 
     [RoutePrefix("api/Places")]
     public class PlacesController : ApiController
@@ -60,39 +47,39 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("{id}/Menu")]
         public async Task<PlaceMenuDto> GetPlaceMenu(int id)
         {
-           
-                var place = await placeService.GetPlace(id);
-                var accessories = placeService.GetPlaceAccessories(place);
-                var mixes = await placeService.GetPlaceTobaccoMixes(place);
+
+            var place = await placeService.GetPlace(id);
+            var accessories = placeService.GetPlaceAccessories(place);
+            var mixes = await placeService.GetPlaceTobaccoMixes(place);
 
 
-                var priceGroups = place.PriceGroups.ToList().Select(a => new PriceGroupDto(a)).ToList();
+            var priceGroups = place.PriceGroups.ToList().Select(a => new PriceGroupDto(a)).ToList();
 
-                var priceMatrix = new Dictionary<int, Dictionary<int, decimal>>();
+            var priceMatrix = new Dictionary<int, Dictionary<int, decimal>>();
 
-                foreach (var pc in priceGroups)
+            foreach (var pc in priceGroups)
+            {
+                var pcMatrix = new Dictionary<int, decimal>();
+                foreach (var item in place.Person.OwnedPipeAccesories)
                 {
-                    var pcMatrix = new Dictionary<int, decimal>();
-                    foreach (var item in place.Person.OwnedPipeAccesories)
-                    {
-                        var priceGroup = item.Prices.FirstOrDefault(a => a.PriceGroupId == pc.Id);
-                        if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId, priceGroup.Price);
-                    }
-
-                    priceMatrix.Add(pc.Id, pcMatrix);
+                    var priceGroup = item.Prices.FirstOrDefault(a => a.PriceGroupId == pc.Id);
+                    if (priceGroup != null) pcMatrix.Add(item.PipeAccesoryId, priceGroup.Price);
                 }
 
-                return new PlaceMenuDto()
-                {
-                    OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
-                    Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
-                    TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes,null).ToList(),
-                    PriceGroup = priceGroups,
-                    BasePrice = place.BaseHookahPrice,
-                    PriceMatrix = priceMatrix.Select(s => new PriceGroupItems{GroupId = s.Key,Prices = s.Value}).ToList(),
-                    Currency = place.Currency
-                };
+                priceMatrix.Add(pc.Id, pcMatrix);
             }
+
+            return new PlaceMenuDto()
+            {
+                OrderExtras = OrderExtraDto.FromModelList(place.OrderExtras).ToList(),
+                Accessories = PipeAccesorySimpleDto.FromModelList(accessories).ToList(),
+                TobaccoMixes = TobaccoMixSimpleDto.FromModelList(mixes, null).ToList(),
+                PriceGroup = priceGroups,
+                BasePrice = place.BaseHookahPrice,
+                PriceMatrix = priceMatrix.Select(s => new PriceGroupItems { GroupId = s.Key, Prices = s.Value }).ToList(),
+                Currency = place.Currency
+            };
+        }
 
         [HttpGet, Route("GetPlaceInfo")]
         public async Task<PlaceDto> GetPlaceInfo(int id)
@@ -107,7 +94,7 @@ namespace smartHookah.Controllers.Api
 
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new HttpResponseException(
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
@@ -121,15 +108,15 @@ namespace smartHookah.Controllers.Api
             var addresses = this.db.Addresses.ToList();
             foreach (var address in addresses)
             {
-                if(address.Lat == null)
+                if (address.Lat == null)
                     continue;
                 if (!(double.TryParse(address.Lat, out _) && double.TryParse(address.Lng, out _)))
                 {
-                    continue;;
+                    continue; ;
                 }
-               var location = GeographyExtensions.CreatePoint(address.Lat, address.Lng);
-               address.Location = location;
-               this.db.Addresses.AddOrUpdate(address);
+                var location = GeographyExtensions.CreatePoint(address.Lat, address.Lng);
+                address.Location = location;
+                this.db.Addresses.AddOrUpdate(address);
             }
 
             this.db.SaveChanges();
@@ -138,16 +125,16 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet]
         [Route("SearchNearby")]
-        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, double? lat = null, double? lng = null,float radius = 50)
+        public async Task<NearbyPlacesDto> SearchNearby(int page = 0, int pageSize = 10, double? lat = null, double? lng = null, float radius = 50)
         {
             var validate = this.placeService.ValidateCoordinates(lng, lat);
             if (validate.HasValue && !validate.Value)
-                return new NearbyPlacesDto {Success = false, Message = "Cannot find your location."};
+                return new NearbyPlacesDto { Success = false, Message = "Cannot find your location." };
             if (pageSize < 0) pageSize = 10;
 
             var result = new NearbyPlacesDto();
-            
-            
+
+
             IQueryable<Place> closestPlaces;
             var places = this.db.Places.Include("BusinessHours").Where(a => a.Public && a.State == PlaceState.Active);
             if (validate.HasValue)
@@ -163,7 +150,7 @@ namespace smartHookah.Controllers.Api
             }
 
             result.NearbyPlaces = PlaceSimpleDto.FromModelList(closestPlaces.ToList()).ToList();
-          
+
 
             result.Message = result.NearbyPlaces.Count > 0
                 ? $"{result.NearbyPlaces.Count} places found nearby."
@@ -172,7 +159,7 @@ namespace smartHookah.Controllers.Api
             return result;
         }
 
- 
+
 
         #endregion
 
@@ -183,25 +170,25 @@ namespace smartHookah.Controllers.Api
         #endregion
 
         #region Setters
-        
+
         [HttpPost, Route("Import")]
         public async Task<IHttpActionResult> ImportPlaces()
         {
             var stream = await Request.Content.ReadAsStreamAsync();
-            
+
             using (var reader = new StreamReader(stream))
             using (var csv = new CsvReader(reader))
             {
                 csv.Configuration.HasHeaderRecord = false;
                 csv.Configuration.Delimiter = ",";
                 csv.Configuration.TrimOptions = TrimOptions.Trim;
-                
+
                 var records = csv.GetRecords<PlaceImportModel>();
 
                 foreach (var record in records)
                 {
                     var place = PlaceImportModel.ToModel(record);
-                    await placeService.AddPlace(place,null);
+                    await placeService.AddPlace(place, null);
                 }
             }
 
@@ -225,7 +212,7 @@ namespace smartHookah.Controllers.Api
                 foreach (var record in records)
                 {
                     var place = PlaceImportModelMapToPlace(record);
-                    await placeService.AddPlace(place,null);
+                    await placeService.AddPlace(place, null);
                 }
             }
 
@@ -238,25 +225,25 @@ namespace smartHookah.Controllers.Api
             var placeModel = importedPlace.ToModel(this.personService.GetCurentPerson()?.Id);
             placeModel.Src = PlaceSrc.Person;
             placeModel.State = PlaceState.Waiting;
-            var imported = await placeService.AddPlace(placeModel,importedPlace.Flags);
+            var imported = await placeService.AddPlace(placeModel, importedPlace.Flags);
             return PlaceDto.FromModel(imported);
         }
 
-        [HttpPut,Route("{placeId}/AddFlags")]
-        public async Task<PlaceDto> AddFlags(int placeId,[FromBody]List<string> flags)
+        [HttpPut, Route("{placeId}/AddFlags")]
+        public async Task<PlaceDto> AddFlags(int placeId, [FromBody]List<string> flags)
         {
             var result = await this.placeService.AddFlags(placeId, flags);
             return PlaceDto.FromModel(result);
         }
 
-        [HttpGet,Route("{placeId}/DashboardData")]
+        [HttpGet, Route("{placeId}/DashboardData")]
         public async Task<PlaceDashboardDto> GetDashboardData(int placeId)
         {
             var result = await this.placeService.PlaceDashboard(placeId);
             return result;
         }
 
-        public  Place PlaceImportModelMapToPlace (PlaceImportModelMap model)
+        public Place PlaceImportModelMapToPlace(PlaceImportModelMap model)
         {
 
             return new Place()
@@ -288,7 +275,7 @@ namespace smartHookah.Controllers.Api
                     match = this.db.Places.FirstOrDefault(a => a.FriendlyUrl == friendlyUrl);
                     count++;
                 }
-              
+
             }
 
             if (friendlyUrl.Length > 25)

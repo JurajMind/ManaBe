@@ -1,25 +1,19 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Person;
+using System.Collections.Generic;
 
 namespace smartHookahTests.Services
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     using Moq;
-
     using NUnit.Framework;
-
     using smartHookah.Helpers;
-    using smartHookah.Models;
     using smartHookah.Services.Device;
     using smartHookah.Services.Redis;
     using smartHookahTests.Common;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [TestFixture]
     internal class DeviceServiceTests
@@ -31,13 +25,13 @@ namespace smartHookahTests.Services
             var deviceId = "deviceId";
             PufType state = PufType.Idle;
             var animation = new Animation()
-                                {
-                                    Id = 1,
-                                    DisplayName = "Test Animation",
-                                    Usage = AnimationUsage.All,
-                                    VersionFrom = 1,
-                                    VersionTo = int.MaxValue,
-                                };
+            {
+                Id = 1,
+                DisplayName = "Test Animation",
+                Usage = AnimationUsage.All,
+                VersionFrom = 1,
+                VersionTo = int.MaxValue,
+            };
 
             // db
             var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
@@ -86,13 +80,13 @@ namespace smartHookahTests.Services
             var deviceId = "deviceId";
             PufType state = PufType.Idle;
             var animation = new Animation()
-                                {
-                                    Id = 1,
-                                    DisplayName = "Test Animation",
-                                    Usage = AnimationUsage.All,
-                                    VersionFrom = 1,
-                                    VersionTo = 2,
-                                };
+            {
+                Id = 1,
+                DisplayName = "Test Animation",
+                Usage = AnimationUsage.All,
+                VersionFrom = 1,
+                VersionTo = 2,
+            };
 
             // db
             var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };
@@ -140,13 +134,13 @@ namespace smartHookahTests.Services
             var deviceId = "deviceId";
             PufType state = PufType.Idle;
             var animation = new Animation()
-                                {
-                                    Id = 1,
-                                    DisplayName = "Test Animation",
-                                    Usage = AnimationUsage.All,
-                                    VersionFrom = 1,
-                                    VersionTo = 1000,
-                                };
+            {
+                Id = 1,
+                DisplayName = "Test Animation",
+                Usage = AnimationUsage.All,
+                VersionFrom = 1,
+                VersionTo = 1000,
+            };
 
             // db
             var hookahSetting = new DeviceSetting() { Id = 1, IdleAnimation = 0 };

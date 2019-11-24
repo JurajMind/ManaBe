@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class DevicePresetFuckup : DbMigration
     {
         public override void Up()
@@ -15,7 +14,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.Person", "DefaultPreset_DevicePresetId");
             AddForeignKey("dbo.Person", "DefaultPreset_DevicePresetId", "dbo.DevicePreset", "DevicePresetId");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Person", "DefaultPreset_DevicePresetId", "dbo.DevicePreset");

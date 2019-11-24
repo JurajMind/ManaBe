@@ -1,6 +1,6 @@
-﻿using System;
+﻿using smartHookah.Models.Dto;
+using System;
 using System.Collections.Generic;
-using smartHookah.Models.Dto;
 
 namespace smartHookah.Services.Statistics
 {
