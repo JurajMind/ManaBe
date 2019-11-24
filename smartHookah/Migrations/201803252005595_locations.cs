@@ -1,9 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    using System.Data.Entity.Spatial;
-    
+
     public partial class locations : DbMigration
     {
         public override void Up()
@@ -14,7 +12,7 @@ namespace smartHookah.Migrations
             //SET[Location] = geography::Point([Lat], [Lng], 4326)
             //GO;
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.Address", "Location");

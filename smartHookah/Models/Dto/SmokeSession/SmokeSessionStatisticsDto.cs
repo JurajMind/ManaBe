@@ -1,7 +1,7 @@
-using System;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
+using System;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {
@@ -44,29 +44,29 @@ namespace smartHookah.Models.Dto
         {
             return new SmokeSessionStatisticsDto()
             {
-                Id = model.Id, 
-                Start = model.Start, 
-                End = model.End, 
-                SmokeDuration = model.SmokeDuration, 
-                LongestPuf = model.LongestPuf, 
-                PufCount = model.PufCount, 
-                EstimatedPersonCount = model.EstimatedPersonCount, 
-                SessionDuration = model.SessionDuration, 
-            }; 
+                Id = model.Id,
+                Start = model.Start,
+                End = model.End,
+                SmokeDuration = model.SmokeDuration,
+                LongestPuf = model.LongestPuf,
+                PufCount = model.PufCount,
+                EstimatedPersonCount = model.EstimatedPersonCount,
+                SessionDuration = model.SessionDuration,
+            };
         }
 
         public SmokeSessionStatistics ToModel()
         {
             return new SmokeSessionStatistics()
             {
-                Id = Id, 
-                Start = Start, 
-                End = End, 
-                SmokeDuration = SmokeDuration, 
-                LongestPuf = LongestPuf, 
-                PufCount = PufCount, 
-                EstimatedPersonCount = EstimatedPersonCount, 
-            }; 
+                Id = Id,
+                Start = Start,
+                End = End,
+                SmokeDuration = SmokeDuration,
+                LongestPuf = LongestPuf,
+                PufCount = PufCount,
+                EstimatedPersonCount = EstimatedPersonCount,
+            };
         }
     }
 }

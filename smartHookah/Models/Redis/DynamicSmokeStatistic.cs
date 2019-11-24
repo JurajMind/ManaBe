@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using smartHookah.Hubs;
+﻿using smartHookah.Hubs;
 using smartHookah.Models.Db;
 using smartHookah.Support;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace smartHookah.Models.Redis
 {
@@ -31,7 +31,7 @@ namespace smartHookah.Models.Redis
 
         public Puf LastPuf { get; set; }
 
-        public List<Puf> LastPufs { get; set; } 
+        public List<Puf> LastPufs { get; set; }
 
         public void FullUpdate(List<Puf> pufs, string sessionId)
         {
@@ -64,7 +64,7 @@ namespace smartHookah.Models.Redis
 
         }
 
-        public DynamicSmokeStatistic Update(Puf puf,string session,string deviceId)
+        public DynamicSmokeStatistic Update(Puf puf, string session, string deviceId)
         {
             if (puf.Type == PufType.In)
             {

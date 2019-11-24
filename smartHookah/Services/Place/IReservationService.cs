@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto.Places.Reservations;
+using System.Collections.Generic;
 
 namespace smartHookah.Services.Place
 {
     using System;
     using System.Threading.Tasks;
-
-    using smartHookah.Models.Dto;
 
     public interface IReservationService
     {
@@ -27,7 +24,7 @@ namespace smartHookah.Services.Place
 
         Task<bool> UpdateReservationState(int id, ReservationState state);
 
-        Task<Reservation> AddLateTime(int id, int time); 
+        Task<Reservation> AddLateTime(int id, int time);
 
         Task<Reservation> GetReservation(int id);
 
@@ -35,7 +32,7 @@ namespace smartHookah.Services.Place
 
         Task<Reservation> RemoveTable(int id, int tableId);
 
-        
+
 
     }
 }

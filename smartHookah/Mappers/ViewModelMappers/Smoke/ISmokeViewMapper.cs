@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
+using System.Threading.Tasks;
 
 namespace smartHookah.Mappers.ViewModelMappers.Smoke
 {

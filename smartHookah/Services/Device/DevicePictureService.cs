@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using smartHookah.Models.Db;
+using smartHookah.Models.Db.Device;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Device;
-using smartHookahCommon.Errors;
-using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Services.Device
 {
@@ -33,7 +33,7 @@ namespace smartHookah.Services.Device
 
             if (device == null)
             {
-                throw new ManaException(ErrorCodes.DeviceNotFound,$"Device with id {deviceId} was not found");
+                throw new ManaException(ErrorCodes.DeviceNotFound, $"Device with id {deviceId} was not found");
             }
 
             return device.Setting.Picture;
@@ -48,7 +48,7 @@ namespace smartHookah.Services.Device
             {
                 throw new ManaException(ErrorCodes.DeviceNotFound, $"Device with id {deviceId} was not found");
             }
-        
+
             if (picture == null)
             {
                 return false;

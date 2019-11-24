@@ -10,7 +10,7 @@ namespace smartHookah.Models.Db
         public virtual Person Person { get; set; }
 
         public DateTime DateTime { get; set; }
-        
+
         public bool Read { get; set; }
         public string Msg { get; set; }
 

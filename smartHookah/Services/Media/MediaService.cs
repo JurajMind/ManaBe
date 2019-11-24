@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using smartHookah.Models.Db;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,16 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
-using Microsoft.Ajax.Utilities;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Services.Media
 {
     public class MediaService : IMediaService
     {
         private readonly SmartHookahContext db;
-        private int[] sizes = {180, 300, 800, 1600};
+        private int[] sizes = { 180, 300, 800, 1600 };
         public MediaService(SmartHookahContext db)
         {
             this.db = db;
@@ -49,13 +46,13 @@ namespace smartHookah.Services.Media
 
         private Models.Db.Place.Media SaveMedia(HttpPostedFile file, string path, string key)
         {
-            
+
             if (file != null)
             {
                 var media = new Models.Db.Place.Media();
                 var lastId = Guid.NewGuid().ToString().Substring(0, 15);
                 var extension = Path.GetExtension(file.FileName);
-                var scalePath = path + key + "/" + lastId +"/";
+                var scalePath = path + key + "/" + lastId + "/";
                 media.Path = scalePath;
                 media.Sizes = Json.Encode(sizes);
                 media.Created = DateTime.Now;
@@ -67,7 +64,7 @@ namespace smartHookah.Services.Media
                     ScaleAndSave(sourceimage, size, 80, scalePath, extension);
                 }
 
-                file.SaveAs(System.Web.Hosting.HostingEnvironment.MapPath(scalePath + "original"+extension));
+                file.SaveAs(System.Web.Hosting.HostingEnvironment.MapPath(scalePath + "original" + extension));
 
                 return media;
             }
@@ -75,10 +72,10 @@ namespace smartHookah.Services.Media
             return null;
         }
 
-        private  void ScaleAndSave(Image image, int maxHeight, int quality, string path,string extension)
+        private void ScaleAndSave(Image image, int maxHeight, int quality, string path, string extension)
         {
             var scaled = ScaleImage(image, maxHeight);
-            SaveImg(scaled, path, quality,extension);
+            SaveImg(scaled, path, quality, extension);
         }
         private System.Drawing.Image ScaleImage(System.Drawing.Image image, int maxHeight)
         {
@@ -93,9 +90,9 @@ namespace smartHookah.Services.Media
             return newImage;
         }
 
-        public bool SaveImg(Image image, string path, int quality,string extension)
+        public bool SaveImg(Image image, string path, int quality, string extension)
         {
-           
+
             ImageCodecInfo jpgInfo = ImageCodecInfo.GetImageEncoders().First(codecInfo => codecInfo.MimeType == extensionToMineType(extension));
             if (jpgInfo == null)
             {
@@ -116,7 +113,7 @@ namespace smartHookah.Services.Media
 
         string extensionToMineType(string extension)
         {
-            return MimeMapping.GetMimeMapping("file"+extension);
+            return MimeMapping.GetMimeMapping("file" + extension);
         }
 
         public async Task<Models.Db.Place.Media> AddPlaceReviewPictureAsync(int id, HttpPostedFile file)
@@ -151,7 +148,7 @@ namespace smartHookah.Services.Media
             }
 
             db.SaveChanges();
-           
+
             return media;
         }
 

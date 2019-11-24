@@ -1,14 +1,14 @@
-﻿using System;
+﻿using FcmSharp;
+using FcmSharp.Requests;
+using FcmSharp.Settings;
+using log4net;
+using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FcmSharp;
-using FcmSharp.Requests;
-using FcmSharp.Settings;
-using log4net;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Messages
 {
@@ -21,7 +21,7 @@ namespace smartHookah.Services.Messages
         private readonly SmartHookahContext db;
 
 
-        public FirebaseNotificationService( SmartHookahContext db)
+        public FirebaseNotificationService(SmartHookahContext db)
         {
             this.db = db;
 
@@ -32,7 +32,7 @@ namespace smartHookah.Services.Messages
             }
         }
 
-        public async Task<bool> NotifyAsync(int personId, string title, string body,Dictionary<string,string> data)
+        public async Task<bool> NotifyAsync(int personId, string title, string body, Dictionary<string, string> data)
         {
             try
             {
@@ -63,9 +63,9 @@ namespace smartHookah.Services.Messages
                         },
 
                     }).ToList();
-                 
 
-              
+
+
                     CancellationTokenSource cts = new CancellationTokenSource();
                     Task[] tasks = messages.Select(m => client.SendAsync(m, cts.Token)).ToArray();
 

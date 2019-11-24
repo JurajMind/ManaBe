@@ -9,6 +9,6 @@ namespace smartHookah.Models.Db
         public string Value { get; set; }
 
         public virtual ICollection<SmokeSessionMetaData> Used { get; set; }
-        
+
     }
 }

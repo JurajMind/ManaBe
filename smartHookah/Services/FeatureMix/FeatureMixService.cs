@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Services.Person;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
 namespace smartHookah.Services.FeatureMix
 {
@@ -27,7 +27,7 @@ namespace smartHookah.Services.FeatureMix
         public IList<FeatureMixCreator> GetFeatureMixCreators(int page = 0, int pageSize = 50, string orderBy = "name", string order = "asc")
         {
             var query = from b in this.db.FeatureMixCreators
-                select b;
+                        select b;
 
             switch (orderBy.ToLower())
             {
@@ -50,7 +50,7 @@ namespace smartHookah.Services.FeatureMix
         {
             var personLikes = this.db.FeatureMixCreators.Find(creatorId)
                 ?.Person.Likes;
-                var query = personLikes.Where(a => a.PipeAccesory is TobaccoMix mix && a.Value > 0 && (mix.AuthorId == creatorId || mix.AuthorId == null)).Select(c => c.PipeAccesory as TobaccoMix).Where(a => a.Tobaccos.Count > 0);
+            var query = personLikes.Where(a => a.PipeAccesory is TobaccoMix mix && a.Value > 0 && (mix.AuthorId == creatorId || mix.AuthorId == null)).Select(c => c.PipeAccesory as TobaccoMix).Where(a => a.Tobaccos.Count > 0);
 
             switch (orderBy.ToLower())
             {

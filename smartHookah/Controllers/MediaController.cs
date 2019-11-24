@@ -1,4 +1,6 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
+using smartHookah.Models.Db.Place;
+using System;
 using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,9 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Controllers
 {
@@ -44,7 +43,7 @@ namespace smartHookah.Controllers
         }
 
         // GET: Media/Create
-        public ActionResult Create(string type,int id)
+        public ActionResult Create(string type, int id)
         {
             ViewBag.type = type;
             return View(id);
@@ -55,57 +54,57 @@ namespace smartHookah.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [System.Web.Mvc.HttpPost]
         [System.Web.Mvc.Authorize]
-        public ActionResult Create(int id,string type)
+        public ActionResult Create(int id, string type)
         {
             var fileName = Request.Files.AllKeys.FirstOrDefault();
             var file = Request.Files[fileName];
             var media = new Media();
-                if (file != null)
-                {
-                    var extension = System.IO.Path.GetExtension(file.FileName);
-                    var path = $"/Content/Media/{type}/{id}/{Path.GetFileNameWithoutExtension(file.FileName)}/";
-                    Directory.CreateDirectory(Server.MapPath(path));
-                    // path = path + file.FileName;
+            if (file != null)
+            {
+                var extension = System.IO.Path.GetExtension(file.FileName);
+                var path = $"/Content/Media/{type}/{id}/{Path.GetFileNameWithoutExtension(file.FileName)}/";
+                Directory.CreateDirectory(Server.MapPath(path));
+                // path = path + file.FileName;
                 Image sourceimage = System.Drawing.Image.FromStream(file.InputStream);
-                    media.Created = DateTime.UtcNow;
-                    media.Type = MediaType.Picture;
-                    ScaleAndSave(sourceimage, 160, 90,path,Server);
-                    ScaleAndSave(sourceimage, 800, 450, path, Server);
-                    ScaleAndSave(sourceimage, 1600, 900, path, Server);
-                    // path = path + "image";
-                    file.SaveAs(Server.MapPath(path+"original.jpg"));
-                    media.Path = path;
-                    db.Media.Add(media);
+                media.Created = DateTime.UtcNow;
+                media.Type = MediaType.Picture;
+                ScaleAndSave(sourceimage, 160, 90, path, Server);
+                ScaleAndSave(sourceimage, 800, 450, path, Server);
+                ScaleAndSave(sourceimage, 1600, 900, path, Server);
+                // path = path + "image";
+                file.SaveAs(Server.MapPath(path + "original.jpg"));
+                media.Path = path;
+                db.Media.Add(media);
 
-                    if (type == "place")
-                    {
-                        var place = this.db.Places.Find(id);
-                        place?.Medias.Add(media);
+                if (type == "place")
+                {
+                    var place = this.db.Places.Find(id);
+                    place?.Medias.Add(media);
 
-                    }
-                    if (type == "accesory")
-                    {
-                        var accesory = this.db.PipeAccesories.Find(id);
-                        accesory?.Mediae.Add(media);
-                      
+                }
+                if (type == "accesory")
+                {
+                    var accesory = this.db.PipeAccesories.Find(id);
+                    accesory?.Mediae.Add(media);
+
                 }
 
                 db.SaveChanges();
             }
 
-            
-            
+
+
             return RedirectToAction("Index");
         }
 
-         public static void ScaleAndSave(Image image, int maxHeight, int quality,string path, HttpServerUtilityBase server)
+        public static void ScaleAndSave(Image image, int maxHeight, int quality, string path, HttpServerUtilityBase server)
         {
             var scaled = ScaleImage(image, maxHeight);
-            SaveImg(scaled, path, quality,server);
+            SaveImg(scaled, path, quality, server);
 
         }
 
-         public static System.Drawing.Image ScaleImage(System.Drawing.Image image, int maxHeight )
+        public static System.Drawing.Image ScaleImage(System.Drawing.Image image, int maxHeight)
         {
             var ratio = (double)maxHeight / image.Height;
             var newWidth = (int)(image.Width * ratio);
@@ -120,7 +119,7 @@ namespace smartHookah.Controllers
 
         }
 
-         public static bool SaveImg(Image image,string path,int quality,HttpServerUtilityBase server)
+        public static bool SaveImg(Image image, string path, int quality, HttpServerUtilityBase server)
         {
             ImageCodecInfo jpgInfo = ImageCodecInfo.GetImageEncoders()
                 .Where(codecInfo => codecInfo.MimeType == "image/jpeg").First();
@@ -128,12 +127,12 @@ namespace smartHookah.Controllers
             {
                 encParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)quality);
                 //quality should be in the range [0..100]
-                using (var fileStream = System.IO.File.Create(server.MapPath(path+image.Height+".jpg")))
+                using (var fileStream = System.IO.File.Create(server.MapPath(path + image.Height + ".jpg")))
                 {
                     image.Save(fileStream, jpgInfo, encParams);
                 }
 
-               
+
             }
             return true;
 
@@ -198,7 +197,7 @@ namespace smartHookah.Controllers
         }
 
         protected override void Dispose(bool disposing)
-        {          
+        {
             base.Dispose(disposing);
         }
     }

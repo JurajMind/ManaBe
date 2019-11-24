@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using smartHookah.Models.Db;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.ParameterObjects
 {
@@ -15,7 +11,7 @@ namespace smartHookah.Models.ParameterObjects
 
     public class ChangeSpeed
     {
-        [Range(0,255)]
+        [Range(0, 255)]
         public int Speed { get; set; }
         public PufType Type { get; set; }
     }

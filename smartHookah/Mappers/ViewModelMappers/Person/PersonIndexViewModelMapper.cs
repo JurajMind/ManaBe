@@ -1,14 +1,13 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using smartHookah.Controllers;
-using smartHookah.Helpers;
+﻿using smartHookah.Controllers;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Services.Device;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Mappers.ViewModelMappers.Person
 {
@@ -18,7 +17,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Person
         private readonly IDeviceService deviceService;
         private readonly ISmokeSessionService sessionService;
         private readonly IRedisService redisService;
-        
+
 
         public PersonIndexViewModelMapper(IDeviceService deviceService, SmartHookahContext db, IRedisService redisService, ISmokeSessionService sessionService)
         {
@@ -49,7 +48,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Person
 
             result.Person = person;
             var activeHookah = result.ActiveSession.Select(a => a.Hookah).Union(hookahs).ToList();
-            result.DynamicStatistic = this.sessionService.GetDynamicSmokeStatistics(activeHookah, a =>  this.redisService.GetSessionId(a.Code));
+            result.DynamicStatistic = this.sessionService.GetDynamicSmokeStatistics(activeHookah, a => this.redisService.GetSessionId(a.Code));
 
             return result;
         }

@@ -28,7 +28,7 @@ namespace smartHookah.Models.Db
         public bool Deleted { get; set; }
 
         public DateTime Updated { get; set; }
-        
+
     }
 
     public class FeatureMixCreatorTranslation

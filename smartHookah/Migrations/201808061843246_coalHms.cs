@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class coalHms : DbMigration
     {
         public override void Up()
@@ -16,7 +15,7 @@ namespace smartHookah.Migrations
             AddForeignKey("dbo.SmokeSessionMetaData", "CoalId", "dbo.PipeAccesory", "Id");
             AddForeignKey("dbo.SmokeSessionMetaData", "HeatManagementId", "dbo.PipeAccesory", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.SmokeSessionMetaData", "HeatManagementId", "dbo.PipeAccesory");

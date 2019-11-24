@@ -16,6 +16,6 @@ namespace smartHookah.Models.Dto.Places.Reservations
         public int TimeSlotSize;
 
         public DateTime Date;
-        
+
     }
 }

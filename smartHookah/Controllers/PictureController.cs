@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
+using smartHookah.Models.Db.Device;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Accord.IO;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Db.Device;
 
 namespace smartHookah.Controllers
 {
@@ -56,28 +50,28 @@ namespace smartHookah.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(HttpPostedFileBase file)
         {
-           var standPicture = new StandPicture();
+            var standPicture = new StandPicture();
 
             var filename = file.FileName;
 
             System.Drawing.Image sourceimage =
                 System.Drawing.Image.FromStream(file.InputStream);
-            var bitmap = (Bitmap) sourceimage;
+            var bitmap = (Bitmap)sourceimage;
 
             var trimmed = PictureHelper.TrimBitmap(bitmap);
 
             var xbm = PictureHelper.BmpToXbm(trimmed);
 
-            var pictureString  =PictureHelper.XbmToWebString(xbm);
+            var pictureString = PictureHelper.XbmToWebString(xbm);
 
             standPicture.PictueString = pictureString;
             standPicture.Width = trimmed.Width;
             standPicture.Height = trimmed.Height;
 
             db.StandPictures.Add(standPicture);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+
 
             return View(standPicture);
         }
@@ -97,7 +91,7 @@ namespace smartHookah.Controllers
             db.HookahSettings.AddOrUpdate(hookah.Setting);
             await db.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Hookahs", new {id = id});
+            return RedirectToAction("Details", "Hookahs", new { id = id });
 
         }
 

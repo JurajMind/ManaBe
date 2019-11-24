@@ -1,16 +1,14 @@
-﻿using System;
+﻿using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
+using smartHookah.Services.Person;
+using smartHookah.Services.Review;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using smartHookah.Models;
-using smartHookah.Models.Dto;
-using smartHookah.Models.Dto.Gear;
-using smartHookah.Services.Gear;
-using smartHookah.Services.Person;
-using smartHookah.Services.Review;
 
 namespace smartHookah.Controllers.Api
 {
@@ -21,7 +19,7 @@ namespace smartHookah.Controllers.Api
         private readonly IReviewService reviewService;
         private readonly IPersonService personService;
 
-        public TobaccoController(ITobaccoService tobaccoService,IReviewService reviewService, IPersonService personService)
+        public TobaccoController(ITobaccoService tobaccoService, IReviewService reviewService, IPersonService personService)
         {
             this.tobaccoService = tobaccoService;
             this.reviewService = reviewService;
@@ -50,7 +48,7 @@ namespace smartHookah.Controllers.Api
         {
             var tobaccos = this.tobaccoService.GetTobaccoList(page, pageSize, filter);
 
-             var result = tobaccos.Select(TobaccoDto.FromModel).ToList();
+            var result = tobaccos.Select(TobaccoDto.FromModel).ToList();
             return result;
         }
 
@@ -65,12 +63,12 @@ namespace smartHookah.Controllers.Api
                 var personStats = tobaccoService.GetPersonTobaccoStatistics(tobacco);
                 var tastes = tobaccoService.GetTobaccoTastes(tobacco);
                 var sessions = await tobaccoService.GetTobaccoSessions(tobacco);
-                var reviews = await this.reviewService.GetTobaccoReviews(tobacco.Id,null);
+                var reviews = await this.reviewService.GetTobaccoReviews(tobacco.Id, null);
 
 
                 return TobaccoInformationDto.FromModel(tobacco, tastes, personStats, stats, sessions, reviews.ToList());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new HttpResponseException(
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));

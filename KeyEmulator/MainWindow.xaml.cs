@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNet.SignalR.Client;
+using System;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.AspNet.SignalR.Client;
 
 namespace KeyEmulator
 {
@@ -46,7 +35,7 @@ namespace KeyEmulator
                 });
                 ServicePointManager.DefaultConnectionLimit = 10;
                 await hubConnection.Start();
-              
+
 
             }
             catch (Exception ex)
@@ -61,7 +50,7 @@ namespace KeyEmulator
             {
                 await hubProxy.Invoke("joinSession", smokeSessionId);
             });
-           
+
         }
 
         private async void JoinSession_Click(object sender, RoutedEventArgs e)

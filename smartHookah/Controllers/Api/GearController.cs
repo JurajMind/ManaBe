@@ -1,18 +1,17 @@
-﻿using System;
+﻿using smartHookah.ErrorHandler;
+using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
+using smartHookah.Services.Redis;
+using smartHookah.Services.Search;
+using smartHookahCommon.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using smartHookah.ErrorHandler;
-using smartHookah.Models.Db;
-using smartHookah.Services.Gear;
-using smartHookah.Services.Redis;
-using smartHookah.Services.Search;
-using smartHookah.Helpers;
-using smartHookah.Models.Dto;
-using smartHookahCommon.Extensions;
 
 namespace smartHookah.Controllers.Api
 {
@@ -37,13 +36,13 @@ namespace smartHookah.Controllers.Api
         [HttpGet, ApiAuthorize, Route("Search/{search}")]
         public async Task<List<SearchPipeAccessory>> Search(string search, string type = null, int page = 0, int pageSize = 50, string searchType = "All")
         {
-           
-            if (!string.IsNullOrEmpty(type) &&Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
-            {
-                if(Enum.TryParse<SearchType>(searchType.FirstLetterToUpper(), out var searchTypeType))
-                    if(searchTypeType == SearchType.Brand)
 
-                return this.gearService.SearchAccessories(search, result, searchTypeType, page, pageSize);
+            if (!string.IsNullOrEmpty(type) && Enum.TryParse<AccesoryType>(type.FirstLetterToUpper(), out var result))
+            {
+                if (Enum.TryParse<SearchType>(searchType.FirstLetterToUpper(), out var searchTypeType))
+                    if (searchTypeType == SearchType.Brand)
+
+                        return this.gearService.SearchAccessories(search, result, searchTypeType, page, pageSize);
 
                 var azureSearchType = await searchService.Search(search, type);
                 return azureSearchType.Select(s => new SearchPipeAccessory(s)).ToList();
@@ -51,7 +50,7 @@ namespace smartHookah.Controllers.Api
             var azureSearch = await searchService.Search(search, type);
             return azureSearch.Select(s => new SearchPipeAccessory(s)).ToList();
 
-         }
+        }
 
         [HttpGet, ApiAuthorize, System.Web.Http.Route("Brands/")]
         public Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands()
@@ -79,10 +78,10 @@ namespace smartHookah.Controllers.Api
                 var ownedByPlaces = gearService.OwnedByPlaces(accessory);
 
                 var usedWithDto = usedWith.Select(item => new UsedWithDto()
-                    {
-                        Accessory = PipeAccesorySimpleDto.FromModel(item.Key),
-                        UsedCount = item.Value
-                    }).ToList();
+                {
+                    Accessory = PipeAccesorySimpleDto.FromModel(item.Key),
+                    UsedCount = item.Value
+                }).ToList();
 
                 var result = new PipeAccessoryDetailsDto()
                 {
@@ -108,7 +107,7 @@ namespace smartHookah.Controllers.Api
 
         [HttpGet, System.Web.Http.Route("{id}/Sessions")]
         [ApiAuthorize]
-        public List<SmokeSessionSimpleDto> Sessions(int id,int pageSize = 100,int page = 0)
+        public List<SmokeSessionSimpleDto> Sessions(int id, int pageSize = 100, int page = 0)
         {
             return this.gearService.UsedInSession(id, pageSize, 0).Select(SmokeSessionSimpleDto.FromModel)
                 .ToList();
@@ -126,10 +125,10 @@ namespace smartHookah.Controllers.Api
         [HttpPost, ApiAuthorize, System.Web.Http.Route("{id}/Vote")]
         public HttpResponseMessage Vote(int id, [FromBody] int value)
         {
-            value = value < 0 ? (int) VoteValue.Dislike : value > 0 ? (int) VoteValue.Like : (int) VoteValue.Unlike;
+            value = value < 0 ? (int)VoteValue.Dislike : value > 0 ? (int)VoteValue.Like : (int)VoteValue.Unlike;
             try
             {
-                this.gearService.Vote(id, (VoteValue) value);
+                this.gearService.Vote(id, (VoteValue)value);
             }
             catch (Exception e)
             {
@@ -138,7 +137,7 @@ namespace smartHookah.Controllers.Api
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
-        } 
+        }
 
         [HttpPost, ApiAuthorize, System.Web.Http.Route("Add")]
         public async Task<PipeAccesorySimpleDto> AddGear([FromBody] PipeAccesorySimpleDto accessory)

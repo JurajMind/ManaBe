@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class reviewUpd5 : DbMigration
     {
         public override void Up()
@@ -14,7 +13,7 @@ namespace smartHookah.Migrations
             CreateIndex("dbo.SessionReview", "SmokeSession_Id");
             AddForeignKey("dbo.SessionReview", "SmokeSession_Id", "dbo.SmokeSession", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.SessionReview", "SmokeSession_Id", "dbo.SmokeSession");

@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Azure.Devices.Client;
+using System;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Newtonsoft.Json;
-using Microsoft.Azure.Devices.Client;
 
 namespace DeviceEmulator
 {
@@ -40,25 +29,25 @@ namespace DeviceEmulator
         {
 
             var milis = System.Convert.ToInt64((DateTime.Now - DeviceStart).TotalMilliseconds);
-            var msg = $"puf:{(int) pufType}:{milis}";
+            var msg = $"puf:{(int)pufType}:{milis}";
 
 
             if (pufType == PufType.Idle)
             {
                 msg = msg + ":100,";
             }
-                var message = new Message(Encoding.ASCII.GetBytes(msg));
+            var message = new Message(Encoding.ASCII.GetBytes(msg));
             message.MessageId = new Random().Next(290, 100000000).ToString();
             //await deviceClient.SendEventAsync(message);
             Post(msg);
-                MsgBox.Items.Add(msg);
+            MsgBox.Items.Add(msg);
 
             MsgBox.SelectedIndex = MsgBox.Items.Count - 1;
             MsgBox.ScrollIntoView(MsgBox.SelectedItem);
             Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
 
-                
-            
+
+
         }
 
         private void Post(string msg)
@@ -70,9 +59,9 @@ namespace DeviceEmulator
             }
             catch (Exception e)
             {
-               
+
             }
-          
+
         }
 
         private void pufButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

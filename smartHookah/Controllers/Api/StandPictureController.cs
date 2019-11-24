@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using Autofac.Integration.WebApi;
+using smartHookah.Models.Db;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 using System.Web.Http;
-using Autofac.Integration.WebApi;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Support;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers.Api
 {
@@ -20,7 +13,7 @@ namespace smartHookah.Controllers.Api
     {
 
         private readonly SmartHookahContext db;
-        
+
         public StandPictureController(SmartHookahContext db)
         {
             this.db = db;
@@ -28,7 +21,7 @@ namespace smartHookah.Controllers.Api
 
         public StandPictureController()
         {
-            
+
         }
 
         [OptionalHttps(true)]
@@ -45,7 +38,7 @@ namespace smartHookah.Controllers.Api
             //var result =
             //    "34:48:AAAAAAAAAAAAAADAAQAAAMABAAAAwAEAAACAAAAAAIAAAAAAgAAAAAD4DwAAAIAAAAAAgAAAAACAAAAAAIAAAAAAgAAAAACAAAAAAIAAAAAAgAAAAACAAA8AAIDAMQAAgGBgAACAGEAAAIAMgAAAwAOAAADAAYAAAMABfgAAwAHBAADAgeAAAMBBIAEA4MMYAQD4jwcBAP4fAAEA/z8AAQD/fwABAP9/AAEA/z+AAAD+P4AAAPgPQAAAwAEgAAAAADAAAAAACAAAAAAGAAAAgAEAAAB4AADA/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:";
 
-            var result  = $"{picture.Width}:{picture.Height}:{picture.PictueString}:";
+            var result = $"{picture.Width}:{picture.Height}:{picture.PictueString}:";
 
             string yourJson = result;
             var response = Request.CreateResponse(HttpStatusCode.OK);

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Gear;
+using smartHookah.Models.Db.Session;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using smartHookah.Models.Db.Gear;
-using smartHookah.Models.Db.Session;
 
 namespace smartHookah.Models.Db.Place
 {
@@ -103,7 +103,7 @@ namespace smartHookah.Models.Db.Place
 
         public bool IsOpen(DateTime open)
         {
-            var todayInt = (int) open.DayOfWeek;
+            var todayInt = (int)open.DayOfWeek;
             var todayOpenHours = BusinessHours?.FirstOrDefault(a => a.Day == todayInt);
 
             if (todayOpenHours == null)
@@ -149,8 +149,8 @@ namespace smartHookah.Models.Db.Place
     public enum PlaceState
     {
         Active = 0,
-        Blocked  = 2,
-        Waiting  = 1,
+        Blocked = 2,
+        Waiting = 1,
     }
 
     public class PlaceFlag

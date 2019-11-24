@@ -1,10 +1,8 @@
-﻿using System.Linq;
+﻿using smartHookah.Models.Db;
+using smartHookah.Services.Person;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Services.Person;
 
 namespace smartHookah.Controllers
 {

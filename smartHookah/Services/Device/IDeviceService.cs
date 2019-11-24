@@ -1,7 +1,7 @@
-﻿using smartHookah.Models.Db;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using smartHookah.Helpers;
 
 
 namespace smartHookah.Services.Device
@@ -22,7 +22,7 @@ namespace smartHookah.Services.Device
         Task SetPreset(string deviceId, DeviceSetting setting);
 
         Task UpdateSettingFromDevice(string deviceId, byte[] rawData);
-        
+
         List<Animation> GetAnimations();
         Animation GetAnimation(int id);
         int GetDeviceVersion(string id);
@@ -35,7 +35,7 @@ namespace smartHookah.Services.Device
 
         string GetUpdatePath(string deviceId, string token);
 
-        Task SetPercentage(string code,int pufCount);
+        Task SetPercentage(string code, int pufCount);
 
 
         ICollection<Models.Db.SmokeSession> Sessions(int id, int pageSize, int page);

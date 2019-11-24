@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Hangfire.Console;
+﻿using Hangfire.Console;
 using Hangfire.Server;
 using log4net;
 using smartHookah.Models.Db;
@@ -9,13 +6,15 @@ using smartHookah.Services.Config;
 using smartHookah.Services.Messages;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Jobs
 {
+    using smartHookah.Services.Device;
     using System.Collections.Generic;
     using System.Data.Entity;
-
-    using smartHookah.Services.Device;
 
     public class SessionAutoEnd
     {
@@ -28,12 +27,12 @@ namespace smartHookah.Jobs
 
         private readonly int offlineMulti = 2;
 
-        public SessionAutoEnd() 
+        public SessionAutoEnd()
         {
             this.iotService = new IotService();
             this.db = new SmartHookahContext();
             var configService = new ConfigService();
-            redisService = new RedisService(configService,this.db);
+            redisService = new RedisService(configService, this.db);
             var emailService = new EmailService();
             var notificationService = new SignalNotificationService(db, redisService, emailService);
             this.smokeSessionService = new SmokeSessionBgService(this.db, redisService, this.iotService);
@@ -68,9 +67,9 @@ namespace smartHookah.Jobs
 
         public async Task EndSmokeSessions(PerformContext context, bool debug = false)
         {
-            
-                var stands = await this.db.Hookahs.ToListAsync();
-                var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code).ToList());
+
+            var stands = await this.db.Hookahs.ToListAsync();
+            var onlineStates = await this.iotService.GetOnlineStates(stands.Select(a => a.Code).ToList());
 
             Parallel.ForEach(
                 stands,
@@ -79,7 +78,7 @@ namespace smartHookah.Jobs
                         try
                         {
                             await this.ProceedDevice(context, debug, device, onlineStates);
-                            
+
                         }
                         catch (Exception e)
                         {
@@ -105,7 +104,7 @@ namespace smartHookah.Jobs
             if (hookah.AutoSessionEndTime == -1) return;
 
             // Get curent smoke statistic
-            var ds = this.smokeSessionService.GetDynamicStatistic(redisSession,null);
+            var ds = this.smokeSessionService.GetDynamicStatistic(redisSession, null);
 
             // No puf was made
             if (ds?.LastPuf == null)

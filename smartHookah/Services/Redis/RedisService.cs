@@ -1,13 +1,13 @@
-﻿using smartHookah.Models.Db;
+﻿using ServiceStack.Redis;
+using smartHookah.Controllers;
+using smartHookah.Models.Db;
+using smartHookah.Models.Redis;
+using smartHookah.Services.Config;
+using smartHookah.Services.Place;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using smartHookah.Controllers;
-using ServiceStack.Redis;
-using smartHookah.Models.Redis;
-using smartHookah.Services.Config;
-using smartHookah.Services.Place;
 
 namespace smartHookah.Services.Redis
 {
@@ -52,7 +52,7 @@ namespace smartHookah.Services.Redis
             using (var redis = this.redisManager.GetClient())
             {
                 var key = String.Format(RedisKeys.SessionKey, sessionId);
-                var value =  TryGetNamespaced<string>(key, redis);
+                var value = TryGetNamespaced<string>(key, redis);
 
                 if (string.IsNullOrEmpty(value))
                 {
@@ -82,7 +82,7 @@ namespace smartHookah.Services.Redis
             using (var redis = this.redisManager.GetClient())
             {
                 var key = String.Format(RedisKeys.DeviceKey, hookahId);
-                var sessionId =  TryGetNamespaced<string>(key, redis);
+                var sessionId = TryGetNamespaced<string>(key, redis);
                 var controlHookahId = String.Format(RedisKeys.SessionKey, sessionId);
                 var controlValue = TryGetNamespaced<string>(controlHookahId, redis);
 
@@ -110,7 +110,7 @@ namespace smartHookah.Services.Redis
 
                     if (hookahSession == null)
                     {
-                        
+
                     }
                     else
                     {
@@ -118,7 +118,7 @@ namespace smartHookah.Services.Redis
                     }
                 }
 
-                    return sessionId;
+                return sessionId;
             }
         }
 
@@ -168,11 +168,11 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public void SetDynamicSmokeStatistic(string sessionId,DynamicSmokeStatistic dynamicSmokeStatistic)
+        public void SetDynamicSmokeStatistic(string sessionId, DynamicSmokeStatistic dynamicSmokeStatistic)
         {
             using (var redis = this.redisManager.GetClient())
             {
-                redis.As<DynamicSmokeStatistic>()[GetNamespacedKey(string.Format(RedisKeys.DynamicSmokeSessionKey,sessionId))] = dynamicSmokeStatistic;
+                redis.As<DynamicSmokeStatistic>()[GetNamespacedKey(string.Format(RedisKeys.DynamicSmokeSessionKey, sessionId))] = dynamicSmokeStatistic;
             }
         }
 
@@ -252,14 +252,14 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public bool CreateSmokeSession(string sessionId,string deviceId)
+        public bool CreateSmokeSession(string sessionId, string deviceId)
         {
             try
             {
                 using (var redis = redisManager.GetClient())
                 {
 
-                    redis.Set(GetNamespacedKey(String.Format(RedisKeys.DeviceKey, deviceId)),sessionId);
+                    redis.Set(GetNamespacedKey(String.Format(RedisKeys.DeviceKey, deviceId)), sessionId);
                     redis.Set(GetNamespacedKey(String.Format(RedisKeys.SessionKey, sessionId)), deviceId);
 
                 }
@@ -306,7 +306,7 @@ namespace smartHookah.Services.Redis
             }
         }
 
-        public void StoreUpdate(string token,UpdateController.UpdateRedis update)
+        public void StoreUpdate(string token, UpdateController.UpdateRedis update)
         {
             using (var redis = redisManager.GetClient())
             {
@@ -320,7 +320,7 @@ namespace smartHookah.Services.Redis
         {
             using (var redis = redisManager.GetClient())
             {
-                return redis.As<UpdateController.UpdateRedis>()[GetNamespacedKey(string.Format(RedisKeys.UpdateKey,token))];
+                return redis.As<UpdateController.UpdateRedis>()[GetNamespacedKey(string.Format(RedisKeys.UpdateKey, token))];
             }
         }
 
@@ -329,7 +329,7 @@ namespace smartHookah.Services.Redis
             var key = String.Format(RedisKeys.DeviceKey, $"{prefix}*");
             using (var redis = redisManager.GetClient())
             {
-               
+
             }
 
             return null;
@@ -340,12 +340,12 @@ namespace smartHookah.Services.Redis
             var key = String.Format(RedisKeys.BrandKey, $"");
             using (var redis = redisManager.GetClient())
             {
-                var allBrands =  redis.SearchKeys(GetNamespacedKey(key));
+                var allBrands = redis.SearchKeys(GetNamespacedKey(key));
                 redis.RemoveAll(allBrands);
                 foreach (var brand in brands)
                 {
                     var brandKey = String.Format(RedisKeys.BrandKey, brand);
-                    redis.Set(GetNamespacedKey(brandKey),brand);
+                    redis.Set(GetNamespacedKey(brandKey), brand);
                 }
 
             }
@@ -377,7 +377,7 @@ namespace smartHookah.Services.Redis
             var key = GetNamespacedKey(RedisKeys.PersonCodeKey, code);
             using (var redis = redisManager.GetClient())
             {
-               return redis.Get<string>(key);
+                return redis.Get<string>(key);
             }
         }
     }

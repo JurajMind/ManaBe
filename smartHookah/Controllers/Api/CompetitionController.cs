@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using smartHookah.ErrorHandler;
+﻿using smartHookah.ErrorHandler;
 using smartHookah.Models.Redis;
 using smartHookah.Services.Redis;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {

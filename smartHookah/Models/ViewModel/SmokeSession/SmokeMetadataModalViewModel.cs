@@ -2,14 +2,10 @@
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Support;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System.Linq;
-
-    using smartHookah.Models;
-    using smartHookah.Support;
-
-    using smartHookahCommon;
 
     public class SmokeMetadataModalViewModel
     {
@@ -80,7 +76,7 @@ namespace smartHookah.Controllers
             result.HeatKeeper = metadata.HeatKeeper;
             result.CoalType = metadata.CoalType;
             result.CoalsCount = metadata.CoalsCount;
-       
+
             result.TobacoWeight = metadata.TobaccoWeight;
             result.AnonymPeopleCount = metadata.AnonymPeopleCount;
         }
@@ -135,26 +131,26 @@ namespace smartHookah.Controllers
                     var part = tobacoArray[i];
                     result.TobacoMix.Add(
                         new SmokeMetadataModalTobacoMix()
-                            {
-                                name = "Part" + 1,
-                                Partin = (int) part.Fraction,
-                                TobaccoBrand = part.Tobacco.Brand.Name,
-                                TobacoFlavor = part.Tobacco.AccName,
-                                TobacoId = part.Tobacco.Id,
-                                Id = part.Id
-                            });
+                        {
+                            name = "Part" + 1,
+                            Partin = (int)part.Fraction,
+                            TobaccoBrand = part.Tobacco.Brand.Name,
+                            TobacoFlavor = part.Tobacco.AccName,
+                            TobacoId = part.Tobacco.Id,
+                            Id = part.Id
+                        });
                 }
             }
             else
             {
                 result.TobacoMix.Add(new SmokeMetadataModalTobacoMix()
-                                         {
-                                             TobaccoBrand = metadata.Tobacco.Brand.Name,
-                                             Partin = System.Convert.ToInt32(metadata.TobaccoWeight),
-                                             TobacoFlavor = metadata.Tobacco.AccName,
-                                             TobacoId = metadata.Tobacco.Id,
-                                             name = "Part0"
-                                         });
+                {
+                    TobaccoBrand = metadata.Tobacco.Brand.Name,
+                    Partin = System.Convert.ToInt32(metadata.TobaccoWeight),
+                    TobacoFlavor = metadata.Tobacco.AccName,
+                    TobacoId = metadata.Tobacco.Id,
+                    name = "Part0"
+                });
                 result.TobacoMix[0].TobaccoBrand = metadata.Tobacco.Brand.Name;
                 result.TobacoMix[0].TobacoFlavor = metadata.Tobacco.AccName;
                 result.TobacoMix[0].TobacoId = metadata.Tobacco.Id;
@@ -162,7 +158,7 @@ namespace smartHookah.Controllers
 
             return result;
         }
-        
+
         public int MetaDataId { get; set; }
 
         public bool MyGear { get; set; }
@@ -207,7 +203,7 @@ namespace smartHookah.Controllers
         public List<HeatManagment> Hmses { get; set; }
 
         public int? DbSmokeSessionId { get; set; }
-        
+
         public HeatKeeper HeatKeeper { get; set; }
 
         public PackType PackType { get; set; }

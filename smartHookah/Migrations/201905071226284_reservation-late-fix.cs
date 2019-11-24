@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class reservationlatefix : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace smartHookah.Migrations
             DropColumn("dbo.Place", "Instagram");
             DropColumn("dbo.Reservation", "Late");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.Reservation", "Late", c => c.Int());

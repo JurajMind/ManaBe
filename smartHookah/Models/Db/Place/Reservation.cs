@@ -1,8 +1,8 @@
-﻿using System;
+﻿using smartHookah.Models.Db.Place;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using smartHookah.Models.Db.Place;
 
 namespace smartHookah.Models.Db
 {
@@ -13,8 +13,8 @@ namespace smartHookah.Models.Db
         public int? PersonId { get; set; }
         public virtual Person Person { get; set; }
         public int PlaceId { get; set; }
-        public virtual  Place.Place Place { get; set; }
-        
+        public virtual Place.Place Place { get; set; }
+
         public DateTime? Started { get; set; }
 
         public DateTime? End { get; set; }
@@ -22,7 +22,7 @@ namespace smartHookah.Models.Db
         public ReservationState Status { get; set; }
 
         public virtual ICollection<HookahOrder> Orders { get; set; }
-        
+
         public int Persons { get; set; }
 
         public TimeSpan Duration { get; set; }
@@ -39,13 +39,15 @@ namespace smartHookah.Models.Db
 
         public string Name { get; set; }
         [NotMapped]
-        public string DisplayName {
+        public string DisplayName
+        {
             get
             {
                 if (!string.IsNullOrEmpty(Name))
                     return Name;
                 return Person == null ? Name : Person.User.First().Email;
-            } }
+            }
+        }
 
         public virtual ICollection<Person> Customers { get; set; }
 

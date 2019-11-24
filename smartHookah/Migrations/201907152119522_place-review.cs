@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class placereview : DbMigration
     {
         public override void Up()
@@ -13,19 +12,19 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.PlaceReview",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        AuthorId = c.Int(),
-                        PublishDate = c.DateTime(nullable: false),
-                        Text = c.String(),
-                        PlaceId = c.Int(),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    AuthorId = c.Int(),
+                    PublishDate = c.DateTime(nullable: false),
+                    Text = c.String(),
+                    PlaceId = c.Int(),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Person", t => t.AuthorId)
                 .ForeignKey("dbo.Place", t => t.PlaceId)
                 .Index(t => t.AuthorId)
                 .Index(t => t.PlaceId);
-            
+
             AddColumn("dbo.PipeAccesory", "Rating", c => c.Double(nullable: false));
             AddColumn("dbo.PipeAccessoryReview", "Discriminator", c => c.String(nullable: false, maxLength: 128));
             AlterColumn("dbo.PipeAccessoryReview", "Quality", c => c.Int());
@@ -33,7 +32,7 @@ namespace smartHookah.Migrations
             AlterColumn("dbo.PipeAccessoryReview", "Smoke", c => c.Int());
             AlterColumn("dbo.PipeAccessoryReview", "Overall", c => c.Double(nullable: false));
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.PlaceReview", "PlaceId", "dbo.Place");

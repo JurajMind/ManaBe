@@ -3,10 +3,8 @@ using System.Linq;
 
 namespace smartHookah.Helpers
 {
-    using System;
-
-    using smartHookah.Models;
     using smartHookah.Models.Dto;
+    using System;
 
     public static class EnumExtensions
     {

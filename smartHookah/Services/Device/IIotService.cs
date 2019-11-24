@@ -1,9 +1,8 @@
 ﻿namespace smartHookah.Services.Device
 {
+    using Microsoft.Azure.Devices;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using Microsoft.Azure.Devices;
 
     public interface IIotService
     {

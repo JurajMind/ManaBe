@@ -1,6 +1,6 @@
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using smartHookah.Models.Db;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -10,14 +8,9 @@ using System.Web.Mvc;
 
 namespace smartHookah.Filters
 {
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Owin;
-
     using Newtonsoft.Json;
+    using System.Net;
+    using System.Threading.Tasks;
 
     public class IPGeographicalLocation
     {
@@ -69,8 +62,8 @@ namespace smartHookah.Filters
         public static async Task<IPGeographicalLocation> QueryGeographicalLocationAsync(string ipAddress)
         {
             WebClient client = new WebClient();
-          
-            string result =  client.DownloadString("http://freegeoip.net/json/" + ipAddress);
+
+            string result = client.DownloadString("http://freegeoip.net/json/" + ipAddress);
 
             return JsonConvert.DeserializeObject<IPGeographicalLocation>(result);
         }
@@ -87,19 +80,19 @@ namespace smartHookah.Filters
 
         public string GetDefaultLocalitazion(string ip)
         {
-            IPGeographicalLocation model =  IPGeographicalLocation.QueryGeographicalLocationAsync(ip).Result;
+            IPGeographicalLocation model = IPGeographicalLocation.QueryGeographicalLocationAsync(ip).Result;
             return model.CountryCode;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var lang = (string)filterContext.RouteData.Values["lang"] ?? _DefaultLanguage;
-            var cookieLang = GetLanguage(filterContext);;
+            var cookieLang = GetLanguage(filterContext); ;
 
             if (filterContext.RouteData.Values["lang"] == null)
             {
                 lang = GetLanguage(filterContext);
-                
+
             }
             else
             {
@@ -108,7 +101,7 @@ namespace smartHookah.Filters
                 {
                     StoreLanguage(filterContext, lang);
                 }
-              
+
             }
 
             if (lang != _DefaultLanguage)
@@ -151,10 +144,10 @@ namespace smartHookah.Filters
             // Don't forget to reset the Expires property!
             cookie.Expires = now.AddYears(50);
             filterContext.HttpContext.Response.SetCookie(cookie);
-            
+
         }
 
-        private  string GetLanguage(ActionExecutingContext filterContext)
+        private string GetLanguage(ActionExecutingContext filterContext)
         {
             HttpCookie cookie = filterContext.HttpContext.Request.Cookies.Get("manapipes-lang");
             DateTime now = DateTime.Now;
@@ -176,12 +169,12 @@ namespace smartHookah.Filters
             return cookie.Value;
         }
 
-     
+
 
         private static void StoreLanguage(ActionExecutingContext filterContext, string lang)
         {
             HttpCookie cookie = filterContext.HttpContext.Request.Cookies.Get("manapipes-lang");
-            if(cookie ==null)
+            if (cookie == null)
                 cookie = new HttpCookie("manapipes-lang");
             DateTime now = DateTime.Now;
 

@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class placeimprovments : DbMigration
     {
         public override void Up()
@@ -20,7 +19,7 @@ namespace smartHookah.Migrations
             DropColumn("dbo.Place", "AllowReservation");
             DropColumn("dbo.PlaceFlag", "DisplayName");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.PlaceFlag", "DisplayName", c => c.String());

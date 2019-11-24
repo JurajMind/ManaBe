@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class softReviewDelete : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace smartHookah.Migrations
             AddColumn("dbo.SessionReview", "Deleted", c => c.Boolean(nullable: false));
             AddColumn("dbo.PlaceReview", "Deleted", c => c.Boolean(nullable: false));
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.PlaceReview", "Deleted");

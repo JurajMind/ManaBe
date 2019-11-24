@@ -3,16 +3,12 @@ using System.Threading.Tasks;
 
 namespace smartHookah.Services.Device
 {
+    using smartHookah.Models.Db;
+    using smartHookah.Services.Person;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
-    using smartHookah.Models;
-    using smartHookah.Models.Db;
-    using smartHookah.Services.Person;
 
     public class DeviceSettingsPresetService : IDeviceSettingsPresetService
     {
@@ -36,7 +32,7 @@ namespace smartHookah.Services.Device
 
             var person = this.personService.GetCurentPerson();
             person.DefaultPreset = defaultPreset;
-         
+
             this.db.Persons.AddOrUpdate(person);
 
             this.db.SaveChanges();
@@ -120,7 +116,7 @@ namespace smartHookah.Services.Device
         {
             var person = this.personService.GetCurentPerson();
             var personId = person?.Id;
-            var presets = this.db.DevicePreset.Include(a  => a.DeviceSetting).Where(a => a.PersonId == personId || a.Person == null);
+            var presets = this.db.DevicePreset.Include(a => a.DeviceSetting).Where(a => a.PersonId == personId || a.Person == null);
             return presets.ToList();
         }
 

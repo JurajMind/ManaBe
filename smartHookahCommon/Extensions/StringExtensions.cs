@@ -12,7 +12,7 @@ namespace smartHookahCommon.Extensions
 
             for (int i = 0; i < s.Length; i++)
             {
-               
+
                 if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(s[i]) != System.Globalization.UnicodeCategory.NonSpacingMark)
                 {
                     sb.Append(s[i]);

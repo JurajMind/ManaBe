@@ -1,11 +1,9 @@
 namespace smartHookah.Models.Dto
 {
+    using Newtonsoft.Json;
+    using smartHookah.Models.Db;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-
-    using Newtonsoft.Json;
-
-    using smartHookah.Models.Db;
 
     [DataContract]
     public class DevicePresetDto
@@ -49,10 +47,10 @@ namespace smartHookah.Models.Dto
         {
             return new DevicePreset()
             {
-                Id = this.Id, 
+                Id = this.Id,
                 Name = this.Name,
-                PersonId = this.PersonId, 
-            }; 
+                PersonId = this.PersonId,
+            };
         }
     }
 }

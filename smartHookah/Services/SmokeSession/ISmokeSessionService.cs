@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Redis;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.SmokeSession
 {
@@ -13,7 +10,7 @@ namespace smartHookah.Services.SmokeSession
 
     public interface ISmokeSessionService
     {
-        DynamicSmokeStatistic GetDynamicStatistic(string sessionId,string deviceId);
+        DynamicSmokeStatistic GetDynamicStatistic(string sessionId, string deviceId);
 
         Dictionary<string, DynamicSmokeStatistic> GetDynamicSmokeStatistics(List<Hookah> hookah,
             Func<Hookah, string> getCode);
@@ -34,7 +31,7 @@ namespace smartHookah.Services.SmokeSession
         Task<SmokeSessionMetaData> SaveMetaData(string id, SmokeSessionMetaData model);
 
         Task<SmokeSession> EndSmokeSession(string id, SessionReport source);
-        
+
         void StoreOldPufs();
 
         SmokeSession GetSmokeSession(int id);

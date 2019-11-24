@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Data.Entity.Spatial;
-using System.Data.Entity.Validation;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using GuigleAPI;
+﻿using GuigleAPI;
 using Microsoft.VisualStudio.Services.Common;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Models.Dto.Places;
@@ -20,6 +9,15 @@ using smartHookah.Services.Device;
 using smartHookah.Services.Redis;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Data.Entity.Spatial;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Place
 {
@@ -91,7 +89,7 @@ namespace smartHookah.Services.Place
             return await this.db.TobaccoMixs.Where(a => a.AuthorId == place.Person.Id).ToListAsync();
         }
 
-        public async Task<Place> AddPlace(Place place,List<string> flags)
+        public async Task<Place> AddPlace(Place place, List<string> flags)
         {
             var tryFindPlace = this.db.Places.FirstOrDefault(a =>
                 (a.Address.Lat == place.Address.Lat && a.Address.Lat == place.Address.Lat) || a.Name == place.Name);
@@ -100,7 +98,7 @@ namespace smartHookah.Services.Place
             {
                 // return tryFindPlace;
             }
-            
+
             if (place == null) throw new ArgumentNullException(nameof(place));
             place.Address = await GetLocation(place.Address);
             place.FranchiseId = await db.Franchises.AnyAsync(a => a.Id == place.FranchiseId) ? place.FranchiseId : null;
@@ -127,8 +125,8 @@ namespace smartHookah.Services.Place
                     if (posibleResult.Results.Any())
                     {
 
-                        var tryAdress =  ParseGoogleResult(posibleResult.Results.First());
-                        
+                        var tryAdress = ParseGoogleResult(posibleResult.Results.First());
+
 
                     }
                 }
@@ -146,7 +144,7 @@ namespace smartHookah.Services.Place
 
             var result = await GoogleGeocodingAPI.SearchAddressAsync(address.ToString());
 
-            if (result.Results.Any() && (this.ValidateCoordinates(address.Lat,address.Lng) ?? false ))
+            if (result.Results.Any() && (this.ValidateCoordinates(address.Lat, address.Lng) ?? false))
             {
                 var firstResult = result.Results.First();
                 address.Lat = firstResult.Geometry.Location.Lat.ToString(CultureInfo.InvariantCulture);
@@ -168,7 +166,7 @@ namespace smartHookah.Services.Place
 
             if (place == null)
             {
-                throw new ManaException(ErrorCodes.PlaceNotFound,$"Place {placeId} was not found");
+                throw new ManaException(ErrorCodes.PlaceNotFound, $"Place {placeId} was not found");
             }
 
             return AddFlags(place, flags);
@@ -187,7 +185,7 @@ namespace smartHookah.Services.Place
                 throw new ManaException(ErrorCodes.PlaceNotFound, $"Place was not found");
             }
 
-            var uniqFlags = place.PlaceFlags == null ? flags  : flags.Where(a => place.PlaceFlags.Count(f => f.Code == a) == 0).ToList();
+            var uniqFlags = place.PlaceFlags == null ? flags : flags.Where(a => place.PlaceFlags.Count(f => f.Code == a) == 0).ToList();
             var dbFlags = this.db.PlaceFlags.Where(f => uniqFlags.Contains(f.Code)).ToList();
 
             if (place.PlaceFlags != null)
@@ -214,14 +212,14 @@ namespace smartHookah.Services.Place
 
             if (place == null)
             {
-                throw new ManaException(ErrorCodes.PlaceNotFound,"$Place not found");
+                throw new ManaException(ErrorCodes.PlaceNotFound, "$Place not found");
             }
 
             var result = new PlaceDashboardDto();
             var deviceStatus = await this.deviceService.GetOnlineStates(devices.Select(s => s.Code));
             foreach (var device in devices)
             {
-                var devicePart = new DevicePlaceDashboardDto {Device = DeviceSimpleDto.FromModel(device)};
+                var devicePart = new DevicePlaceDashboardDto { Device = DeviceSimpleDto.FromModel(device) };
                 if (deviceStatus.TryGetValue(device.Code, out var deviceState))
                 {
                     devicePart.Device.IsOnline = deviceState;
@@ -250,7 +248,7 @@ namespace smartHookah.Services.Place
             return await places;
         }
 
-        public async Task<Place> ChangePlaceState(int placeId,PlaceState newState)
+        public async Task<Place> ChangePlaceState(int placeId, PlaceState newState)
         {
             var place = await this.db.Places.FindAsync(placeId);
             if (place == null)

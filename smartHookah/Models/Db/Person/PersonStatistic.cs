@@ -13,7 +13,7 @@ namespace smartHookah.Models.Db
 
         public decimal AvgPufCount { get; set; }
 
-       public Int64 AvgSessionDurationTick { get; set; }
+        public Int64 AvgSessionDurationTick { get; set; }
 
         [NotMapped]
         public TimeSpan AvgSessionDuration

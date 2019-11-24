@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -12,7 +11,7 @@ namespace smartHookah.Controllers
         public ActionResult Manifest()
         {
             var pages = new List<string>();
-        
+
             var scriptsPaths = GetRelativePathsToRoot("~/Scripts/");
             var contentPaths = GetRelativePathsToRoot("~/Content/");
 
@@ -46,61 +45,61 @@ namespace smartHookah.Controllers
         }
     }
 
-        public class ManifestResult : FileResult
+    public class ManifestResult : FileResult
+    {
+        public ManifestResult(string version)
+            : base("text/cache-manifest")
         {
-            public ManifestResult(string version)
-                : base("text/cache-manifest")
-            {
-                CacheResources = new List<string>();
-                NetworkResources = new List<string>();
-                FallbackResources = new Dictionary<string, string>();
-                Version = version;
-            }
+            CacheResources = new List<string>();
+            NetworkResources = new List<string>();
+            FallbackResources = new Dictionary<string, string>();
+            Version = version;
+        }
 
-            public string Version { get; set; }
+        public string Version { get; set; }
 
-            public IEnumerable<string> CacheResources { get; set; }
+        public IEnumerable<string> CacheResources { get; set; }
 
-            public IEnumerable<string> NetworkResources { get; set; }
+        public IEnumerable<string> NetworkResources { get; set; }
 
-            public Dictionary<string, string> FallbackResources { get; set; }
+        public Dictionary<string, string> FallbackResources { get; set; }
 
-            protected override void WriteFile(HttpResponseBase response)
-            {
-                WriteManifestHeader(response);
-                WriteCacheResources(response);
-                WriteNetwork(response);
-                WriteFallback(response);
-            }
+        protected override void WriteFile(HttpResponseBase response)
+        {
+            WriteManifestHeader(response);
+            WriteCacheResources(response);
+            WriteNetwork(response);
+            WriteFallback(response);
+        }
 
-            private void WriteManifestHeader(HttpResponseBase response)
-            {
-                response.Output.WriteLine("CACHE MANIFEST");
-                response.Output.WriteLine("#V" + Version ?? string.Empty);
-            }
+        private void WriteManifestHeader(HttpResponseBase response)
+        {
+            response.Output.WriteLine("CACHE MANIFEST");
+            response.Output.WriteLine("#V" + Version ?? string.Empty);
+        }
 
-            private void WriteCacheResources(HttpResponseBase response)
-            {
-                response.Output.WriteLine("CACHE:");
-                foreach (var cacheResource in CacheResources)
-                    response.Output.WriteLine(cacheResource);
-            }
+        private void WriteCacheResources(HttpResponseBase response)
+        {
+            response.Output.WriteLine("CACHE:");
+            foreach (var cacheResource in CacheResources)
+                response.Output.WriteLine(cacheResource);
+        }
 
 
         private void WriteNetwork(HttpResponseBase response)
-            {
-                response.Output.WriteLine();
-                response.Output.WriteLine("NETWORK:");
-                foreach (var networkResource in NetworkResources)
-                    response.Output.WriteLine(networkResource);
-            }
+        {
+            response.Output.WriteLine();
+            response.Output.WriteLine("NETWORK:");
+            foreach (var networkResource in NetworkResources)
+                response.Output.WriteLine(networkResource);
+        }
 
-            private void WriteFallback(HttpResponseBase response)
-            {
-                response.Output.WriteLine();
-                response.Output.WriteLine("FALLBACK:");
-                foreach (var fallbackResource in FallbackResources)
-                    response.Output.WriteLine(fallbackResource.Key + " " + fallbackResource.Value);
-            }
+        private void WriteFallback(HttpResponseBase response)
+        {
+            response.Output.WriteLine();
+            response.Output.WriteLine("FALLBACK:");
+            foreach (var fallbackResource in FallbackResources)
+                response.Output.WriteLine(fallbackResource.Key + " " + fallbackResource.Value);
+        }
     }
-    }
+}

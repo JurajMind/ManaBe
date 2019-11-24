@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.TeamFoundation.VersionControl.Client;
+﻿using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.VisualStudio.Services.Account;
 using Microsoft.VisualStudio.Services.Common;
+using smartHookah.Helpers;
 using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
 using smartHookah.Services.Person;
+using smartHookah.Services.Redis;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
 using smartHookahCommon.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
-
-using smartHookah.Helpers;
-using smartHookah.Models.Dto;
-using smartHookah.Services.Redis;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Gear
 {
@@ -38,10 +37,10 @@ namespace smartHookah.Services.Gear
 
         public List<PipeAccesory> GetPersonAccessories(int? personId, string type)
         {
-            var person = personId == null 
+            var person = personId == null
                 ? personService.GetCurentPerson()
                 : db.Persons.Find(personId);
-            
+
             if (person == null) throw new AccountNotFoundException();
             var query = person.OwnedPipeAccesories.Where(a => a.DeleteDate == null).Select(a => a.PipeAccesory);
             switch (type.ToLower())
@@ -77,7 +76,7 @@ namespace smartHookah.Services.Gear
                 throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory with id {id} was not found");
             return accessory;
         }
-        
+
         public void Vote(int id, VoteValue value)
         {
             var accessory = GetPipeAccessory(id);
@@ -86,14 +85,14 @@ namespace smartHookah.Services.Gear
             var oldVote = db.PipeAccesoryLikes.Where(a => a.PersonId == person.Id).FirstOrDefault(a => a.PipeAccesoryId == accessory.Id);
             if (oldVote != null)
             {
-                if(oldVote.Value == (int)value) 
+                if (oldVote.Value == (int)value)
                     throw new DuplicateItemFoundException($"Accessory {accessory.Id} already has vote value of \'{value.ToString()}\' from current person.");
-                if (oldVote.Value == -1 && (int) value > oldVote.Value)
+                if (oldVote.Value == -1 && (int)value > oldVote.Value)
                 {
                     accessory.DisLikeCount--;
                     accessory.LikeCount += value == VoteValue.Like ? 1 : 0;
                 }
-                else if (oldVote.Value == 1 && (int) value < oldVote.Value)
+                else if (oldVote.Value == 1 && (int)value < oldVote.Value)
                 {
                     accessory.LikeCount--;
                     accessory.DisLikeCount += value == VoteValue.Dislike ? 1 : 0;
@@ -103,7 +102,7 @@ namespace smartHookah.Services.Gear
                     accessory.LikeCount += value == VoteValue.Like ? 1 : 0;
                     accessory.DisLikeCount += value == VoteValue.Dislike ? 1 : 0;
                 }
-                oldVote.Value = (int) value;
+                oldVote.Value = (int)value;
             }
             else
             {
@@ -116,9 +115,9 @@ namespace smartHookah.Services.Gear
             {
                 PersonId = person.Id,
                 PipeAccesoryId = accessory.Id,
-                Value = (int) value
+                Value = (int)value
             };
-            
+
             accessory.Likes.Add(vote);
             db.PipeAccesoryLikes.AddOrUpdate(vote);
             db.PipeAccesories.AddOrUpdate(accessory);
@@ -142,12 +141,12 @@ namespace smartHookah.Services.Gear
                 k => k.Key,
                 v => v.Select(s => s.Brand).OrderBy(a => a.DisplayName).Distinct().Select(
                     b => new BrandGroupDto
-                             {
-                             Id = b.Name,
-                             Name = b.DisplayName,
-                             Picture = b.Picture,
-                             ItemCount = v.Count(a => a.BrandName == b.Name)
-                         }).ToList());
+                    {
+                        Id = b.Name,
+                        Name = b.DisplayName,
+                        Picture = b.Picture,
+                        ItemCount = v.Count(a => a.BrandName == b.Name)
+                    }).ToList());
 
             this.cacheService.Store("brands", result);
 
@@ -236,7 +235,7 @@ namespace smartHookah.Services.Gear
         public async Task<PipeAccesory> MergeGear(int targetId, int sourceId)
         {
             var source = await this.db.PipeAccesories.FindAsync(sourceId);
-          
+
             var target = await this.db.PipeAccesories.FindAsync(targetId);
             if (source == null || target == null)
             {
@@ -246,7 +245,7 @@ namespace smartHookah.Services.Gear
             //sessions
             var sessions = await this.db.SessionMetaDatas.Where(a =>
                 a != null &&
-                (   a.TobaccoId == source.Id
+                (a.TobaccoId == source.Id
                  || a.BowlId == source.Id
                  || a.PipeId == source.Id
                  || a.HeatManagementId == source.Id
@@ -350,9 +349,9 @@ namespace smartHookah.Services.Gear
             var person = personService.GetCurentPerson(personId);
 
             var result = db.Persons.FirstOrDefault(a => a.Id == person.Id)?.SmokeSessions?
-                .Count(a => a.MetaData.Bowl?.Id == accessory.Id || 
-                            a.MetaData.Pipe?.Id == accessory.Id || 
-                            a.MetaData.HeatManagement?.Id == accessory.Id || 
+                .Count(a => a.MetaData.Bowl?.Id == accessory.Id ||
+                            a.MetaData.Pipe?.Id == accessory.Id ||
+                            a.MetaData.HeatManagement?.Id == accessory.Id ||
                             a.MetaData.Coal?.Id == accessory.Id);
 
             return result ?? 0;
@@ -361,7 +360,7 @@ namespace smartHookah.Services.Gear
         public int UsedByPerson(PipeAccesory accessory)
         {
             var person = personService.GetCurentPerson();
-            
+
             var result = db.Persons.FirstOrDefault(a => a.Id == person.Id)?.SmokeSessions?
                 .Count(a => a.MetaData.Bowl?.Id == accessory.Id ||
                             a.MetaData.Pipe?.Id == accessory.Id ||
@@ -382,25 +381,25 @@ namespace smartHookah.Services.Gear
             var result = new Dictionary<PipeAccesory, int>();
 
             var bowls = (from o in sessions
-                where o.MetaData.Bowl != null
-                where o.MetaData.Bowl.Id != accessory.Id
-                group o by o.MetaData.Bowl).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+                         where o.MetaData.Bowl != null
+                         where o.MetaData.Bowl.Id != accessory.Id
+                         group o by o.MetaData.Bowl).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
 
             var pipes = (from o in sessions
-                where o.MetaData.Pipe != null
-                where o.MetaData.Pipe.Id != accessory.Id
-                group o by o.MetaData.Pipe).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+                         where o.MetaData.Pipe != null
+                         where o.MetaData.Pipe.Id != accessory.Id
+                         group o by o.MetaData.Pipe).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
 
             var hmds = (from o in sessions
-                where o.MetaData.HeatManagement != null
-                where o.MetaData.HeatManagement.Id != accessory.Id
-                group o by o.MetaData.HeatManagement).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+                        where o.MetaData.HeatManagement != null
+                        where o.MetaData.HeatManagement.Id != accessory.Id
+                        group o by o.MetaData.HeatManagement).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
 
             var coals = (from o in sessions
-                where o.MetaData.Coal != null
-                where o.MetaData.Coal.Id != accessory.Id
-                group o by o.MetaData.Coal).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
-            
+                         where o.MetaData.Coal != null
+                         where o.MetaData.Coal.Id != accessory.Id
+                         group o by o.MetaData.Coal).ToDictionary(k => k.Key as PipeAccesory, v => v.Count());
+
             result.AddRangeIfRangeNotNull(bowls);
             result.AddRangeIfRangeNotNull(hmds);
             result.AddRangeIfRangeNotNull(pipes);
@@ -462,7 +461,7 @@ namespace smartHookah.Services.Gear
 
             var accessory = db.PipeAccesories.FirstOrDefault(a => a.Id == id);
 
-            if (accessory == null) throw new ManaException(ErrorCodes.AccessoryNotFound,$"Accessory id {id} not found.");
+            if (accessory == null) throw new ManaException(ErrorCodes.AccessoryNotFound, $"Accessory id {id} not found.");
 
             if (person.OwnedPipeAccesories.All(a => a.PipeAccesory.Id != accessory.Id))
                 throw new KeyNotFoundException($"OwnAccessory id {id} not found.");
@@ -479,7 +478,7 @@ namespace smartHookah.Services.Gear
 
                 current.Amount = 0;
                 current.DeleteDate = DateTime.UtcNow;
-                
+
                 db.OwnPipeAccesorieses.AddOrUpdate(current);
                 await db.SaveChangesAsync();
                 return true;
@@ -501,7 +500,7 @@ namespace smartHookah.Services.Gear
             var hmds = sessions.Select(a => a.MetaData.HeatManagement as PipeAccesory).Where(a => a != null).ToList();
             var pipes = sessions.Select(a => a.MetaData.Pipe as PipeAccesory).Where(a => a != null).ToList();
             var coals = sessions.Select(a => a.MetaData.Coal as PipeAccesory).Where(a => a != null).ToList();
-            var tobacco = sessions.Where(a => !(a.MetaData.Tobacco is TobaccoMix) ).Select(a => a.MetaData.Tobacco as PipeAccesory).Where(a => a != null).ToList();
+            var tobacco = sessions.Where(a => !(a.MetaData.Tobacco is TobaccoMix)).Select(a => a.MetaData.Tobacco as PipeAccesory).Where(a => a != null).ToList();
 
             result.AddRangeIfRangeNotNull(bowls);
             result.AddRangeIfRangeNotNull(hmds);

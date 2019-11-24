@@ -1,22 +1,20 @@
-﻿using System;
+﻿using smartHookah.Models.Dto;
+using smartHookah.Models.Dto.Device;
+using smartHookah.Services.Device;
+using smartHookah.Services.Gear;
+using smartHookah.Services.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-using smartHookah.Models.Dto;
-using smartHookah.Models.Dto.Device;
-using smartHookah.Services.Device;
-using smartHookah.Services.Gear;
-using smartHookah.Services.Messages;
-
 namespace smartHookah.Controllers.Api
 {
-    using System.Threading.Tasks;
-
     using smartHookah.ErrorHandler;
     using smartHookah.Services.Person;
+    using System.Threading.Tasks;
 
     [RoutePrefix("api/Person")]
     public class PersonController : ApiController
@@ -151,11 +149,11 @@ namespace smartHookah.Controllers.Api
         [ApiAuthorize, HttpPost, Route("TestNotification")]
         public async Task TestNotification()
         {
-           await this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
-                $"Test notification", new Dictionary<string, string>()
-                {
+            await this.firebaseNotificationService.NotifyAsync(this.personService.GetCurentPerson().Id, "Test notifikace",
+                 $"Test notification", new Dictionary<string, string>()
+                 {
                     { "Date", DateTime.UtcNow.ToString() }
-                });
+                 });
         }
 
 

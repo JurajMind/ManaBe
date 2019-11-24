@@ -1,28 +1,23 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
-    using System.IO;
-
     using CsvHelper;
     using CsvHelper.Configuration;
     using CsvHelper.Configuration.Attributes;
-
     using Google.Apis.Services;
-
     using smartHookah.Models.Factory;
     using smartHookah.Models.ViewModel;
     using smartHookah.Support;
+    using System.IO;
 
     [Authorize]
     public class PipeAccesorryController : Controller
@@ -60,18 +55,18 @@ namespace smartHookah.Controllers
                 switch (type)
                 {
                     case "bowl":
-                    {
-                        accesory = new Bowl(accesory);
-                        break;
-                    }
+                        {
+                            accesory = new Bowl(accesory);
+                            break;
+                        }
                     case "tobacco":
                         {
                             accesory = new Tobacco(accesory);
                             break;
                         }
                     case "pipe":
-                    {
-                            accesory = new Pipe(accesory); 
+                        {
+                            accesory = new Pipe(accesory);
                             break;
                         }
 
@@ -93,7 +88,7 @@ namespace smartHookah.Controllers
                 var existing =
                     db.PipeAccesories.FirstOrDefault(a => a.AccName == accesory.AccName && a.BrandName == accesory.BrandName);
 
-                
+
 
                 if (brand == null)
                     return RedirectToAction("Create");
@@ -109,13 +104,13 @@ namespace smartHookah.Controllers
                 {
                     accesory = existing;
                 }
-                
+
                 var add = bool.Parse(collection["add"]);
 
                 if (add)
                 {
                     Person person;
-                    PersonController.AddGear(accesory.Id,0,db,out person,UserHelper.GetCurentPerson(db).Id);
+                    PersonController.AddGear(accesory.Id, 0, db, out person, UserHelper.GetCurentPerson(db).Id);
                     return RedirectToAction("MyGear", "Person");
                 }
 
@@ -166,7 +161,7 @@ namespace smartHookah.Controllers
             if (file != null)
             {
                 var extension = System.IO.Path.GetExtension(file.FileName);
-                item.Picture = path +item.Brand.Name+"/"+ item.AccName + extension;
+                item.Picture = path + item.Brand.Name + "/" + item.AccName + extension;
 
                 System.IO.Directory.CreateDirectory(Server.MapPath(path + item.Brand.Name));
 
@@ -188,7 +183,7 @@ namespace smartHookah.Controllers
             {
                 case "bowl":
                     return GetBrandFromQuery(brans.Where(a => a.Bowl));
-                   
+
                 case "pipe":
                     return GetBrandFromQuery(brans.Where(a => a.Hookah));
                 case "tobacco":
@@ -199,22 +194,22 @@ namespace smartHookah.Controllers
                     return GetBrandFromQuery(brans.Where(a => a.Coal));
             }
 
-            return Json(new {brans = new List<string>() {"None"} },JsonRequestBehavior.AllowGet);
+            return Json(new { brans = new List<string>() { "None" } }, JsonRequestBehavior.AllowGet);
 
         }
 
         public async Task<JsonResult> GetAllGear()
         {
-            var pipes = db.Pipes.Select(a => new {id = a.Id, name = a.BrandName + " " + a.AccName});
+            var pipes = db.Pipes.Select(a => new { id = a.Id, name = a.BrandName + " " + a.AccName });
             var bowls = db.Bowls.Select(a => new { id = a.Id, name = a.BrandName + " " + a.AccName });
             var tobacoBrands = db.Brands.Where(a => a.Tobacco).Select(a => a.Name).Distinct().Select(b => new { id = b, name = b });
 
-            return Json(new {pipes, bowls, tobacoBrands}, JsonRequestBehavior.AllowGet);
+            return Json(new { pipes, bowls, tobacoBrands }, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<JsonResult> GetMyGear()
         {
-            
+
             var person = UserHelper.GetCurentPerson(db);
             if (person == null)
                 return await GetAllGear();
@@ -243,10 +238,10 @@ namespace smartHookah.Controllers
                     return Json(new { names = brans.PipeAccessories.Where(a => a is Tobacco).Select(a => a.AccName) }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { names = new List<string>() {"None"} }, JsonRequestBehavior.AllowGet);
+            return Json(new { names = new List<string>() { "None" } }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> GetNamePartial(string type, string brand,int? personId = null)
+        public async Task<ActionResult> GetNamePartial(string type, string brand, int? personId = null)
         {
             var person = UserHelper.GetCurentPerson(db, personId);
 
@@ -284,7 +279,7 @@ namespace smartHookah.Controllers
 
         private JsonResult GetBrandFromQuery(IQueryable<Brand> brands)
         {
-            return Json(new {brans = brands.Select(a => a.Name).OrderBy(a => a).ToList()},JsonRequestBehavior.AllowGet);
+            return Json(new { brans = brands.Select(a => a.Name).OrderBy(a => a).ToList() }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -325,7 +320,7 @@ namespace smartHookah.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ImportPost(HttpPostedFileBase file, string type,string save = "")
+        public async Task<ActionResult> ImportPost(HttpPostedFileBase file, string type, string save = "")
         {
             var model = new ImportResultModel();
             var preview = save == "save";
@@ -341,9 +336,9 @@ namespace smartHookah.Controllers
                 csv.Configuration.MissingFieldFound = null;
                 csv.Configuration.Delimiter = ",";
                 csv.Configuration.TrimOptions = TrimOptions.Trim;
-            
+
                 var records = csv.GetRecords<ImportPipeAccesory>();
-               
+
                 foreach (var record in records)
                 {
                     try

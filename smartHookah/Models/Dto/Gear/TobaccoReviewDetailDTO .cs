@@ -1,14 +1,14 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Session.Dto;
+using System.Runtime.Serialization;
 
 namespace smartHookah.Models.Dto.Gear
 {
     [DataContract]
     public class TobaccoReviewDetailDto : TobaccoReviewDto
     {
-       
+
         [DataMember, JsonProperty("SmokeSessionId")]
         public SessionReviewDto SessionReview { get; set; }
 

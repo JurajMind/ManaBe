@@ -6,6 +6,12 @@ using smartHookah.Services.SmokeSession;
 
 namespace smartHookah.Controllers
 {
+    using GuigleAPI;
+    using smartHookah.Helpers;
+    using smartHookah.Models;
+    using smartHookah.Models.Dto;
+    using smartHookah.Models.Redis;
+    using smartHookah.Support;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -22,16 +28,6 @@ namespace smartHookah.Controllers
     using System.Web;
     using System.Web.Http;
     using System.Web.Mvc;
-
-    using GuigleAPI;
-
-    using smartHookah.Helpers;
-    using smartHookah.Models;
-    using smartHookah.Models.Dto;
-    using smartHookah.Models.Redis;
-    using smartHookah.Support;
-
-    using smartHookahCommon;
 
     /// <summary>
     ///     The places controller.
@@ -190,16 +186,16 @@ namespace smartHookah.Controllers
                     dynamicOut = new DynamicSmokeStatistic();
                 model.Hookah.Add(
                     new HookahDashboardViewModel
-                        {
-                            Key = hookah.Code,
-                            Name = hookah.Name,
-                            DynamicSmokeStatisticDto =
+                    {
+                        Key = hookah.Code,
+                        Name = hookah.Name,
+                        DynamicSmokeStatisticDto =
                                 new DynamicSmokeStatisticDto(dynamicOut),
-                            Online = onlineHookah.Contains(hookah.Code),
-                            EstPufCount = (int)estTobaco,
-                            HookahPicture = hookahPicture
-                          
-                        });
+                        Online = onlineHookah.Contains(hookah.Code),
+                        EstPufCount = (int)estTobaco,
+                        HookahPicture = hookahPicture
+
+                    });
             }
 
             return this.Json(model, JsonRequestBehavior.AllowGet);
@@ -247,7 +243,7 @@ namespace smartHookah.Controllers
                     Console.WriteLine(e);
                     //throw;
                 }
-        
+
 
                 this.db.Media.Remove(media);
                 this.db.SaveChanges();
@@ -273,9 +269,9 @@ namespace smartHookah.Controllers
             }
             catch (Exception e)
             {
-              
+
             }
-               
+
             model.Place = lounge;
             model.CanEdit = person != null;
             return this.View(model);
@@ -585,7 +581,7 @@ namespace smartHookah.Controllers
             return this.Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        [System.Web.Mvc.Authorize] 
+        [System.Web.Mvc.Authorize]
         public async Task<ActionResult> Statistics(string id)
         {
             var place = db.Places.FirstOrDefault(a => a.FriendlyUrl == id);
@@ -595,16 +591,16 @@ namespace smartHookah.Controllers
 
         public async Task<JsonResult> GetStatisticData(string id)
         {
-            var place = db.Places.Where(a => a.FriendlyUrl ==id).FirstOrDefault();
+            var place = db.Places.Where(a => a.FriendlyUrl == id).FirstOrDefault();
 
-            var reservation = db.Reservations.Include(a  => a.Seats).Where(
+            var reservation = db.Reservations.Include(a => a.Seats).Where(
                 a => a.PlaceId == place.Id && (a.Status == ReservationState.Visited || a.Status == ReservationState.Confirmed
                      || a.Status == ReservationState.Created)).ToList();
 
             var canceled = reservation.Where(a => a.Status == ReservationState.NonVisited);
 
             var dayDistribution = reservation.GroupBy(a => a.Time.DayOfWeek)
-                .ToPlotData(a => a.ToString(),a => (int)a.Key);
+                .ToPlotData(a => a.ToString(), a => (int)a.Key);
 
             var timeDistribution = reservation.GroupBy(a => a.Time.Hour.ToString(), a => a)
                 .ToPlotData(a => a.ToString());
@@ -636,11 +632,11 @@ namespace smartHookah.Controllers
             model.tableUssage = tableUssage;
             model.customers = reservation.Sum(a => a.Persons);
             var start = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
-            var end  = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
+            var end = reservation.OrderBy(a => a.Created).Select(a => a.Created).FirstOrDefault();
             model.DataSpan = (end.Date - start.Date).TotalDays.ToString();
             model.Start = start.ToString();
             model.ReservationCount = reservation.Count();
-            return Json(model,JsonRequestBehavior.AllowGet);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -721,13 +717,13 @@ namespace smartHookah.Controllers
             if (place == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
             var model = new OrderHookahViewModel
-                            {
-                                Place = place,
-                                Hookah = place.Person.Pipes.ToList(),
-                                Bowls = place.Person.Bowls.ToList(),
-                                Tobacco = place.Person.Tobaccos.ToList()
+            {
+                Place = place,
+                Hookah = place.Person.Pipes.ToList(),
+                Bowls = place.Person.Bowls.ToList(),
+                Tobacco = place.Person.Tobaccos.ToList()
             };
-                        if (resId.HasValue)
+            if (resId.HasValue)
             {
                 var reservation = this.db.Reservations.Find(resId);
                 if (reservation != null && reservation.Seats != null) model.Seat = reservation.Seats;
@@ -809,14 +805,14 @@ namespace smartHookah.Controllers
             descriptionSb.Append("TobaccoDescription:");
             descriptionSb.Append(model.TobaccoDescription);
             var order = new HookahOrder
-                            {
-                                Created = DateTime.Now.ToUniversalTime(),
-                                ExtraInfo = descriptionSb.ToString(),
-                                SmokeSessionMetaData = smokeSessionMetadata,
-                                Person = person,
-                                State = OrderState.Open,
-                                Place = place
-                            };
+            {
+                Created = DateTime.Now.ToUniversalTime(),
+                ExtraInfo = descriptionSb.ToString(),
+                SmokeSessionMetaData = smokeSessionMetadata,
+                Person = person,
+                State = OrderState.Open,
+                Place = place
+            };
 
             if (model.Seat != 0) order.SeatId = model.Seat;
 
@@ -863,7 +859,7 @@ namespace smartHookah.Controllers
             foreach (var sessionId in hookahSessionId)
             {
                 var session = this.db.SmokeSessions.Include(a => a.DbPufs).FirstOrDefault(a => a.SessionId == sessionId);
-                
+
                 model.Hookahs.Add(session.Hookah);
             }
 
@@ -872,7 +868,7 @@ namespace smartHookah.Controllers
         }
 
         [System.Web.Mvc.HttpPost]
-        public async Task<ActionResult> ProcessOrder(int id, int hookahId, int?seatId, int? reservationId)
+        public async Task<ActionResult> ProcessOrder(int id, int hookahId, int? seatId, int? reservationId)
         {
             var order = await this.db.HookahOrders.FindAsync(id);
             var hookah = await this.db.Hookahs.FindAsync(hookahId);

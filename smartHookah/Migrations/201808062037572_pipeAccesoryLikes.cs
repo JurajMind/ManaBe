@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class pipeAccesoryLikes : DbMigration
     {
         public override void Up()
@@ -14,34 +13,34 @@ namespace smartHookah.Migrations
             CreateTable(
                 "dbo.PipeAccesoryLike",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        PersonId = c.Int(nullable: false),
-                        PipeAccesoryId = c.Int(nullable: false),
-                        Value = c.Int(nullable: false),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    PersonId = c.Int(nullable: false),
+                    PipeAccesoryId = c.Int(nullable: false),
+                    Value = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Person", t => t.PersonId, cascadeDelete: true)
                 .ForeignKey("dbo.PipeAccesory", t => t.PipeAccesoryId, cascadeDelete: true)
                 .Index(t => t.PersonId)
                 .Index(t => t.PipeAccesoryId);
-            
+
             AddColumn("dbo.PipeAccesory", "LikeCount", c => c.Int(nullable: false));
             AddColumn("dbo.PipeAccesory", "DisLikeCount", c => c.Int(nullable: false));
             DropTable("dbo.PersonPipeAccesory");
         }
-        
+
         public override void Down()
         {
             CreateTable(
                 "dbo.PersonPipeAccesory",
                 c => new
-                    {
-                        Person_Id = c.Int(nullable: false),
-                        PipeAccesory_Id = c.Int(nullable: false),
-                    })
+                {
+                    Person_Id = c.Int(nullable: false),
+                    PipeAccesory_Id = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => new { t.Person_Id, t.PipeAccesory_Id });
-            
+
             DropForeignKey("dbo.PipeAccesoryLike", "PipeAccesoryId", "dbo.PipeAccesory");
             DropForeignKey("dbo.PipeAccesoryLike", "PersonId", "dbo.Person");
             DropIndex("dbo.PipeAccesoryLike", new[] { "PipeAccesoryId" });

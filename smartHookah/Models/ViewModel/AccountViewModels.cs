@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace smartHookah.Models
 {
-    using smartHookah.Support;
-
     public class ExternalLoginConfirmationViewModel
     {
         [Required]

@@ -1,10 +1,9 @@
-﻿using System.Data.Entity;
+﻿using smartHookah.Models.Db;
+using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {

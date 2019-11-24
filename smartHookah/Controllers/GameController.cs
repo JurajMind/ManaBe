@@ -1,13 +1,9 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using smartHookah.Helpers;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Controllers
 {
@@ -56,7 +52,7 @@ namespace smartHookah.Controllers
         public ActionResult ChcGamePost(int value)
         {
             var person = UserHelper.GetCurentPerson(db);
-            person.Game = new GamePerson() {Value = value};
+            person.Game = new GamePerson() { Value = value };
 
             db.Persons.AddOrUpdate(person);
 
@@ -100,6 +96,6 @@ namespace smartHookah.Controllers
     {
         public string sessionId;
     }
-    
+
 
 }

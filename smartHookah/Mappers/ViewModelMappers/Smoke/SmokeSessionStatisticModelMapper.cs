@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using smartHookah.Controllers;
+﻿using smartHookah.Controllers;
 using smartHookah.Helpers;
 using smartHookah.Models.Db;
-using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Session;
 using smartHookah.Models.ViewModel.SmokeSession;
 using smartHookah.Services.Person;
+using System.Linq;
 
 namespace smartHookah.Mappers.ViewModelMappers.Smoke
 {
@@ -42,7 +38,7 @@ namespace smartHookah.Mappers.ViewModelMappers.Smoke
             SmokeSessionMetaData outMetaData;
             result.SmokeMetadataModalViewModel = this.metadataModalViewModelMapper.Map(result.SmokeSession.SessionId,
                 result.SmokeSession.MetaData, personService.GetCurentPerson(), out outMetaData);
-         
+
             var pufs =
                 result.SmokeSession.Pufs.ToList().Select(a => (Puf)a).OrderBy(a => a.DateTime).ToList();
             result.LiveStatistic = SmokeHelper.GetSmokeStatistics(pufs);

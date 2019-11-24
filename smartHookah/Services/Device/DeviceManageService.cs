@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using smartHookah.Models.Db;
+using smartHookah.Models.Dto.Device;
+using smartHookah.Services.SmokeSession;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using smartHookah.Models.Db;
-using smartHookah.Models.Dto.Device;
 
 namespace smartHookah.Services.Device
 {
     public class DeviceManageService : IDeviceManageService
     {
         private readonly IIotService IotService;
+        private readonly ISmokeSessionBgService sessionBgService;
         private readonly SmartHookahContext db;
 
-        public DeviceManageService(IIotService iotService, SmartHookahContext db)
+        public DeviceManageService(IIotService iotService, SmartHookahContext db, ISmokeSessionBgService sessionBgService)
         {
             IotService = iotService;
             this.db = db;
+            this.sessionBgService = sessionBgService;
         }
 
         private string GenerateCode()
@@ -32,7 +33,7 @@ namespace smartHookah.Services.Device
         public async Task<DeviceCreationDto> CreateDevice()
         {
             var code = this.GenerateCode();
-            var deviceIot =  await this.IotService.CreateDevice(code);
+            var deviceIot = await this.IotService.CreateDevice(code);
             var patternHookah = db.Hookahs.First(a => a.Code == "pattern");
             var deviceDb = new Hookah(patternHookah);
             deviceDb.Code = code;
@@ -47,7 +48,7 @@ namespace smartHookah.Services.Device
                 Key = deviceIot.Authentication.SymmetricKey.PrimaryKey,
                 Led = 32
             };
-
+            await this.sessionBgService.InitSmokeSession(code);
             return tokenToDevice;
 
         }

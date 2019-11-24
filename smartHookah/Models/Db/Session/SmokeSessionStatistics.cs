@@ -1,7 +1,7 @@
-﻿using System;
+﻿using smartHookah.Support;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using smartHookah.Support;
 
 namespace smartHookah.Models.Db
 {
@@ -26,7 +26,7 @@ namespace smartHookah.Models.Db
         { }
         public SmokeSessionStatistics(IEnumerable<Puf> pufs)
         {
-            if(!pufs.Any())
+            if (!pufs.Any())
                 return;
 
             var pufsOrder = pufs.OrderBy(a => a.DateTime);

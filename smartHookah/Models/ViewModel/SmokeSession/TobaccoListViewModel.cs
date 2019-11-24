@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using smartHookah.Models.Db;
+using System.Collections.Generic;
 
 namespace smartHookah.Models
 {
@@ -7,6 +7,6 @@ namespace smartHookah.Models
     {
         public List<Tobacco> Tobaccos { get; set; }
 
-            public bool CanEdit { get; set; }
+        public bool CanEdit { get; set; }
     }
 }

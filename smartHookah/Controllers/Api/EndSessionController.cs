@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Microsoft.ApplicationInsights;
-using smartHookah.Models;
+﻿using Microsoft.ApplicationInsights;
 using smartHookah.Models.Db;
 using smartHookah.Services.Redis;
 using smartHookah.Services.SmokeSession;
-using smartHookahCommon;
+using System;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {

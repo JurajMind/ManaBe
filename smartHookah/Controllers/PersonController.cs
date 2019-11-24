@@ -1,23 +1,17 @@
-﻿using System;
+﻿using smartHookah.Helpers;
+using smartHookah.Mappers.ViewModelMappers.Person;
+using smartHookah.Models.Db;
+using smartHookah.Services.Redis;
+using smartHookah.Services.SmokeSession;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Accord.Statistics.Kernels;
-using Microsoft.AspNet.Identity.Owin;
-using smartHookah.Helpers;
-using smartHookah.Mappers.ViewModelMappers.Person;
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Models.Redis;
-using smartHookah.Services.Redis;
-using smartHookah.Services.SmokeSession;
-using smartHookahCommon;
 
 namespace smartHookah.Controllers
 {
@@ -45,7 +39,7 @@ namespace smartHookah.Controllers
             this.redisService = redisService;
         }
 
-    
+
         // GET: Person
         public async Task<ActionResult> Index(int? id)
         {
@@ -55,15 +49,15 @@ namespace smartHookah.Controllers
                                .Include(a => a.SmokeSessions.Select(b => b.Statistics)).FirstOrDefault();
 
             var model = await this.personIndexViewModelMapper.Map(person);
-         
+
             //var sessions = person.SmokeSessions.Where(a => a.Statistics != null).OrderByDescending(a => a.Statistics.Start).Take(5);
-           
+
 
             //var model = new PersonIndexViewModel();
             //model.SmokeSessions = sessions.ToList();
             //var hookahs = person.Hookahs.ToList();
             //model.OnlineHookah = await IotDeviceHelper.GetState(hookahs.Select(a => a.Code).ToList());
-            
+
             //model.Hookah = hookahs;
             //model.ActiveSession = db.SmokeSessions.Where(a =>
             //        a.Persons.Any(p => p.Id == person.Id) && a.Statistics == null).ToList();
@@ -79,12 +73,12 @@ namespace smartHookah.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> GetSmokeOverview(string from, string to,int?id)
+        public async Task<ActionResult> GetSmokeOverview(string from, string to, int? id)
         {
-            var fromDate = DateTime.ParseExact(from, "dd.MM.yyyy",CultureInfo.InvariantCulture);
+            var fromDate = DateTime.ParseExact(from, "dd.MM.yyyy", CultureInfo.InvariantCulture);
             var toDate = DateTime.ParseExact(to, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-            var sessions = GetPersonSmokeSession(fromDate, toDate,id);
-          
+            var sessions = GetPersonSmokeSession(fromDate, toDate, id);
+
             return View("_PersonSmokeSessionDetails", sessions);
         }
 
@@ -92,11 +86,11 @@ namespace smartHookah.Controllers
         public ActionResult ManageColors(int? id, int? personId)
         {
 
-            var person = UserHelper.GetCurentPerson(db, personId,true);
+            var person = UserHelper.GetCurentPerson(db, personId, true);
             if (person == null)
                 return RedirectToAction("Index");
 
-          
+
 
             var setting = person.DefaultSetting;
 
@@ -111,10 +105,10 @@ namespace smartHookah.Controllers
             return View(model);
         }
 
-        private List<SmokeSession> GetPersonSmokeSession(DateTime from, DateTime? to = null,int?id = null)
+        private List<SmokeSession> GetPersonSmokeSession(DateTime from, DateTime? to = null, int? id = null)
         {
             var toDate = to ?? DateTime.Now;
-            var person = UserHelper.GetCurentPerson(db,id);
+            var person = UserHelper.GetCurentPerson(db, id);
             return db.SmokeSessions.Where(
                     a =>
                         a.Persons.Any(p => p.Id == person.Id) && a.Statistics != null &&
@@ -126,7 +120,7 @@ namespace smartHookah.Controllers
                 .Include(x => x.Statistics).OrderByDescending(a => a.Id).ToList();
         }
 
-        [Authorize(Roles =  "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> PersonList()
         {
             return View(await db.Persons.ToListAsync());
@@ -137,11 +131,11 @@ namespace smartHookah.Controllers
             var user = UserHelper.GetCurentPerson(db);
             var user2 = db.Persons.Include(a => a.SmokeSessions).FirstOrDefault(u => u.Id == user.Id);
             var sessions = user2.SmokeSessions;
-           
 
-                     var model = new SmokeSessionViewModel();
+
+            var model = new SmokeSessionViewModel();
             model.SmokeSessions = sessions.ToList();
-            return View("~/Views/SmokeSession/Index.cshtml",model);
+            return View("~/Views/SmokeSession/Index.cshtml", model);
         }
 
         public async Task<ActionResult> DashBoard(int? id)
@@ -152,7 +146,7 @@ namespace smartHookah.Controllers
             }
             Person person = await db.Persons.FindAsync(id);
 
-            ApplicationUser user =  db.Users.First(a => a.PersonId == id);
+            ApplicationUser user = db.Users.First(a => a.PersonId == id);
 
             if (person == null)
             {
@@ -162,8 +156,8 @@ namespace smartHookah.Controllers
             var session = db.SmokeSessions.Where(s => s.Hookah.Owners.Any(p => p.Id == id))
                 .Include(a => a.Statistics)
                 .Include(a => a.MetaData);
-                
-           
+
+
 
             var model = new DashBoardViewModel();
 
@@ -325,9 +319,9 @@ namespace smartHookah.Controllers
                         }
                     }
                     db.Persons.AddOrUpdate(hookahOwner);
-               
+
                 }
-               
+
             }
             await db.SaveChangesAsync();
             return null;
@@ -352,7 +346,7 @@ namespace smartHookah.Controllers
             return await ShowGear(person.Id);
 
         }
-        
+
         public async Task<ActionResult> ShowGear(int id)
         {
             var curentPerson = UserHelper.GetCurentPerson();
@@ -372,31 +366,31 @@ namespace smartHookah.Controllers
                 return null;
 
             var model = ShowGearViewModel(person);
-         
-            return View("ShowGear",model);
+
+            return View("ShowGear", model);
         }
 
         public async Task<ActionResult> MyStatistic(int? id)
         {
             var person = UserHelper.GetCurentPerson(db, id);
             var fromDate = DateTime.Now.AddDays(-7);
-            var sessions = GetPersonSmokeSession(fromDate,id:id);
+            var sessions = GetPersonSmokeSession(fromDate, id: id);
             var model = new MyStatisticViewModel();
             model.session = sessions;
 
             return View(model);
         }
 
-     
+
 
 
         private ShowGearViewModel ShowGearViewModel(Person person)
         {
-           
+
             var model = new ShowGearViewModel();
             model.Pipes = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Pipe && a.DeleteDate == null).Select(a => a.PipeAccesory as Pipe).ToList();
             model.Bowls = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Bowl && a.DeleteDate == null).Select(a => a.PipeAccesory as Bowl).ToList();
-            model.Tobaccos = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Tobacco && a.DeleteDate == null ).Select(a => a.PipeAccesory as Tobacco).ToList();
+            model.Tobaccos = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Tobacco && a.DeleteDate == null).Select(a => a.PipeAccesory as Tobacco).ToList();
             model.HeatManagments = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is HeatManagment && a.DeleteDate == null).Select(a => a.PipeAccesory as HeatManagment).ToList();
             model.Goals = person.OwnedPipeAccesories.Where(a => a.PipeAccesory is Coal && a.DeleteDate == null).Select(a => a.PipeAccesory as Coal).ToList();
             model.Person = person;
@@ -414,23 +408,23 @@ namespace smartHookah.Controllers
         [Authorize]
         public async Task<ActionResult> AddGear(int id, int? amount, int? personId = null)
         {
-            AddGear(id, amount, db, out var person,personId);
+            AddGear(id, amount, db, out var person, personId);
 
             var model = ShowGearViewModel(person);
             return View("_MyGear", model);
         }
 
-        public static void AddGear(int id, int? amount, SmartHookahContext db,out Person person, int? personId = null)
+        public static void AddGear(int id, int? amount, SmartHookahContext db, out Person person, int? personId = null)
         {
-            
+
             if (!personId.HasValue)
                 person = UserHelper.GetCurentPerson();
             else
             {
-                person =  db.Persons.Find(personId.Value);
+                person = db.Persons.Find(personId.Value);
             }
 
-            var newAccesory =  db.PipeAccesories.Find(id);
+            var newAccesory = db.PipeAccesories.Find(id);
 
             if (person.OwnedPipeAccesories.Any(a => a.PipeAccesoryId == newAccesory.Id && !a.Deleted))
             {
@@ -442,12 +436,12 @@ namespace smartHookah.Controllers
                 Person = person,
                 PipeAccesory = newAccesory,
                 Amount = Convert.ToInt32(amount),
-                CreatedDate =  DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow,
 
             });
 
             db.Persons.AddOrUpdate(person);
-             db.SaveChanges();
+            db.SaveChanges();
 
             return;
         }
@@ -473,14 +467,14 @@ namespace smartHookah.Controllers
             }
 
             oldAccesory.DeleteDate = DateTime.UtcNow;
-            
+
             db.OwnPipeAccesorieses.AddOrUpdate(oldAccesory);
 
             await db.SaveChangesAsync();
 
 
             var model = ShowGearViewModel(person);
-            
+
             return View("_MyGear", model);
 
         }

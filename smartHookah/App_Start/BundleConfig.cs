@@ -132,10 +132,10 @@ namespace smartHookah
             bundles.Add(new StyleBundle("~/Content/css").Include(
                     "~/Content/bootstrap-tagsinput.css",
                     "~/Content/bmd.css"
-                    ).Include("~/Content/wheelcolorpicker.css",new CssRewriteUrlTransform()).Include("~/Content/site.css",new CssRewriteUrlTransform()));
+                    ).Include("~/Content/wheelcolorpicker.css", new CssRewriteUrlTransform()).Include("~/Content/site.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new StyleBundle("~/Content/cssAll").Include(
-  
+
                 "~/Content/PagedList.css",
                 "~/Content/noUiSlider/nouislider.min.css",
                 "~/Content/bootstrap-material-design.css",

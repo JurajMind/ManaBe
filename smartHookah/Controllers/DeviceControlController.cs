@@ -5,20 +5,16 @@ using smartHookah.Services.Redis;
 
 namespace smartHookah.Controllers
 {
+    using Helpers;
+    using Newtonsoft.Json.Linq;
+    using smartHookah.Services.Device;
+    using smartHookah.Services.Person;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-
-    using Newtonsoft.Json.Linq;
-
-    using Helpers;
-    using smartHookah.Services.Device;
-    using smartHookah.Services.Person;
-
-    using smartHookahCommon;
 
     public class DeviceControlController : Controller
     {
@@ -41,7 +37,7 @@ namespace smartHookah.Controllers
             this.metadataModalMapper = metadataModalMapper;
         }
 
-        public async Task<ActionResult> DefaultMetadata(int? hookahId, int?personId)
+        public async Task<ActionResult> DefaultMetadata(int? hookahId, int? personId)
         {
             var model = new DefaultMetadataViewModel { hookahId = hookahId, personId = personId };
             SmokeSessionMetaData metadata = null;
@@ -52,7 +48,7 @@ namespace smartHookah.Controllers
                 {
                     metadata = hookah.DefaultMetaData;
                 }
-                    
+
             }
 
 
@@ -79,7 +75,7 @@ namespace smartHookah.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SaveDefaultMetadata(int? hookahId, int?personId, SaveSmokeMetadataModel model)
+        public async Task<ActionResult> SaveDefaultMetadata(int? hookahId, int? personId, SaveSmokeMetadataModel model)
         {
             var metadata = new SmokeSessionMetaData();
             SmokeSessionController.SetMetadata(model, metadata);
@@ -92,7 +88,7 @@ namespace smartHookah.Controllers
                     person.DefaultMetaData = metadata;
                     this.db.Persons.AddOrUpdate(person);
                     await this.db.SaveChangesAsync();
-                    return this.RedirectToAction("DefaultMetadata", new {personId = person.Id});
+                    return this.RedirectToAction("DefaultMetadata", new { personId = person.Id });
                 }
             }
 
@@ -121,14 +117,14 @@ namespace smartHookah.Controllers
 
                 var person = this.db.Persons.Where(a => a.Id == placeId).Include(a => a.Hookahs).FirstOrDefault();
 
-                if(person == null)
+                if (person == null)
                     return new JsonResult();
 
                 foreach (var stand in person.Hookahs)
                 {
                     await this.Sent(null, command, data, stand.Code);
                 }
-              
+
 
                 return new JsonResult();
             }
@@ -142,7 +138,7 @@ namespace smartHookah.Controllers
             {
                 deviceId = this.redisService.GetHookahId(id);
             }
-       
+
             switch (command)
             {
                 case "qrcode":
@@ -157,25 +153,25 @@ namespace smartHookah.Controllers
                     return await this.ChangeAnimaton(data, deviceId);
 
                 case "br":
-                {
-                    return await this.ChangeBrightness(data, deviceId);
-                }
+                    {
+                        return await this.ChangeBrightness(data, deviceId);
+                    }
 
                 case "sleep":
-                {
-                    await IotDeviceHelper.SendMsgToDevice(deviceId, "slp:");
+                    {
+                        await IotDeviceHelper.SendMsgToDevice(deviceId, "slp:");
                         return new JsonResult();
                     }
 
                 case "speed":
-                {
-                    return await this.ChangeSpeed(data, deviceId);
+                    {
+                        return await this.ChangeSpeed(data, deviceId);
                     }
-                    
+
 
                 case "color":
-                {
-                    await this.ChangeColor(data, deviceId);
+                    {
+                        await this.ChangeColor(data, deviceId);
                         return new JsonResult();
                     }
 
@@ -212,7 +208,7 @@ namespace smartHookah.Controllers
                 return new JsonResult();
             }
 
-            await this.deviceService.SetSpeed(deviceId, speedValue,(PufType) speedIndex);
+            await this.deviceService.SetSpeed(deviceId, speedValue, (PufType)speedIndex);
 
             return new JsonResult();
         }
@@ -220,7 +216,7 @@ namespace smartHookah.Controllers
         private async Task ChangeColor(string data, string deviceId)
         {
             JObject jObject = JObject.Parse(data);
-            
+
             var h = (byte)(jObject["h"].Value<double>() * 255);
             var s = (byte)(jObject["s"].Value<double>() * 255);
             var v = (byte)(jObject["v"].Value<double>() * 255);
@@ -253,8 +249,8 @@ namespace smartHookah.Controllers
             }
 
             var animation = this.deviceService.GetAnimation(AnimationValue);
-            await this.deviceService.SetAnimation(deviceId, animation, (PufType) AnimationIndex);
-            
+            await this.deviceService.SetAnimation(deviceId, animation, (PufType)AnimationIndex);
+
 
             return new JsonResult();
         }
@@ -305,20 +301,20 @@ namespace smartHookah.Controllers
             return GetDeviceSettingViewModel(settings, hookah.Version);
         }
 
-        public static DeviceSettingViewModel GetDeviceSettingViewModel(DeviceSetting setting , int? hookahVersion, SmartHookahContext db = null)
+        public static DeviceSettingViewModel GetDeviceSettingViewModel(DeviceSetting setting, int? hookahVersion, SmartHookahContext db = null)
         {
             if (setting == null)
-            { 
+            {
                 setting = new DeviceSetting();
                 setting.Color.Value = 255;
                 setting.Color.Hue = 255;
                 setting.Color.Saturation = 255;
                 setting.PictureId = 1;
-                
+
 
                 if (db != null)
                 {
-                   var stored =  db.HookahSettings.Add(setting);
+                    var stored = db.HookahSettings.Add(setting);
                     setting = stored;
                     db.SaveChanges();
                 }
@@ -327,10 +323,10 @@ namespace smartHookah.Controllers
             var model = new DeviceSettingViewModel();
 
             model.Setting = setting;
-            if(hookahVersion.HasValue)
-            model.HookahVersion = hookahVersion.Value;
+            if (hookahVersion.HasValue)
+                model.HookahVersion = hookahVersion.Value;
             model.IdleAnimation = setting.IdleAnimation;
-            model.PufAnimation =  setting.PufAnimation;
+            model.PufAnimation = setting.PufAnimation;
             model.BlowAnimation = setting.BlowAnimation;
             model.Animations = AnimationHelper.Animations;
 
@@ -360,7 +356,7 @@ namespace smartHookah.Controllers
 
             public List<Helpers.Animation> Animations { get; set; }
 
-            
+
         }
 
         [HttpPost]
@@ -376,15 +372,15 @@ namespace smartHookah.Controllers
         [HttpPost]
         public JsonResult UseDefault(string id)
         {
-           
+
             var result = this.devicePresetService.UseDefaut(id);
-         
+
             return this.Json(new { success = result });
 
         }
     }
 
-    public class DefaultMetadataViewModel 
+    public class DefaultMetadataViewModel
     {
         public int? hookahId { get; set; }
         public int? personId { get; set; }

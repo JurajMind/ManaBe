@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using smartHookah.Models.Dto;
+﻿using smartHookah.Models.Dto;
+using System.Collections.Generic;
 using MessageType = smartHookah.Models.Dto.MessageType;
 
 
@@ -20,12 +20,12 @@ namespace smartHookah.Services.Messages
 
         public void AddMessage(string text, string code, MessageType type)
         {
-           this.AddMessage(new DtoMessage
-           {
-               Type = type,
-               Code = code,
-               Text = text
-           });
+            this.AddMessage(new DtoMessage
+            {
+                Type = type,
+                Code = code,
+                Text = text
+            });
         }
 
         public void AddMessage(DtoMessage message)

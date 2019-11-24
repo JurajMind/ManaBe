@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -17,6 +8,15 @@ using smartHookah.Mappers.ViewModelMappers.Smoke;
 using smartHookah.Models.Db;
 using smartHookah.Services.SmokeSession;
 using smartHookah.Support;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 using static System.Threading.Tasks.Task;
 
 namespace smartHookah.Controllers
@@ -25,7 +25,7 @@ namespace smartHookah.Controllers
     using smartHookah.Services.Redis;
 
     [System.Web.Mvc.Authorize]
-    
+
     public class SmokeSessionController : Controller
     {
         private readonly SmartHookahContext _db;
@@ -66,7 +66,7 @@ namespace smartHookah.Controllers
             if (sessionId?.Id == 0)
                 return RedirectToAction("Index", "Home");
 
-            return RedirectToAction("GetStatistics", new {id = sessionId.Id});
+            return RedirectToAction("GetStatistics", new { id = sessionId.Id });
         }
 
         // End smoke session
@@ -185,7 +185,7 @@ namespace smartHookah.Controllers
         public ActionResult GetStatistics(int id, int? PersonId = null)
         {
             var model = this.smokeSessionStatisticModelMapper.Map(id);
-            
+
             if (PersonId.HasValue)
                 model.Share = !model.SmokeSession.IsPersonAssign(PersonId.Value);
 
@@ -201,7 +201,7 @@ namespace smartHookah.Controllers
             {
                 var model = new SmokeStatisticViewModel();
 
-                var dynamic = this.sessionService.GetDynamicStatistic(sessionId,null);
+                var dynamic = this.sessionService.GetDynamicStatistic(sessionId, null);
 
                 if (dynamic.LastPuf == null)
                     return PartialView("NoLiveStatistic");
@@ -225,7 +225,7 @@ namespace smartHookah.Controllers
         {
             var intId = 0;
             if (!int.TryParse(id, out intId))
-                return RedirectToAction("SmokeSession", "SmokeSession", new {id});
+                return RedirectToAction("SmokeSession", "SmokeSession", new { id });
             var ss = await _db.SmokeSessions.FindAsync(intId);
             var hookah = ss.Hookah.Id;
             _db.DbPufs.RemoveRange(ss.DbPufs);
@@ -235,7 +235,7 @@ namespace smartHookah.Controllers
             _db.SmokeSessions.Remove(ss);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Index", "SmokeSession", new {id = hookah});
+            return RedirectToAction("Index", "SmokeSession", new { id = hookah });
         }
 
 
@@ -273,7 +273,7 @@ namespace smartHookah.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SmokeSession(string id)
         {
-        
+
 
             var session = _db.SmokeSessions.FirstOrDefault(a => a.SessionId == id);
 
@@ -298,10 +298,10 @@ namespace smartHookah.Controllers
                 return false;
 
             var person = this.personService.GetCurentPerson();
-          
+
             if (person == null)
                 return false;
-          
+
             if (User.IsInRole("Admin") && !manual)
                 return false;
 
@@ -312,7 +312,7 @@ namespace smartHookah.Controllers
             else
             {
                 await this.personService.UnAssignSession(session.Id);
-                
+
             }
 
             return true;
@@ -420,7 +420,7 @@ namespace smartHookah.Controllers
 
                 var estimated = dbSession.MetaData.Tobacco.GetTobacoEstimated(_db);
                 ClientContext.Clients.Group(dbSession.Hookah.Code)
-                    .updateStats(hookah.Code, (int) estimated, hooakhPicture);
+                    .updateStats(hookah.Code, (int)estimated, hooakhPicture);
             }
 
             catch (Exception)
@@ -446,7 +446,7 @@ namespace smartHookah.Controllers
 
             metadata.HeatKeeper = HeatKeeper.Unknown;
 
-            metadata.PackType = (PackType) model.PackType;
+            metadata.PackType = (PackType)model.PackType;
 
             metadata.CoalType = CoalType.Unknown;
 
@@ -461,14 +461,14 @@ namespace smartHookah.Controllers
                 .FirstOrDefault(a => a.SessionId == id);
 
             if (smokeSession == null)
-                return Json(new {success = false});
+                return Json(new { success = false });
 
             var result = await AssignToSmokeSession(smokeSession, assign, true);
 
             if (result)
-                return Json(new {success = true});
+                return Json(new { success = true });
 
-            return Json(new {success = false});
+            return Json(new { success = false });
         }
     }
 }

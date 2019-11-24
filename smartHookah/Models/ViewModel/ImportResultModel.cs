@@ -1,8 +1,7 @@
 ﻿namespace smartHookah.Models.ViewModel
 {
-    using System.Collections.Generic;
-
     using smartHookah.Models.Db;
+    using System.Collections.Generic;
 
     public class ImportResultModel
     {
@@ -12,7 +11,7 @@
             this.newImport = new List<PipeAccesory>();
             this.updateImport = new List<PipeAccesory>();
         }
-        public  List<Brand> newBrands { get; set; }
+        public List<Brand> newBrands { get; set; }
 
         public List<PipeAccesory> newImport { get; set; }
 

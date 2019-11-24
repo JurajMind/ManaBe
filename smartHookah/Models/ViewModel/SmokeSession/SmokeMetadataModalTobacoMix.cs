@@ -4,7 +4,7 @@
     {
         public string name { get; set; }
         public string TobaccoBrand { get; set; }
-        
+
         public string TobacoFlavor { get; set; }
         public int TobacoId { get; set; }
 

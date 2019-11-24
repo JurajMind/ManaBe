@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {
-    public class SmokeSessionListItemViewModel 
+    public class SmokeSessionListItemViewModel
     {
         public SmokeSession SmokeSession { get; set; }
 

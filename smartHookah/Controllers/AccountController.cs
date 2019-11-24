@@ -1,25 +1,23 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using smartHookah.Models;
 using smartHookah.Models.Db;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace smartHookah.Controllers
 {
-    using System.Configuration;
-    using System.Data.Entity.Migrations;
-    using System.Net.Http;
     using Microsoft.Owin;
-    using Microsoft.Owin.Security.OAuth;
     using Newtonsoft.Json.Linq;
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
+    using System.Configuration;
+    using System.Data.Entity.Migrations;
+    using System.Net.Http;
 
     [Authorize]
     public class AccountController : Controller
@@ -127,7 +125,7 @@ namespace smartHookah.Controllers
                 case SignInStatus.RequiresVerification:
                     return this.RedirectToAction(
                         "SendCode",
-                        new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
+                        new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -146,7 +144,7 @@ namespace smartHookah.Controllers
             }
 
             return this.View(
-                new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
+                new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         // POST: /Account/VerifyCode
@@ -221,7 +219,7 @@ namespace smartHookah.Controllers
                     var callbackUrl = this.Url.Action(
                         "ConfirmEmail",
                         "Account",
-                        new {userId = user.Id, code = code},
+                        new { userId = user.Id, code = code },
                         protocol: this.Request.Url.Scheme);
                     await this.UserManager.SendEmailAsync(
                         user.Id,
@@ -296,7 +294,7 @@ namespace smartHookah.Controllers
                 var callbackUrl = this.Url.Action(
                     "ResetPassword",
                     "Account",
-                    new {userId = user.Id, code = code},
+                    new { userId = user.Id, code = code },
                     protocol: this.Request.Url.Scheme);
                 await this.UserManager.SendEmailAsync(
                     user.Id,
@@ -370,7 +368,7 @@ namespace smartHookah.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(
                 provider,
-                this.Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
+                this.Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
         // GET: /Account/SendCode
@@ -384,10 +382,10 @@ namespace smartHookah.Controllers
             }
 
             var userFactors = await this.UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose})
+            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose })
                 .ToList();
             return this.View(
-                new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
+                new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         // POST: /Account/SendCode
@@ -409,7 +407,7 @@ namespace smartHookah.Controllers
 
             return this.RedirectToAction(
                 "VerifyCode",
-                new {Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe});
+                new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
         // GET: /Account/ExternalLoginCallback
@@ -431,7 +429,7 @@ namespace smartHookah.Controllers
                 case SignInStatus.LockedOut:
                     return this.View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return this.RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
+                    return this.RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
@@ -528,7 +526,7 @@ namespace smartHookah.Controllers
                 var uri = new Uri(fbEndpoint);
                 var response = await client.GetAsync(uri);
                 var content = await response.Content.ReadAsStringAsync();
-                dynamic jObj = (JObject) Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                dynamic jObj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(content);
                 var name = jObj["name"];
                 var email = jObj["email"];
                 result.DisplayName = name;
@@ -574,7 +572,7 @@ namespace smartHookah.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
 
-                dynamic jObj = (JObject) Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                dynamic jObj = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
                 parsedToken = new ParsedExternalAccessToken();
 
@@ -767,7 +765,7 @@ namespace smartHookah.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties {RedirectUri = this.RedirectUri};
+                var properties = new AuthenticationProperties { RedirectUri = this.RedirectUri };
                 if (this.UserId != null)
                 {
                     properties.Dictionary[XsrfKey] = this.UserId;

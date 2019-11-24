@@ -1,6 +1,6 @@
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Linq;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -28,16 +28,16 @@ namespace smartHookah.Models.Dto
         {
             return new FeatureMixCreatorDto()
             {
-                Name = model.Name, 
-                Description = model.Description, 
-                Location = model.Location, 
-                SocialMedias = model.SocialMedias.ToList(), 
-                Medias = MediaDto.FromModelList(model.Medias).ToList(), 
-                LogoPicture = model.LogoPicture, 
+                Name = model.Name,
+                Description = model.Description,
+                Location = model.Location,
+                SocialMedias = model.SocialMedias.ToList(),
+                Medias = MediaDto.FromModelList(model.Medias).ToList(),
+                LogoPicture = model.LogoPicture,
                 PersonId = model.PersonId,
-                Id = model.Id, 
+                Id = model.Id,
 
-            }; 
+            };
         }
 
         public static IEnumerable<FeatureMixCreatorDto> FromModelList(IEnumerable<FeatureMixCreator> model)
@@ -57,7 +57,7 @@ namespace smartHookah.Models.Dto
         public string Description { get; set; }
 
         public string Location { get; set; }
-        
+
         public string LogoPicture { get; set; }
 
         public int PersonId { get; set; }

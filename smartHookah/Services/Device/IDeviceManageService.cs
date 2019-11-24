@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using smartHookah.Models.Dto.Device;
+﻿using smartHookah.Models.Dto.Device;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Device
 {

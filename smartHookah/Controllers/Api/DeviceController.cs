@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using smartHookah.ErrorHandler;
+﻿using smartHookah.ErrorHandler;
 using smartHookah.Models.Db;
 using smartHookah.Models.Dto.Device;
 using smartHookah.Models.ParameterObjects;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
 using smartHookah.Services.SmokeSession;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {
@@ -220,7 +220,7 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("{id}/Add")]
-        public async Task<DeviceSimpleDto> AddDevice(string id,string code,string newName)
+        public async Task<DeviceSimpleDto> AddDevice(string id, string code, string newName)
         {
             var added = await this.personService.AddDeviceAsync(id, code, newName);
             return DeviceSimpleDto.FromModel(added);
@@ -243,7 +243,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/Update/{updateId}")]
         public async Task<bool> PromptUpdate(int id, int updateId)
         {
-           return await this.updateService.UpdateDevice(id, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
+            return await this.updateService.UpdateDevice(id, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
         }
 
         [HttpGet, Route("Updates")]
@@ -258,7 +258,7 @@ namespace smartHookah.Controllers.Api
         {
             var picture = await devicePictureService.FindStandPicture(id);
 
-            var response = new DeviceInfoResponse {Picture = DevicePictureDto.FromModel(picture)};
+            var response = new DeviceInfoResponse { Picture = DevicePictureDto.FromModel(picture) };
 
             return response;
         }
@@ -266,7 +266,7 @@ namespace smartHookah.Controllers.Api
         [HttpPost, Route("{id}/SetPicture")]
         public async Task<bool> SetPicture(int id, [FromBody]int pictureId)
         {
-             return await devicePictureService.SetStandPicture(id,pictureId);
+            return await devicePictureService.SetStandPicture(id, pictureId);
         }
 
         [HttpGet, Route("Pictures")]
@@ -278,10 +278,10 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpGet, Route("{id}/Sessions")]
-        public ICollection<SmokeSessionSimpleDto> GetDeviceSessions(int id,int pageSize = 10,int page = 0)
+        public ICollection<SmokeSessionSimpleDto> GetDeviceSessions(int id, int pageSize = 10, int page = 0)
         {
             var sessions = this.deviceService.Sessions(id, pageSize, page);
-;
+            ;
             return SmokeSessionSimpleDto.FromModelList(sessions.ToList()).ToList();
         }
 

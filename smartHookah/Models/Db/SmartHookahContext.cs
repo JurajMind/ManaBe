@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using smartHookah.Models.Db.Device;
 using smartHookah.Models.Db.Gear;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Db.Session;
+using System;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
 
 namespace smartHookah.Models.Db
 {
@@ -198,7 +198,7 @@ namespace smartHookah.Models.Db
                     cs.MapRightKey("PersonRefId");
                     cs.ToTable("FeatureMixCreatorFollow");
                 });
-            
+
             modelBuilder.Entity<Person>().HasMany(s => s.Friends).WithRequired(s => s.A).WillCascadeOnDelete(false);
             modelBuilder.Entity<Person>().HasMany(s => s.Friends).WithRequired(s => s.B).WillCascadeOnDelete(false);
 
@@ -278,7 +278,7 @@ namespace smartHookah.Models.Db
             modelBuilder.Entity<PlaceDay>().HasMany(p => p.PlaceEvents);
 
             modelBuilder.Entity<PlaceEvent>().HasMany(p => p.Persons).WithMany(e => e.PlaceEvents);
-            
+
             modelBuilder.Entity<Person>().HasOptional(d => d.DefaultPreset);
 
             modelBuilder.Entity<DevicePreset>().HasOptional(a => a.Person).WithMany(a => a.Presets)

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using smartHookah.Models.Db.Gear;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using smartHookah.Models.Db.Gear;
 
 namespace smartHookah.Models.Dto.Gear
 {
@@ -35,7 +35,7 @@ namespace smartHookah.Models.Dto.Gear
 
         [DataMember, JsonProperty("SmokeSessionId")]
         public int SmokeSessionId { get; set; }
-        
+
         [DataMember, JsonProperty("SessionReviewId")]
         public int SessionReviewId { get; set; }
 

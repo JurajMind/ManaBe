@@ -1,13 +1,13 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace smartHookah.Models.Db
 {
     public class Puf
     {
-        public Puf(string smokeSessionId,PufType s) : this(smokeSessionId,s,DateTime.Now.ToLocalTime())
+        public Puf(string smokeSessionId, PufType s) : this(smokeSessionId, s, DateTime.Now.ToLocalTime())
         {
-          
+
         }
 
         public Puf()
@@ -29,7 +29,7 @@ namespace smartHookah.Models.Db
             SmokeSessionId = smokeSessionId;
         }
 
-        public Puf(string smokeSessionId, PufType s, DateTime pufTime,long milis, int presure = 0) :this(smokeSessionId,s,pufTime)
+        public Puf(string smokeSessionId, PufType s, DateTime pufTime, long milis, int presure = 0) : this(smokeSessionId, s, pufTime)
         {
             Milis = milis;
             Presure = presure;

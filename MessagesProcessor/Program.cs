@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.ServiceBus.Messaging;
+using System;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ServiceBus.Messaging;
 
 namespace MessagesProcessor
 {
@@ -22,7 +18,7 @@ namespace MessagesProcessor
                 {
                     try
                     {
-                        if(retrievedMessage == null)
+                        if (retrievedMessage == null)
                             continue;
                         //Console.WriteLine("Message(s) Retrieved: " + retrievedMessage.GetBody<string>());
                         Console.WriteLine(retrievedMessage.Properties["device"]);

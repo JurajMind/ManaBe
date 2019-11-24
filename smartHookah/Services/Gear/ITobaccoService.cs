@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using smartHookah.Models;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Gear;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace smartHookah.Services.Gear
 {
@@ -32,7 +31,7 @@ namespace smartHookah.Services.Gear
         Task<List<TobaccoMix>> GetMixFromTobaccos(List<int> ids, int pageSize = 10, int page = 0);
 
         Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0, bool own = true);
-        
+
     }
-        
+
 }

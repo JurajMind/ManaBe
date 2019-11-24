@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace smartHookahTests.Extensions
+﻿namespace smartHookahTests.Extensions
 {
     public static class StringExtensions
     {
@@ -12,7 +10,7 @@ namespace smartHookahTests.Extensions
 
             for (int i = 0; i < s.Length; i++)
             {
-               
+
                 if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(s[i]) != System.Globalization.UnicodeCategory.NonSpacingMark)
                 {
                     sb.Append(s[i]);

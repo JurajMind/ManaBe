@@ -1,24 +1,22 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
+using smartHookah.Models.Dto;
+using smartHookah.Services.Gear;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
-using smartHookah.Models.Db;
-using smartHookah.Models.Dto;
-using smartHookah.Services.Gear;
-using smartHookahCommon.Errors;
-using smartHookahCommon.Exceptions;
 
 namespace smartHookah.Controllers.Api
 {
-    using System.Data.Entity;
-    using System.Net;
-    using System.Net.Http;
     using log4net;
     using smartHookah.ErrorHandler;
     using smartHookah.Services.Person;
+    using System.Data.Entity;
+    using System.Net;
+    using System.Net.Http;
 
     [System.Web.Http.RoutePrefix("api/Mixology")]
     public class MixologyController : ApiController
@@ -33,14 +31,14 @@ namespace smartHookah.Controllers.Api
 
         private readonly ILog logger = LogManager.GetLogger(typeof(MixologyController));
 
-        public MixologyController(SmartHookahContext db,IPersonService personService, IGearService gearService, ITobaccoService tobaccoService)
+        public MixologyController(SmartHookahContext db, IPersonService personService, IGearService gearService, ITobaccoService tobaccoService)
         {
             this.db = db;
             this.personService = personService;
             this.gearService = gearService;
             this.tobaccoService = tobaccoService;
         }
-        
+
         #region Getters
 
         [System.Web.Http.HttpGet]
@@ -48,23 +46,23 @@ namespace smartHookah.Controllers.Api
         [ApiAuthorize]
         public async Task<IEnumerable<TobaccoMixSimpleDto>> GetMixes(int page = 0, int pageSize = 50, string author = "me", string orderBy = "created", string order = "dsc")
         {
-           var query = from a in this.db.TobaccoMixs select a;
+            var query = from a in this.db.TobaccoMixs select a;
             if (await this.db.Brands.AnyAsync(a => a.TobaccoMixBrand && a.Name.ToLower() == author.ToLower()))
             {
-                query = from m in query where m.Brand.Name.ToLower() == author.ToLower() && m.Deleted == false  select m;
+                query = from m in query where m.Brand.Name.ToLower() == author.ToLower() && m.Deleted == false select m;
             }
             else if (author == "me")
             {
                 var user = this.personService.GetCurentPerson();
                 if (user == null)
                 {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Forbidden,"User not found"));
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User not found"));
                 }
                 ;
                 var userId = user.Id;
-                query = from m in query where m.Author.Id == userId &&  m.Deleted == false select m;
+                query = from m in query where m.Author.Id == userId && m.Deleted == false select m;
             }
-            else if(author == "favorite")
+            else if (author == "favorite")
             {
                 var user = this.personService.GetCurentPerson();
                 if (user == null)
@@ -110,7 +108,7 @@ namespace smartHookah.Controllers.Api
 
             var res = query.ToList();
             var person = this.personService.GetCurentPerson();
-            return TobaccoMixSimpleDto.FromModelList(res,person.Id);
+            return TobaccoMixSimpleDto.FromModelList(res, person.Id);
         }
 
 
@@ -120,7 +118,7 @@ namespace smartHookah.Controllers.Api
             try
             {
                 var mix = await tobaccoService.GetTobaccoMix(id);
-                return TobaccoMixSimpleDto.FromModel(mix,this.personService.GetCurentPerson()?.Id);
+                return TobaccoMixSimpleDto.FromModel(mix, this.personService.GetCurentPerson()?.Id);
             }
             catch (Exception e)
             {
@@ -155,14 +153,14 @@ namespace smartHookah.Controllers.Api
             bool own = true)
         {
             var result = await this.tobaccoService.GetMixFromTobaccos(ids.ToList(), pageSize, page);
-            return TobaccoMixSimpleDto.FromModelList(result,this.personService.GetCurentPersonId()).ToList();
+            return TobaccoMixSimpleDto.FromModelList(result, this.personService.GetCurentPersonId()).ToList();
         }
 
         [System.Web.Http.HttpGet, System.Web.Http.Route("Suggest/Tobacco")]
         public async Task<List<TobaccoSimpleDto>> SuggestMixTobacco([FromUri] int[] ids, int pageSize = 100, int page = 0,
             bool own = true)
         {
-            var result = await this.tobaccoService.SuggestTobaccos(ids.ToList(), pageSize, page,own);
+            var result = await this.tobaccoService.SuggestTobaccos(ids.ToList(), pageSize, page, own);
             return TobaccoSimpleDto.FromModelList(result).ToList();
         }
 
@@ -196,7 +194,7 @@ namespace smartHookah.Controllers.Api
             }
 
             var person = this.personService.GetCurentPerson();
-            if(mix.AuthorId != person.Id)
+            if (mix.AuthorId != person.Id)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest,
                     "Only author can rename mix"));
@@ -232,7 +230,7 @@ namespace smartHookah.Controllers.Api
         public async Task<DTO> RemoveMix(int mixId)
         {
             var mix = this.db.TobaccoMixs.Find(mixId);
-            if(mix == null) return new DTO(){ Success = false, Message = $"Mix with id {mixId} not found." };
+            if (mix == null) return new DTO() { Success = false, Message = $"Mix with id {mixId} not found." };
             var person = this.personService.GetCurentPerson();
             if (mix.AuthorId != person.Id)
             {
@@ -250,7 +248,7 @@ namespace smartHookah.Controllers.Api
             }
             catch (Exception e)
             {
-                return new DTO(){Success = false, Message = e.Message};
+                return new DTO() { Success = false, Message = e.Message };
             }
         }
 

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Http;
-using smartHookah.Models.Db.Session.Dto;
+﻿using smartHookah.Models.Db.Session.Dto;
 using smartHookah.Models.Dto.Gear;
 using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Review;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {
@@ -54,10 +54,10 @@ namespace smartHookah.Controllers.Api
         }
 
         [HttpPost, Route("Session/{id}")]
-        public async Task<SessionReviewDto> AddSessionReview(int id,[FromBody] SessionReviewDto reviewDto)
+        public async Task<SessionReviewDto> AddSessionReview(int id, [FromBody] SessionReviewDto reviewDto)
         {
             var mReview = reviewDto.ToModel();
-            var review = await this.reviewService.AddSessionReviews(id,mReview);
+            var review = await this.reviewService.AddSessionReviews(id, mReview);
             return SessionReviewDto.FromModel(review);
         }
 
@@ -76,7 +76,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("Tobacco/{id}")]
         public async Task<IEnumerable<TobaccoReviewDto>> GetTobaccoReview(int id, int pageSize = 10, int page = 0)
         {
-            var reviews = await this.reviewService.GetTobaccoReviews(id, null,pageSize, page);
+            var reviews = await this.reviewService.GetTobaccoReviews(id, null, pageSize, page);
             return TobaccoReviewDto.FromModelList(reviews);
         }
 
@@ -97,7 +97,7 @@ namespace smartHookah.Controllers.Api
         [HttpGet, Route("Tobacco/{id}/Detail")]
         public async Task<TobaccoReviewDetailDto> TobaccoReviewDetail(int id)
         {
-            var review =  await this.reviewService.GetTobaccoReviewDetail(id);
+            var review = await this.reviewService.GetTobaccoReviewDetail(id);
 
             return TobaccoReviewDetailDto.FromModel(review);
         }

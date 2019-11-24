@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QRCoder;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using QRCoder;
 
 namespace smartHookah.Support
 {
@@ -85,10 +85,10 @@ namespace smartHookah.Support
         public static BitArray Slice(this BitArray from, int start, int count)
         {
             var result = new BitArray(count);
-           
+
             for (int i = 0; i < count; i++)
             {
-                
+
                 result[i] = @from[i + start];
             }
 

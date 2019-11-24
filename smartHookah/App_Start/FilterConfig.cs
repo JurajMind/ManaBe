@@ -1,7 +1,7 @@
-﻿using System.Configuration;
+﻿using smartHookah.Filters;
+using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
-using smartHookah.Filters;
 
 namespace smartHookah
 {
@@ -31,12 +31,12 @@ namespace smartHookah
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if(v)
+            if (v)
                 return;
 
             base.OnAuthorization(filterContext);
         }
 
-       
+
     }
 }

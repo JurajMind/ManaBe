@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace smartHookah.Filters
+﻿namespace smartHookah.Filters
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Web.Http.Filters;
-    using System.Web.Mvc;
-
     using log4net;
-
     using smartHookah.Controllers.Api;
+    using System.Web.Mvc;
 
     public class ExceptionFilter : HandleErrorAttribute
     {

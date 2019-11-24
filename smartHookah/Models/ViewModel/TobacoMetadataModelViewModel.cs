@@ -4,8 +4,6 @@ namespace smartHookah.Controllers
 {
     using System.Collections.Generic;
 
-    using smartHookah.Models;
-
     public class TobacoMetadataModelViewModel
     {
         public bool MyTobacco { get; set; }
@@ -16,9 +14,11 @@ namespace smartHookah.Controllers
         public int TobacoMixId { get; set; }
 
         public IEnumerable<string> TobacoBrands { get; set; }
-        public string TobacoMixName { get; set;} 
+        public string TobacoMixName { get; set; }
 
-        public MixLayerMethod LayerMethod { get;
+        public MixLayerMethod LayerMethod
+        {
+            get;
             set;
         }
     }

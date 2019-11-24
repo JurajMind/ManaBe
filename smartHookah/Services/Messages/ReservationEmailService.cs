@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
 using smartHookah.Services.Person;
+using System.Linq;
 
 namespace smartHookah.Services.Messages
 {
@@ -19,12 +19,12 @@ namespace smartHookah.Services.Messages
 
         public void CreatedReservation(Reservation reservation)
         {
-           
+
             var template = reservation.Status == ReservationState.ConfirmationRequired
                 ? "reservationWaitForConfirm"
                 : "reservationConfirm";
 
-            if(personService.IsPlaceManager(reservation.PlaceId) && reservation.PersonId != 1)
+            if (personService.IsPlaceManager(reservation.PlaceId) && reservation.PersonId != 1)
                 return;
 
             foreach (var personEmail in reservation.Person.User.Select(s => s.Email))

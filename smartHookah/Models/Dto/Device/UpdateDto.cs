@@ -1,5 +1,5 @@
-using System;
 using smartHookah.Models.Db;
+using System;
 
 namespace smartHookah.Models.Dto.Device
 {
@@ -19,24 +19,24 @@ namespace smartHookah.Models.Dto.Device
         {
             return new UpdateDto()
             {
-                Id = model.Id, 
-                Version = model.Version, 
-                ReleseDate = model.ReleseDate.Date, 
-                ReleseNote = model.ReleseNote, 
-                Type = model.Type, 
-            }; 
+                Id = model.Id,
+                Version = model.Version,
+                ReleseDate = model.ReleseDate.Date,
+                ReleseNote = model.ReleseNote,
+                Type = model.Type,
+            };
         }
 
         public Update ToModel()
         {
             return new Update()
             {
-                Id = Id, 
-                Version = Version, 
-                ReleseDate = ReleseDate, 
-                ReleseNote = ReleseNote, 
-                Type = Type, 
-            }; 
+                Id = Id,
+                Version = Version,
+                ReleseDate = ReleseDate,
+                ReleseNote = ReleseNote,
+                Type = Type,
+            };
         }
     }
 }

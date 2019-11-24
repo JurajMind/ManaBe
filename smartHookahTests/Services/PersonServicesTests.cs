@@ -2,23 +2,16 @@
 
 namespace smartHookahTests.Services
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.Owin;
+    using Moq;
+    using NUnit.Framework;
+    using smartHookah.Services.Device;
+    using smartHookah.Services.Redis;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Security.Principal;
-
-    using Microsoft.AspNet.Identity;
-    using Microsoft.Owin;
-
-    using Moq;
-
-    using NUnit.Framework;
-
-    using smartHookah;
-    using smartHookah.Models;
-    using smartHookah.Services.Device;
-    using smartHookah.Services.Person;
-    using smartHookah.Services.Redis;
 
     [TestFixture]
     internal class PersonServicesTests
@@ -49,14 +42,14 @@ namespace smartHookahTests.Services
 
 
             var owinContextExtensionsWrapper = new Mock<IOwinContextExtensionsWrapper>(MockBehavior.Strict);
-            owinContextExtensionsWrapper.Setup(s => s.FindById<ApplicationUser, string>(userId,owinMock.Object))
+            owinContextExtensionsWrapper.Setup(s => s.FindById<ApplicationUser, string>(userId, owinMock.Object))
                 .Returns(new ApplicationUser { Id = userId });
 
             db.Setup(d => d.Persons).Returns(mockSet.Object);
 
-         
 
-         //   var result = service.GetCurentPerson();
+
+            //   var result = service.GetCurentPerson();
 
         }
     }

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using NeinLinq;
-using smartHookah.Models.Db;
+﻿using smartHookah.Models.Db;
 using smartHookah.Services.Device;
 using smartHookah.Services.Person;
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace smartHookah.Controllers
 {
@@ -59,19 +58,19 @@ namespace smartHookah.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Version,ReleseDate,ReleseNote,Type")] Update update, HttpPostedFileBase file,string versionString)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Version,ReleseDate,ReleseNote,Type")] Update update, HttpPostedFileBase file, string versionString)
         {
             if (ModelState.IsValid && file != null)
             {
                 var path = $"~/Updates/{versionString}/{update.Type}";
                 var path32 = path + "/32/";
-                var path60 = path + "/60/"; 
-                update.Path = path32+file.FileName;
-             
+                var path60 = path + "/60/";
+                update.Path = path32 + file.FileName;
+
 
                 update.Version = Helper.UpdateVersionToInt(versionString);
 
-                if(!System.IO.Directory.Exists(Server.MapPath(path32)))
+                if (!System.IO.Directory.Exists(Server.MapPath(path32)))
                     System.IO.Directory.CreateDirectory(Server.MapPath(path32));
                 if (!System.IO.Directory.Exists(Server.MapPath(path60)))
                     System.IO.Directory.CreateDirectory(Server.MapPath(path60));
@@ -102,7 +101,7 @@ namespace smartHookah.Controllers
             }
             return View(update);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -146,9 +145,9 @@ namespace smartHookah.Controllers
         }
         [AllowAnonymous]
         [OptionalHttps(true)]
-        public FileResult Download(string id,string token)
+        public FileResult Download(string id, string token)
         {
-           var path = this.deviceService.GetUpdatePath(id, token);
+            var path = this.deviceService.GetUpdatePath(id, token);
 
             var filePath = Server.MapPath(path);
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -178,12 +177,12 @@ namespace smartHookah.Controllers
         }
 
         [Authorize]
-        public async Task<JsonResult> PromptUpdate(int hookahId, int updateId )
+        public async Task<JsonResult> PromptUpdate(int hookahId, int updateId)
         {
-            
-            await this.updateService.UpdateDevice(hookahId, updateId,this.personService.GetCurentPerson(), User.IsInRole("Admin"));
 
-            return Json(new {succes = true, msg = "Update was sent"});
+            await this.updateService.UpdateDevice(hookahId, updateId, this.personService.GetCurentPerson(), User.IsInRole("Admin"));
+
+            return Json(new { succes = true, msg = "Update was sent" });
         }
 
         public class UpdateRedis
@@ -192,7 +191,7 @@ namespace smartHookah.Controllers
 
             public string HookahCode { get; set; }
 
-            
+
         }
     }
 }

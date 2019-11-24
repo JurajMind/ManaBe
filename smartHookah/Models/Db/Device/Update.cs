@@ -4,16 +4,16 @@ namespace smartHookah.Models.Db
 {
     public class Update
     {
-       public int Id { get; set; }
-       public int Version { get; set; }
+        public int Id { get; set; }
+        public int Version { get; set; }
 
-       public DateTime ReleseDate { get; set; }
+        public DateTime ReleseDate { get; set; }
 
-       public string ReleseNote { get; set; }
+        public string ReleseNote { get; set; }
 
-       public UpdateType Type { get; set; }
+        public UpdateType Type { get; set; }
 
-       public string Path { get; set; }
+        public string Path { get; set; }
 
 
     }
@@ -21,7 +21,7 @@ namespace smartHookah.Models.Db
 
     public enum UpdateType
     {
-        Beta  = 1,
+        Beta = 1,
         Alfa = 2,
         Stable = 0,
         Devel = 3,
@@ -55,11 +55,11 @@ namespace smartHookah.Models.Db
         public virtual Hookah Hookah { get; set; }
 
         public int OldVersion { get; set; }
-        
+
         public int NewVersionId { get; set; }
         public virtual Update NewVersion { get; set; }
 
         public DateTime UpdateTime { get; set; }
-       
+
     }
 }

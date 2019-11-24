@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using smartHookah.ErrorHandler;
-using smartHookah.Filters;
-using smartHookah.Models.Db;
+﻿using smartHookah.ErrorHandler;
 using smartHookah.Models.Db.Place;
 using smartHookah.Models.Dto;
 using smartHookah.Services.Media;
 using smartHookah.SwaggerExtensions;
 using smartHookahCommon.Errors;
 using smartHookahCommon.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
 namespace smartHookah.Controllers.Api
 {
@@ -85,7 +81,7 @@ namespace smartHookah.Controllers.Api
 
                     int MaxContentLength = 1024 * 1024 * 3; //Size = 3 MB
 
-                    IList<string> AllowedFileExtensions = new List<string> {".jpg", ".gif", ".png",".bmp"};
+                    IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
                     var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                     var extension = ext.ToLower();
                     if (!AllowedFileExtensions.Contains(extension))
@@ -114,7 +110,7 @@ namespace smartHookah.Controllers.Api
             catch (Exception ex)
             {
                 throw new ManaException(ErrorCodes.MediaUploadError,
-                    "Upload error",ex);
+                    "Upload error", ex);
             }
         }
     }

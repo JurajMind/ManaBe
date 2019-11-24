@@ -1,8 +1,7 @@
 namespace smartHookah.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class cleanToken : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace smartHookah.Migrations
             AddPrimaryKey("dbo.NotificationToken", "Token");
             DropColumn("dbo.NotificationToken", "Id");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.NotificationToken", "Id", c => c.Int(nullable: false, identity: true));

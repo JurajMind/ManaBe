@@ -1,15 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
 using smartHookah.Models.Db;
+using System.Collections.Generic;
 
 namespace smartHookah.Models.Dto
 {
-    using System;
-    using System.Runtime.Serialization;
-
     using Newtonsoft.Json;
-
-    using smartHookah.Support;
+    using System.Runtime.Serialization;
 
     public class TobaccoTasteDto
     {
@@ -20,7 +15,7 @@ namespace smartHookah.Models.Dto
         public int Id { get; set; }
 
         public string OriginalName { get; set; }
-        
+
         public static TobaccoTasteDto FromModel(TobaccoTaste model) => model == null
             ? null
             : new TobaccoTasteDto()
@@ -69,13 +64,13 @@ namespace smartHookah.Models.Dto
 
         public static IEnumerable<TobaccoSimpleDto> FromModelList(IEnumerable<Tobacco> model)
         {
-            if(model == null) yield break;
+            if (model == null) yield break;
             foreach (var item in model)
             {
                 yield return FromModel(item);
             }
         }
-        
+
     }
 
     public class TobaccoDto : TobaccoSimpleDto
@@ -95,16 +90,16 @@ namespace smartHookah.Models.Dto
             var tobaccoDto = TobaccoSimpleDto.FromModel(model);
             return new TobaccoDto
             {
-                           Id = tobaccoDto.Id,
-                           BrandName = tobaccoDto.BrandName,
-                           BrandId = tobaccoDto.BrandName,
-                           Picture = tobaccoDto.Picture,
-                           Name = tobaccoDto.Name,
-                           PufCount = (int) (model?.Statistics?.PufCount ?? 0),
-                           Used = model.Statistics?.Used ?? 0,
-                           Duration = (int)(model.Statistics?.SmokeDurationTick ?? 0)
-                           
-                       };
+                Id = tobaccoDto.Id,
+                BrandName = tobaccoDto.BrandName,
+                BrandId = tobaccoDto.BrandName,
+                Picture = tobaccoDto.Picture,
+                Name = tobaccoDto.Name,
+                PufCount = (int)(model?.Statistics?.PufCount ?? 0),
+                Used = model.Statistics?.Used ?? 0,
+                Duration = (int)(model.Statistics?.SmokeDurationTick ?? 0)
+
+            };
         }
     }
 }

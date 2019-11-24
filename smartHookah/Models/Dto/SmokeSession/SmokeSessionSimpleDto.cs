@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models.Dto
 {
@@ -34,15 +34,16 @@ namespace smartHookah.Models.Dto
 
         public static SmokeSessionSimpleDto FromModel(SmokeSession model)
         {
-            if(model == null)
+            if (model == null)
             {
                 return null;
             }
             var statistic = new DynamicSmokeStatisticRawDto();
-            if( model.DynamicSmokeStatistic != null)
+            if (model.DynamicSmokeStatistic != null)
             {
                 statistic = new DynamicSmokeStatisticRawDto(model.DynamicSmokeStatistic);
-            }else if(model.Statistics != null)
+            }
+            else if (model.Statistics != null)
             {
                 statistic = new DynamicSmokeStatisticRawDto(model.Statistics);
             }
@@ -50,7 +51,7 @@ namespace smartHookah.Models.Dto
             {
                 Id = model.Id,
                 SessionId = model.SessionId,
-                Live =  model.StatisticsId == null,
+                Live = model.StatisticsId == null,
                 Device = DeviceSimpleDto.FromModel(model.Hookah),
                 MetaData = SmokeSessionMetaDataDto.FromModel(model.MetaData),
                 PlaceId = model.Place?.Id,
@@ -58,9 +59,9 @@ namespace smartHookah.Models.Dto
                 Statistic = statistic
             };
         }
-    
-            
-        
+
+
+
 
         public static IEnumerable<SmokeSessionSimpleDto> FromModelList(List<SmokeSession> model)
         {

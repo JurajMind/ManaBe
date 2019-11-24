@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using smartHookah.Models.Db;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
-using System.Web.Security;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Helpers
 {
     using System.Net;
-    using System.ServiceModel.Web;
     using System.Web.Http;
 
     public static class IdentityHelpers
@@ -28,7 +24,7 @@ namespace smartHookah.Helpers
                 return claimsIdentity.Claims.FirstOrDefault(x => x.Type == "UserId").Value;
             }
 
-            if(claimsIdentity.Claims.FirstOrDefault(x => x.Type == "sub") != null)
+            if (claimsIdentity.Claims.FirstOrDefault(x => x.Type == "sub") != null)
             {
                 var email = claimsIdentity.Claims.FirstOrDefault(x => x.Type == "sub").Value;
                 return db.Users.FirstOrDefault(x => x.Email == email)?.Id;
@@ -61,7 +57,7 @@ namespace smartHookah.Helpers
                     .GetUserManager<ApplicationUserManager>()
                     .FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
-            if(user == null)
+            if (user == null)
                 return new List<Hookah>();
             var result = new List<Hookah>();
 
@@ -69,9 +65,9 @@ namespace smartHookah.Helpers
             {
                 using (var db = new SmartHookahContext())
                 {
-                  return  db.Hookahs.ToList();
+                    return db.Hookahs.ToList();
                 }
-                
+
             }
 
             if (user.Person != null)
@@ -79,10 +75,10 @@ namespace smartHookah.Helpers
                 result.AddRange(user.Person.Hookahs);
             }
 
-           // if (user.Person.IsLounge)
-           // {
-           //     result.AddRange(user.Person.Hookahs);
-           // }
+            // if (user.Person.IsLounge)
+            // {
+            //     result.AddRange(user.Person.Hookahs);
+            // }
 
             return result;
 
@@ -102,13 +98,13 @@ namespace smartHookah.Helpers
 
         }
 
-     
+
         public static Person GetCurentPerson(SmartHookahContext db)
         {
             var userId = UserId(db);
             var user = db.Users.Find(userId);
 
-            
+
             if (user == null || !user.PersonId.HasValue)
                 return null;
             return
@@ -125,7 +121,7 @@ namespace smartHookah.Helpers
         private static string UserId(SmartHookahContext db)
         {
             var userIdentity = System.Web.HttpContext.Current.User.Identity.GetUserId();
-           if(userIdentity != null)
+            if (userIdentity != null)
                 return userIdentity;
             var userId = HttpContext.Current.User.Identity.GetUserIdUni(db);
             return userId;

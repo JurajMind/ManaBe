@@ -1,13 +1,11 @@
-﻿using System.Linq;
+﻿using Autofac;
+using Microsoft.Owin;
+using smartHookah.Models.Db;
+using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Compilation;
-using Autofac;
-using Microsoft.Owin;
-using smartHookah.Models.Db;
-using smartHookah.Services.Config;
-using smartHookah.Services.Redis;
 
 namespace smartHookah
 {
@@ -34,7 +32,7 @@ namespace smartHookah
                     .Where(t => (t.Name.EndsWith("Service") || t.Name.EndsWith("Mapper")))
                     .AsImplementedInterfaces();
             }
-   
+
         }
     }
 }

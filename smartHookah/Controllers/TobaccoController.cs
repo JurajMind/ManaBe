@@ -1,4 +1,9 @@
-﻿using System;
+﻿using PagedList;
+using smartHookah.Models.Db;
+using smartHookah.Services.Gear;
+using smartHookah.Services.SmokeSession;
+using smartHookah.Support;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -6,14 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-using PagedList;
-
-using smartHookah.Models;
-using smartHookah.Models.Db;
-using smartHookah.Services.Gear;
-using smartHookah.Services.SmokeSession;
-using smartHookah.Support;
 
 namespace smartHookah.Controllers
 {
@@ -281,7 +278,7 @@ namespace smartHookah.Controllers
                     tobacco =
                         tobacco.OrderByDescending(a => a.Statistics.SessionDurationTick)
                             .ThenByDescending(a => a.Statistics.SmokeDurationTick);
-                   break;
+                    break;
 
                 case "taste":
                     tobacco =
@@ -526,16 +523,16 @@ namespace smartHookah.Controllers
             var tobacoMix = tobacos.Where(a => !String.IsNullOrEmpty(a.AccName)).Select(t => t as TobaccoMix);
 
             return Json(tobacoMix.OrderBy(a => a.AccName).Select(x => new
-                                                                          {
-                                                                              name = x.AccName,
-                                                                              id = x.Id,
-                                                                              parts = x.Tobaccos.Select(y => new
-                                                                                                                 {
-                                                                                                                     name = y.Tobacco.AccName,
-                                                                                                                     brand = y.Tobacco.BrandName,
-                                                                                                                     fraction = y.Fraction
-                                                                                                                 })
-                                                                          }), JsonRequestBehavior.AllowGet);
+            {
+                name = x.AccName,
+                id = x.Id,
+                parts = x.Tobaccos.Select(y => new
+                {
+                    name = y.Tobacco.AccName,
+                    brand = y.Tobacco.BrandName,
+                    fraction = y.Fraction
+                })
+            }), JsonRequestBehavior.AllowGet);
         }
 
         public static Tobacco GetTobacoFromMetadata(SaveSmokeMetadataModel model, SmartHookahContext db)
@@ -687,7 +684,7 @@ namespace smartHookah.Controllers
             }
             return result;
         }
-       
+
         [Authorize(Roles = "Admin")]
         public ActionResult CleanMix()
         {
@@ -736,7 +733,7 @@ namespace smartHookah.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
-        public async  Task<ActionResult> CalculateStatistic(int id)
+        public async Task<ActionResult> CalculateStatistic(int id)
         {
 
             var acc = this.db.PipeAccesories.Find(id);

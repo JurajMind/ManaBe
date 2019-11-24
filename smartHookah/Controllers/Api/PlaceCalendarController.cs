@@ -1,6 +1,8 @@
-﻿using smartHookah.Models.Db;
+﻿using smartHookah.Helpers;
+using smartHookah.Models.Db;
 using smartHookah.Models.Dto;
-using smartHookah.Helpers;
+using smartHookahCommon.Errors;
+using smartHookahCommon.Exceptions;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -8,8 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
-using smartHookahCommon.Errors;
-using smartHookahCommon.Exceptions;
 using PlaceDay = smartHookah.Models.Dto.PlaceDay;
 
 namespace smartHookah.Controllers.Api
@@ -30,25 +30,25 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("SavePlaceDay")]
         public async Task<DTO> SavePlaceDay([Bind(Include = "Id,PlaceId,Day,OpenHour,CloseHour")] PlaceDay placeDay)
         {
-            if (placeDay == null) return new DTO(){Success = false, Message = "PlaceDay is null."};
+            if (placeDay == null) return new DTO() { Success = false, Message = "PlaceDay is null." };
 
             var day = _db.PlaceDays.Find(placeDay.Id);
             var place = _db.Places.Find(placeDay.PlaceId);
 
-            if (place == null) return new DTO(){Success = false, Message = "Place not found, please provide correct place id."};
+            if (place == null) return new DTO() { Success = false, Message = "Place not found, please provide correct place id." };
 
             try
             {
                 day = new Models.Db.PlaceDay() { Id = placeDay.Id > 0 ? placeDay.Id : 0, Day = placeDay.Day, PlaceId = placeDay.PlaceId, OpenHour = placeDay.OpenHour, CloseHour = placeDay.CloseHour };
-                
+
                 _db.PlaceDays.AddOrUpdate(day);
                 _db.SaveChanges();
 
-                return new DTO(){Success = true, Message = "PlaceDay successfully saved."};
+                return new DTO() { Success = true, Message = "PlaceDay successfully saved." };
             }
             catch (Exception e)
             {
-                return new DTO(){Success = false, Message = $"{e.Message}"};
+                return new DTO() { Success = false, Message = $"{e.Message}" };
             }
         }
 
@@ -56,15 +56,15 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("SavePlaceEvent")]
         public async Task<DTO> SavePlaceEvent([Bind(Include = "Id,PlaceDayId,Title,Description,Start,End,PrivacyType,FacebookUrl")] PlaceEventDTO placeEvent)
         {
-            if(placeEvent == null) return new DTO(){Success = false, Message = "PlaceEvent is null."};
+            if (placeEvent == null) return new DTO() { Success = false, Message = "PlaceEvent is null." };
 
             var day = _db.PlaceDays.Find(placeEvent.PlaceDayId);
 
-            if(day == null) return new DTO(){Success = false, Message = "PlaceDay not found, please provide correct PlaceDay id."};
-            if(placeEvent.Start > placeEvent.End) return new DTO(){Success = false, Message = "Event cannot end after it starts."};
-            if(placeEvent.Start.Date != day.Day.Date) return new DTO(){Success = false, Message = "Event start date must be the same as corresponding PlaceDay date."};
+            if (day == null) return new DTO() { Success = false, Message = "PlaceDay not found, please provide correct PlaceDay id." };
+            if (placeEvent.Start > placeEvent.End) return new DTO() { Success = false, Message = "Event cannot end after it starts." };
+            if (placeEvent.Start.Date != day.Day.Date) return new DTO() { Success = false, Message = "Event start date must be the same as corresponding PlaceDay date." };
 
-            if(!FacebookHelper.ValidateEventPrivacyType(placeEvent.PrivacyType)) return new DTO(){Success = false, Message = "Event privacy type not valid."};
+            if (!FacebookHelper.ValidateEventPrivacyType(placeEvent.PrivacyType)) return new DTO() { Success = false, Message = "Event privacy type not valid." };
 
             try
             {
@@ -79,7 +79,7 @@ namespace smartHookah.Controllers.Api
                     PlaceDayId = day?.Id ?? 0,
                     PrivacyType = placeEvent.PrivacyType
                 };
-                
+
                 _db.PlaceEvents.AddOrUpdate(ev);
                 _db.SaveChanges();
 
@@ -95,7 +95,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("CreateEventFromFacebook")]
         public async Task<DTO> CreatePlaceEventFromFacebook(string url)
         {
-            return new DTO(){Success = false, Message = "Function not implemented yet."};
+            return new DTO() { Success = false, Message = "Function not implemented yet." };
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("GetCalendar")]
         public async Task<PlaceCalendarDto> GetPlaceCalendar(int placeId, string privacyType = "public")
         {
-            if(placeId < 0)
+            if (placeId < 0)
                 throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
             var place = _db.Places.Find(placeId);
             if (place == null)
@@ -118,7 +118,7 @@ namespace smartHookah.Controllers.Api
             var result = new PlaceCalendarDto();
             foreach (var day in place.PlaceDays)
             {
-                var d = new PlaceDay(){Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour};
+                var d = new PlaceDay() { Id = day.Id, PlaceId = day.PlaceId, Day = day.Day, OpenHour = day.OpenHour, CloseHour = day.CloseHour };
                 foreach (var e in day.PlaceEvents)
                 {
                     if (e.PrivacyType.ToLower() == privacyType.ToLower() && FacebookHelper.ValidateEventPrivacyType(privacyType))
@@ -147,7 +147,7 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("GetPlaceDay")]
         public async Task<PlaceDay> GetPlaceDay(int placeId, int? dayId, DateTime? dayDate, string privacyType = "public")
         {
-            if (placeId < 1)  
+            if (placeId < 1)
                 throw new ManaException(ErrorCodes.PlaceNotFound, "Wrong place id");
             var place = _db.Places.Find(placeId);
             if (place == null)
@@ -160,7 +160,8 @@ namespace smartHookah.Controllers.Api
             if (dayId.HasValue)
             {
                 day = (from d in place.PlaceDays where d.Id == dayId select d).FirstOrDefault();
-            } else if (dayDate.HasValue)
+            }
+            else if (dayDate.HasValue)
             {
                 day = (from d in place.PlaceDays where d.Day.Date == dayDate select d).FirstOrDefault();
             }
@@ -200,11 +201,11 @@ namespace smartHookah.Controllers.Api
         [System.Web.Http.Route("GetPlaceEvent")]
         public async Task<PlaceEventDTO> GetPlaceEvent(int eventId)
         {
-            if(eventId < 1) return new PlaceEventDTO(){Success = false, Message = "Please provide correct PlaceEvent id."};
+            if (eventId < 1) return new PlaceEventDTO() { Success = false, Message = "Please provide correct PlaceEvent id." };
 
             var e = _db.PlaceEvents.Find(eventId);
-            
-            if (e == null) return new PlaceEventDTO(){Success = false, Message = "Event not found."};
+
+            if (e == null) return new PlaceEventDTO() { Success = false, Message = "Event not found." };
 
             var result = new PlaceEventDTO()
             {
@@ -225,12 +226,12 @@ namespace smartHookah.Controllers.Api
         public async Task<PlaceEventCollectionDTO> FindEventsBy(int? placeId, DateTime? startsAfter, DateTime? endsBefore, string privacyType = "")
         {
             var query = from ev in _db.PlaceEvents select ev;
-            
+
             query = (placeId.HasValue && placeId > 0 && _db.Places.Find(placeId) != null)
                 ? query.Where(e => e.PlaceDay.PlaceId == placeId)
                 : query;
-            query = startsAfter.HasValue 
-                ? query.Where(e => DbFunctions.TruncateTime(e.Start) >= DbFunctions.TruncateTime(startsAfter)) 
+            query = startsAfter.HasValue
+                ? query.Where(e => DbFunctions.TruncateTime(e.Start) >= DbFunctions.TruncateTime(startsAfter))
                 : query.Where(e => DbFunctions.TruncateTime(e.Start) >= DbFunctions.TruncateTime(DateTime.UtcNow));
             query = endsBefore.HasValue
                 ? query.Where(e => DbFunctions.TruncateTime(e.Start) <= DbFunctions.TruncateTime(endsBefore))
@@ -243,7 +244,7 @@ namespace smartHookah.Controllers.Api
 
             if (events.Count > 0)
             {
-                var result = new PlaceEventCollectionDTO(){Success = true, Message = $"{events.Count} events found."};
+                var result = new PlaceEventCollectionDTO() { Success = true, Message = $"{events.Count} events found." };
 
                 foreach (var e in events)
                 {
@@ -264,7 +265,7 @@ namespace smartHookah.Controllers.Api
                 return result;
             }
 
-            return new PlaceEventCollectionDTO() {Success = false, Message = "No events with given parameters found."};
+            return new PlaceEventCollectionDTO() { Success = false, Message = "No events with given parameters found." };
         }
 
         #endregion
@@ -283,15 +284,15 @@ namespace smartHookah.Controllers.Api
                 {
                     _db.PlaceDays.Remove(day);
                     _db.SaveChanges();
-                    return new DTO(){Success = true, Message = $"PlaceDay with id {dayId} has been deleted."};
+                    return new DTO() { Success = true, Message = $"PlaceDay with id {dayId} has been deleted." };
                 }
                 catch (Exception e)
                 {
-                    return new DTO(){Success = false, Message = e.Message};
+                    return new DTO() { Success = false, Message = e.Message };
                 }
             }
 
-            return new DTO(){Success = false, Message = $"Cannot find PlaceDay with id {dayId}."};
+            return new DTO() { Success = false, Message = $"Cannot find PlaceDay with id {dayId}." };
         }
 
         [System.Web.Http.AcceptVerbs("DELETE")]

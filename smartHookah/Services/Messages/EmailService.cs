@@ -1,12 +1,12 @@
-﻿using System;
+﻿using log4net;
+using Mailzory;
+using Microsoft.AspNet.Identity;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
-using log4net;
-using Mailzory;
-using Microsoft.AspNet.Identity;
 using Westwind.Globalization;
 
 namespace smartHookah.Services.Messages
@@ -14,9 +14,9 @@ namespace smartHookah.Services.Messages
     public class EmailService : IEmailService, IIdentityMessageService
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(EmailService));
-        public void SendTemplateAsync(string mailAdress,string subject,string template,object model)
+        public void SendTemplateAsync(string mailAdress, string subject, string template, object model)
         {
-            if(mailAdress == null)
+            if (mailAdress == null)
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace smartHookah.Services.Messages
                 template = template + ".txt";
             }
 
-            var translatedSubject =  DbRes.T(subject, "Email");
+            var translatedSubject = DbRes.T(subject, "Email");
 
             // template path
             var viewPath = Path.Combine("~/Views/Emails", template);
@@ -35,15 +35,15 @@ namespace smartHookah.Services.Messages
             var layoutPath = HostingEnvironment.MapPath("~/Views/Emails/_EmailLayout.txt");
             var layout = File.ReadAllLines(layoutPath);
 
-            var index = Array.FindIndex(layout,a => a.Contains("#BODY#"));
+            var index = Array.FindIndex(layout, a => a.Contains("#BODY#"));
 
             var first = layout.Take(index);
             var seccond = layout.Skip(index + 1);
-                          
+
             var readedTemplate = File.ReadLines(viewPath);
 
             var compile = first.Concat(readedTemplate).Concat(seccond);
-         
+
             var email = new Email(string.Join("", compile));
             email.ViewBag.Model = model;
             email.SetFrom("app@manapipes.com", "Manapipes");
@@ -51,7 +51,7 @@ namespace smartHookah.Services.Messages
             {
                 try
                 {
-                  await email.SendAsync(mailAdress, subject);
+                    await email.SendAsync(mailAdress, subject);
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +59,7 @@ namespace smartHookah.Services.Messages
                 }
             });
 
-          
+
         }
 
         public Task SendAsync(IdentityMessage message)
@@ -73,8 +73,8 @@ namespace smartHookah.Services.Messages
             var email = new Email(message.Body);
 
 
-         
-         
+
+
             // set Attachments (Optional)
             //email.Attachments.Add(new Attachment("Attachments/attach1.pdf"));
             //email.Attachments.Add(new Attachment("Attachments/attach2.docx"));
@@ -83,7 +83,7 @@ namespace smartHookah.Services.Messages
             email.SetFrom("app@manapipes.com", "Manapipes");
 
             // send email with BCC
-            return email.SendAsync(message.Destination,message.Subject);
+            return email.SendAsync(message.Destination, message.Subject);
 
 
         }

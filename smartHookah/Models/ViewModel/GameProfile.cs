@@ -1,11 +1,10 @@
-﻿using System;
+﻿using smartHookah.Controllers;
+using smartHookah.Models.Db;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
-using smartHookah.Controllers;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Models
 {
@@ -25,11 +24,13 @@ namespace smartHookah.Models
         public int Level { get; set; }
 
         [NotMapped]
-        public int TestLevel => (int) ((lvlConst * Math.Sqrt(Experience)) + 1);
+        public int TestLevel => (int)((lvlConst * Math.Sqrt(Experience)) + 1);
 
         [NotMapped]
-        public double LvlProgress {
-            get { return ((double) Experience / (double) ExpToLevel(TestLevel+1)) * 100; } }
+        public double LvlProgress
+        {
+            get { return ((double)Experience / (double)ExpToLevel(TestLevel + 1)) * 100; }
+        }
         public int ExpToLevel(int level)
         {
             return (int)(Math.Pow(level / lvlConst, 2));
@@ -39,7 +40,7 @@ namespace smartHookah.Models
 
         public int Clouds { get; set; }
 
-        public  IEnumerable<Reward> GainRewards
+        public IEnumerable<Reward> GainRewards
         {
             get { return DoneEvent.SelectMany(a => a.Event.Rewards); }
         }
@@ -106,17 +107,17 @@ namespace smartHookah.Models
         public virtual Event Event { get; set; }
 
         public DateTime Obtain { get; set; }
-        
+
     }
 
     public class EventProgress
     {
-       public int Id { get; set; }
+        public int Id { get; set; }
 
         [ForeignKey("GameProfile")]
         public int GameProfileId { get; set; }
         public virtual GameProfile GameProfile { get; set; }
-     
+
         public int EventId { get; set; }
         public virtual Event EventRecepie { get; set; }
 
@@ -126,14 +127,14 @@ namespace smartHookah.Models
 
         public string StringProgress { get; set; }
 
-        public static EventProgress operator +(EventProgress x,EventProgress y)
+        public static EventProgress operator +(EventProgress x, EventProgress y)
         {
             if (x == null || y == null)
                 return null;
 
 
-            if(x.GameProfileId != y.GameProfileId || x.EventId != y.EventId)
-            return null;
+            if (x.GameProfileId != y.GameProfileId || x.EventId != y.EventId)
+                return null;
 
             x.TimeProgress = x.TimeProgress + y.TimeProgress;
             x.IntProgress = x.IntProgress + y.IntProgress;
@@ -198,7 +199,7 @@ namespace smartHookah.Models
                 {
                     TimeFrameTicks = value.Value.Ticks;
                 }
-                
+
             }
         }
 
@@ -216,7 +217,7 @@ namespace smartHookah.Models
     public enum EventType
     {
         Person = 1,
-        Place =  2,
+        Place = 2,
     }
 
     public class EventRecepie
@@ -225,7 +226,7 @@ namespace smartHookah.Models
         public int Id { get; set; }
 
         public int EventId { get; set; }
-        public virtual Event Event  {get; set; }
+        public virtual Event Event { get; set; }
 
         public string EventString { get; set; }
 
@@ -241,10 +242,10 @@ namespace smartHookah.Models
 
 
         public EventRecepieType Type { get; set; }
-       
 
-       [MaxLength(2)]
-       public string TriggerCountCompare { get; set; }
+
+        [MaxLength(2)]
+        public string TriggerCountCompare { get; set; }
 
     }
 
@@ -266,13 +267,13 @@ namespace smartHookah.Models
         TobaccoInMix = 13,
         SessionCount = 14,
         PufCountSum = 15,
-      
+
     }
 
 
     public class Reward
     {
-        public static Reward Transform(Reward reward,string type)
+        public static Reward Transform(Reward reward, string type)
         {
             switch (type)
             {
@@ -291,7 +292,7 @@ namespace smartHookah.Models
                 default:
                     return reward;
             }
-           
+
         }
         public virtual string GetWebName()
         {
@@ -325,9 +326,9 @@ namespace smartHookah.Models
     {
         public Title()
         {
-            
+
         }
-        public Title(Reward reward):base(reward)
+        public Title(Reward reward) : base(reward)
         { }
         [NotMapped]
         public string TitleName
@@ -347,7 +348,7 @@ namespace smartHookah.Models
         {
 
         }
-        public Badge(Reward reward):base(reward)
+        public Badge(Reward reward) : base(reward)
         { }
         [NotMapped]
         public string BadgePictureUrl
@@ -367,7 +368,7 @@ namespace smartHookah.Models
         {
 
         }
-        public Achievment(Reward reward):base(reward)
+        public Achievment(Reward reward) : base(reward)
         { }
         [NotMapped]
         public string AchievmentName
@@ -388,7 +389,7 @@ namespace smartHookah.Models
         {
 
         }
-        public GamePicture(Reward reward):base(reward)
+        public GamePicture(Reward reward) : base(reward)
         { }
         [NotMapped]
         public string PictureUrl

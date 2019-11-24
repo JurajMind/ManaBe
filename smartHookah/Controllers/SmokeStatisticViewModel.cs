@@ -2,11 +2,9 @@
 
 namespace smartHookah.Controllers
 {
+    using smartHookah.Models.Redis;
     using System;
     using System.Collections.Generic;
-
-    using smartHookah.Models;
-    using smartHookah.Models.Redis;
 
     public class SmokeStatisticViewModel
     {

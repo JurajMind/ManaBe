@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json.Converters;
+using System;
 
 namespace smartHookah.Helpers.Formaters
 {

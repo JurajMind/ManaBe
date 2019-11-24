@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Microsoft.Azure.Devices;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.Devices;
 
 namespace smartHookah.Helpers
 {
     public class IotDeviceHelper
     {
-        public static async Task SendMsgToDevice(string deviceId,string message)
+        public static async Task SendMsgToDevice(string deviceId, string message)
         {
-        ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(ConfigurationManager.AppSettings["IoTConnectionString"]);
+            ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(ConfigurationManager.AppSettings["IoTConnectionString"]);
             var serviceMessage = new Message(Encoding.ASCII.GetBytes(message))
             {
                 Ack = DeliveryAcknowledgement.Full,
@@ -20,7 +20,7 @@ namespace smartHookah.Helpers
             };
             await serviceClient.SendAsync(deviceId, serviceMessage);
             await serviceClient.CloseAsync();
-       }
+        }
 
         public static async Task<List<string>> GetState(List<string> deviceIds)
         {
@@ -32,6 +32,6 @@ namespace smartHookah.Helpers
 
         }
 
-      
-}
+
+    }
 }

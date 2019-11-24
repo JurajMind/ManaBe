@@ -109,7 +109,7 @@ namespace smartHookahTests.Common
         {
             foreach (var entity in entities)
             {
-               this._data.Add(entity);
+                this._data.Add(entity);
             }
         }
 

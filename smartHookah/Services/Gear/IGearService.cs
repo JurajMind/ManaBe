@@ -1,15 +1,11 @@
-﻿using System;
+﻿using smartHookah.Models.Db;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using smartHookah.Models;
-using smartHookah.Models.Db;
 
 namespace smartHookah.Services.Gear
 {
-    using System.Web.Helpers;
-
     using smartHookah.Models.Dto;
+    using System.Web.Helpers;
 
     public interface IGearService
     {
@@ -21,8 +17,8 @@ namespace smartHookah.Services.Gear
 
         Dictionary<AccesoryType, List<BrandGroupDto>> GetBrands();
 
-        List<SearchPipeAccessory> SearchAccessories(string search, AccesoryType type, SearchType searchType,int page,int pageSize);
-        
+        List<SearchPipeAccessory> SearchAccessories(string search, AccesoryType type, SearchType searchType, int page, int pageSize);
+
         int UsedByPerson(PipeAccesory accessory, int personId);
 
         int UsedByPerson(PipeAccesory accessory);

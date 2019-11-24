@@ -10,7 +10,7 @@ namespace smartHookah.Controllers
         {
             builder.RegisterControllers(typeof(HomeController).Assembly);
 
-         }
+        }
     }
 
     public class ApiModule : Module
