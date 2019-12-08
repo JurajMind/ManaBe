@@ -6,7 +6,6 @@ using smartHookah.Models.Db.Session;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
 
 namespace smartHookah.Models.Db
 {
@@ -126,18 +125,6 @@ namespace smartHookah.Models.Db
         public static SmartHookahContext Create()
         {
             return new SmartHookahContext();
-        }
-
-        public SmokeSession GetCurrentSession(int id)
-        {
-            var hookah = this.Hookahs.Find(id);
-            return this.CurrentSession(hookah);
-        }
-
-        public SmokeSession GetSmokeSession(string hookahCode)
-        {
-            var hookah = this.Hookahs.FirstOrDefault(h => h.Code == hookahCode);
-            return this.CurrentSession(hookah);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -304,18 +291,5 @@ namespace smartHookah.Models.Db
 
         }
 
-        private SmokeSession CurrentSession(Hookah hookah)
-        {
-            var smokeSession = hookah.SmokeSessions.FirstOrDefault();
-
-            if (smokeSession == null)
-            {
-                var newSession = this.SmokeSessions.Create();
-                newSession.Hookah = hookah;
-                return newSession;
-            }
-
-            return smokeSession;
-        }
     }
 }
