@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using System.Configuration;
+using CsvHelper;
 using CsvHelper.Configuration;
 using smartHookah.Models.Db;
 using smartHookah.Models.Db.Place;
@@ -9,6 +10,9 @@ using System.Data.Entity.Migrations;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
+using System.Web.Mvc;
+using smartHookah.ErrorHandler;
 
 namespace smartHookah.Controllers.Api
 {
@@ -159,6 +163,76 @@ namespace smartHookah.Controllers.Api
             return result;
         }
 
+        [HttpGet]
+        [Route("GoogleProxy/place/autocomplete/json")]
+        public async Task<HttpResponseMessage> Proxy(string input, string types, string sessionToken)
+        {
+
+
+            var apiKey = ConfigurationManager.AppSettings["googleMapApiKey_proxy"];
+            var urlString =
+                String.Format(
+                    "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={0}&types={1}&key={2}&sessiontoken={3}",
+                    input, types, apiKey, sessionToken);
+            ServicePointManager
+                    .ServerCertificateValidationCallback +=
+                (sender, cert, chain, sslPolicyErrors) => true;
+
+            using (HttpClient http = new HttpClient())
+            {
+                this.Request.RequestUri = new Uri(urlString);
+                this.Request.Headers.Clear();
+                this.Request.Headers.Add("cache-control", "no-cache");
+                this.Request.Headers.Add("Connection", "keep-alive");
+                this.Request.Headers.Add("Accept-Encoding", "gzip, deflate");
+                this.Request.Headers.Add("Host", "maps.googleapis.com");
+                this.Request.Headers.Add("Cache-Control", "no-cache");
+                this.Request.Headers.Add("Accept", "*/*");
+                this.Request.Headers.Add("User-Agent", "PostmanRuntime/7.20.1");
+                if (this.Request.Method == HttpMethod.Get)
+                {
+                    this.Request.Content = null;
+                }
+
+                return await http.SendAsync(this.Request);
+            }
+        }
+
+        [HttpGet]
+        [Route("GoogleProxy/place/details/json")]
+        public async Task<HttpResponseMessage> Proxy(string placeId)
+        {
+
+
+            var apiKey = ConfigurationManager.AppSettings["googleMapApiKey_proxy"];
+            var urlString =
+                String.Format(
+                    "https://maps.googleapis.com/maps/api/place/details/json?key={0}" +
+                    "&placeid={1}",
+                        apiKey, placeId);
+            ServicePointManager
+                    .ServerCertificateValidationCallback +=
+                (sender, cert, chain, sslPolicyErrors) => true;
+
+            using (HttpClient http = new HttpClient())
+            {
+                this.Request.RequestUri = new Uri(urlString);
+                this.Request.Headers.Clear();
+                this.Request.Headers.Add("cache-control", "no-cache");
+                this.Request.Headers.Add("Connection", "keep-alive");
+                this.Request.Headers.Add("Accept-Encoding", "gzip, deflate");
+                this.Request.Headers.Add("Host", "maps.googleapis.com");
+                this.Request.Headers.Add("Cache-Control", "no-cache");
+                this.Request.Headers.Add("Accept", "*/*");
+                this.Request.Headers.Add("User-Agent", "PostmanRuntime/7.20.1");
+                if (this.Request.Method == HttpMethod.Get)
+                {
+                    this.Request.Content = null;
+                }
+
+                return await http.SendAsync(this.Request);
+            }
+        }
 
 
         #endregion
