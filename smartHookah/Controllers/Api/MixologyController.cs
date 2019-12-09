@@ -148,11 +148,11 @@ namespace smartHookah.Controllers.Api
                     this.Request.CreateErrorResponse(HttpStatusCode.NotFound, e.Message));
             }
         }
-        [System.Web.Http.HttpGet, System.Web.Http.Route("Suggest/Mix")]
-        public async Task<List<TobaccoMixSimpleDto>> GetMiFromTobaccos([FromUri] int[] ids, int pageSize = 100, int page = 0,
-            bool own = true)
+        [System.Web.Http.HttpGet, System.Web.Http.Route("Search/Mix")]
+        public async Task<List<TobaccoMixSimpleDto>> GetMixFromTobaccos([FromUri] int[] ids, string name = null, int pageSize = 100, int page = 0,
+            bool union = true)
         {
-            var result = await this.tobaccoService.GetMixFromTobaccos(ids.ToList(), pageSize, page);
+            var result = await this.tobaccoService.GetMixFromTobaccos(name,ids.ToList(), pageSize, page, union);
             return TobaccoMixSimpleDto.FromModelList(result, this.personService.GetCurentPersonId()).ToList();
         }
 
