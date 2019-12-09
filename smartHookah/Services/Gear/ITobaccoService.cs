@@ -28,7 +28,7 @@ namespace smartHookah.Services.Gear
 
         Task<List<TobaccoMix>> GetMixFromTobacco(int id, int pageSize = 10, int page = 0);
 
-        Task<List<TobaccoMix>> GetMixFromTobaccos(List<int> ids, int pageSize = 10, int page = 0);
+        Task<List<TobaccoMix>> GetMixFromTobaccos(string name,List<int> ids, int pageSize = 10, int page = 0, bool union = true);
 
         Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0, bool own = true);
 
