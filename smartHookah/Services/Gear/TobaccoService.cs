@@ -139,8 +139,13 @@ namespace smartHookah.Services.Gear
             return mixes;
         }
 
-        public async Task<List<TobaccoMix>> GetMixFromTobaccos(List<int> ids, int pageSize = 10, int page = 0)
+        public async Task<List<TobaccoMix>> GetMixFromTobaccos(string name,List<int> ids, int pageSize = 10, int page = 0, bool union = true)
         {
+            if (name != null && (ids == null || ids.Count == 0))
+            {
+                return this.db.TobaccoMixs.Where(a => a.AccName.ToUpper().Contains(name.ToUpper())).ToList();
+            }
+
             var result = new List<TobaccoMix>();
 
             foreach (var id in ids)
@@ -148,14 +153,21 @@ namespace smartHookah.Services.Gear
                 result.AddRange(await this.GetMixFromTobacco(id, pageSize, page));
             }
 
+            if(union)
+                result = result.Where(m => ids.All( x => m.Tobaccos.Any( y => x == y.TobaccoId))).ToList();
+
             var filtered = result.GroupBy(a => a.Id).OrderBy(b => b.Count()).SelectMany(b => b).Distinct();
 
+            if (name != null)
+            {
+                filtered = filtered.Where(a => a.AccName.ToUpper().Contains(name.ToUpper()));
+            }
             return filtered.ToList();
         }
 
         public async Task<List<Tobacco>> SuggestTobaccos(List<int> ids, int pageSize = 10, int page = 0, bool own = true)
         {
-            var mixes = await this.GetMixFromTobaccos(ids, pageSize, page);
+            var mixes = await this.GetMixFromTobaccos(null,ids, pageSize, page);
 
             var tobaccos = mixes.SelectMany(a => a.Tobaccos).Select(a => a.Tobacco).Distinct().ToList();
 
