@@ -222,6 +222,10 @@ namespace smartHookah.Models.Db
         public int? AuthorId { get; set; }
         public virtual Person Author { get; set; }
 
+        public int? OriginMixId { get; set; }
+
+        public virtual TobaccoMix OriginMix { get; set; }
+
         public MixLayerMethod? LayerMethod { get; set; } = 0;
 
         public override double GetTobacoEstimated(SmartHookahContext db)

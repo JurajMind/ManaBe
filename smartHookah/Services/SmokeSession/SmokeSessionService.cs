@@ -110,9 +110,20 @@ namespace smartHookah.Services.SmokeSession
             if (session?.MetaData?.Tobacco?.Statistics != null)
                 pufCount = (int)session?.MetaData?.Tobacco?.Statistics.PufCount;
 
-            await this.deviceService.SetPercentage(session.Hookah.Code, pufCount);
+            await _updateDevicePercentage(session?.MetaData, session.Hookah.Code);
 
         }
+
+        private async Task _updateDevicePercentage(SmokeSessionMetaData metadata, string hookahCode)
+        {
+            var pufCount = 300;
+
+            if (metadata.Tobacco?.Statistics != null)
+                pufCount = (int) (metadata.Tobacco?.Statistics.PufCount ?? 300);
+
+            await this.deviceService.SetPercentage(hookahCode, pufCount);
+        }
+
 
 
         public DeviceSetting GetStandSettings(string id)
@@ -201,7 +212,10 @@ namespace smartHookah.Services.SmokeSession
                 throw;
             }
 
-            return this.db.SessionMetaDatas.Where(a => a.Id == model.Id).Include(a => a.Tobacco).FirstOrDefault();
+            var outMetadata = this.db.SessionMetaDatas.Include(b => b.Tobacco).Include(b => b.Tobacco.Statistics).Where(a => a.Id == model.Id).Include(a => a.Tobacco).FirstOrDefault();
+            await this._updateDevicePercentage(outMetadata,session.Hookah.Code);
+
+            return outMetadata;
         }
 
         public Task<SmokeSession> EndSmokeSession(string id, SessionReport source)

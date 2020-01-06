@@ -974,6 +974,10 @@
     <Compile Include="Migrations\201911231406446_device_add.Designer.cs">
       <DependentUpon>201911231406446_device_add.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001062214514_mix-origin.cs" />
+    <Compile Include="Migrations\202001062214514_mix-origin.Designer.cs">
+      <DependentUpon>202001062214514_mix-origin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dto\Device\DeviceCreationDto.cs" />
     <Compile Include="Models\Dto\Gear\PipeAccesoryReviewDto.cs" />
     <Compile Include="Models\Db\Session\SessionReview.cs" />
@@ -1315,6 +1319,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911231406446_device_add.resx">
       <DependentUpon>201911231406446_device_add.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001062214514_mix-origin.resx">
+      <DependentUpon>202001062214514_mix-origin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />

@@ -55,6 +55,9 @@ namespace smartHookah.Models.Dto
         [DataMember, JsonProperty("CoalCount")]
         public double CoalsCount { get; set; }
 
+        [DataMember, JsonProperty("EstimatedPufCount")]
+        public int EstimatedPufCount { get; set; }
+
         public static SmokeSessionMetaDataDto FromModel(SmokeSessionMetaData model) => model == null
             ? null
             : new SmokeSessionMetaDataDto()
@@ -74,7 +77,8 @@ namespace smartHookah.Models.Dto
                 HeatManagementId = model.HeatManagementId,
                 HeatManagement = model.HeatManagement == null ? null : PipeAccesorySimpleDto.FromModel(model.HeatManagement),
                 PackType = model.PackType,
-                CoalsCount = model.CoalsCount
+                CoalsCount = model.CoalsCount,
+                EstimatedPufCount = (int)(model?.Tobacco?.Statistics?.PufCount ?? 300.0)
             };
 
         public SmokeSessionMetaData ToModel()
