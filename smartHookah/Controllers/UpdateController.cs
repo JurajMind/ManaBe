@@ -162,7 +162,7 @@ namespace smartHookah.Controllers
             var device = this.db.Hookahs.FirstOrDefault(a => a.Code == id);
             if (device == null || device.UpdateType != UpdateType.Init)
             {
-                return null;
+               // return null;
             }
 
             var path = this.db.Updates.OrderByDescending(a => a.ReleseDate).First();
