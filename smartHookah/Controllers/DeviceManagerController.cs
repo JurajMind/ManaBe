@@ -18,9 +18,9 @@ namespace smartHookah.Controllers
         [HttpGet]
         [OptionalHttps(true)]
         [ActionName("DefaultAction")]
-        public async Task<DeviceCreationDto> CreateDevice()
+        public async Task<DeviceCreationDto> CreateDevice(bool debug=false)
         {
-            return await this.deviceManageService.CreateDevice();
+            return await this.deviceManageService.CreateDevice(debug);
         }
     }
 }

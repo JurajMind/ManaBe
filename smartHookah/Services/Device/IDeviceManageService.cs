@@ -5,6 +5,6 @@ namespace smartHookah.Services.Device
 {
     public interface IDeviceManageService
     {
-        Task<DeviceCreationDto> CreateDevice();
+        Task<DeviceCreationDto> CreateDevice(bool debug);
     }
 }

@@ -40,6 +40,7 @@ namespace smartHookah.Services.Device
 
         ICollection<Models.Db.SmokeSession> Sessions(int id, int pageSize, int page);
 
+        Task<bool> DeleteDevice(string code);
 
     }
 }

@@ -274,6 +274,23 @@ namespace smartHookah.Services.Device
             return sessions.ToList();
         }
 
+        public async  Task<bool> DeleteDevice(string code)
+        {
+            var dbDevice = this.db.Hookahs.FirstOrDefault(a => a.Code == code);
+
+            if (dbDevice == null)
+            {
+                throw new ManaException(ErrorCodes.DeviceNotFound);
+            }
+
+            this.db.HookahSettings.Remove(dbDevice.Setting);
+            this.db.Hookahs.Remove(dbDevice);
+            this.db.SaveChanges();
+
+            await this.iotService.DeleteDevice(dbDevice.Code);
+            return true;
+        }
+
         public Task<Dictionary<string, bool>> GetOnlineStates(IEnumerable<string> deviceIds)
         {
             return this.iotService.GetOnlineStates(deviceIds.ToList());

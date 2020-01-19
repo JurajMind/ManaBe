@@ -84,5 +84,13 @@ namespace smartHookah.Services.Device
             };
             return await registryManager.AddDeviceAsync(device);
         }
+
+        public async Task DeleteDevice(string code)
+        {
+            var device = await this.GetDevice(code);
+            if (device == null)
+                return;
+            await registryManager.RemoveDeviceAsync(device);
+        }
     }
 }
