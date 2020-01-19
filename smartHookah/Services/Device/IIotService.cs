@@ -17,5 +17,7 @@
         Task SendMsgToDevice(string deviceId, string message);
 
         Task<Device> CreateDevice(string code);
+
+        Task DeleteDevice(string code);
     }
 }
