@@ -5,6 +5,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using smartHookah.Services.Device;
 
 namespace smartHookah.Controllers
 {
@@ -22,14 +23,16 @@ namespace smartHookah.Controllers
         private readonly ISmokeSessionService smokeSessionService;
         private readonly ISmokeSessionBgService smokeSessionBg;
         private readonly IRedisService redisService;
+        private readonly IDeviceService deviceService;
 
         private IMailChimpManager manager;
-        public AdminController(SmartHookahContext context, ISmokeSessionService smokeSessionService, IRedisService redisService, ISmokeSessionBgService smokeSessionBg)
+        public AdminController(SmartHookahContext context, ISmokeSessionService smokeSessionService, IRedisService redisService, ISmokeSessionBgService smokeSessionBg, IDeviceService deviceService)
         {
             this.db = context;
             this.smokeSessionService = smokeSessionService;
             this.redisService = redisService;
             this.smokeSessionBg = smokeSessionBg;
+            this.deviceService = deviceService;
             this.manager = new MailChimpManager(ConfigurationManager.AppSettings["MailChimpApiKey"]);
         }
         // GET: Admin
@@ -152,6 +155,26 @@ namespace smartHookah.Controllers
 
             return null;
 
+        }
+
+        public async Task<ActionResult> DeleteDevice(string code)
+        {
+            await this.deviceService.DeleteDevice(code);
+
+            return null;
+
+        }
+
+        public async Task<ActionResult> CleanDevice()
+        {
+
+            var devices = this.db.Hookahs.Where(a => a.Code.StartsWith("tear20200117")).ToList();
+            foreach (var device in devices)
+            {
+                await this.DeleteDevice(device.Code);
+            }
+
+            return null;
         }
 
     }

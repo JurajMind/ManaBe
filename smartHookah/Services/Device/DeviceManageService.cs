@@ -30,8 +30,12 @@ namespace smartHookah.Services.Device
         }
 
 
-        public async Task<DeviceCreationDto> CreateDevice()
+        public async Task<DeviceCreationDto> CreateDevice(bool debug = false)
         {
+            if (debug)
+            {
+                return await this.GetDebugDevice();
+            }
             var code = this.GenerateCode();
             var deviceIot = await this.IotService.CreateDevice(code);
             var patternHookah = db.Hookahs.First(a => a.Code == "pattern");
@@ -51,6 +55,19 @@ namespace smartHookah.Services.Device
             await this.sessionBgService.InitSmokeSession(code);
             return tokenToDevice;
 
+        }
+
+        private async Task<DeviceCreationDto> GetDebugDevice()
+        {
+            var code = "beta1";
+            var deviceIot = await this.IotService.GetDevice(code);
+            var tokenToDevice = new DeviceCreationDto()
+            {
+                Id = code,
+                Key = deviceIot.Authentication.SymmetricKey.PrimaryKey,
+                Led = 32
+            };
+            return tokenToDevice;
         }
     }
 }
