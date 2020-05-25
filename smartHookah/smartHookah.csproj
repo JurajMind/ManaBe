@@ -2359,9 +2359,7 @@
     <Content Include="Views\Hookahs\CreateBatch.cshtml" />
     <Content Include="Views\Person\MyStatistic.cshtml" />
     <Content Include="Views\Info\Index.cshtml" />
-    <Content Include="Views\Game\ChcGame.cshtml" />
     <Content Include="Views\Game\ChcGamePost.cshtml" />
-    <Content Include="Views\Game\GameResult.cshtml" />
     <Content Include="Views\DeviceControl\DefaultMetadata.cshtml" />
     <Content Include="Views\Game\Halloween.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
