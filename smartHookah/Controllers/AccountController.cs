@@ -67,22 +67,22 @@ namespace smartHookah.Controllers
             this.owinContext = owinContext;
             this.personService = personService;
             this.accountService = accountService;
-            LoadAuth0();
+            
         }
 
         private async Task LoadAuth0()
         {
             var client = new HttpClient();
             var url = $"{ConfigurationManager.AppSettings["Auth0Domain"]}.well-known/openid-configuration";
-            var response = await client.GetAsync(url);
-            var content = await response.Content.ReadAsStringAsync();
-            OpenIdConnectConfiguration openIdConfig = OpenIdConnectConfiguration.Create(content);
+           
+            CancellationToken cancellationToken = new CancellationToken();
+            var data = await OpenIdConnectConfigurationRetriever.GetAsync(url, cancellationToken);
             validationParameters =
                 new TokenValidationParameters
                 {
                     ValidIssuer = ConfigurationManager.AppSettings["Auth0Domain"],
                     ValidAudiences = new[] { ConfigurationManager.AppSettings["Auth0ApiIdentifier"] },
-                    IssuerSigningKeys = openIdConfig.SigningKeys
+                    IssuerSigningKeys = data.SigningKeys
                 };
         }
 
@@ -569,9 +569,13 @@ namespace smartHookah.Controllers
 
             if (provider == "Auth0")
             {
+                if(validationParameters == null)
+                {
+                    await this.LoadAuth0();
+                }
              
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-                var user = handler.ValidateToken("eyJhbGciOi.....", this.validationParameters, out var validatedToken);
+                var user = handler.ValidateToken(accessToken, this.validationParameters, out var validatedToken);
             }
 
             if (provider == "Facebook")
