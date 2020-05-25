@@ -55,6 +55,9 @@ namespace smartHookah
             //   consumerKey: "",
             //   consumerSecret: "");
 
+
+
+
             app.UseFacebookAuthentication(
                appId: ConfigurationManager.AppSettings["fbAppId"],
                appSecret: ConfigurationManager.AppSettings["fbAppSecret"]);

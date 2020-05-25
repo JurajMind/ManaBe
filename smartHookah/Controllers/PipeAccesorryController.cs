@@ -3,6 +3,7 @@ using smartHookah.Models.Db;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -331,7 +332,7 @@ namespace smartHookah.Controllers
                 ImportedAccesories = new List<PipeAccesory>()
             };
             using (var reader = new StreamReader(file.InputStream))
-            using (var csv = new CsvReader(reader))
+            using (var csv = new CsvReader(reader,CultureInfo.CurrentUICulture))
             {
                 csv.Configuration.MissingFieldFound = null;
                 csv.Configuration.Delimiter = ",";
@@ -445,7 +446,7 @@ namespace smartHookah.Controllers
             {
                 var svc = new Google.Apis.Customsearch.v1.CustomsearchService(new BaseClientService.Initializer { ApiKey = apiKey });
                 var query = $"\"{pipeAccesory.Brand.DisplayName} {pipeAccesory.AccName}\"";
-                var listRequest = svc.Cse.List(query);
+                var listRequest = svc.Cse.List();
 
                 listRequest.Cx = cx;
                 var search = listRequest.Execute();
