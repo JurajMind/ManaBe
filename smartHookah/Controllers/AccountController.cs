@@ -4,10 +4,15 @@ using Microsoft.Owin.Security;
 using smartHookah.Models;
 using smartHookah.Models.Db;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using SecurityToken = System.IdentityModel.Tokens.SecurityToken;
 
 namespace smartHookah.Controllers
 {
@@ -38,6 +43,8 @@ namespace smartHookah.Controllers
 
         private static string fbAppToken = "***REMOVED***|dlrAZ0Z5cltOcdfPnc7r7MYTRds";
 
+        private TokenValidationParameters validationParameters;
+
         public AccountController(IOwinContext owinContext, IPersonService personService, IAccountService accountService,
             IRedisService redisService, SmartHookahContext db)
         {
@@ -60,6 +67,23 @@ namespace smartHookah.Controllers
             this.owinContext = owinContext;
             this.personService = personService;
             this.accountService = accountService;
+            LoadAuth0();
+        }
+
+        private async Task LoadAuth0()
+        {
+            var client = new HttpClient();
+            var url = $"{ConfigurationManager.AppSettings["Auth0Domain"]}.well-known/openid-configuration";
+            var response = await client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            OpenIdConnectConfiguration openIdConfig = OpenIdConnectConfiguration.Create(content);
+            validationParameters =
+                new TokenValidationParameters
+                {
+                    ValidIssuer = ConfigurationManager.AppSettings["Auth0Domain"],
+                    ValidAudiences = new[] { ConfigurationManager.AppSettings["Auth0ApiIdentifier"] },
+                    IssuerSigningKeys = openIdConfig.SigningKeys
+                };
         }
 
         public ApplicationSignInManager SignInManager
@@ -542,6 +566,13 @@ namespace smartHookah.Controllers
             ParsedExternalAccessToken parsedToken = null;
 
             var verifyTokenEndPoint = string.Empty;
+
+            if (provider == "Auth0")
+            {
+             
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                var user = handler.ValidateToken("eyJhbGciOi.....", this.validationParameters, out var validatedToken);
+            }
 
             if (provider == "Facebook")
             {

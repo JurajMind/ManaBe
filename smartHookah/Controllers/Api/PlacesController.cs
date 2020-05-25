@@ -7,6 +7,7 @@ using smartHookah.Models.Dto.Places;
 using smartHookah.Services.Person;
 using smartHookahCommon.Extensions;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -251,7 +252,7 @@ namespace smartHookah.Controllers.Api
             var stream = await Request.Content.ReadAsStreamAsync();
 
             using (var reader = new StreamReader(stream))
-            using (var csv = new CsvReader(reader))
+            using (var csv = new CsvReader(reader,CultureInfo.CurrentUICulture))
             {
                 csv.Configuration.HasHeaderRecord = false;
                 csv.Configuration.Delimiter = ",";
@@ -275,7 +276,7 @@ namespace smartHookah.Controllers.Api
             var stream = await Request.Content.ReadAsStreamAsync();
 
             using (var reader = new StreamReader(stream))
-            using (var csv = new CsvReader(reader))
+            using (var csv = new CsvReader(reader,CultureInfo.CurrentUICulture))
             {
                 csv.Configuration.HasHeaderRecord = true;
                 csv.Configuration.Delimiter = ",";
