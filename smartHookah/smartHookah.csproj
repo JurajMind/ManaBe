@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
@@ -55,35 +55,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.3.8.0\lib\net46\Accord.dll</HintPath>
+      <HintPath>..\packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>
     </Reference>
     <Reference Include="Accord.MachineLearning, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\net46\Accord.MachineLearning.dll</HintPath>
+      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\net462\Accord.MachineLearning.dll</HintPath>
     </Reference>
     <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll</HintPath>
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll</HintPath>
     </Reference>
     <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll</HintPath>
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Core.dll</HintPath>
     </Reference>
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll</HintPath>
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac, Version=5.1.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.5.1.4\lib\net461\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.Mvc5.5.0.0\lib\net461\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.WebApi, Version=5.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.5.0.0\lib\net461\Autofac.Integration.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Azure.Core, Version=1.2.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Core.1.2.1\lib\netstandard2.0\Azure.Core.dll</HintPath>
@@ -108,6 +104,24 @@
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.10.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.10.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Buffers, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Buffers.0.6.0\lib\net45\DotNetty.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs.0.6.0\lib\net45\DotNetty.Codecs.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Codecs.Mqtt, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs.Mqtt.0.6.0\lib\net45\DotNetty.Codecs.Mqtt.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Common, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Common.0.6.0\lib\net45\DotNetty.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Handlers, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Handlers.0.6.0\lib\net45\DotNetty.Handlers.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetty.Transport, Version=0.6.0.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Transport.0.6.0\lib\net45\DotNetty.Transport.dll</HintPath>
     </Reference>
     <Reference Include="EFCache, Version=1.2.1.0, Culture=neutral, PublicKeyToken=46c4868af4307d2c, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.Cache.1.2.1\lib\net46\EFCache.dll</HintPath>
@@ -292,8 +306,8 @@
     <Reference Include="Microsoft.Azure.Devices.Client, Version=1.20.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Devices.Client.1.20.3\lib\net451\Microsoft.Azure.Devices.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Devices.Shared, Version=1.16.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.16.0\lib\net451\Microsoft.Azure.Devices.Shared.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Devices.Shared, Version=1.20.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.20.0\lib\net472\Microsoft.Azure.Devices.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.3.0.3\lib\net452\Microsoft.Azure.KeyVault.Core.dll</HintPath>
@@ -301,32 +315,26 @@
     <Reference Include="Microsoft.Azure.Mobile.Server, Version=2.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Mobile.Server.2.0.3\lib\net46\Microsoft.Azure.Mobile.Server.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Mobile.Server.Authentication, Version=2.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Authentication.2.0.3\lib\net46\Microsoft.Azure.Mobile.Server.Authentication.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Azure.Mobile.Server.Entity, Version=2.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Entity.2.0.3\lib\net46\Microsoft.Azure.Mobile.Server.Entity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Mobile.Server.Tables, Version=2.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Mobile.Server.Tables.2.0.3\lib\net46\Microsoft.Azure.Mobile.Server.Tables.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Search, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Search.9.0.1\lib\net461\Microsoft.Azure.Search.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Search, Version=10.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Search.10.1.0\lib\net461\Microsoft.Azure.Search.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Search.Common, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Search.Common.9.0.1\lib\net461\Microsoft.Azure.Search.Common.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Search.Common, Version=10.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Search.Common.10.1.0\lib\net461\Microsoft.Azure.Search.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Search.Data, Version=10.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Search.Data.10.1.0\lib\net461\Microsoft.Azure.Search.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Search.Service, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Search.Service.9.0.1\lib\net461\Microsoft.Azure.Search.Service.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Search.Service, Version=10.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Search.Service.10.1.0\lib\net461\Microsoft.Azure.Search.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Services.AppAuthentication, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.3\lib\net452\Microsoft.Azure.Services.AppAuthentication.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Azure.Storage.Common, Version=11.1.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Storage.Common.11.1.5\lib\net452\Microsoft.Azure.Storage.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -422,12 +430,8 @@
     <Reference Include="Microsoft.Owin.Security.OpenIdConnect, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OpenIdConnect.4.1.0\lib\net45\Microsoft.Owin.Security.OpenIdConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Rest.ClientRuntime.2.3.21\lib\net461\Microsoft.Rest.ClientRuntime.dll</HintPath>
@@ -446,126 +450,135 @@
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Build.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Build.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Build.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Build.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Build.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Build.Common.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Build.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Build.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Build2.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Build2.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Build2.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Build2.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Chat.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Chat.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Services.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Core.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Core.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Core.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Core.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Dashboards.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Dashboards.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Dashboards.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Dashboards.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.DeleteTeamProject, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.DeleteTeamProject.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.DeleteTeamProject, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.DeleteTeamProject.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Diff, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Diff.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Diff, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Diff.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Discussion.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Discussion.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Discussion.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Discussion.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.DistributedTask.Common.Contracts, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundation.DistributedTask.Common.15.112.1\lib\net45\Microsoft.TeamFoundation.DistributedTask.Common.Contracts.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Git.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Git.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Git.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Git.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Lab.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Lab.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Lab.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Lab.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Lab.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Lab.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Lab.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Lab.Common.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Lab.TestIntegration.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Lab.TestIntegration.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Lab.TestIntegration.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Lab.TestIntegration.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.Lab.WorkflowIntegration.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Policy.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Policy.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Policy.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Policy.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.ProjectManagement, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.ProjectManagement.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.ProjectManagement, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.ProjectManagement.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.SharePointReporting.Integration, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.SharePointReporting.Integration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.SharePointReporting.Integration, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.SharePointReporting.Integration.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.SourceControl.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.SourceControl.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.SourceControl.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.SourceControl.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Test.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Test.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Test.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Test.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.TestImpact.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.TestImpact.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.TestImpact.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.TestImpact.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.TestManagement.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.TestManagement.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.TestManagement.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.TestManagement.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.TeamFoundation.TestManagement.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.TestManagement.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.TestManagement.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.TestManagement.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.TeamFoundation.TestManagement.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.TestManagement.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.TestManagement.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.TestManagement.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.VersionControl.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.VersionControl.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.VersionControl.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.VersionControl.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.VersionControl.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.VersionControl.Common.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.VersionControl.Common.Integration, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.VersionControl.Common.Integration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.VersionControl.Common.Integration, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.VersionControl.Common.Integration.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Wiki.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Wiki.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.Work.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.Work.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.Work.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.Work.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.DataStoreLoader.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Client.QueryLanguage.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Common.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Proxy, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Proxy.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Process.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Process.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.WebApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.15.112.1\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Proxy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Services.Client.Interactive, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.VisualStudio.Services.InteractiveClient.15.112.1\lib\net45\Microsoft.VisualStudio.Services.Client.Interactive.dll</HintPath>
+    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.TeamFoundation.WorkItemTracking.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Services.Client.Interactive, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Services.InteractiveClient.16.153.0\lib\net45\Microsoft.VisualStudio.Services.Client.Interactive.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Services.Common, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Services.Client.16.153.0\lib\net45\Microsoft.VisualStudio.Services.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Services.TestManagement.TestPlanning.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.VisualStudio.Services.TestManagement.TestPlanning.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Services.TestResults.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TeamFoundationServer.Client.16.153.0\lib\net45\Microsoft.VisualStudio.Services.TestResults.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Services.WebApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Services.Client.16.153.0\lib\net45\Microsoft.VisualStudio.Services.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
@@ -576,7 +589,6 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -584,7 +596,6 @@
     </Reference>
     <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Security.3.2.3.0\lib\net45\Mono.Security.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MsieJavaScriptEngine, Version=2.2.2.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
       <HintPath>..\packages\MsieJavaScriptEngine.2.2.2\lib\net45\MsieJavaScriptEngine.dll</HintPath>
@@ -604,33 +615,29 @@
     <Reference Include="NodaTime, Version=2.0.3.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.0.3\lib\net45\NodaTime.dll</HintPath>
     </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">
       <HintPath>..\packages\PCLCrypto.2.0.147\lib\net45\PCLCrypto.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PInvoke.BCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
       <HintPath>..\packages\PInvoke.BCrypt.0.3.152\lib\net40\PInvoke.BCrypt.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PInvoke.Kernel32, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
       <HintPath>..\packages\PInvoke.Kernel32.0.3.152\lib\net40\PInvoke.Kernel32.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PInvoke.NCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
       <HintPath>..\packages\PInvoke.NCrypt.0.3.152\lib\net40\PInvoke.NCrypt.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PInvoke.Windows.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
       <HintPath>..\packages\PInvoke.Windows.Core.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.Windows.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="QRCoder, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL">
@@ -641,27 +648,23 @@
     </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Redis, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Redis.3.9.71\lib\net35\ServiceStack.Redis.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -685,6 +688,10 @@
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.6.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.TraceSource" />
+    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -698,7 +705,10 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.5.1\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
       <Private>True</Private>
@@ -719,6 +729,14 @@
     <Reference Include="System.IO.Packaging, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Packaging.4.7.0\lib\net46\System.IO.Packaging.dll</HintPath>
     </Reference>
+    <Reference Include="System.Linq, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Linq.Expressions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Expressions.4.3.0\lib\net463\System.Linq.Expressions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
@@ -726,7 +744,6 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
-      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -739,21 +756,34 @@
     <Reference Include="System.Net.WebSockets, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.WebSockets.4.0.0\lib\net46\System.Net.WebSockets.dll</HintPath>
       <Private>True</Private>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.WebSockets.Client, Version=4.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.WebSockets.Client.4.0.2\lib\net46\System.Net.WebSockets.Client.dll</HintPath>
-      <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime" />
+    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.4.3.0\lib\net463\System.Runtime.InteropServices.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
@@ -762,13 +792,14 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.1.1\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\net461\System.Security.AccessControl.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -798,20 +829,20 @@
     <Reference Include="System.Spatial, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.8.4\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.6.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.RegularExpressions.4.3.0\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -820,6 +851,8 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -831,10 +864,7 @@
     </Reference>
     <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Http.Owin, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.7\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
@@ -843,6 +873,9 @@
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
@@ -862,14 +895,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest">
-    </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -878,7 +904,6 @@
     </Reference>
     <Reference Include="Validation, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
       <HintPath>..\packages\Validation.2.3.7\lib\dotnet\Validation.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="VroomJs, Version=1.2.3.0, Culture=neutral, PublicKeyToken=e7c52e67fcb0044f, processorArchitecture=MSIL">
       <HintPath>..\packages\VroomJs.1.2.3\lib\net45\VroomJs.dll</HintPath>
@@ -888,7 +913,6 @@
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Westwind.Globalization, Version=2.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Westwind.Globalization.2.15.0\lib\net45\Westwind.Globalization.dll</HintPath>
@@ -903,11 +927,6 @@
       <HintPath>..\packages\Westwind.Web.2.75\lib\net45\Westwind.Web.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -1331,6 +1350,8 @@
     <EmbeddedResource Include="Migrations\202001062214514_mix-origin.resx">
       <DependentUpon>202001062214514_mix-origin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\LocalizationForm.de.resx" />
+    <EmbeddedResource Include="Properties\LocalizationForm.resx" />
     <EmbeddedResource Include="Queries\searchType.sql" />
     <Compile Include="Services\Device\DeviceService.cs" />
     <Compile Include="Services\Device\IDeviceService.cs" />
@@ -1620,6 +1641,7 @@
     <Compile Include="Services\SmokeSession\SmokeSessionService.cs" />
     <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="SimpleRefreshTokenProvider.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Support\Config\ConfigSettings.cs" />
     <Compile Include="Support\DataAnotation.cs" />
@@ -1646,6 +1668,8 @@
     <Content Include="Configs\manapipes-firebase-adminsdk-lkavm-60a4682f46.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Content\bootstrap-material-design.css.new" />
     <None Include="Content\bootstrap-material-design.min.css.new" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -1783,6 +1807,35 @@
     <Content Include="LocalizationAdmin\images\vsizegrip.png" />
     <Content Include="LocalizationAdmin\images\Westwind.Localization_128.png" />
     <Content Include="LocalizationAdmin\index.html" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\dist\vendor-manifest.json" />
+    <Compile Include="Models\Dto\SmokeSession\DynamicSmokeStatisticDto.cs" />
+    <Compile Include="Models\Dto\BrandGroupDto.cs" />
+    <EmbeddedResource Include="Queries\searchByBrand.sql" />
+    <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
+      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806120945125_PlaceCalendar.resx">
+      <DependentUpon>201806120945125_PlaceCalendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806281021144_business_hours_not_mapped_fix.resx">
+      <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
+      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.resx">
+      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808061843246_coalHms.resx">
+      <DependentUpon>201808061843246_coalHms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808062037572_pipeAccesoryLikes.resx">
+      <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="LocalizationAdmin\LocalizationService.ashx" />
     <Content Include="LocalizationAdmin\bower_components\ng-file-upload\README.md" />
     <Content Include="LocalizationAdmin\bower_components\ng-file-upload\npm-debug.log" />
@@ -1825,37 +1878,31 @@
     <Content Include="LocalizationAdmin\bower_components\angular-sanitize\angular-sanitize.min.js.map" />
     <Content Include="LocalizationAdmin\bower_components\angular-sanitize\.bower.json" />
     <Content Include="LocalizationAdmin\bower.json" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\dist\vendor-manifest.json" />
-    <Compile Include="Models\Dto\SmokeSession\DynamicSmokeStatisticDto.cs" />
-    <Compile Include="Models\Dto\BrandGroupDto.cs" />
-    <EmbeddedResource Include="Queries\searchByBrand.sql" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <None Include="LocalizationAdmin\scripts\_references.js" />
+    <Content Include="LocalizationAdmin\Partials\AddResourceDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\CommentDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\CreateClassDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ImportExportResxDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\Menubar.html" />
+    <Content Include="LocalizationAdmin\Partials\RenameResourceDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceEditor.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceGrid.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceList.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceProviderInfoDialog.html" />
+    <Content Include="LocalizationAdmin\Partials\ResourceSetList.html" />
+    <Content Include="LocalizationAdmin\Partials\TranslateDialog.html" />
+    <Content Include="LocalizationAdmin\scripts\ww.angular.js" />
+    <Content Include="LocalizationAdmin\scripts\ww.jquery.js" />
+    <Content Include="LocalizationAdmin\scripts\ww.jquery.min.js" />
+    <Content Include="LocalizationAdmin\touch-icon.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
-    <EmbeddedResource Include="Migrations\201805231838494_gdpr.resx">
-      <DependentUpon>201805231838494_gdpr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806120945125_PlaceCalendar.resx">
-      <DependentUpon>201806120945125_PlaceCalendar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806281021144_business_hours_not_mapped_fix.resx">
-      <DependentUpon>201806281021144_business_hours_not_mapped_fix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807061525281_cleanBh.resx">
-      <DependentUpon>201807061525281_cleanBh.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808030925117_PlaceMedia_IsDeafault_Property.resx">
-      <DependentUpon>201808030925117_PlaceMedia_IsDeafault_Property.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808061843246_coalHms.resx">
-      <DependentUpon>201808061843246_coalHms.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808062037572_pipeAccesoryLikes.resx">
-      <DependentUpon>201808062037572_pipeAccesoryLikes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SwaggerExtensions\CustomSwagger.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.js" />
     <Content Include="Scripts\gijgo\combined\gijgo.min.js" />
     <Content Include="Scripts\gijgo\combined\messages\messages.bg-bg.js" />
@@ -1881,6 +1928,87 @@
     <Content Include="Content\gijgo\fonts\gijgo-material.woff" />
     <Content Include="Content\gijgo\fonts\gijgo-material.ttf" />
     <Content Include="Content\gijgo\fonts\gijgo-material.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <None Include="packages.config" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\gijgo\modular\datetimepicker.js" />
     <Content Include="Scripts\gijgo\modular\datetimepicker.min.js" />
@@ -1902,6 +2030,7 @@
     <Content Include="Scripts\gijgo\modular\timepicker.min.js" />
     <Content Include="Scripts\gijgo\modular\tree.js" />
     <Content Include="Scripts\gijgo\modular\tree.min.js" />
+    <None Include="Scripts\jquery-3.3.1-vsdoc.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -1909,18 +2038,38 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lodash.core.js" />
     <Content Include="Scripts\lodash.core.min.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\select2.full.js" />
     <Content Include="Scripts\select2.full.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\slim\slim.kickstart.min.js" />
     <Compile Include="Services\Redis\ICacheService.cs" />
+    <Content Include="Scripts\tether.js" />
+    <Content Include="Scripts\tether.min.js" />
+    <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\vue.min.js" />
+    <Content Include="Scripts\ww.jquery.js" />
+    <Content Include="Scripts\ww.jquery.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="Views\Emails\hello.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1946,24 +2095,7 @@
     <Content Include=".babelrc" />
     <Content Include="Content\range-slider.css.map" />
     <Content Include="Content\range-slider.scss" />
-    <None Include="LocalizationAdmin\scripts\_references.js" />
-    <Content Include="LocalizationAdmin\Partials\AddResourceDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\CommentDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\CreateClassDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\ImportExportResxDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\Menubar.html" />
-    <Content Include="LocalizationAdmin\Partials\RenameResourceDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\ResourceEditor.html" />
-    <Content Include="LocalizationAdmin\Partials\ResourceGrid.html" />
-    <Content Include="LocalizationAdmin\Partials\ResourceList.html" />
-    <Content Include="LocalizationAdmin\Partials\ResourceProviderInfoDialog.html" />
-    <Content Include="LocalizationAdmin\Partials\ResourceSetList.html" />
-    <Content Include="LocalizationAdmin\Partials\TranslateDialog.html" />
-    <Content Include="LocalizationAdmin\scripts\ww.angular.js" />
-    <Content Include="LocalizationAdmin\scripts\ww.jquery.js" />
-    <Content Include="LocalizationAdmin\scripts\ww.jquery.min.js" />
     <Content Include="LocalizationAdmin\scripts\ww.resourceEditor.js" />
-    <Content Include="LocalizationAdmin\touch-icon.png" />
     <Content Include="Scripts\babel.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -1986,33 +2118,15 @@
     <Content Include="Scripts\bootstrap-colorselector.js" />
     <Content Include="Scripts\bootstrap-rating-input.js" />
     <Content Include="Scripts\bootstrap-tagsinput.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\clipboard.min.js" />
     <Content Include="Scripts\decoder.min.js" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\material.min.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Scripts\moment-with-locales.js" />
-    <Content Include="Scripts\moment-with-locales.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\ww.jquery.js" />
-    <Content Include="Scripts\ww.jquery.min.js" />
     <None Include="bundleconfig.json" />
     <Content Include="package.json" />
     <Content Include="nuget.config" />
@@ -2033,25 +2147,14 @@
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\shake.js" />
     <Content Include="Scripts\snackbar.js" />
-    <Content Include="Scripts\tether.js" />
-    <Content Include="Scripts\tether.min.js" />
-    <Content Include="Scripts\vue.js" />
-    <Content Include="Scripts\vue.min.js" />
     <Content Include="Content\material-bootstrap-wizard.css" />
     <Content Include="Scripts\Vue\Place\main.js" />
     <Content Include="sw.js" />
     <Content Include="Scripts\webqr.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Views\ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\manifest.json" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Properties\PublishProfiles\smartHookah - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\smarthookah - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\smartHookah - Web Deploy %283%29.pubxml" />
@@ -2107,18 +2210,11 @@
     <Content Include="Scripts\highcharts\themes\sand-signika.js" />
     <Content Include="Scripts\highcharts\themes\skies.js" />
     <Content Include="Scripts\jquery.stayInWebApp.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jquery.wheelcolorpicker.js" />
     <Content Include="Scripts\material.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-duration-format.js" />
     <Content Include="Scripts\nouislider.js" />
     <Content Include="Scripts\phaser.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\ripples.js" />
     <Content Include="Scripts\smoothie.js" />
     <Content Include="Scripts\_references.js" />
@@ -2268,6 +2364,8 @@
     <Content Include="Views\Game\GameResult.cshtml" />
     <Content Include="Views\DeviceControl\DefaultMetadata.cshtml" />
     <Content Include="Views\Game\Halloween.cshtml" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Views\Emails\hello.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -2293,8 +2391,6 @@
     <None Include="Views\Emails\reservationWaitForConfirm.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Assets\_PrivacyPolicy.cshtml" />
     <Content Include="Views\Assets\_TermOfUssage.cshtml" />
     <Content Include="Views\Assets\PrivacyPolicy.cshtml" />
@@ -2377,9 +2473,6 @@
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
@@ -2413,8 +2506,6 @@
     <EmbeddedResource Include="Migrations\201803252005595_locations.resx">
       <DependentUpon>201803252005595_locations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\LocalizationForm.de.resx" />
-    <EmbeddedResource Include="Properties\LocalizationForm.resx" />
     <EmbeddedResource Include="Resources\Account\Account.sk.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Account.sk.Designer.cs</LastGenOutput>
@@ -2548,8 +2639,10 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\build\Microsoft.TeamFoundationServer.ExtendedClient.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\build\Microsoft.TeamFoundationServer.ExtendedClient.targets'))" />
+    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.10.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.10.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets'))" />
@@ -2558,18 +2651,18 @@
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.WindowsServer.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.Web.2.10.0\build\Microsoft.ApplicationInsights.Web.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.Web.2.10.0\build\Microsoft.ApplicationInsights.Web.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.3\build\Microsoft.Azure.Services.AppAuthentication.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.3\build\Microsoft.Azure.Services.AppAuthentication.targets'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\build\Microsoft.TeamFoundationServer.ExtendedClient.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\build\Microsoft.TeamFoundationServer.ExtendedClient.targets'))" />
   </Target>
-  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Import Project="..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\build\Microsoft.TeamFoundationServer.ExtendedClient.targets" Condition="Exists('..\packages\Microsoft.TeamFoundationServer.ExtendedClient.15.112.1\build\Microsoft.TeamFoundationServer.ExtendedClient.targets')" />
+  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.10.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.10.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.10.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.10.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.10.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.Web.2.10.0\build\Microsoft.ApplicationInsights.Web.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.Web.2.10.0\build\Microsoft.ApplicationInsights.Web.targets')" />
   <Import Project="..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.3\build\Microsoft.Azure.Services.AppAuthentication.targets" Condition="Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.3\build\Microsoft.Azure.Services.AppAuthentication.targets')" />
-  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\build\Microsoft.TeamFoundationServer.ExtendedClient.targets" Condition="Exists('..\packages\Microsoft.TeamFoundationServer.ExtendedClient.16.153.0\build\Microsoft.TeamFoundationServer.ExtendedClient.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
