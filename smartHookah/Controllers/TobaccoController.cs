@@ -17,6 +17,7 @@ namespace smartHookah.Controllers
     using smartHookah.Helpers;
     using smartHookah.Services.Person;
     using smartHookah.Services.Redis;
+    using smartHookah.Services.Review;
 
     [Authorize]
     public class TobaccoController : Controller
@@ -30,14 +31,16 @@ namespace smartHookah.Controllers
         private readonly IGearService gearService;
 
         private readonly ISmokeSessionBgService sessionBgService;
+        private readonly IReviewService reviewService;
 
-        public TobaccoController(SmartHookahContext db, IPersonService personService, IRedisService redisService, IGearService gearService, ISmokeSessionBgService sessionBgService)
+        public TobaccoController(SmartHookahContext db, IPersonService personService, IRedisService redisService, IGearService gearService, ISmokeSessionBgService sessionBgService, IReviewService reviewService)
         {
             this.db = db;
             this.personService = personService;
             this.redisService = redisService;
             this.gearService = gearService;
             this.sessionBgService = sessionBgService;
+            this.reviewService = reviewService;
         }
 
         // GET: TobaccoSimple
@@ -161,7 +164,7 @@ namespace smartHookah.Controllers
 
             model.NamedMix = usedinMix.Where(a => a.AccName != null);
 
-            model.Tobacco.Reviews = db.TobaccoReviews.Where(a => a.ReviewedTobaccoId == id).Take(10).ToList();
+            model.Tobacco.Reviews = (await this.reviewService.GetTobaccoReviews(id.Value, db, 10, 0)).ToList();
 
 
             model.CanDeleteMix = false;
