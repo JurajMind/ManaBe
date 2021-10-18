@@ -23,6 +23,18 @@ namespace smartHookah
               new { controller = "Share", action = "Index" }  // Parameter defaults
           );
 
+            routes.MapRoute(
+            "Mix",                                           // Route name
+            "Mix/{id}",                            // URL with parameters
+            new { controller = "Tobacco", action = "Details" }  // Parameter defaults
+        );
+
+            routes.MapRoute(
+           "Flavor",                                           // Route name
+           "Flavor/{id}",                            // URL with parameters
+           new { controller = "Tobacco", action = "Details" }  // Parameter defaults
+       );
+
             routes.MapRoute("DefaultLocalized", "{lang}/{controller}/{action}/{id}",
                 constraints: new { lang = @"(\w{2})|(\w{2}-\w{2})" }, // en or en-US
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

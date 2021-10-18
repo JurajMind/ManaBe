@@ -113,7 +113,7 @@ namespace smartHookah.Controllers
 
             return null;
         }
-
+        [Authorize]
         public async Task<ActionResult> ShowMyMixes(int? id)
         {
             var model = new MyMixesViewModel();
@@ -138,6 +138,8 @@ namespace smartHookah.Controllers
         }
 
         // GET: TobaccoSimple/Details/5
+
+        [AllowAnonymous]
         public async Task<ActionResult> Details(int? id)
         {
             this.redisService.StoreAddress(Request.UserHostAddress, Request.UserHostName);
@@ -168,15 +170,6 @@ namespace smartHookah.Controllers
 
 
             model.CanDeleteMix = false;
-
-            if (model.Tobacco is TobaccoMix)
-            {
-                var mix = model.Tobacco as TobaccoMix;
-                var person = personService.GetCurentPerson(mix.AuthorId);
-
-                if (person != null)
-                    model.CanDeleteMix = true;
-            }
 
             return View(model);
 
