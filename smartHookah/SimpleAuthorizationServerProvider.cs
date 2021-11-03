@@ -124,7 +124,7 @@ namespace smartHookah
                 context.SetError("invalid_clientId", "Refresh token is issued to a different clientId.");
                 return Task.FromResult<object>(null);
             }
-
+           
             // Change auth ticket for refresh token requests
             var newIdentity = new ClaimsIdentity(context.Ticket.Identity);
             newIdentity.AddClaim(new Claim("newClaim", "newValue"));
