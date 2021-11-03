@@ -22,7 +22,10 @@ namespace smartHookah.Services.Person
             {
                 IssuedUtc = DateTime.UtcNow,
                 ExpiresUtc = DateTime.UtcNow.Add(tokenExpiration),
+
             };
+
+            props.Dictionary["as:client_id"] = "test";
 
             var ticket = new AuthenticationTicket(identity, props);
 

@@ -9,7 +9,14 @@ namespace smartHookah
 
         public async Task CreateAsync(AuthenticationTokenCreateContext context)
         {
-            var clientid = context.Ticket.Properties.Dictionary["as:client_id"];
+            var clientid = "test";
+            try
+            {
+                clientid =  context.Ticket.Properties.Dictionary["as:client_id"];
+            }
+            catch { 
+            }
+            
 
             if (string.IsNullOrEmpty(clientid))
             {
@@ -33,7 +40,7 @@ namespace smartHookah
 
                 context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
                 context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
-
+                context.Ticket.Properties.AllowRefresh = true;
                 token.ProtectedTicket = context.SerializeTicket();
 
                 var result = await _repo.AddRefreshToken(token);
@@ -62,7 +69,7 @@ namespace smartHookah
                 {
                     //Get protectedTicket from refreshToken class
                     context.DeserializeTicket(refreshToken.ProtectedTicket);
-                    var result = await _repo.RemoveRefreshToken(hashedTokenId);
+                  //  var result = await _repo.RemoveRefreshToken(hashedTokenId);
                 }
             }
         }
