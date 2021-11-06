@@ -194,6 +194,7 @@ namespace smartHookah.Services.Review
                     review.nsSmoke = review.TobaccoReview.Smoke;
                     review.nsStrength = review.TobaccoReview.Strength;
                     review.nsDuration = review.TobaccoReview.Duration;
+                    review.TobaccoReview = null;
                 }
                 else
                 {
