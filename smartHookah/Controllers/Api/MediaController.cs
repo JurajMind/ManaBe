@@ -63,12 +63,24 @@ namespace smartHookah.Controllers.Api
         [SwaggerParameter("file", "A file", Required = true, Type = "file")]
         [HttpPost]
         [Route("TobaccoReview/{id}/Add")]
-        public async Task<MediaDto> AddSessionReview(int id)
+        public async Task<MediaDto> AddTobaccoReview(int id)
         {
             var file = HttpContext.Current.Request.Files.Count > 0 ?
                 HttpContext.Current.Request.Files[0] : null;
             this.ValidateFile(file);
             Media media = await this._mediaService.AddTobaccoReviewPictureAsync(id, file);
+            return MediaDto.FromModel(media);
+        }
+
+        [SwaggerParameter("file", "A file", Required = true, Type = "file")]
+        [HttpPost]
+        [Route("SessionReview/{id}/Add")]
+        public async Task<MediaDto> AddSessionReviewPicture(int id)
+        {
+            var file = HttpContext.Current.Request.Files.Count > 0 ?
+                HttpContext.Current.Request.Files[0] : null;
+            this.ValidateFile(file);
+            Media media = await this._mediaService.AddSessionReviewPictureAsync(id, file);
             return MediaDto.FromModel(media);
         }
 
