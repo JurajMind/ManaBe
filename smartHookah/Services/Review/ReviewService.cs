@@ -178,6 +178,7 @@ namespace smartHookah.Services.Review
 
             review.AuthorId = this.PersonService.GetCurentPerson().Id;
             review.PublishDate = DateTime.UtcNow;
+            review.SmokeSession = smokeSession;
 
             if (review.PlaceReview != null)
             {
