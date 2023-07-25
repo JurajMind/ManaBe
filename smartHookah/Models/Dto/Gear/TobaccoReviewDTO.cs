@@ -42,23 +42,28 @@ namespace smartHookah.Models.Dto.Gear
         [DataMember, JsonProperty("Medias")]
         public List<MediaDto> Medias { get; set; }
 
-        public static TobaccoReviewDto FromModel(TobaccoReview model) => model == null
-            ? null
-            : new TobaccoReviewDto()
+        public static TobaccoReviewDto FromModel(TobaccoReview model)
+        {
+            if(model == null)
             {
-                Id = model.Id,
+                return null;
+            } 
+return new TobaccoReviewDto()
+{
+Id = model.Id,
 
-                Overall = model.Overall,
-                Cut = model.Cut,
-                Strength = model.Strength,
-                Duration = model.Duration,
-                Smoke = model.Smoke,
-                Taste = model.Taste,
-                SmokeSessionId = model.SmokeSessionId ?? 0,
-                SessionReviewId = model?.SessionReview?.Id ?? 0,
-                Text = model.Text,
-                Medias = MediaDto.FromModelList(model.Medias).ToList(),
-            };
+Overall = model.Overall,
+Cut = model.Cut,
+Strength = model.Strength,
+Duration = model.Duration,
+Smoke = model.Smoke,
+Taste = model.Taste,
+SmokeSessionId = model.SmokeSessionId ?? 0,
+SessionReviewId = model?.SessionReview?.Id ?? 0,
+Text = model.Text,
+Medias = MediaDto.FromModelList(model.Medias).ToList(),
+};
+        }
 
         public static IEnumerable<TobaccoReviewDto> FromModelList(IEnumerable<TobaccoReview> model)
         {
