@@ -25,14 +25,25 @@ namespace smartHookah.Services.Device
 
         public async Task<IEnumerable<Device>> GetDevices(List<string> deviceIds)
         {
-
-            var devices = await this.registryManager.GetDevicesAsync(deviceIds.Count);
-            return devices.Where(d => deviceIds.Contains(d.Id));
+            List<Device> result = new List<Device>();
+            foreach (var id in deviceIds)
+            {  
+                result.Add(await this.GetDevice(id));
+            }
+            return result.Where(e => e != null).ToList() ;
         }
 
         public async Task<Device> GetDevice(string deviceId)
         {
-            return await this.registryManager.GetDeviceAsync(deviceId);
+            try
+            {
+                return await this.registryManager.GetDeviceAsync(deviceId);
+            }
+            catch (Exception)
+            {
+                return new Device(deviceId);
+            }
+          
         }
 
         public async Task<bool> GetOnlineState(string deviceId)
@@ -44,16 +55,19 @@ namespace smartHookah.Services.Device
         public async Task<Dictionary<string, bool>> GetOnlineStates(IList<string> deviceIds)
         {
             var result = new Dictionary<string, bool>();
-            var query = registryManager.CreateQuery("SELECT * FROM devices", 100);
-            while (query.HasMoreResults)
+           
+            try
             {
-                var page = await query.GetNextAsTwinAsync();
-                foreach (var twin in page)
-                {
-                    result.Add(twin.DeviceId, twin.ConnectionState == DeviceConnectionState.Connected);
+               foreach(var device in deviceIds) { 
+                    result.Add(device,await GetOnlineState(device));
                 }
-                if (result.Keys.Count(deviceIds.Contains) == deviceIds.Count())
-                    break; ;
+            }
+            catch (Exception e)
+            {
+
+            
+            
+
             }
 
             return result;
